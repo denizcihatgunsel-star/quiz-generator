@@ -1,10 +1,13 @@
 import { PrismaClient } from "@/app/generated/prisma/client";
 import { PrismaLibSql } from "@prisma/adapter-libsql";
 
-// Prisma 7: connection via driver adapter. PrismaLibSql takes a Config directly.
 function makeClient() {
-  const url = process.env.DATABASE_URL ?? "file:./prisma/dev.db";
-  const adapter = new PrismaLibSql({ url });
+  const url = process.env.TURSO_DATABASE_URL ?? process.env.DATABASE_URL ?? "file:./prisma/dev.db";
+  const authToken = process.env.TURSO_AUTH_TOKEN;
+
+  const adapter = new PrismaLibSql(
+    authToken ? { url, authToken } : { url }
+  );
   return new PrismaClient({ adapter });
 }
 
