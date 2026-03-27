@@ -6,10 +6,12 @@ import { getPlan, currentMonth, isUnlimited } from "@/lib/subscription";
 
 export const maxDuration = 60;
 
-const client = new OpenAI({
-  apiKey: process.env.DEEPSEEK_API_KEY,
-  baseURL: "https://api.deepseek.com",
-});
+function getClient() {
+  return new OpenAI({
+    apiKey: process.env.DEEPSEEK_API_KEY,
+    baseURL: "https://api.deepseek.com",
+  });
+}
 
 const SYSTEM_PROMPT = `You are an expert educator and quiz designer. When given lesson content, you generate high-quality multiple choice questions and flashcards that test deep understanding, not just memorization.
 
@@ -112,7 +114,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const completion = await client.chat.completions.create({
+    const completion = await getClient().chat.completions.create({
       model: "deepseek-chat",
       max_tokens: 8000,
       response_format: { type: "json_object" },
