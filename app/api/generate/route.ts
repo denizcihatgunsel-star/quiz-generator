@@ -4,6 +4,8 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { getPlan, currentMonth, isUnlimited } from "@/lib/subscription";
 
+export const maxDuration = 60;
+
 const client = new OpenAI({
   apiKey: process.env.DEEPSEEK_API_KEY,
   baseURL: "https://api.deepseek.com",
