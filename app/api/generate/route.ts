@@ -175,9 +175,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.error("Generate error:", err);
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("Generate error:", message, err);
     return NextResponse.json(
-      { error: "Something went wrong. Please try again." },
+      { error: `Generation failed: ${message}` },
       { status: 500 }
     );
   }

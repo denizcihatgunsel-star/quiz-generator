@@ -85,13 +85,18 @@ export default function QuizGenerator() {
         body: JSON.stringify({ lesson }),
       });
 
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error(`Server returned ${res.status} — this usually means the request timed out. Try a shorter lesson.`);
+      }
 
       if (!res.ok) {
         if (data.code === "LIMIT_REACHED") {
           setLimitReached(true);
         }
-        throw new Error(data.error || "Failed to generate quiz");
+        throw new Error(data.error || `Request failed with status ${res.status}`);
       }
 
       setQuiz(data);
