@@ -2,5 +2,8 @@
   command = "npm run build"
   publish = ".next"
 
+[functions]
+  external_node_modules = ["@prisma/adapter-libsql", "@libsql/client"]
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"
