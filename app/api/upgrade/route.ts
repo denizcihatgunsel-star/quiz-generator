@@ -11,14 +11,12 @@ export async function POST(req: NextRequest) {
 
   const { plan } = await req.json();
 
-  if (!plan || !["free", "plus", "pro"].includes(plan)) {
+  if (!plan || !(plan in PLANS)) {
     return NextResponse.json({ error: "Invalid plan." }, { status: 400 });
   }
 
   const planDetails = PLANS[plan as PlanId];
 
-  // In production: initiate Stripe Checkout here and redirect.
-  // For this demo we apply the plan directly.
   await db.subscription.upsert({
     where: { userId: session.user.id },
     update: { plan, status: "active" },

@@ -1,41 +1,102 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { PLANS, type PlanId } from "@/lib/subscription";
 
 export default function PricingPage() {
+  return (
+    <Suspense>
+      <PricingContent />
+    </Suspense>
+  );
+}
+
+function PricingContent() {
   const { data: session } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [upgrading, setUpgrading] = useState<PlanId | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [managingBilling, setManagingBilling] = useState(false);
+
+  // Handle success/cancel redirects from Stripe
+  useEffect(() => {
+    if (searchParams.get("success") === "true") {
+      const plan = searchParams.get("plan");
+      setToast(`Successfully upgraded to ${plan ? PLANS[plan as PlanId]?.name ?? plan : "your new plan"}! Enjoy your quizzes.`);
+    }
+    if (searchParams.get("canceled") === "true") {
+      setToast("Checkout canceled. No charges were made.");
+    }
+  }, [searchParams]);
 
   const handleSelect = async (planId: PlanId) => {
     if (!session) {
-      router.push(`/auth/register`);
+      router.push("/auth/register");
       return;
     }
 
+    // Free plan — downgrade directly
+    if (planId === "free") {
+      setUpgrading(planId);
+      const res = await fetch("/api/upgrade", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: "free" }),
+      });
+      const data = await res.json();
+      setUpgrading(null);
+      if (res.ok) {
+        setToast(data.message);
+        setTimeout(() => router.push("/"), 2000);
+      } else {
+        setToast(data.error ?? "Something went wrong.");
+      }
+      return;
+    }
+
+    // Paid plan — create Stripe checkout session
     setUpgrading(planId);
     setToast(null);
 
-    const res = await fetch("/api/upgrade", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan: planId }),
-    });
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: planId }),
+      });
 
-    const data = await res.json();
-    setUpgrading(null);
+      const data = await res.json();
+      setUpgrading(null);
 
-    if (res.ok) {
-      setToast(data.message);
-      setTimeout(() => router.push("/"), 2000);
-    } else {
-      setToast(data.error ?? "Something went wrong.");
+      if (res.ok && data.url) {
+        window.location.href = data.url;
+      } else {
+        setToast(data.error ?? "Failed to start checkout.");
+      }
+    } catch {
+      setUpgrading(null);
+      setToast("Something went wrong. Please try again.");
     }
+  };
+
+  const handleManageBilling = async () => {
+    setManagingBilling(true);
+    try {
+      const res = await fetch("/api/billing", { method: "POST" });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        window.location.href = data.url;
+      } else {
+        setToast(data.error ?? "Could not open billing portal.");
+      }
+    } catch {
+      setToast("Something went wrong.");
+    }
+    setManagingBilling(false);
   };
 
   return (
@@ -53,11 +114,11 @@ export default function PricingPage() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-16">
+      <main className="max-w-6xl mx-auto px-4 py-16">
         {/* Hero */}
         <div className="text-center mb-14">
           <h1 className="text-4xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight mb-4">
-            Simple, transparent pricing
+            Simple, student-friendly pricing
           </h1>
           <p className="text-zinc-500 dark:text-zinc-400 text-lg max-w-md mx-auto">
             Start free. Upgrade when you need more quizzes.
@@ -74,14 +135,14 @@ export default function PricingPage() {
         {/* Plans */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
           {Object.values(PLANS).map((plan) => {
-            const isPopular = plan.id === "plus" || plan.id === "starter";
+            const isHighlighted = plan.id === "starter" || plan.id === "plus";
             const isBusy = upgrading === plan.id;
 
             return (
               <div
                 key={plan.id}
-                className={`relative flex flex-col rounded-2xl border p-7 ${
-                  isPopular
+                className={`relative flex flex-col rounded-2xl border p-6 ${
+                  isHighlighted
                     ? "border-violet-400 dark:border-violet-600 bg-white dark:bg-zinc-800 shadow-lg shadow-violet-100 dark:shadow-violet-900/30"
                     : "border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800/50"
                 }`}
@@ -89,7 +150,7 @@ export default function PricingPage() {
                 {/* Badge */}
                 {plan.badge && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-violet-600 text-white">
+                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-violet-600 text-white whitespace-nowrap">
                       {plan.badge}
                     </span>
                   </div>
@@ -102,15 +163,11 @@ export default function PricingPage() {
                   </h2>
                   <div className="flex items-baseline gap-1">
                     {plan.price === 0 ? (
-                      <span className="text-4xl font-bold text-zinc-900 dark:text-zinc-100">
-                        Free
-                      </span>
+                      <span className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">Free</span>
                     ) : (
                       <>
-                        <span className="text-4xl font-bold text-zinc-900 dark:text-zinc-100">
-                          ${plan.price}
-                        </span>
-                        <span className="text-sm text-zinc-500 dark:text-zinc-400">/month</span>
+                        <span className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">${plan.price}</span>
+                        <span className="text-sm text-zinc-500 dark:text-zinc-400">/mo</span>
                       </>
                     )}
                   </div>
@@ -122,16 +179,10 @@ export default function PricingPage() {
                 </div>
 
                 {/* Features */}
-                <ul className="space-y-2.5 mb-8 flex-1">
+                <ul className="space-y-2 mb-6 flex-1">
                   {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2.5 text-sm text-zinc-600 dark:text-zinc-400">
-                      <svg
-                        className="w-4 h-4 mt-0.5 shrink-0 text-emerald-500"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                      >
+                    <li key={f} className="flex items-start gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+                      <svg className="w-4 h-4 mt-0.5 shrink-0 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                       </svg>
                       <span>{f}</span>
@@ -144,7 +195,7 @@ export default function PricingPage() {
                   onClick={() => handleSelect(plan.id)}
                   disabled={isBusy}
                   className={`w-full py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
-                    isPopular
+                    isHighlighted
                       ? "bg-violet-600 hover:bg-violet-700 text-white shadow-sm hover:shadow-md"
                       : "bg-zinc-100 dark:bg-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-600 text-zinc-900 dark:text-zinc-100"
                   } disabled:opacity-60`}
@@ -152,28 +203,34 @@ export default function PricingPage() {
                   {isBusy ? (
                     <>
                       <span className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin" />
-                      Activating…
+                      Processing…
                     </>
                   ) : plan.price === 0 ? (
                     session ? "Downgrade to Free" : "Get started free"
                   ) : (
-                    `Get ${plan.name}`
+                    `Get ${plan.name} — $${plan.price}/mo`
                   )}
                 </button>
-
-                {plan.price > 0 && (
-                  <p className="text-xs text-zinc-400 dark:text-zinc-500 text-center mt-3">
-                    Demo — no real charge
-                  </p>
-                )}
               </div>
             );
           })}
         </div>
 
-        {/* FAQ note */}
-        <p className="text-center text-sm text-zinc-400 dark:text-zinc-600 mt-12">
-          Plans activate instantly. In production, payments are handled via Stripe.
+        {/* Manage billing */}
+        {session && (
+          <div className="text-center mt-10">
+            <button
+              onClick={handleManageBilling}
+              disabled={managingBilling}
+              className="text-sm text-violet-600 dark:text-violet-400 hover:underline disabled:opacity-50"
+            >
+              {managingBilling ? "Opening..." : "Manage billing & invoices"}
+            </button>
+          </div>
+        )}
+
+        <p className="text-center text-sm text-zinc-400 dark:text-zinc-600 mt-6">
+          Secure payments via Stripe. Cancel anytime.
         </p>
       </main>
     </div>
