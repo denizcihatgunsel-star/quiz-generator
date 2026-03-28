@@ -17,6 +17,19 @@ model User {
 
   subscription Subscription?
   usages       UsageRecord[]
+  quizzes      SavedQuiz[]
+}
+
+model SavedQuiz {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic     String
+  data      String   // JSON string of full quiz
+  score     Int?
+  total     Int?
+  shareId   String?  @unique
+  createdAt DateTime @default(now())
 }
 
 model Subscription {

@@ -44,6 +44,18 @@ const statements = [
     CONSTRAINT "UsageRecord_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
   )`,
   `CREATE UNIQUE INDEX IF NOT EXISTS "UsageRecord_userId_month_key" ON "UsageRecord"("userId", "month")`,
+  `CREATE TABLE IF NOT EXISTS "SavedQuiz" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "topic" TEXT NOT NULL,
+    "data" TEXT NOT NULL,
+    "score" INTEGER,
+    "total" INTEGER,
+    "shareId" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "SavedQuiz_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "SavedQuiz_shareId_key" ON "SavedQuiz"("shareId")`,
 ];
 
 for (const sql of statements) {

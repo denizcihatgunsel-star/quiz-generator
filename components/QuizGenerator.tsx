@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { QuizData, GenerateStatus } from "@/types/quiz";
@@ -45,14 +45,36 @@ export default function QuizGenerator() {
   const [limitReached, setLimitReached] = useState(false);
   const [activeTab, setActiveTab] = useState<TabId>("mcq");
   const [usage, setUsage] = useState<UsageInfo | null>(null);
+  const [savedShareId, setSavedShareId] = useState<string | null>(null);
+  const [savedQuizId, setSavedQuizId] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [score, setScore] = useState<{ correct: number; total: number } | null>(null);
+  const [darkMode, setDarkMode] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const charCount = lesson.trim().length;
   const isReady = charCount >= 50 && charCount <= 15000;
   const isLoggedIn = !!session;
 
-  // Fetch usage info on load / after each generation
-  const fetchUsage = async () => {
+  // Dark mode
+  useEffect(() => {
+    const stored = localStorage.getItem("darkMode");
+    const isDark = stored === "true" || (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    setDarkMode(isDark);
+    document.documentElement.classList.toggle("dark", isDark);
+  }, []);
+
+  const toggleDarkMode = () => {
+    const next = !darkMode;
+    setDarkMode(next);
+    localStorage.setItem("darkMode", String(next));
+    document.documentElement.classList.toggle("dark", next);
+  };
+
+  const fetchUsage = useCallback(async () => {
     if (!session?.user?.id) return;
     try {
       const res = await fetch("/api/usage");
@@ -63,12 +85,47 @@ export default function QuizGenerator() {
     } catch {
       // silently ignore
     }
-  };
+  }, [session?.user?.id]);
 
   useEffect(() => {
     if (session) fetchUsage();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session]);
+  }, [session, fetchUsage]);
+
+  // File upload handler
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // TXT and MD files — read client-side
+    if (file.name.endsWith(".txt") || file.name.endsWith(".md")) {
+      const text = await file.text();
+      setLesson(text.slice(0, 15000));
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
+    // PDF — send to server
+    if (file.type === "application/pdf" || file.name.endsWith(".pdf")) {
+      setUploading(true);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        const res = await fetch("/api/upload", { method: "POST", body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        setLesson(data.text);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Upload failed");
+      } finally {
+        setUploading(false);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+      }
+      return;
+    }
+
+    setError("Unsupported file type. Please upload a PDF, TXT, or MD file.");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
   const handleGenerate = async () => {
     if (!isReady || status === "loading") return;
@@ -77,6 +134,9 @@ export default function QuizGenerator() {
     setError(null);
     setLimitReached(false);
     setQuiz(null);
+    setSavedShareId(null);
+    setSavedQuizId(null);
+    setScore(null);
 
     try {
       const res = await fetch("/api/generate", {
@@ -102,7 +162,23 @@ export default function QuizGenerator() {
       setQuiz(data);
       setStatus("success");
       setActiveTab("mcq");
-      fetchUsage(); // refresh usage counter
+      fetchUsage();
+
+      // Auto-save quiz
+      try {
+        const saveRes = await fetch("/api/quiz/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ topic: data.topic, data }),
+        });
+        const saveData = await saveRes.json();
+        if (saveRes.ok) {
+          setSavedShareId(saveData.shareId);
+          setSavedQuizId(saveData.id);
+        }
+      } catch {
+        // Save failed silently — quiz still works
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
       setStatus("error");
@@ -115,12 +191,75 @@ export default function QuizGenerator() {
     setError(null);
     setLimitReached(false);
     setLesson("");
+    setSavedShareId(null);
+    setSavedQuizId(null);
+    setScore(null);
     setTimeout(() => textareaRef.current?.focus(), 100);
   };
 
   const loadExample = () => {
     setLesson(EXAMPLE_LESSON);
     textareaRef.current?.focus();
+  };
+
+  const copyShareLink = () => {
+    if (!savedShareId) return;
+    navigator.clipboard.writeText(`${window.location.origin}/quiz/${savedShareId}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Download quiz as PDF (simple print approach)
+  const downloadPDF = () => {
+    if (!quiz) return;
+    const win = window.open("", "_blank");
+    if (!win) return;
+    win.document.write(`
+      <html><head><title>${quiz.topic} - Quiz</title>
+      <style>
+        body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; color: #1a1a1a; }
+        h1 { font-size: 22px; margin-bottom: 6px; }
+        h2 { font-size: 16px; margin-top: 30px; color: #7c3aed; }
+        .q { margin-bottom: 20px; }
+        .q p { margin: 0 0 6px; font-weight: bold; }
+        .opt { margin: 2px 0 2px 20px; }
+        .correct { color: #16a34a; font-weight: bold; }
+        .exp { font-size: 13px; color: #555; margin-top: 4px; }
+        .fc { display: inline-block; width: 45%; vertical-align: top; margin: 8px 2%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+        .fc strong { display: block; margin-bottom: 4px; }
+      </style></head><body>
+      <h1>${quiz.topic}</h1>
+      <p style="color:#888;font-size:13px;">Generated by QuizGen</p>
+      <h2>Multiple Choice</h2>
+      ${quiz.multipleChoice.map((q, i) => `
+        <div class="q">
+          <p>${i + 1}. ${q.question}</p>
+          ${q.options.map((o, j) => `<div class="opt ${j === q.correctIndex ? "correct" : ""}">${String.fromCharCode(65 + j)}. ${o}</div>`).join("")}
+          <div class="exp">${q.explanation}</div>
+        </div>
+      `).join("")}
+      <h2>Flashcards</h2>
+      ${quiz.flashcards.map((f) => `<div class="fc"><strong>${f.front}</strong>${f.back}</div>`).join("")}
+      </body></html>
+    `);
+    win.document.close();
+    win.print();
+  };
+
+  // Score callback from MCQ view
+  const handleScoreUpdate = async (correct: number, total: number) => {
+    setScore({ correct, total });
+    if (savedQuizId) {
+      try {
+        await fetch(`/api/quiz/${savedQuizId}/score`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ score: correct, total }),
+        });
+      } catch {
+        // silently ignore
+      }
+    }
   };
 
   const planId = (usage?.planId ?? "free") as PlanId;
@@ -146,6 +285,29 @@ export default function QuizGenerator() {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Dark mode toggle */}
+            <button
+              onClick={toggleDarkMode}
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              title={darkMode ? "Light mode" : "Dark mode"}
+            >
+              {darkMode ? (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" strokeWidth="2"/><path strokeWidth="2" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+              ) : (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+              )}
+            </button>
+
+            {/* Dashboard link */}
+            {isLoggedIn && (
+              <Link
+                href="/dashboard"
+                className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+              >
+                Dashboard
+              </Link>
+            )}
+
             {quiz && (
               <button
                 onClick={handleReset}
@@ -187,7 +349,7 @@ export default function QuizGenerator() {
                 Turn any lesson into a quiz
               </h1>
               <p className="text-zinc-500 dark:text-zinc-400 text-base">
-                Paste your lesson content below and DeepSeek will generate multiple
+                Paste your lesson content or upload a file and DeepSeek will generate multiple
                 choice questions and flashcards instantly.
               </p>
             </div>
@@ -238,7 +400,7 @@ export default function QuizGenerator() {
               </div>
             )}
 
-            {/* Usage bar (logged in, not unlimited) */}
+            {/* Usage bar */}
             {isLoggedIn && usage && !isUnlimited && !atLimit && (
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex-1 h-1.5 bg-zinc-100 dark:bg-zinc-700 rounded-full overflow-hidden">
@@ -265,12 +427,42 @@ export default function QuizGenerator() {
                 >
                   Lesson Content
                 </label>
-                <button
-                  onClick={loadExample}
-                  className="text-xs text-violet-600 dark:text-violet-400 hover:underline"
-                >
-                  Load example
-                </button>
+                <div className="flex items-center gap-3">
+                  {/* File upload button */}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,.txt,.md"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                    id="file-upload"
+                  />
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading || !isLoggedIn}
+                    className="flex items-center gap-1.5 text-xs text-violet-600 dark:text-violet-400 hover:underline disabled:opacity-50 disabled:no-underline"
+                  >
+                    {uploading ? (
+                      <>
+                        <span className="inline-block w-3 h-3 border-2 border-violet-400/30 border-t-violet-400 rounded-full animate-spin" />
+                        Extracting…
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                        </svg>
+                        Upload file
+                      </>
+                    )}
+                  </button>
+                  <button
+                    onClick={loadExample}
+                    className="text-xs text-violet-600 dark:text-violet-400 hover:underline"
+                  >
+                    Load example
+                  </button>
+                </div>
               </div>
 
               <textarea
@@ -278,7 +470,7 @@ export default function QuizGenerator() {
                 ref={textareaRef}
                 value={lesson}
                 onChange={(e) => setLesson(e.target.value)}
-                placeholder="Paste your lesson, article, notes, or any educational content here…"
+                placeholder="Paste your lesson, article, notes, or any educational content here… or upload a PDF/TXT file above."
                 className="w-full px-4 pb-4 min-h-52 text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-600 bg-transparent resize-y focus:outline-none leading-relaxed"
                 aria-describedby="char-count"
               />
@@ -356,12 +548,14 @@ export default function QuizGenerator() {
               </div>
             )}
 
-            {/* Feature cards (idle + logged out) */}
+            {/* Feature cards */}
             {status === "idle" && !isLoggedIn && (
               <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
                   { icon: "🧠", title: "Multiple Choice", desc: "5–8 questions with instant feedback and explanations" },
                   { icon: "🃏", title: "Flashcards", desc: "8–12 cards with flip animation for active recall practice" },
+                  { icon: "📄", title: "Upload Files", desc: "Upload PDF or TXT files to generate quizzes automatically" },
+                  { icon: "📊", title: "Track Progress", desc: "View quiz history, scores, and stats on your dashboard" },
                 ].map((f) => (
                   <div key={f.title} className="flex gap-4 p-4 rounded-xl bg-white dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-700">
                     <span className="text-2xl">{f.icon}</span>
@@ -390,6 +584,49 @@ export default function QuizGenerator() {
               </p>
             </div>
 
+            {/* Score card */}
+            {score && (
+              <div className="mb-6 p-5 rounded-2xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/50">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-emerald-900 dark:text-emerald-200">
+                      Quiz Complete!
+                    </p>
+                    <p className="text-xs text-emerald-700 dark:text-emerald-400 mt-0.5">
+                      You scored {score.correct} out of {score.total} ({Math.round((score.correct / score.total) * 100)}%)
+                    </p>
+                  </div>
+                  <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+                    {Math.round((score.correct / score.total) * 100)}%
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Action buttons */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {savedShareId && (
+                <button
+                  onClick={copyShareLink}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 text-sm text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                  </svg>
+                  {copied ? "Link copied!" : "Share"}
+                </button>
+              )}
+              <button
+                onClick={downloadPDF}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 text-sm text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Download PDF
+              </button>
+            </div>
+
             <div className="flex gap-1 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl mb-6">
               {TABS.map((tab) => (
                 <button
@@ -411,7 +648,7 @@ export default function QuizGenerator() {
 
             <div role="tabpanel">
               {activeTab === "mcq" ? (
-                <MultipleChoiceView questions={quiz.multipleChoice} />
+                <MultipleChoiceView questions={quiz.multipleChoice} onComplete={handleScoreUpdate} />
               ) : (
                 <FlashcardView flashcards={quiz.flashcards} />
               )}
@@ -428,6 +665,10 @@ export default function QuizGenerator() {
         ·{" "}
         <Link href="/pricing" className="hover:text-violet-500 transition-colors">
           Pricing
+        </Link>{" "}
+        ·{" "}
+        <Link href="/dashboard" className="hover:text-violet-500 transition-colors">
+          Dashboard
         </Link>{" "}
         · {new Date().getFullYear()}
       </footer>
