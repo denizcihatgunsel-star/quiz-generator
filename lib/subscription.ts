@@ -1,4 +1,4 @@
-export type PlanId = "free" | "plus" | "pro";
+export type PlanId = "free" | "starter" | "plus" | "pro" | "team";
 
 export interface Plan {
   id: PlanId;
@@ -19,32 +19,58 @@ export const PLANS: Record<PlanId, Plan> = {
       "5 quizzes per month",
       "Multiple choice questions",
       "Flashcard generator",
-      "Community support",
+      "Score tracking",
     ],
+  },
+  starter: {
+    id: "starter",
+    name: "Starter",
+    price: 2,
+    quizzesPerMonth: 20,
+    features: [
+      "20 quizzes per month",
+      "Everything in Free",
+      "PDF upload support",
+      "Quiz history",
+    ],
+    badge: "Best for Students",
   },
   plus: {
     id: "plus",
     name: "Plus",
-    price: 7,
-    quizzesPerMonth: 50,
+    price: 5,
+    quizzesPerMonth: 60,
     badge: "Most Popular",
     features: [
-      "50 quizzes per month",
-      "Everything in Free",
-      "Quiz history (coming soon)",
+      "60 quizzes per month",
+      "Everything in Starter",
+      "Share quizzes",
+      "Download as PDF",
       "Priority support",
     ],
   },
   pro: {
     id: "pro",
     name: "Pro",
+    price: 9,
+    quizzesPerMonth: 200,
+    features: [
+      "200 quizzes per month",
+      "Everything in Plus",
+      "Bulk generation (coming soon)",
+      "API access (coming soon)",
+    ],
+  },
+  team: {
+    id: "team",
+    name: "Team",
     price: 15,
     quizzesPerMonth: Infinity,
     features: [
       "Unlimited quizzes",
-      "Everything in Plus",
-      "Bulk generation (coming soon)",
-      "API access (coming soon)",
+      "Everything in Pro",
+      "Up to 5 members (coming soon)",
+      "Shared quiz library (coming soon)",
       "Dedicated support",
     ],
   },
