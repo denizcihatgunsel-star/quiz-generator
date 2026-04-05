@@ -58,10 +58,17 @@ function PricingContent() {
       return;
     }
 
-    // Paid plan — redirect to PayLink payment page
+    // Paid plan — redirect to Stripe payment link
+    const paymentLinks: Record<string, string> = {
+      starter: "https://buy.stripe.com/7sYbJ13Ch93y3nyer08bS00",
+      plus: "https://buy.stripe.com/6oU3cv2yd6VqbU46Yy8bS02",
+      pro: "https://buy.stripe.com/bJe28rc8N93y9LWbeO8bS03",
+      team: "https://buy.stripe.com/eVq9AT5Kp1B62ju5Uu8bS04",
+    };
+
     setUpgrading(planId);
     setToast(null);
-    window.location.href = "https://buy.stripe.com/7sYbJ13Ch93y3nyer08bS00";
+    window.location.href = paymentLinks[planId] ?? paymentLinks.starter;
     return;
   };
 
