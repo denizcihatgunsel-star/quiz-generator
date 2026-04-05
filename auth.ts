@@ -1,11 +1,16 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   providers: [
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
     Credentials({
       credentials: {
         email: { label: "Email", type: "email" },
@@ -32,6 +37,30 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/auth/login",
   },
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === "google" && user.email) {
+        const existing = await db.user.findUnique({
+          where: { email: user.email },
+        });
+
+        if (!existing) {
+          const newUser = await db.user.create({
+            data: {
+              name: user.name ?? "",
+              email: user.email,
+              password: "",
+            },
+          });
+          await db.subscription.create({
+            data: { userId: newUser.id, plan: "free", status: "active" },
+          });
+          user.id = newUser.id;
+        } else {
+          user.id = existing.id;
+        }
+      }
+      return true;
+    },
     jwt({ token, user }) {
       if (user?.id) token.id = user.id;
       return token;

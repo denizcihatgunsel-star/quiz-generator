@@ -10,6 +10,7 @@ import FlashcardView from "./FlashcardView";
 import FillInTheBlankView from "./FillInTheBlankView";
 import TrueFalseView from "./TrueFalseView";
 import UserMenu from "./UserMenu";
+import LandingPage from "./LandingPage";
 
 const EXAMPLE_LESSON = `The water cycle, also known as the hydrological cycle, describes the continuous movement of water on, above, and below Earth's surface. The main stages are:
 
@@ -512,6 +513,9 @@ export default function QuizGenerator() {
                   {charCount < 50 && charCount > 0 && (
                     <span className="ml-1">(min 50)</span>
                   )}
+                  {charCount === 0 && (
+                    <span className="ml-1 text-zinc-400 dark:text-zinc-600">(~5 pages of notes)</span>
+                  )}
                 </p>
 
                 <button
@@ -591,6 +595,9 @@ export default function QuizGenerator() {
                 ))}
               </div>
             )}
+
+            {/* Landing page sections */}
+            {status === "idle" && <LandingPage />}
           </div>
         ) : (
           /* Results */
@@ -694,20 +701,33 @@ export default function QuizGenerator() {
         )}
       </main>
 
-      <footer className="text-center py-8 text-xs text-zinc-400 dark:text-zinc-600">
-        Built with{" "}
-        <a href="https://deepseek.com" className="hover:text-violet-500 transition-colors" target="_blank" rel="noopener noreferrer">
-          DeepSeek
-        </a>{" "}
-        ·{" "}
-        <Link href="/pricing" className="hover:text-violet-500 transition-colors">
-          Pricing
-        </Link>{" "}
-        ·{" "}
-        <Link href="/dashboard" className="hover:text-violet-500 transition-colors">
-          Dashboard
-        </Link>{" "}
-        · {new Date().getFullYear()}
+      <footer className="border-t border-zinc-200 dark:border-zinc-800 mt-16">
+        <div className="max-w-3xl mx-auto px-4 py-10">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-lg bg-violet-600 flex items-center justify-center text-white text-xs font-bold">Q</div>
+              <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">QuizGen</span>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-zinc-400 dark:text-zinc-500">
+              <Link href="/pricing" className="hover:text-violet-500 transition-colors">Pricing</Link>
+              <Link href="/dashboard" className="hover:text-violet-500 transition-colors">Dashboard</Link>
+              <span className="hover:text-violet-500 transition-colors cursor-default">Privacy Policy</span>
+              <span className="hover:text-violet-500 transition-colors cursor-default">Terms of Service</span>
+              <span className="hover:text-violet-500 transition-colors cursor-default">Contact</span>
+            </div>
+          </div>
+          <div className="mt-6 pt-6 border-t border-zinc-100 dark:border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-xs text-zinc-400 dark:text-zinc-600">
+              &copy; {new Date().getFullYear()} QuizGen. All rights reserved.
+            </p>
+            <p className="text-xs text-zinc-400 dark:text-zinc-600">
+              Powered by{" "}
+              <a href="https://deepseek.com" className="hover:text-violet-500 transition-colors" target="_blank" rel="noopener noreferrer">
+                DeepSeek AI
+              </a>
+            </p>
+          </div>
+        </div>
       </footer>
     </div>
   );
