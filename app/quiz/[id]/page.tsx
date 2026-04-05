@@ -5,10 +5,14 @@ import Link from "next/link";
 import { QuizData } from "@/types/quiz";
 import MultipleChoiceView from "@/components/MultipleChoiceView";
 import FlashcardView from "@/components/FlashcardView";
+import FillInTheBlankView from "@/components/FillInTheBlankView";
+import TrueFalseView from "@/components/TrueFalseView";
 
 const TABS = [
-  { id: "mcq", label: "Multiple Choice" },
-  { id: "flashcards", label: "Flashcards" },
+  { id: "mcq", label: "Multiple Choice", icon: "\ud83e\udde0" },
+  { id: "flashcards", label: "Flashcards", icon: "\ud83c\udccf" },
+  { id: "fillblank", label: "Fill in Blank", icon: "\u270d\ufe0f" },
+  { id: "truefalse", label: "True / False", icon: "\u2696\ufe0f" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -59,12 +63,18 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
         <div className="text-center">
           <p className="text-zinc-500 dark:text-zinc-400 mb-4">{error ?? "Quiz not found."}</p>
           <Link href="/" className="text-sm text-violet-600 dark:text-violet-400 hover:underline">
-            ← Back to home
+            &larr; Back to home
           </Link>
         </div>
       </div>
     );
   }
+
+  const availableTabs = TABS.filter((tab) => {
+    if (tab.id === "fillblank") return (quiz.fillInTheBlank?.length ?? 0) > 0;
+    if (tab.id === "truefalse") return (quiz.trueFalse?.length ?? 0) > 0;
+    return true;
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-950 dark:to-zinc-900">
@@ -93,31 +103,41 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
           </div>
           <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">{quiz.topic}</h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-            {quiz.multipleChoice.length} questions · {quiz.flashcards.length} flashcards
+            {quiz.multipleChoice.length} MCQ &middot; {quiz.flashcards.length} flashcards
+            {(quiz.fillInTheBlank?.length ?? 0) > 0 && ` \u00b7 ${quiz.fillInTheBlank.length} fill-in-blank`}
+            {(quiz.trueFalse?.length ?? 0) > 0 && ` \u00b7 ${quiz.trueFalse.length} true/false`}
           </p>
         </div>
 
-        <div className="flex gap-1 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl mb-6">
-          {TABS.map((tab) => (
+        <div className="flex gap-1 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl mb-6 overflow-x-auto">
+          {availableTabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
+              className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
                 activeTab === tab.id
                   ? "bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-sm"
                   : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200"
               }`}
             >
-              {tab.id === "mcq" ? "Multiple Choice" : "Flashcards"}
+              <span className="mr-1">{tab.icon}</span>
+              <span className="hidden sm:inline">{tab.label}</span>
             </button>
           ))}
         </div>
 
         <div>
-          {activeTab === "mcq" ? (
+          {activeTab === "mcq" && (
             <MultipleChoiceView questions={quiz.multipleChoice} />
-          ) : (
+          )}
+          {activeTab === "flashcards" && (
             <FlashcardView flashcards={quiz.flashcards} />
+          )}
+          {activeTab === "fillblank" && quiz.fillInTheBlank?.length > 0 && (
+            <FillInTheBlankView questions={quiz.fillInTheBlank} />
+          )}
+          {activeTab === "truefalse" && quiz.trueFalse?.length > 0 && (
+            <TrueFalseView questions={quiz.trueFalse} />
           )}
         </div>
       </main>

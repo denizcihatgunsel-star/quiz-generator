@@ -13,14 +13,7 @@ function getClient() {
   });
 }
 
-const SYSTEM_PROMPT = `You are an expert educator and quiz designer. When given lesson content, you generate high-quality multiple choice questions and flashcards that test deep understanding, not just memorization.
-
-Guidelines:
-- Multiple choice questions should test comprehension and application
-- Each question should have 4 options with exactly one correct answer
-- Explanations should teach, not just confirm the answer
-- Flashcards should capture core concepts, definitions, and relationships
-- Always respond with valid JSON only — no markdown, no commentary`;
+const SYSTEM_PROMPT = `You are an expert educator and quiz designer. When given lesson content, generate high-quality questions that test deep understanding, not just memorization. Only use information explicitly present in the provided material — never invent facts. Distribute questions across Bloom's Taxonomy levels (Remember, Understand, Apply, Analyze, Evaluate). Make wrong answers target common misconceptions. Tag each question with difficulty and Bloom's level. Always respond with valid JSON only — no markdown, no commentary.`;
 
 const USER_PROMPT_TEMPLATE = (lesson: string) => `
 Generate a quiz from the following lesson content.
@@ -39,7 +32,9 @@ Respond with ONLY this exact JSON structure (no markdown, no backticks):
       "question": "<clear, specific question>",
       "options": ["<option A>", "<option B>", "<option C>", "<option D>"],
       "correctIndex": 0,
-      "explanation": "<why this is correct and why the others are not, 1-2 sentences>"
+      "explanation": "<why this is correct and why the others are not, 1-2 sentences>",
+      "difficulty": "Easy",
+      "bloomLevel": "Remember"
     }
   ],
   "flashcards": [
@@ -48,15 +43,42 @@ Respond with ONLY this exact JSON structure (no markdown, no backticks):
       "front": "<term, concept, or question>",
       "back": "<concise definition, explanation, or answer>"
     }
+  ],
+  "fillInTheBlank": [
+    {
+      "id": "fib-1",
+      "sentence": "<sentence with ___ where the missing word/phrase should go>",
+      "answer": "<the correct word or short phrase>",
+      "explanation": "<brief explanation of why this is correct>",
+      "difficulty": "Medium",
+      "bloomLevel": "Apply"
+    }
+  ],
+  "trueFalse": [
+    {
+      "id": "tf-1",
+      "statement": "<declarative statement that is clearly true or false based on the lesson>",
+      "correct": true,
+      "explanation": "<why this is true or false, referencing the lesson content>",
+      "difficulty": "Easy",
+      "bloomLevel": "Understand"
+    }
   ]
 }
 
 Requirements:
 - Generate 5-8 multiple choice questions
 - Generate 8-12 flashcards
+- Generate 3-5 fill-in-the-blank questions
+- Generate 3-5 true/false questions
 - correctIndex is 0-based (0 = first option)
-- Vary question difficulty from recall to application
-- Make distractors plausible but clearly wrong on reflection
+- Distribute questions across Bloom's Taxonomy levels: Remember, Understand, Apply, Analyze, Evaluate
+- Tag each question with difficulty: "Easy", "Medium", or "Hard"
+- Tag each question with bloomLevel: "Remember", "Understand", "Apply", "Analyze", or "Evaluate"
+- Make distractors target common misconceptions, not obviously wrong
+- For fill-in-the-blank, use exactly "___" (three underscores) for the blank
+- For true/false, mix true and false statements roughly evenly
+- Only use information from the provided lesson content
 `;
 
 export async function POST(req: NextRequest) {
@@ -146,6 +168,10 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       );
     }
+
+    // Ensure new arrays exist even if AI omits them
+    if (!Array.isArray(quiz.fillInTheBlank)) quiz.fillInTheBlank = [];
+    if (!Array.isArray(quiz.trueFalse)) quiz.trueFalse = [];
 
     // --- Increment usage ---
     await db.usageRecord.upsert({

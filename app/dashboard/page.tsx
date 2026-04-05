@@ -20,6 +20,7 @@ export default function DashboardPage() {
   const [quizzes, setQuizzes] = useState<SavedQuizItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/auth/login");
@@ -39,6 +40,21 @@ export default function DashboardPage() {
     navigator.clipboard.writeText(url);
     setCopied(shareId);
     setTimeout(() => setCopied(null), 2000);
+  };
+
+  const deleteQuiz = async (id: string) => {
+    if (deleting) return;
+    setDeleting(id);
+    try {
+      const res = await fetch(`/api/quiz/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setQuizzes((prev) => prev.filter((q) => q.id !== id));
+      }
+    } catch {
+      // silently ignore
+    } finally {
+      setDeleting(null);
+    }
   };
 
   const totalQuizzes = quizzes.length;
@@ -149,6 +165,13 @@ export default function DashboardPage() {
                   >
                     View
                   </Link>
+                  <button
+                    onClick={() => deleteQuiz(q.id)}
+                    disabled={deleting === q.id}
+                    className="text-xs px-3 py-1.5 rounded-lg border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950 transition-colors disabled:opacity-50"
+                  >
+                    {deleting === q.id ? "..." : "Delete"}
+                  </button>
                 </div>
               </div>
             ))}

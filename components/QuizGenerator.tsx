@@ -7,6 +7,8 @@ import { QuizData, GenerateStatus } from "@/types/quiz";
 import { PLANS, type PlanId } from "@/lib/subscription";
 import MultipleChoiceView from "./MultipleChoiceView";
 import FlashcardView from "./FlashcardView";
+import FillInTheBlankView from "./FillInTheBlankView";
+import TrueFalseView from "./TrueFalseView";
 import UserMenu from "./UserMenu";
 
 const EXAMPLE_LESSON = `The water cycle, also known as the hydrological cycle, describes the continuous movement of water on, above, and below Earth's surface. The main stages are:
@@ -24,8 +26,10 @@ const EXAMPLE_LESSON = `The water cycle, also known as the hydrological cycle, d
 The water cycle is powered primarily by solar energy and gravity. It plays a critical role in distributing freshwater, regulating temperature, and shaping weather patterns across the globe.`;
 
 const TABS = [
-  { id: "mcq", label: "Multiple Choice" },
-  { id: "flashcards", label: "Flashcards" },
+  { id: "mcq", label: "Multiple Choice", icon: "\ud83e\udde0" },
+  { id: "flashcards", label: "Flashcards", icon: "\ud83c\udccf" },
+  { id: "fillblank", label: "Fill in Blank", icon: "\u270d\ufe0f" },
+  { id: "truefalse", label: "True / False", icon: "\u2696\ufe0f" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -238,6 +242,24 @@ export default function QuizGenerator() {
           <div class="exp">${q.explanation}</div>
         </div>
       `).join("")}
+      ${(quiz.fillInTheBlank?.length ?? 0) > 0 ? `
+      <h2>Fill in the Blank</h2>
+      ${quiz.fillInTheBlank.map((q: { sentence: string; answer: string; explanation: string }, i: number) => `
+        <div class="q">
+          <p>${i + 1}. ${q.sentence}</p>
+          <div class="correct">Answer: ${q.answer}</div>
+          <div class="exp">${q.explanation}</div>
+        </div>
+      `).join("")}` : ""}
+      ${(quiz.trueFalse?.length ?? 0) > 0 ? `
+      <h2>True / False</h2>
+      ${quiz.trueFalse.map((q: { statement: string; correct: boolean; explanation: string }, i: number) => `
+        <div class="q">
+          <p>${i + 1}. ${q.statement}</p>
+          <div class="correct">Answer: ${q.correct ? "True" : "False"}</div>
+          <div class="exp">${q.explanation}</div>
+        </div>
+      `).join("")}` : ""}
       <h2>Flashcards</h2>
       ${quiz.flashcards.map((f) => `<div class="fc"><strong>${f.front}</strong>${f.back}</div>`).join("")}
       </body></html>
@@ -350,7 +372,7 @@ export default function QuizGenerator() {
               </h1>
               <p className="text-zinc-500 dark:text-zinc-400 text-base">
                 Paste your lesson content or upload a file and DeepSeek will generate multiple
-                choice questions and flashcards instantly.
+                choice, fill-in-the-blank, true/false questions and flashcards instantly.
               </p>
             </div>
 
@@ -552,10 +574,12 @@ export default function QuizGenerator() {
             {status === "idle" && !isLoggedIn && (
               <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
-                  { icon: "🧠", title: "Multiple Choice", desc: "5–8 questions with instant feedback and explanations" },
-                  { icon: "🃏", title: "Flashcards", desc: "8–12 cards with flip animation for active recall practice" },
-                  { icon: "📄", title: "Upload Files", desc: "Upload PDF or TXT files to generate quizzes automatically" },
-                  { icon: "📊", title: "Track Progress", desc: "View quiz history, scores, and stats on your dashboard" },
+                  { icon: "\ud83e\udde0", title: "Multiple Choice", desc: "5\u20138 questions with instant feedback and explanations" },
+                  { icon: "\ud83c\udccf", title: "Flashcards", desc: "8\u201312 cards with flip animation for active recall" },
+                  { icon: "\u270d\ufe0f", title: "Fill in the Blank", desc: "3\u20135 questions testing recall and application" },
+                  { icon: "\u2696\ufe0f", title: "True / False", desc: "3\u20135 statements testing comprehension" },
+                  { icon: "\ud83d\udcc4", title: "Upload Files", desc: "Upload PDF or TXT files to generate quizzes" },
+                  { icon: "\ud83d\udcca", title: "Track Progress", desc: "View quiz history, scores, and stats" },
                 ].map((f) => (
                   <div key={f.title} className="flex gap-4 p-4 rounded-xl bg-white dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-700">
                     <span className="text-2xl">{f.icon}</span>
@@ -580,7 +604,9 @@ export default function QuizGenerator() {
               </div>
               <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">{quiz.topic}</h2>
               <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-                {quiz.multipleChoice.length} questions · {quiz.flashcards.length} flashcards
+                {quiz.multipleChoice.length} MCQ · {quiz.flashcards.length} flashcards
+                {quiz.fillInTheBlank?.length > 0 && ` · ${quiz.fillInTheBlank.length} fill-in-blank`}
+                {quiz.trueFalse?.length > 0 && ` · ${quiz.trueFalse.length} true/false`}
               </p>
             </div>
 
@@ -627,12 +653,16 @@ export default function QuizGenerator() {
               </button>
             </div>
 
-            <div className="flex gap-1 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl mb-6">
-              {TABS.map((tab) => (
+            <div className="flex gap-1 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl mb-6 overflow-x-auto">
+              {TABS.filter((tab) => {
+                if (tab.id === "fillblank") return (quiz.fillInTheBlank?.length ?? 0) > 0;
+                if (tab.id === "truefalse") return (quiz.trueFalse?.length ?? 0) > 0;
+                return true;
+              }).map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
+                  className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
                     activeTab === tab.id
                       ? "bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-sm"
                       : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200"
@@ -640,17 +670,24 @@ export default function QuizGenerator() {
                   role="tab"
                   aria-selected={activeTab === tab.id}
                 >
-                  {tab.id === "mcq" ? "🧠 " : "🃏 "}
-                  {tab.label}
+                  <span className="mr-1">{tab.icon}</span>
+                  <span className="hidden sm:inline">{tab.label}</span>
                 </button>
               ))}
             </div>
 
             <div role="tabpanel">
-              {activeTab === "mcq" ? (
+              {activeTab === "mcq" && (
                 <MultipleChoiceView questions={quiz.multipleChoice} onComplete={handleScoreUpdate} />
-              ) : (
+              )}
+              {activeTab === "flashcards" && (
                 <FlashcardView flashcards={quiz.flashcards} />
+              )}
+              {activeTab === "fillblank" && quiz.fillInTheBlank?.length > 0 && (
+                <FillInTheBlankView questions={quiz.fillInTheBlank} onComplete={handleScoreUpdate} />
+              )}
+              {activeTab === "truefalse" && quiz.trueFalse?.length > 0 && (
+                <TrueFalseView questions={quiz.trueFalse} onComplete={handleScoreUpdate} />
               )}
             </div>
           </div>

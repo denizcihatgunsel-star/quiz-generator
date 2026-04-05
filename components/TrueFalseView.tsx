@@ -1,36 +1,34 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { MultipleChoiceQuestion } from "@/types/quiz";
+import { TrueFalseQuestion } from "@/types/quiz";
 
 interface Props {
-  questions: MultipleChoiceQuestion[];
+  questions: TrueFalseQuestion[];
   onComplete?: (correct: number, total: number) => void;
 }
 
-export default function MultipleChoiceView({ questions, onComplete }: Props) {
-  const [answers, setAnswers] = useState<Record<string, number>>({});
+export default function TrueFalseView({ questions, onComplete }: Props) {
+  const [answers, setAnswers] = useState<Record<string, boolean | null>>({});
   const [revealed, setRevealed] = useState<Record<string, boolean>>({});
-  const [visibleCount, setVisibleCount] = useState(3);
   const [completed, setCompleted] = useState(false);
 
-  const visible = questions.slice(0, visibleCount);
-  const answeredCount = Object.keys(answers).length;
+  const answeredCount = Object.keys(revealed).length;
   const allAnswered = answeredCount === questions.length;
 
   useEffect(() => {
     if (allAnswered && !completed) {
       setCompleted(true);
       const correct = questions.filter(
-        (q) => answers[q.id] === q.correctIndex
+        (q) => answers[q.id] === q.correct
       ).length;
       onComplete?.(correct, questions.length);
     }
   }, [allAnswered, completed, questions, answers, onComplete]);
 
-  const pick = (qId: string, optIndex: number) => {
+  const pick = (qId: string, value: boolean) => {
     if (revealed[qId]) return;
-    setAnswers((prev) => ({ ...prev, [qId]: optIndex }));
+    setAnswers((prev) => ({ ...prev, [qId]: value }));
     setRevealed((prev) => ({ ...prev, [qId]: true }));
   };
 
@@ -49,10 +47,10 @@ export default function MultipleChoiceView({ questions, onComplete }: Props) {
         </span>
       </div>
 
-      {visible.map((q, qi) => {
+      {questions.map((q, qi) => {
         const chosen = answers[q.id];
         const isRevealed = revealed[q.id];
-        const isCorrect = chosen === q.correctIndex;
+        const isCorrect = chosen === q.correct;
 
         return (
           <div
@@ -66,28 +64,25 @@ export default function MultipleChoiceView({ questions, onComplete }: Props) {
             }`}
           >
             {/* Difficulty + Bloom's tags */}
-            {q.difficulty && (
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400">
-                  {q.difficulty}
-                </span>
-                {q.bloomLevel && (
-                  <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-400">
-                    {q.bloomLevel}
-                  </span>
-                )}
-              </div>
-            )}
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400">
+                {q.difficulty}
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-400">
+                {q.bloomLevel}
+              </span>
+            </div>
 
             <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-3">
               <span className="text-violet-500 dark:text-violet-400 mr-1.5">{qi + 1}.</span>
-              {q.question}
+              {q.statement}
             </p>
 
-            <div className="grid grid-cols-1 gap-2">
-              {q.options.map((opt, oi) => {
-                const isChosen = chosen === oi;
-                const isAnswer = q.correctIndex === oi;
+            <div className="flex gap-3">
+              {[true, false].map((value) => {
+                const isChosen = chosen === value;
+                const isAnswer = q.correct === value;
+                const label = value ? "True" : "False";
 
                 let style =
                   "border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-violet-300 dark:hover:border-violet-700 hover:bg-violet-50 dark:hover:bg-violet-950/30 cursor-pointer";
@@ -98,7 +93,7 @@ export default function MultipleChoiceView({ questions, onComplete }: Props) {
                       "border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-300 dark:ring-emerald-700";
                   } else if (isChosen && !isAnswer) {
                     style =
-                      "border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/40 text-red-700 dark:text-red-300 line-through";
+                      "border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/40 text-red-700 dark:text-red-300";
                   } else {
                     style =
                       "border-zinc-100 dark:border-zinc-800 text-zinc-400 dark:text-zinc-600 cursor-default";
@@ -107,15 +102,12 @@ export default function MultipleChoiceView({ questions, onComplete }: Props) {
 
                 return (
                   <button
-                    key={oi}
-                    onClick={() => pick(q.id, oi)}
+                    key={label}
+                    onClick={() => pick(q.id, value)}
                     disabled={isRevealed}
-                    className={`w-full text-left px-4 py-2.5 rounded-xl border text-sm transition-all ${style}`}
+                    className={`flex-1 text-center px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${style}`}
                   >
-                    <span className="font-semibold mr-2 opacity-50">
-                      {String.fromCharCode(65 + oi)}.
-                    </span>
-                    {opt}
+                    {label}
                   </button>
                 );
               })}
@@ -124,7 +116,7 @@ export default function MultipleChoiceView({ questions, onComplete }: Props) {
             {isRevealed && (
               <div className="mt-3 flex items-start gap-2 text-xs leading-relaxed">
                 <span className={isCorrect ? "text-emerald-500" : "text-red-500"}>
-                  {isCorrect ? "✓" : "✗"}
+                  {isCorrect ? "\u2713" : "\u2717"}
                 </span>
                 <p className="text-zinc-600 dark:text-zinc-400">{q.explanation}</p>
               </div>
@@ -133,28 +125,18 @@ export default function MultipleChoiceView({ questions, onComplete }: Props) {
         );
       })}
 
-      {visibleCount < questions.length && (
-        <button
-          onClick={() => setVisibleCount((c) => Math.min(c + 3, questions.length))}
-          className="w-full py-3 text-sm font-medium text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950/30 rounded-xl border border-dashed border-violet-200 dark:border-violet-800 transition-colors"
-        >
-          Show more questions ({questions.length - visibleCount} remaining)
-        </button>
-      )}
-
       {/* Final score */}
       {allAnswered && (
         <div className="mt-6 p-5 rounded-2xl border border-violet-200 dark:border-violet-800 bg-violet-50 dark:bg-violet-950/50 text-center">
           <p className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-            {questions.filter((q) => answers[q.id] === q.correctIndex).length} / {questions.length} correct
+            {questions.filter((q) => answers[q.id] === q.correct).length} / {questions.length} correct
           </p>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
             {Math.round(
-              (questions.filter((q) => answers[q.id] === q.correctIndex).length /
+              (questions.filter((q) => answers[q.id] === q.correct).length /
                 questions.length) *
                 100
-            )}
-            % accuracy
+            )}% accuracy
           </p>
         </div>
       )}

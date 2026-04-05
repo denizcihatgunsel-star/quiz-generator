@@ -58,29 +58,11 @@ function PricingContent() {
       return;
     }
 
-    // Paid plan — create Stripe checkout session
+    // Paid plan — redirect to PayLink payment page
     setUpgrading(planId);
     setToast(null);
-
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planId }),
-      });
-
-      const data = await res.json();
-      setUpgrading(null);
-
-      if (res.ok && data.url) {
-        window.location.href = data.url;
-      } else {
-        setToast(data.error ?? "Failed to start checkout.");
-      }
-    } catch {
-      setUpgrading(null);
-      setToast("Something went wrong. Please try again.");
-    }
+    window.location.href = "https://buy.stripe.com/7sYbJ13Ch93y3nyer08bS00";
+    return;
   };
 
   const handleManageBilling = async () => {
