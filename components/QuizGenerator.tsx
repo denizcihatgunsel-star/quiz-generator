@@ -222,7 +222,26 @@ export default function QuizGenerator() {
         throw new Error(errorMsg);
       }
 
-      const data = JSON.parse(fullText);
+      // Try to parse JSON, with recovery for truncated responses
+      let data;
+      try {
+        data = JSON.parse(fullText);
+      } catch {
+        // Attempt to fix truncated JSON by closing open brackets
+        let fixed = fullText.replace(/```json\s*/g, "").replace(/```\s*$/g, "").trim();
+        // Remove any trailing incomplete string/value
+        fixed = fixed.replace(/,\s*"[^"]*$/, "").replace(/,\s*$/, "");
+        // Count and close open brackets
+        const openBraces = (fixed.match(/\{/g) || []).length - (fixed.match(/\}/g) || []).length;
+        const openBrackets = (fixed.match(/\[/g) || []).length - (fixed.match(/\]/g) || []).length;
+        for (let i = 0; i < openBrackets; i++) fixed += "]";
+        for (let i = 0; i < openBraces; i++) fixed += "}";
+        try {
+          data = JSON.parse(fixed);
+        } catch {
+          throw new Error("Failed to parse quiz data. Please try again with shorter content.");
+        }
+      }
 
       // Ensure arrays exist
       if (!Array.isArray(data.fillInTheBlank)) data.fillInTheBlank = [];

@@ -150,7 +150,7 @@ export async function POST(req: NextRequest) {
       try {
         const completion = await getClient().chat.completions.create({
           model: "deepseek-chat",
-          max_tokens: 8000,
+          max_tokens: 16000,
           response_format: { type: "json_object" },
           stream: true,
           messages: [
