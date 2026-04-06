@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-import { getStripe, getPlanPriceId } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { PLANS, type PlanId } from "@/lib/subscription";
+
+const PLAN_PRICES: Record<string, number> = {
+  starter: 200,  // $2.00 in cents
+  plus: 500,     // $5.00
+  pro: 900,      // $9.00
+  team: 1500,    // $15.00
+};
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -16,49 +23,43 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid plan." }, { status: 400 });
   }
 
-  const priceId = getPlanPriceId(plan);
-  if (!priceId) {
-    return NextResponse.json({ error: "Plan not configured for payments." }, { status: 400 });
+  const priceInCents = PLAN_PRICES[plan];
+  if (!priceInCents) {
+    return NextResponse.json({ error: "Plan not configured." }, { status: 400 });
   }
 
   try {
-    // Find or create Stripe customer
     const user = await db.user.findUnique({ where: { id: session.user.id } });
     if (!user) {
       return NextResponse.json({ error: "User not found." }, { status: 404 });
     }
 
-    const sub = await db.subscription.findUnique({ where: { userId: user.id } });
-    let customerId = sub?.stripeCustomerId;
+    const stripe = getStripe();
+    const origin = req.headers.get("origin") ?? process.env.NEXTAUTH_URL ?? "http://localhost:3000";
+    const planInfo = PLANS[plan as PlanId];
 
-    if (!customerId) {
-      const customer = await getStripe().customers.create({
-        email: user.email,
-        name: user.name ?? undefined,
-        metadata: { userId: user.id },
-      });
-      customerId = customer.id;
-
-      // Save Stripe customer ID
-      await db.subscription.upsert({
-        where: { userId: user.id },
-        update: { stripeCustomerId: customerId },
-        create: { userId: user.id, plan: "free", status: "active", stripeCustomerId: customerId },
-      });
-    }
-
-    const origin = req.headers.get("origin") ?? process.env.NEXTAUTH_URL ?? "http://localhost:3001";
-
-    const checkoutSession = await getStripe().checkout.sessions.create({
-      customer: customerId,
-      mode: "subscription",
-      line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${origin}/pricing?success=true&plan=${plan}`,
-      cancel_url: `${origin}/pricing?canceled=true`,
+    const checkoutSession = await stripe.checkout.sessions.create({
+      mode: "payment",
+      customer_email: user.email,
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: `${planInfo.name} Plan`,
+              description: `${planInfo.quizzesPerMonth === Infinity ? "Unlimited" : planInfo.quizzesPerMonth} quizzes per month`,
+            },
+            unit_amount: priceInCents,
+          },
+          quantity: 1,
+        },
+      ],
       metadata: {
-        userId: user.id,
+        userId: session.user.id,
         planId: plan,
       },
+      success_url: `${origin}/pricing?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/pricing?canceled=true`,
     });
 
     return NextResponse.json({ url: checkoutSession.url });

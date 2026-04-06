@@ -24,14 +24,30 @@ function PricingContent() {
 
   // Handle success/cancel redirects from Stripe
   useEffect(() => {
-    if (searchParams.get("success") === "true") {
-      const plan = searchParams.get("plan");
-      setToast(`Successfully upgraded to ${plan ? PLANS[plan as PlanId]?.name ?? plan : "your new plan"}! Enjoy your quizzes.`);
+    const sessionId = searchParams.get("session_id");
+    if (sessionId) {
+      // Verify payment and upgrade user
+      fetch("/api/checkout/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId }),
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.success) {
+            const planName = PLANS[data.plan as PlanId]?.name ?? data.plan;
+            setToast(`Successfully upgraded to ${planName}! Enjoy your quizzes.`);
+            setTimeout(() => router.push("/"), 3000);
+          } else {
+            setToast(data.error ?? "Could not verify payment.");
+          }
+        })
+        .catch(() => setToast("Could not verify payment. Please contact support."));
     }
     if (searchParams.get("canceled") === "true") {
       setToast("Checkout canceled. No charges were made.");
     }
-  }, [searchParams]);
+  }, [searchParams, router]);
 
   const handleSelect = async (planId: PlanId) => {
     if (!session) {
@@ -58,18 +74,29 @@ function PricingContent() {
       return;
     }
 
-    // Paid plan — redirect to Stripe payment link
-    const paymentLinks: Record<string, string> = {
-      starter: "https://buy.stripe.com/7sYbJ13Ch93y3nyer08bS00",
-      plus: "https://buy.stripe.com/6oU3cv2yd6VqbU46Yy8bS02",
-      pro: "https://buy.stripe.com/bJe28rc8N93y9LWbeO8bS03",
-      team: "https://buy.stripe.com/eVq9AT5Kp1B62ju5Uu8bS04",
-    };
-
+    // Paid plan — create Stripe checkout session
     setUpgrading(planId);
     setToast(null);
-    window.location.href = paymentLinks[planId] ?? paymentLinks.starter;
-    return;
+
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: planId }),
+      });
+
+      const data = await res.json();
+      setUpgrading(null);
+
+      if (res.ok && data.url) {
+        window.location.href = data.url;
+      } else {
+        setToast(data.error ?? "Failed to start checkout.");
+      }
+    } catch {
+      setUpgrading(null);
+      setToast("Something went wrong. Please try again.");
+    }
   };
 
   const handleManageBilling = async () => {
@@ -95,7 +122,7 @@ function PricingContent() {
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-violet-600 flex items-center justify-center text-white text-sm font-bold">Q</div>
-            <span className="font-semibold text-zinc-900 dark:text-zinc-100">QuizGen</span>
+            <span className="font-semibold text-zinc-900 dark:text-zinc-100">Examina</span>
           </Link>
           <Link href="/" className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
             ← Back to app
