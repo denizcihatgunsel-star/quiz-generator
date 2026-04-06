@@ -36,6 +36,37 @@ const TABS = [
 
 type TabId = (typeof TABS)[number]["id"];
 
+const LANGUAGES = [
+  { code: "English", label: "English", flag: "🇺🇸" },
+  { code: "Spanish", label: "Espa\u00f1ol", flag: "🇪🇸" },
+  { code: "French", label: "Fran\u00e7ais", flag: "🇫🇷" },
+  { code: "German", label: "Deutsch", flag: "🇩🇪" },
+  { code: "Italian", label: "Italiano", flag: "🇮🇹" },
+  { code: "Portuguese", label: "Portugu\u00eas", flag: "🇧🇷" },
+  { code: "Dutch", label: "Nederlands", flag: "🇳🇱" },
+  { code: "Russian", label: "\u0420\u0443\u0441\u0441\u043a\u0438\u0439", flag: "🇷🇺" },
+  { code: "Chinese", label: "\u4e2d\u6587", flag: "🇨🇳" },
+  { code: "Japanese", label: "\u65e5\u672c\u8a9e", flag: "🇯🇵" },
+  { code: "Korean", label: "\ud55c\uad6d\uc5b4", flag: "🇰🇷" },
+  { code: "Arabic", label: "\u0627\u0644\u0639\u0631\u0628\u064a\u0629", flag: "🇸🇦" },
+  { code: "Turkish", label: "T\u00fcrk\u00e7e", flag: "🇹🇷" },
+  { code: "Hindi", label: "\u0939\u093f\u0928\u094d\u0926\u0940", flag: "🇮🇳" },
+  { code: "Polish", label: "Polski", flag: "🇵🇱" },
+  { code: "Swedish", label: "Svenska", flag: "🇸🇪" },
+  { code: "Norwegian", label: "Norsk", flag: "🇳🇴" },
+  { code: "Danish", label: "Dansk", flag: "🇩🇰" },
+  { code: "Finnish", label: "Suomi", flag: "🇫🇮" },
+  { code: "Greek", label: "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac", flag: "🇬🇷" },
+  { code: "Czech", label: "\u010ce\u0161tina", flag: "🇨🇿" },
+  { code: "Romanian", label: "Rom\u00e2n\u0103", flag: "🇷🇴" },
+  { code: "Hungarian", label: "Magyar", flag: "🇭🇺" },
+  { code: "Vietnamese", label: "Ti\u1ebfng Vi\u1ec7t", flag: "🇻🇳" },
+  { code: "Thai", label: "\u0e44\u0e17\u0e22", flag: "🇹🇭" },
+  { code: "Indonesian", label: "Bahasa Indonesia", flag: "🇮🇩" },
+  { code: "Ukrainian", label: "\u0423\u043a\u0440\u0430\u0457\u043d\u0441\u044c\u043a\u0430", flag: "🇺🇦" },
+  { code: "Hebrew", label: "\u05e2\u05d1\u05e8\u05d9\u05ea", flag: "🇮🇱" },
+];
+
 interface UsageInfo {
   used: number;
   limit: number;
@@ -60,6 +91,7 @@ export default function QuizGenerator() {
   const [darkMode, setDarkMode] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [demoUsed, setDemoUsed] = useState(false);
+  const [language, setLanguage] = useState("English");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -153,7 +185,7 @@ export default function QuizGenerator() {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lesson }),
+        body: JSON.stringify({ lesson, language }),
       });
 
       let data;
@@ -571,20 +603,39 @@ export default function QuizGenerator() {
                       />
 
                       <div className="flex items-center justify-between px-5 py-3 border-t border-zinc-800">
-                        <p
-                          id="char-count"
-                          className={`text-xs ${
-                            charCount < 50
-                              ? "text-zinc-600"
-                              : charCount > 14000
-                              ? "text-amber-500"
-                              : "text-emerald-500"
-                          }`}
-                        >
-                          {charCount.toLocaleString()} / 15,000 chars
-                          {charCount < 50 && charCount > 0 && <span className="ml-1">(min 50)</span>}
-                          {charCount === 0 && <span className="ml-1 text-zinc-600">(~5 pages of notes)</span>}
-                        </p>
+                        <div className="flex items-center gap-3">
+                          <p
+                            id="char-count"
+                            className={`text-xs ${
+                              charCount < 50
+                                ? "text-zinc-600"
+                                : charCount > 14000
+                                ? "text-amber-500"
+                                : "text-emerald-500"
+                            }`}
+                          >
+                            {charCount.toLocaleString()} / 15,000
+                            {charCount < 50 && charCount > 0 && <span className="ml-1">(min 50)</span>}
+                          </p>
+
+                          {/* Language Selector */}
+                          <div className="relative">
+                            <select
+                              value={language}
+                              onChange={(e) => setLanguage(e.target.value)}
+                              className="appearance-none bg-zinc-800 border border-zinc-700 rounded-lg px-2.5 py-1 pr-7 text-xs text-zinc-300 focus:outline-none focus:ring-1 focus:ring-violet-500/40 focus:border-violet-500 cursor-pointer hover:border-zinc-600 transition-colors"
+                            >
+                              {LANGUAGES.map((lang) => (
+                                <option key={lang.code} value={lang.code}>
+                                  {lang.flag} {lang.label}
+                                </option>
+                              ))}
+                            </select>
+                            <svg className="w-3 h-3 text-zinc-500 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </div>
+                        </div>
 
                         <button
                           onClick={handleGenerate}

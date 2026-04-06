@@ -15,9 +15,17 @@ function getClient() {
 
 const SYSTEM_PROMPT = `You are an expert educator and quiz designer. When given lesson content, generate high-quality questions that test deep understanding, not just memorization. Only use information explicitly present in the provided material — never invent facts. Distribute questions across Bloom's Taxonomy levels (Remember, Understand, Apply, Analyze, Evaluate). Make wrong answers target common misconceptions. Tag each question with difficulty and Bloom's level. Always respond with valid JSON only — no markdown, no commentary.`;
 
-const USER_PROMPT_TEMPLATE = (lesson: string) => `
-Generate a quiz from the following lesson content.
+const SUPPORTED_LANGUAGES = [
+  "English", "Spanish", "French", "German", "Italian", "Portuguese",
+  "Dutch", "Russian", "Chinese", "Japanese", "Korean", "Arabic",
+  "Turkish", "Hindi", "Polish", "Swedish", "Norwegian", "Danish",
+  "Finnish", "Greek", "Czech", "Romanian", "Hungarian", "Vietnamese",
+  "Thai", "Indonesian", "Malay", "Ukrainian", "Hebrew",
+];
 
+const USER_PROMPT_TEMPLATE = (lesson: string, language: string) => `
+Generate a quiz from the following lesson content.
+${language !== "English" ? `\nIMPORTANT: Generate ALL quiz content (topic, questions, options, explanations, flashcards, statements, answers) in ${language}. The lesson content may be in any language — read and understand it, but write the entire quiz output in ${language}.\n` : ""}
 LESSON CONTENT:
 ---
 ${lesson}
@@ -78,7 +86,7 @@ Requirements:
 - Make distractors target common misconceptions, not obviously wrong
 - For fill-in-the-blank, use exactly "___" (three underscores) for the blank
 - For true/false, mix true and false statements roughly evenly
-- Only use information from the provided lesson content
+- Only use information from the provided lesson content${language !== "English" ? `\n- Write ALL content in ${language}` : ""}
 `;
 
 export async function POST(req: NextRequest) {
@@ -116,7 +124,9 @@ export async function POST(req: NextRequest) {
   }
 
   // --- Input validation ---
-  const { lesson } = await req.json();
+  const body = await req.json();
+  const lesson = body.lesson;
+  const language = SUPPORTED_LANGUAGES.includes(body.language) ? body.language : "English";
 
   if (!lesson || typeof lesson !== "string" || lesson.trim().length < 50) {
     return NextResponse.json(
@@ -139,7 +149,7 @@ export async function POST(req: NextRequest) {
       response_format: { type: "json_object" },
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: USER_PROMPT_TEMPLATE(lesson.trim()) },
+        { role: "user", content: USER_PROMPT_TEMPLATE(lesson.trim(), language) },
       ],
     });
 
