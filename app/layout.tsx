@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Quiz Generator — Powered by DeepSeek",
+  title: "Examina — AI Quiz Generator",
   description:
     "Paste any lesson and instantly generate multiple choice questions and flashcards with AI.",
 };

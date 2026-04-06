@@ -11,6 +11,7 @@ import FillInTheBlankView from "./FillInTheBlankView";
 import TrueFalseView from "./TrueFalseView";
 import UserMenu from "./UserMenu";
 import LandingPage from "./LandingPage";
+import ChatBot from "./ChatBot";
 
 const EXAMPLE_LESSON = `The water cycle, also known as the hydrological cycle, describes the continuous movement of water on, above, and below Earth's surface. The main stages are:
 
@@ -285,6 +286,13 @@ export default function QuizGenerator() {
     }
   };
 
+  const handleChatQuiz = (quizData: QuizData) => {
+    setQuiz(quizData);
+    setStatus("success");
+    setActiveTab("mcq");
+    fetchUsage();
+  };
+
   const planId = (usage?.planId ?? "free") as PlanId;
   const plan = PLANS[planId];
   const isUnlimited = plan.quizzesPerMonth === Infinity;
@@ -303,7 +311,7 @@ export default function QuizGenerator() {
             </div>
             <span className="font-semibold text-zinc-900 dark:text-zinc-100">QuizGen</span>
             <span className="text-xs text-zinc-400 dark:text-zinc-600 hidden sm:inline">
-              · powered by DeepSeek
+              · powered by Examina AI
             </span>
           </div>
 
@@ -372,7 +380,7 @@ export default function QuizGenerator() {
                 Turn any lesson into a quiz
               </h1>
               <p className="text-zinc-500 dark:text-zinc-400 text-base">
-                Paste your lesson content or upload a file and DeepSeek will generate multiple
+                Paste your lesson content or upload a file and Examina will generate multiple
                 choice, fill-in-the-blank, true/false questions and flashcards instantly.
               </p>
             </div>
@@ -570,7 +578,19 @@ export default function QuizGenerator() {
                     />
                   ))}
                 </div>
-                <p className="text-xs">DeepSeek is reading your lesson and crafting questions…</p>
+                <p className="text-xs">Examina is reading your lesson and crafting questions…</p>
+              </div>
+            )}
+
+            {/* AI Chatbot */}
+            {status === "idle" && (
+              <div className="mt-8">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
+                    Or ask Examina AI
+                  </span>
+                </div>
+                <ChatBot onQuizGenerated={handleChatQuiz} />
               </div>
             )}
 
@@ -722,9 +742,7 @@ export default function QuizGenerator() {
             </p>
             <p className="text-xs text-zinc-400 dark:text-zinc-600">
               Powered by{" "}
-              <a href="https://deepseek.com" className="hover:text-violet-500 transition-colors" target="_blank" rel="noopener noreferrer">
-                DeepSeek AI
-              </a>
+              <span className="text-violet-500">Examina AI</span>
             </p>
           </div>
         </div>

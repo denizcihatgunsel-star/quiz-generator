@@ -5,7 +5,7 @@ import { useState } from "react";
 const FAQ_ITEMS = [
   { q: "What file types are supported?", a: "You can upload PDF, TXT, and MD (Markdown) files. You can also paste text directly." },
   { q: "How many quizzes can I generate for free?", a: "Free accounts get 5 quizzes per month. Upgrade to Starter for 20, Plus for 60, Pro for 200, or Team for unlimited." },
-  { q: "What AI model powers the quiz generation?", a: "QuizGen uses DeepSeek AI to analyze your content and generate high-quality questions across multiple Bloom's Taxonomy levels." },
+  { q: "What AI model powers the quiz generation?", a: "Examina uses advanced AI to analyze your content and generate high-quality questions across multiple Bloom's Taxonomy levels." },
   { q: "Can I share quizzes with others?", a: "Yes! Every generated quiz gets a unique shareable link. You can also download quizzes as PDF." },
   { q: "Is my content stored?", a: "Your lesson content is sent to the AI for generation only. Generated quizzes are saved to your account so you can access them later." },
 ];
