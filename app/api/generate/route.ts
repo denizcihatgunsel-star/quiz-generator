@@ -75,10 +75,11 @@ Respond with ONLY this exact JSON structure (no markdown, no backticks):
 }
 
 Requirements:
-- Generate 5-8 multiple choice questions
-- Generate 8-12 flashcards
-- Generate 3-5 fill-in-the-blank questions
-- Generate 3-5 true/false questions
+- Generate 5-6 multiple choice questions
+- Generate 6-8 flashcards
+- Generate 3-4 fill-in-the-blank questions
+- Generate 3-4 true/false questions
+- Keep explanations concise (1 sentence max)
 - correctIndex is 0-based (0 = first option)
 - Distribute questions across Bloom's Taxonomy levels: Remember, Understand, Apply, Analyze, Evaluate
 - Tag each question with difficulty: "Easy", "Medium", or "Hard"
@@ -150,7 +151,7 @@ export async function POST(req: NextRequest) {
       try {
         const completion = await getClient().chat.completions.create({
           model: "deepseek-chat",
-          max_tokens: 16000,
+          max_tokens: 8192,
           response_format: { type: "json_object" },
           stream: true,
           messages: [
