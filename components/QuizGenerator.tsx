@@ -59,12 +59,14 @@ export default function QuizGenerator() {
   const [score, setScore] = useState<{ correct: number; total: number } | null>(null);
   const [darkMode, setDarkMode] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [demoUsed, setDemoUsed] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const charCount = lesson.trim().length;
   const isReady = charCount >= 50 && charCount <= 15000;
   const isLoggedIn = !!session;
+  const canGenerateDemo = !isLoggedIn && !demoUsed;
 
   // Dark mode — default to dark
   useEffect(() => {
@@ -72,6 +74,10 @@ export default function QuizGenerator() {
     const isDark = stored === null ? true : stored === "true";
     setDarkMode(isDark);
     document.documentElement.classList.toggle("dark", isDark);
+    // Check demo usage
+    if (localStorage.getItem("examina_demo_used") === "true") {
+      setDemoUsed(true);
+    }
   }, []);
 
   const toggleDarkMode = () => {
@@ -167,21 +173,29 @@ export default function QuizGenerator() {
       setQuiz(data);
       setStatus("success");
       setActiveTab("mcq");
-      fetchUsage();
 
-      try {
-        const saveRes = await fetch("/api/quiz/save", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ topic: data.topic, data }),
-        });
-        const saveData = await saveRes.json();
-        if (saveRes.ok) {
-          setSavedShareId(saveData.shareId);
-          setSavedQuizId(saveData.id);
+      // Mark demo as used for non-logged-in users
+      if (!isLoggedIn) {
+        localStorage.setItem("examina_demo_used", "true");
+        setDemoUsed(true);
+      } else {
+        fetchUsage();
+
+        // Auto-save quiz (only for logged-in users)
+        try {
+          const saveRes = await fetch("/api/quiz/save", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ topic: data.topic, data }),
+          });
+          const saveData = await saveRes.json();
+          if (saveRes.ok) {
+            setSavedShareId(saveData.shareId);
+            setSavedQuizId(saveData.id);
+          }
+        } catch {
+          // Save failed silently
         }
-      } catch {
-        // Save failed silently
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -429,8 +443,8 @@ export default function QuizGenerator() {
                   fill-in-the-blank, and true/false questions in seconds.
                 </p>
 
-                {/* Not logged in — CTA */}
-                {!isLoggedIn && sessionStatus !== "loading" && (
+                {/* Not logged in + demo used — CTA to sign up */}
+                {!isLoggedIn && sessionStatus !== "loading" && demoUsed && (
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
                     <Link
                       href="/auth/register"
@@ -447,6 +461,18 @@ export default function QuizGenerator() {
                     >
                       Sign in
                     </Link>
+                  </div>
+                )}
+
+                {/* Demo badge for non-logged-in users */}
+                {!isLoggedIn && sessionStatus !== "loading" && canGenerateDemo && (
+                  <div className="max-w-2xl mx-auto mb-4">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-500/20 bg-violet-500/5 text-xs text-violet-400">
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                      Try 1 free quiz — no account required
+                    </div>
                   </div>
                 )}
 
@@ -487,7 +513,7 @@ export default function QuizGenerator() {
                 )}
 
                 {/* Quiz Input Area */}
-                {isLoggedIn && (
+                {(isLoggedIn || canGenerateDemo) && (
                   <div className="max-w-2xl mx-auto">
                     <div className="rounded-2xl border border-zinc-800 bg-zinc-900/80 shadow-2xl shadow-black/20 overflow-hidden glow-purple">
                       <div className="flex items-center justify-between px-5 pt-4 pb-2">
@@ -639,6 +665,29 @@ export default function QuizGenerator() {
           /* ========== QUIZ RESULTS ========== */
           <div className="pt-28 pb-16">
             <div className="max-w-3xl mx-auto px-4">
+              {/* Demo CTA — sign up to save */}
+              {!isLoggedIn && (
+                <div className="mb-6 p-5 rounded-2xl border border-violet-500/30 bg-violet-500/5">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-medium text-violet-200">Your demo quiz is ready!</p>
+                      <p className="text-xs text-violet-400/70 mt-0.5">
+                        Sign up to save quizzes, track scores, share with others, and generate more.
+                      </p>
+                    </div>
+                    <Link
+                      href="/auth/register"
+                      className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-sm font-medium transition-all shadow-lg shadow-violet-500/20"
+                    >
+                      Create free account
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
+              )}
+
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-1">
                   <div className="w-2 h-2 rounded-full bg-emerald-500" />

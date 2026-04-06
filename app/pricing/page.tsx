@@ -22,11 +22,9 @@ function PricingContent() {
   const [toast, setToast] = useState<string | null>(null);
   const [managingBilling, setManagingBilling] = useState(false);
 
-  // Handle success/cancel redirects from Stripe
   useEffect(() => {
     const sessionId = searchParams.get("session_id");
     if (sessionId) {
-      // Verify payment and upgrade user
       fetch("/api/checkout/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -55,7 +53,6 @@ function PricingContent() {
       return;
     }
 
-    // Free plan — downgrade directly
     if (planId === "free") {
       setUpgrading(planId);
       const res = await fetch("/api/upgrade", {
@@ -74,7 +71,6 @@ function PricingContent() {
       return;
     }
 
-    // Paid plan — create Stripe checkout session
     setUpgrading(planId);
     setToast(null);
 
@@ -116,40 +112,41 @@ function PricingContent() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+    <div className="min-h-screen bg-[#09090b]">
       {/* Header */}
-      <header className="border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 backdrop-blur">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-violet-600 flex items-center justify-center text-white text-sm font-bold">Q</div>
-            <span className="font-semibold text-zinc-900 dark:text-zinc-100">Examina</span>
+      <header className="border-b border-zinc-800/50 bg-[#09090b]/80 backdrop-blur-xl sticky top-0 z-10">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5">
+            <img src="/logo.png" alt="Examina" className="w-8 h-8 rounded-xl object-cover" />
+            <span className="font-semibold text-white text-lg">Examina</span>
           </Link>
-          <Link href="/" className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
-            ← Back to app
+          <Link href="/" className="text-sm text-zinc-500 hover:text-white transition-colors">
+            Back to app
           </Link>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 py-16">
+      <main className="max-w-6xl mx-auto px-4 py-20">
         {/* Hero */}
-        <div className="text-center mb-14">
-          <h1 className="text-4xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight mb-4">
+        <div className="text-center mb-16">
+          <p className="text-violet-400 text-sm font-semibold uppercase tracking-widest mb-3">Pricing</p>
+          <h1 className="text-4xl sm:text-5xl font-bold text-white tracking-tight mb-4">
             Simple, student-friendly pricing
           </h1>
-          <p className="text-zinc-500 dark:text-zinc-400 text-lg max-w-md mx-auto">
+          <p className="text-zinc-400 text-lg max-w-md mx-auto">
             Start free. Upgrade when you need more quizzes.
           </p>
         </div>
 
         {/* Toast */}
         {toast && (
-          <div className="mb-8 max-w-md mx-auto p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-sm text-center">
+          <div className="mb-8 max-w-md mx-auto p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20 text-emerald-400 text-sm text-center">
             {toast}
           </div>
         )}
 
         {/* Plans */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
           {Object.values(PLANS).map((plan) => {
             const isHighlighted = plan.id === "starter" || plan.id === "plus";
             const isBusy = upgrading === plan.id;
@@ -157,16 +154,16 @@ function PricingContent() {
             return (
               <div
                 key={plan.id}
-                className={`relative flex flex-col rounded-2xl border p-6 ${
+                className={`relative flex flex-col rounded-2xl border p-6 transition-all ${
                   isHighlighted
-                    ? "border-violet-400 dark:border-violet-600 bg-white dark:bg-zinc-800 shadow-lg shadow-violet-100 dark:shadow-violet-900/30"
-                    : "border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800/50"
+                    ? "border-violet-500/40 bg-zinc-900/80 shadow-lg shadow-violet-500/10"
+                    : "border-zinc-800 bg-zinc-900/50 hover:border-zinc-700"
                 }`}
               >
                 {/* Badge */}
                 {plan.badge && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-violet-600 text-white whitespace-nowrap">
+                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-violet-600 to-indigo-600 text-white whitespace-nowrap shadow-lg shadow-violet-500/20">
                       {plan.badge}
                     </span>
                   </div>
@@ -174,20 +171,20 @@ function PricingContent() {
 
                 {/* Plan name & price */}
                 <div className="mb-5">
-                  <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+                  <h2 className="text-lg font-bold text-white mb-2">
                     {plan.name}
                   </h2>
                   <div className="flex items-baseline gap-1">
                     {plan.price === 0 ? (
-                      <span className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">Free</span>
+                      <span className="text-3xl font-bold text-white">Free</span>
                     ) : (
                       <>
-                        <span className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">${plan.price}</span>
-                        <span className="text-sm text-zinc-500 dark:text-zinc-400">/mo</span>
+                        <span className="text-3xl font-bold text-white">${plan.price}</span>
+                        <span className="text-sm text-zinc-500">/mo</span>
                       </>
                     )}
                   </div>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1.5">
+                  <p className="text-sm text-zinc-500 mt-1.5">
                     {plan.quizzesPerMonth === Infinity
                       ? "Unlimited quizzes"
                       : `${plan.quizzesPerMonth} quizzes / month`}
@@ -195,10 +192,10 @@ function PricingContent() {
                 </div>
 
                 {/* Features */}
-                <ul className="space-y-2 mb-6 flex-1">
+                <ul className="space-y-2.5 mb-6 flex-1">
                   {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-zinc-600 dark:text-zinc-400">
-                      <svg className="w-4 h-4 mt-0.5 shrink-0 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <li key={f} className="flex items-start gap-2 text-sm text-zinc-400">
+                      <svg className="w-4 h-4 mt-0.5 shrink-0 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                       </svg>
                       <span>{f}</span>
@@ -212,14 +209,14 @@ function PricingContent() {
                   disabled={isBusy}
                   className={`w-full py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
                     isHighlighted
-                      ? "bg-violet-600 hover:bg-violet-700 text-white shadow-sm hover:shadow-md"
-                      : "bg-zinc-100 dark:bg-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-600 text-zinc-900 dark:text-zinc-100"
+                      ? "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white shadow-lg shadow-violet-500/20"
+                      : "bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700"
                   } disabled:opacity-60`}
                 >
                   {isBusy ? (
                     <>
                       <span className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin" />
-                      Processing…
+                      Processing...
                     </>
                   ) : plan.price === 0 ? (
                     session ? "Downgrade to Free" : "Get started free"
@@ -238,14 +235,14 @@ function PricingContent() {
             <button
               onClick={handleManageBilling}
               disabled={managingBilling}
-              className="text-sm text-violet-600 dark:text-violet-400 hover:underline disabled:opacity-50"
+              className="text-sm text-violet-400 hover:text-violet-300 transition-colors disabled:opacity-50"
             >
               {managingBilling ? "Opening..." : "Manage billing & invoices"}
             </button>
           </div>
         )}
 
-        <p className="text-center text-sm text-zinc-400 dark:text-zinc-600 mt-6">
+        <p className="text-center text-sm text-zinc-600 mt-6">
           Secure payments via Stripe. Cancel anytime.
         </p>
       </main>

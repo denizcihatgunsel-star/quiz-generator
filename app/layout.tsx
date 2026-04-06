@@ -17,7 +17,21 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Examina — AI Quiz Generator",
   description:
-    "Paste any lesson and instantly generate multiple choice questions and flashcards with AI.",
+    "Paste any lesson and instantly generate multiple choice, flashcard, fill-in-the-blank, and true/false questions with AI.",
+  openGraph: {
+    title: "Examina — AI Quiz Generator",
+    description:
+      "Turn any lesson into a quiz instantly. Multiple choice, flashcards, fill-in-the-blank, and true/false — powered by AI.",
+    type: "website",
+    images: ["/logo.png"],
+  },
+  twitter: {
+    card: "summary",
+    title: "Examina — AI Quiz Generator",
+    description:
+      "Turn any lesson into a quiz instantly. Powered by AI.",
+    images: ["/logo.png"],
+  },
 };
 
 export default function RootLayout({

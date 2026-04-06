@@ -82,39 +82,36 @@ Requirements:
 `;
 
 export async function POST(req: NextRequest) {
-  // --- Auth check ---
+  // --- Auth check (allow demo for unauthenticated users) ---
   const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json(
-      { error: "Please sign in to generate quizzes.", code: "UNAUTHENTICATED" },
-      { status: 401 }
-    );
-  }
+  const isDemo = !session?.user?.id;
 
-  const userId = session.user.id;
+  if (!isDemo) {
+    const userId = session.user.id;
 
-  // --- Subscription + usage check ---
-  const subscription = await db.subscription.findUnique({ where: { userId } });
-  const plan = getPlan(subscription?.plan ?? "free");
-  const month = currentMonth();
+    // --- Subscription + usage check ---
+    const subscription = await db.subscription.findUnique({ where: { userId } });
+    const plan = getPlan(subscription?.plan ?? "free");
+    const month = currentMonth();
 
-  if (!isUnlimited(plan)) {
-    const usage = await db.usageRecord.findUnique({
-      where: { userId_month: { userId, month } },
-    });
-    const used = usage?.count ?? 0;
+    if (!isUnlimited(plan)) {
+      const usage = await db.usageRecord.findUnique({
+        where: { userId_month: { userId, month } },
+      });
+      const used = usage?.count ?? 0;
 
-    if (used >= plan.quizzesPerMonth) {
-      return NextResponse.json(
-        {
-          error: `You've used all ${plan.quizzesPerMonth} quizzes for this month on the ${plan.name} plan. Upgrade to generate more.`,
-          code: "LIMIT_REACHED",
-          used,
-          limit: plan.quizzesPerMonth,
-          plan: plan.id,
-        },
-        { status: 429 }
-      );
+      if (used >= plan.quizzesPerMonth) {
+        return NextResponse.json(
+          {
+            error: `You've used all ${plan.quizzesPerMonth} quizzes for this month on the ${plan.name} plan. Upgrade to generate more.`,
+            code: "LIMIT_REACHED",
+            used,
+            limit: plan.quizzesPerMonth,
+            plan: plan.id,
+          },
+          { status: 429 }
+        );
+      }
     }
   }
 
@@ -173,12 +170,16 @@ export async function POST(req: NextRequest) {
     if (!Array.isArray(quiz.fillInTheBlank)) quiz.fillInTheBlank = [];
     if (!Array.isArray(quiz.trueFalse)) quiz.trueFalse = [];
 
-    // --- Increment usage ---
-    await db.usageRecord.upsert({
-      where: { userId_month: { userId, month } },
-      update: { count: { increment: 1 } },
-      create: { userId, month, count: 1 },
-    });
+    // --- Increment usage (skip for demo) ---
+    if (!isDemo) {
+      const userId = session.user.id;
+      const month = currentMonth();
+      await db.usageRecord.upsert({
+        where: { userId_month: { userId, month } },
+        update: { count: { increment: 1 } },
+        create: { userId, month, count: 1 },
+      });
+    }
 
     return NextResponse.json(quiz);
   } catch (err) {

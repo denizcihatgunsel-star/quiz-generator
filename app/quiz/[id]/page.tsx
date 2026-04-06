@@ -47,10 +47,10 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-950 dark:to-zinc-900 flex items-center justify-center">
+      <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
         <div className="flex gap-1">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="w-2 h-2 rounded-full bg-violet-400 animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />
+            <div key={i} className="w-2 h-2 rounded-full bg-violet-500 animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />
           ))}
         </div>
       </div>
@@ -59,11 +59,11 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
 
   if (error || !quiz) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-950 dark:to-zinc-900 flex items-center justify-center">
+      <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-zinc-500 dark:text-zinc-400 mb-4">{error ?? "Quiz not found."}</p>
-          <Link href="/" className="text-sm text-violet-600 dark:text-violet-400 hover:underline">
-            &larr; Back to home
+          <p className="text-zinc-500 mb-4">{error ?? "Quiz not found."}</p>
+          <Link href="/" className="text-sm text-violet-400 hover:text-violet-300 transition-colors">
+            Back to home
           </Link>
         </div>
       </div>
@@ -77,16 +77,16 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-950 dark:to-zinc-900">
-      <header className="border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 backdrop-blur sticky top-0 z-10">
+    <div className="min-h-screen bg-[#09090b]">
+      <header className="border-b border-zinc-800/50 bg-[#09090b]/80 backdrop-blur-xl sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-violet-600 flex items-center justify-center text-white text-sm font-bold">Q</div>
-            <span className="font-semibold text-zinc-900 dark:text-zinc-100">QuizGen</span>
+            <img src="/logo.png" alt="Examina" className="w-8 h-8 rounded-xl object-cover" />
+            <span className="font-semibold text-white text-lg">Examina</span>
           </Link>
           <button
             onClick={copyLink}
-            className="text-sm px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors"
+            className="px-4 py-2 rounded-full border border-zinc-800 text-sm text-zinc-400 hover:text-white hover:border-zinc-600 transition-colors"
           >
             {copied ? "Link copied!" : "Share quiz"}
           </button>
@@ -97,27 +97,27 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-2 h-2 rounded-full bg-emerald-500" />
-            <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
+            <span className="text-xs font-medium text-emerald-400 uppercase tracking-widest">
               Shared Quiz
             </span>
           </div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">{quiz.topic}</h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+          <h1 className="text-2xl font-bold text-white">{quiz.topic}</h1>
+          <p className="text-sm text-zinc-500 mt-1">
             {quiz.multipleChoice.length} MCQ &middot; {quiz.flashcards.length} flashcards
             {(quiz.fillInTheBlank?.length ?? 0) > 0 && ` \u00b7 ${quiz.fillInTheBlank.length} fill-in-blank`}
             {(quiz.trueFalse?.length ?? 0) > 0 && ` \u00b7 ${quiz.trueFalse.length} true/false`}
           </p>
         </div>
 
-        <div className="flex gap-1 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl mb-6 overflow-x-auto">
+        <div className="flex gap-1 p-1 bg-zinc-900 border border-zinc-800 rounded-xl mb-6 overflow-x-auto">
           {availableTabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
+              className={`flex-1 py-2.5 px-3 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
                 activeTab === tab.id
-                  ? "bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-sm"
-                  : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200"
+                  ? "bg-zinc-800 text-white shadow-sm"
+                  : "text-zinc-500 hover:text-zinc-300"
               }`}
             >
               <span className="mr-1">{tab.icon}</span>
