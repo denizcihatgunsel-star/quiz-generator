@@ -39,30 +39,45 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider === "google" && user.email) {
-        const existing = await db.user.findUnique({
-          where: { email: user.email },
-        });
+        try {
+          const existing = await db.user.findUnique({
+            where: { email: user.email },
+          });
 
-        if (!existing) {
-          const newUser = await db.user.create({
-            data: {
-              name: user.name ?? "",
-              email: user.email,
-              password: "",
-            },
-          });
-          await db.subscription.create({
-            data: { userId: newUser.id, plan: "free", status: "active" },
-          });
-          user.id = newUser.id;
-        } else {
-          user.id = existing.id;
+          if (!existing) {
+            const newUser = await db.user.create({
+              data: {
+                name: user.name ?? "",
+                email: user.email,
+                password: "",
+              },
+            });
+            await db.subscription.create({
+              data: { userId: newUser.id, plan: "free", status: "active" },
+            });
+          }
+        } catch (err) {
+          console.error("Google signIn callback error:", err);
+          return false;
         }
       }
       return true;
     },
-    jwt({ token, user }) {
-      if (user?.id) token.id = user.id;
+    async jwt({ token, account }) {
+      // For Google users, look up the database ID by email
+      if (account?.provider === "google" && token.email) {
+        const dbUser = await db.user.findUnique({
+          where: { email: token.email },
+        });
+        if (dbUser) token.id = dbUser.id;
+      }
+      // For credentials users, id is already set from authorize()
+      if (!token.id && token.sub) {
+        const dbUser = await db.user.findUnique({
+          where: { id: token.sub },
+        });
+        if (dbUser) token.id = dbUser.id;
+      }
       return token;
     },
     session({ session, token }) {
