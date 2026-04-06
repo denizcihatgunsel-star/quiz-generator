@@ -38,7 +38,7 @@ export default function RootLayout({
               (function() {
                 try {
                   var stored = localStorage.getItem('darkMode');
-                  var isDark = stored === 'true' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                  var isDark = stored === null ? true : stored === 'true';
                   if (isDark) document.documentElement.classList.add('dark');
                 } catch(e) {}
               })();
