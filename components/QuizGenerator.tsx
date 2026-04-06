@@ -304,9 +304,7 @@ export default function QuizGenerator() {
           <div className="nav-glass rounded-2xl px-4 sm:px-6 py-3 flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-violet-500/20">
-                E
-              </div>
+              <img src="/logo.png" alt="Examina" className="w-8 h-8 rounded-xl object-cover" />
               <span className="font-semibold text-white text-lg tracking-tight">Examina</span>
             </div>
 
@@ -746,9 +744,7 @@ export default function QuizGenerator() {
         <div className="max-w-5xl mx-auto px-4 py-12">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white text-xs font-bold">
-                E
-              </div>
+              <img src="/logo.png" alt="Examina" className="w-7 h-7 rounded-xl object-cover" />
               <span className="text-sm font-semibold text-zinc-300">Examina</span>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-zinc-500">
