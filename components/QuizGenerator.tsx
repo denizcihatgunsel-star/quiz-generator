@@ -188,19 +188,45 @@ export default function QuizGenerator() {
         body: JSON.stringify({ lesson, language }),
       });
 
-      let data;
-      try {
-        data = await res.json();
-      } catch {
-        throw new Error(`Server returned ${res.status} — this usually means the request timed out. Try a shorter lesson.`);
-      }
-
+      // Non-streaming error responses (auth, validation, limit)
       if (!res.ok) {
+        let data;
+        try {
+          data = await res.json();
+        } catch {
+          throw new Error(`Server returned ${res.status} — please try again.`);
+        }
         if (data.code === "LIMIT_REACHED") {
           setLimitReached(true);
         }
         throw new Error(data.error || `Request failed with status ${res.status}`);
       }
+
+      // Read the streamed response
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error("Failed to read response stream.");
+
+      const decoder = new TextDecoder();
+      let fullText = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        fullText += decoder.decode(value, { stream: true });
+      }
+
+      // Check for server-side error marker
+      const errorMarker = "__EXAMINA_ERROR__:";
+      if (fullText.includes(errorMarker)) {
+        const errorMsg = fullText.split(errorMarker).pop()?.trim() || "Generation failed.";
+        throw new Error(errorMsg);
+      }
+
+      const data = JSON.parse(fullText);
+
+      // Ensure arrays exist
+      if (!Array.isArray(data.fillInTheBlank)) data.fillInTheBlank = [];
+      if (!Array.isArray(data.trueFalse)) data.trueFalse = [];
 
       setQuiz(data);
       setStatus("success");

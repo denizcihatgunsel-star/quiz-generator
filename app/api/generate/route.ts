@@ -142,83 +142,88 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  try {
-    const completion = await getClient().chat.completions.create({
-      model: "deepseek-chat",
-      max_tokens: 8000,
-      response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: USER_PROMPT_TEMPLATE(lesson.trim(), language) },
-      ],
-    });
+  // --- Stream the response to prevent Vercel timeout ---
+  const encoder = new TextEncoder();
 
-    const rawText = completion.choices[0]?.message?.content?.trim();
-    if (!rawText) {
-      return NextResponse.json(
-        { error: "No response generated. Please try again." },
-        { status: 500 }
-      );
-    }
+  const stream = new ReadableStream({
+    async start(controller) {
+      try {
+        const completion = await getClient().chat.completions.create({
+          model: "deepseek-chat",
+          max_tokens: 8000,
+          response_format: { type: "json_object" },
+          stream: true,
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: USER_PROMPT_TEMPLATE(lesson.trim(), language) },
+          ],
+        });
 
-    const quiz = JSON.parse(rawText);
+        let fullText = "";
 
-    if (
-      !quiz.topic ||
-      !Array.isArray(quiz.multipleChoice) ||
-      !Array.isArray(quiz.flashcards) ||
-      quiz.multipleChoice.length === 0 ||
-      quiz.flashcards.length === 0
-    ) {
-      return NextResponse.json(
-        { error: "Generated quiz has an invalid structure. Please try again." },
-        { status: 500 }
-      );
-    }
+        for await (const chunk of completion) {
+          const content = chunk.choices[0]?.delta?.content;
+          if (content) {
+            fullText += content;
+            // Send each chunk to keep the connection alive
+            controller.enqueue(encoder.encode(content));
+          }
+        }
 
-    // Ensure new arrays exist even if AI omits them
-    if (!Array.isArray(quiz.fillInTheBlank)) quiz.fillInTheBlank = [];
-    if (!Array.isArray(quiz.trueFalse)) quiz.trueFalse = [];
+        // After streaming completes, validate and increment usage
+        try {
+          const quiz = JSON.parse(fullText);
 
-    // --- Increment usage (skip for demo) ---
-    if (!isDemo) {
-      const userId = session.user.id;
-      const month = currentMonth();
-      await db.usageRecord.upsert({
-        where: { userId_month: { userId, month } },
-        update: { count: { increment: 1 } },
-        create: { userId, month, count: 1 },
-      });
-    }
+          if (
+            !quiz.topic ||
+            !Array.isArray(quiz.multipleChoice) ||
+            !Array.isArray(quiz.flashcards) ||
+            quiz.multipleChoice.length === 0 ||
+            quiz.flashcards.length === 0
+          ) {
+            // Send error as a special marker the client can detect
+            controller.enqueue(encoder.encode("\n__EXAMINA_ERROR__:Generated quiz has an invalid structure. Please try again."));
+            controller.close();
+            return;
+          }
 
-    return NextResponse.json(quiz);
-  } catch (err) {
-    if (err instanceof SyntaxError) {
-      return NextResponse.json(
-        { error: "Failed to parse the generated quiz. Please try again." },
-        { status: 500 }
-      );
-    }
+          // Increment usage (skip for demo)
+          if (!isDemo) {
+            const userId = session.user.id;
+            const month = currentMonth();
+            await db.usageRecord.upsert({
+              where: { userId_month: { userId, month } },
+              update: { count: { increment: 1 } },
+              create: { userId, month, count: 1 },
+            });
+          }
+        } catch {
+          controller.enqueue(encoder.encode("\n__EXAMINA_ERROR__:Failed to parse the generated quiz. Please try again."));
+        }
 
-    if (err instanceof OpenAI.AuthenticationError) {
-      return NextResponse.json(
-        { error: "Invalid API key. Please check your DEEPSEEK_API_KEY." },
-        { status: 401 }
-      );
-    }
+        controller.close();
+      } catch (err) {
+        let errorMsg = "Generation failed.";
 
-    if (err instanceof OpenAI.RateLimitError) {
-      return NextResponse.json(
-        { error: "Rate limit reached. Please wait a moment and try again." },
-        { status: 429 }
-      );
-    }
+        if (err instanceof OpenAI.AuthenticationError) {
+          errorMsg = "Invalid API key.";
+        } else if (err instanceof OpenAI.RateLimitError) {
+          errorMsg = "Rate limit reached. Please wait a moment and try again.";
+        } else if (err instanceof Error) {
+          errorMsg = `Generation failed: ${err.message}`;
+        }
 
-    const message = err instanceof Error ? err.message : String(err);
-    console.error("Generate error:", message, err);
-    return NextResponse.json(
-      { error: `Generation failed: ${message}` },
-      { status: 500 }
-    );
-  }
+        controller.enqueue(encoder.encode(`__EXAMINA_ERROR__:${errorMsg}`));
+        controller.close();
+      }
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Transfer-Encoding": "chunked",
+      "Cache-Control": "no-cache",
+    },
+  });
 }
