@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "@/lib/i18n";
 
 const FAQ_ITEMS = [
   { q: "What file types can I upload?", a: "PDF, TXT, and Markdown files. Or just paste text directly." },
@@ -11,6 +12,7 @@ const FAQ_ITEMS = [
 ];
 
 export default function LandingPage() {
+  const { t } = useTranslation();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
@@ -20,11 +22,11 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">What you get</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">{t("landing.whatYouGet")}</p>
               <h2 className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight">
-                Four question types,
+                {t("landing.fourTypes")}
                 <br />
-                one click.
+                {t("landing.oneClick")}
               </h2>
             </div>
             <div className="space-y-8">
@@ -53,9 +55,9 @@ export default function LandingPage() {
       {/* How it works */}
       <section id="features" className="py-32 bg-white">
         <div className="max-w-5xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">How it works</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">{t("landing.howItWorks")}</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight mb-20">
-            Paste. Generate. Study.
+            {t("landing.pasteGenerateStudy")}
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-12">
@@ -96,7 +98,7 @@ export default function LandingPage() {
       {/* Testimonials */}
       <section className="py-32 bg-white">
         <div className="max-w-5xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">From our users</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">{t("landing.fromUsers")}</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-neutral-100">
             {[
@@ -120,9 +122,9 @@ export default function LandingPage() {
       {/* FAQ */}
       <section id="faq" className="py-32 border-t border-black/5">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">FAQ</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">{t("landing.faq")}</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight mb-16">
-            Common questions
+            {t("landing.commonQuestions")}
           </h2>
 
           <div className="divide-y divide-black/5">
@@ -150,16 +152,16 @@ export default function LandingPage() {
       <section className="py-32 bg-neutral-900">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="text-3xl sm:text-5xl font-medium text-white leading-tight mb-6">
-            Start studying smarter.
+            {t("landing.ctaTitle")}
           </h2>
           <p className="text-neutral-400 mb-10 max-w-md mx-auto">
-            5 free quizzes per month. No credit card required.
+            {t("landing.ctaSubtitle")}
           </p>
           <a
             href="/auth/register"
             className="inline-block px-8 py-3 border border-white text-white text-sm font-medium hover:bg-white hover:text-black transition-colors duration-200"
           >
-            Create free account
+            {t("landing.ctaButton")}
           </a>
         </div>
       </section>

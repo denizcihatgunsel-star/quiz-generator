@@ -12,6 +12,7 @@ import TrueFalseView from "./TrueFalseView";
 import UserMenu from "./UserMenu";
 import LandingPage from "./LandingPage";
 import ChatBot from "./ChatBot";
+import { useTranslation } from "@/lib/i18n";
 
 const EXAMPLE_LESSON = `The water cycle, also known as the hydrological cycle, describes the continuous movement of water on, above, and below Earth's surface. The main stages are:
 
@@ -74,6 +75,7 @@ interface UsageInfo {
 }
 
 export default function QuizGenerator() {
+  const { t } = useTranslation();
   const { data: session, status: sessionStatus } = useSession();
   const [lesson, setLesson] = useState("");
   const [status, setStatus] = useState<GenerateStatus>("idle");
@@ -398,11 +400,11 @@ export default function QuizGenerator() {
               <span className="font-medium text-neutral-900 tracking-tight">Examina</span>
             </Link>
             <div className="hidden sm:flex items-center gap-6">
-              <a href="#features" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">Features</a>
-              <Link href="/pricing" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">Pricing</Link>
-              <a href="#faq" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">FAQ</a>
+              <a href="#features" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">{t("nav.features")}</a>
+              <Link href="/pricing" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">{t("nav.pricing")}</Link>
+              <a href="#faq" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">{t("nav.faq")}</a>
               {isLoggedIn && (
-                <Link href="/dashboard" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">Dashboard</Link>
+                <Link href="/dashboard" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">{t("nav.dashboard")}</Link>
               )}
             </div>
           </div>
@@ -410,7 +412,7 @@ export default function QuizGenerator() {
           <div className="flex items-center gap-4">
             {quiz && (
               <button onClick={handleReset} className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
-                New quiz
+                {t("nav.newQuiz")}
               </button>
             )}
 
@@ -421,10 +423,10 @@ export default function QuizGenerator() {
             ) : !isLoggedIn ? (
               <div className="flex items-center gap-4">
                 <Link href="/auth/login" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
-                  Login
+                  {t("nav.login")}
                 </Link>
                 <Link href="/auth/register" className="text-sm px-4 py-2 bg-neutral-900 text-white hover:bg-neutral-700 transition-colors duration-200">
-                  Get started
+                  {t("nav.getStarted")}
                 </Link>
               </div>
             ) : null}
@@ -465,13 +467,13 @@ export default function QuizGenerator() {
               <div className="max-w-5xl mx-auto px-6">
                 <div className="max-w-3xl">
                   <h1 className="text-4xl sm:text-6xl lg:text-7xl font-medium text-neutral-900 tracking-tight leading-[1.08] mb-8">
-                    Turn any lesson
+                    {t("hero.title1")}
                     <br />
-                    into a quiz
+                    {t("hero.title2")}
                   </h1>
 
                   <p className="text-lg text-neutral-500 max-w-xl mb-16 leading-relaxed">
-                    Paste your content, pick a language, and get multiple choice, flashcards, fill-in-the-blank, and true/false questions in seconds.
+                    {t("hero.subtitle")}
                   </p>
                 </div>
 
@@ -479,17 +481,17 @@ export default function QuizGenerator() {
                 {!isLoggedIn && sessionStatus !== "loading" && demoUsed && (
                   <div className="mb-12 flex items-center gap-6">
                     <Link href="/auth/register" className="px-6 py-3 bg-neutral-900 text-white text-sm font-medium hover:bg-neutral-700 transition-colors">
-                      Create free account
+                      {t("hero.createAccount")}
                     </Link>
                     <Link href="/auth/login" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
-                      Sign in
+                      {t("hero.signIn")}
                     </Link>
                   </div>
                 )}
 
                 {/* Demo hint */}
                 {!isLoggedIn && sessionStatus !== "loading" && canGenerateDemo && (
-                  <p className="text-xs text-neutral-400 mb-6">Try one quiz free — no account needed.</p>
+                  <p className="text-xs text-neutral-400 mb-6">{t("hero.demoHint")}</p>
                 )}
 
                 {/* Limit reached */}
@@ -522,14 +524,14 @@ export default function QuizGenerator() {
                   <div className="max-w-2xl">
                     <div className="border border-neutral-200 bg-white overflow-hidden">
                       <div className="flex items-center justify-between px-5 pt-4 pb-2">
-                        <span className="text-xs text-neutral-400 uppercase tracking-[0.15em]">Content</span>
+                        <span className="text-xs text-neutral-400 uppercase tracking-[0.15em]">{t("input.content")}</span>
                         <div className="flex items-center gap-4">
                           <input ref={fileInputRef} type="file" accept=".pdf,.txt,.md" onChange={handleFileUpload} className="hidden" id="file-upload" />
                           <button onClick={() => fileInputRef.current?.click()} disabled={uploading} className="text-xs text-neutral-400 hover:text-neutral-900 disabled:opacity-50 transition-colors">
-                            {uploading ? "Extracting..." : "Upload file"}
+                            {uploading ? t("input.extracting") : t("input.upload")}
                           </button>
                           <button onClick={loadExample} className="text-xs text-neutral-400 hover:text-neutral-900 transition-colors">
-                            Example
+                            {t("input.example")}
                           </button>
                         </div>
                       </div>
@@ -539,7 +541,7 @@ export default function QuizGenerator() {
                         ref={textareaRef}
                         value={lesson}
                         onChange={(e) => setLesson(e.target.value)}
-                        placeholder="Paste your lesson, article, or notes here..."
+                        placeholder={t("input.placeholder")}
                         className="w-full px-5 pb-4 min-h-40 text-sm text-neutral-900 placeholder-neutral-300 bg-transparent resize-y focus:outline-none leading-relaxed"
                         aria-describedby="char-count"
                       />
@@ -568,7 +570,7 @@ export default function QuizGenerator() {
                           className="px-5 py-2 bg-neutral-900 text-white text-sm font-medium hover:bg-neutral-700 disabled:bg-neutral-200 disabled:text-neutral-400 transition-colors disabled:cursor-not-allowed"
                           aria-busy={status === "loading"}
                         >
-                          {status === "loading" ? "Generating..." : "Generate"}
+                          {status === "loading" ? t("input.generating") : t("input.generate")}
                         </button>
                       </div>
                     </div>
@@ -585,13 +587,13 @@ export default function QuizGenerator() {
                     {status === "loading" && (
                       <div className="mt-8 flex items-center gap-3 text-neutral-400">
                         <div className="w-3 h-3 border border-neutral-300 border-t-neutral-900 rounded-full animate-spin" />
-                        <p className="text-xs">Reading your content...</p>
+                        <p className="text-xs">{t("input.reading")}</p>
                       </div>
                     )}
 
                     {status === "idle" && (
                       <div className="mt-12">
-                        <p className="text-xs text-neutral-400 uppercase tracking-[0.15em] mb-4">Or ask Examina</p>
+                        <p className="text-xs text-neutral-400 uppercase tracking-[0.15em] mb-4">{t("input.orAsk")}</p>
                         <ChatBot onQuizGenerated={handleChatQuiz} />
                       </div>
                     )}
@@ -610,18 +612,18 @@ export default function QuizGenerator() {
                 <div className="mb-8 p-6 border border-neutral-200 bg-white">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm text-neutral-900">Your quiz is ready.</p>
-                      <p className="text-xs text-neutral-500 mt-1">Sign up to save, share, and generate more.</p>
+                      <p className="text-sm text-neutral-900">{t("quiz.yourQuizReady")}</p>
+                      <p className="text-xs text-neutral-500 mt-1">{t("quiz.signUpToSave")}</p>
                     </div>
                     <Link href="/auth/register" className="shrink-0 px-5 py-2 bg-neutral-900 text-white text-sm font-medium hover:bg-neutral-700 transition-colors">
-                      Create account
+                      {t("quiz.createAccount")}
                     </Link>
                   </div>
                 </div>
               )}
 
               <div className="mb-8">
-                <p className="text-xs text-neutral-400 uppercase tracking-[0.15em] mb-3">Quiz ready</p>
+                <p className="text-xs text-neutral-400 uppercase tracking-[0.15em] mb-3">{t("quiz.ready")}</p>
                 <h2 className="text-2xl font-medium text-neutral-900">{quiz.topic}</h2>
                 <p className="text-sm text-neutral-500 mt-2">
                   {quiz.multipleChoice.length} MCQ · {quiz.flashcards.length} flashcards
@@ -634,8 +636,8 @@ export default function QuizGenerator() {
                 <div className="mb-8 p-6 border border-neutral-200 bg-white">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-neutral-900">Complete</p>
-                      <p className="text-xs text-neutral-500 mt-0.5">{score.correct}/{score.total} correct</p>
+                      <p className="text-sm text-neutral-900">{t("quiz.complete")}</p>
+                      <p className="text-xs text-neutral-500 mt-0.5">{score.correct}/{score.total} {t("quiz.correct")}</p>
                     </div>
                     <p className="text-3xl font-medium text-neutral-900">{Math.round((score.correct / score.total) * 100)}%</p>
                   </div>
@@ -645,11 +647,11 @@ export default function QuizGenerator() {
               <div className="flex flex-wrap gap-3 mb-8">
                 {savedShareId && (
                   <button onClick={copyShareLink} className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
-                    {copied ? "Copied" : "Share link"}
+                    {copied ? t("quiz.copied") : t("quiz.shareLink")}
                   </button>
                 )}
                 <button onClick={downloadPDF} className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
-                  Download PDF
+                  {t("quiz.downloadPdf")}
                 </button>
               </div>
 
