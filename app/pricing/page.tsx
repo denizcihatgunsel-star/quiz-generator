@@ -114,33 +114,33 @@ function PricingContent() {
   return (
     <div className="min-h-screen bg-[#f5f5f0]">
       {/* Header */}
-      <header className="border-b border-zinc-800/50 bg-[#f5f5f0]/80 backdrop-blur-xl sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <header className="border-b border-black/5 bg-[#f5f5f0]/90 backdrop-blur-sm sticky top-0 z-10">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <img src="/logo.png" alt="Examina" className="w-8 h-8 rounded-xl object-cover" />
-            <span className="font-semibold text-white text-lg">Examina</span>
+            <img src="/logo.png" alt="Examina" className="w-7 h-7 rounded-lg object-cover" />
+            <span className="font-medium text-neutral-900">Examina</span>
           </Link>
-          <Link href="/" className="text-sm text-zinc-500 hover:text-white transition-colors">
+          <Link href="/" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
             Back to app
           </Link>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 py-20">
+      <main className="max-w-5xl mx-auto px-6 py-20">
         {/* Hero */}
         <div className="text-center mb-16">
-          <p className="text-violet-400 text-sm font-semibold uppercase tracking-widest mb-3">Pricing</p>
-          <h1 className="text-4xl sm:text-5xl font-bold text-white tracking-tight mb-4">
+          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-3">Pricing</p>
+          <h1 className="text-4xl sm:text-5xl font-medium text-neutral-900 tracking-tight mb-4">
             Simple, student-friendly pricing
           </h1>
-          <p className="text-zinc-400 text-lg max-w-md mx-auto">
+          <p className="text-neutral-500 text-lg max-w-md mx-auto">
             Start free. Upgrade when you need more quizzes.
           </p>
         </div>
 
         {/* Toast */}
         {toast && (
-          <div className="mb-8 max-w-md mx-auto p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20 text-emerald-400 text-sm text-center">
+          <div className="mb-8 max-w-md mx-auto p-4 border border-emerald-200 bg-emerald-50 text-emerald-700 text-sm text-center">
             {toast}
           </div>
         )}
@@ -154,16 +154,16 @@ function PricingContent() {
             return (
               <div
                 key={plan.id}
-                className={`relative flex flex-col rounded-2xl border p-6 transition-all ${
+                className={`relative flex flex-col border p-6 transition-all ${
                   isHighlighted
-                    ? "border-violet-500/40 bg-zinc-900/80 shadow-lg shadow-violet-500/10"
-                    : "border-zinc-800 bg-zinc-900/50 hover:border-zinc-700"
+                    ? "border-neutral-900 bg-white shadow-sm"
+                    : "border-neutral-200 bg-white hover:border-neutral-300"
                 }`}
               >
                 {/* Badge */}
                 {plan.badge && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-violet-600 to-indigo-600 text-white whitespace-nowrap shadow-lg shadow-violet-500/20">
+                    <span className="px-3 py-1 text-xs font-medium bg-neutral-900 text-white whitespace-nowrap">
                       {plan.badge}
                     </span>
                   </div>
@@ -171,20 +171,20 @@ function PricingContent() {
 
                 {/* Plan name & price */}
                 <div className="mb-5">
-                  <h2 className="text-lg font-bold text-white mb-2">
+                  <h2 className="text-sm font-medium text-neutral-500 mb-2">
                     {plan.name}
                   </h2>
                   <div className="flex items-baseline gap-1">
                     {plan.price === 0 ? (
-                      <span className="text-3xl font-bold text-white">Free</span>
+                      <span className="text-3xl font-medium text-neutral-900">Free</span>
                     ) : (
                       <>
-                        <span className="text-3xl font-bold text-white">${plan.price}</span>
-                        <span className="text-sm text-zinc-500">/mo</span>
+                        <span className="text-3xl font-medium text-neutral-900">${plan.price}</span>
+                        <span className="text-sm text-neutral-400">/mo</span>
                       </>
                     )}
                   </div>
-                  <p className="text-sm text-zinc-500 mt-1.5">
+                  <p className="text-sm text-neutral-400 mt-1.5">
                     {plan.quizzesPerMonth === Infinity
                       ? "Unlimited quizzes"
                       : `${plan.quizzesPerMonth} quizzes / month`}
@@ -194,9 +194,9 @@ function PricingContent() {
                 {/* Features */}
                 <ul className="space-y-2.5 mb-6 flex-1">
                   {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-zinc-400">
-                      <svg className="w-4 h-4 mt-0.5 shrink-0 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    <li key={f} className="flex items-start gap-2 text-sm text-neutral-600">
+                      <svg className="w-4 h-4 mt-0.5 shrink-0 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span>{f}</span>
                     </li>
@@ -207,10 +207,10 @@ function PricingContent() {
                 <button
                   onClick={() => handleSelect(plan.id)}
                   disabled={isBusy}
-                  className={`w-full py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
+                  className={`w-full py-2.5 text-sm font-medium transition-all flex items-center justify-center gap-2 ${
                     isHighlighted
-                      ? "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white shadow-lg shadow-violet-500/20"
-                      : "bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700"
+                      ? "bg-neutral-900 text-white hover:bg-neutral-700"
+                      : "bg-[#f5f5f0] text-neutral-900 border border-neutral-200 hover:border-neutral-400"
                   } disabled:opacity-60`}
                 >
                   {isBusy ? (
@@ -235,14 +235,14 @@ function PricingContent() {
             <button
               onClick={handleManageBilling}
               disabled={managingBilling}
-              className="text-sm text-violet-400 hover:text-violet-300 transition-colors disabled:opacity-50"
+              className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors disabled:opacity-50"
             >
               {managingBilling ? "Opening..." : "Manage billing & invoices"}
             </button>
           </div>
         )}
 
-        <p className="text-center text-sm text-zinc-600 mt-6">
+        <p className="text-center text-sm text-neutral-400 mt-6">
           Secure payments via Stripe. Cancel anytime.
         </p>
       </main>
