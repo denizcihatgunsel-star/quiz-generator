@@ -54,9 +54,10 @@ export default function ChatBot({ onQuizGenerated }: ChatBotProps) {
         body: JSON.stringify({ message: msg }),
       });
 
-      const data = await res.json();
-
+      // Non-streaming error responses (auth, validation, limit)
       if (!res.ok) {
+        let data;
+        try { data = await res.json(); } catch { data = { error: "Something went wrong." }; }
         setMessages((prev) => [
           ...prev,
           { role: "assistant", content: data.error || "Something went wrong." },
@@ -65,7 +66,53 @@ export default function ChatBot({ onQuizGenerated }: ChatBotProps) {
         return;
       }
 
+      // Read streamed response
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error("No response");
+
+      const decoder = new TextDecoder();
+      let fullText = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        fullText += decoder.decode(value, { stream: true });
+      }
+
+      // Check for error marker
+      const errorMarker = "__EXAMINA_ERROR__:";
+      if (fullText.includes(errorMarker)) {
+        const errorMsg = fullText.split(errorMarker).pop()?.trim() || "Something went wrong.";
+        setMessages((prev) => [...prev, { role: "assistant", content: errorMsg }]);
+        setLoading(false);
+        return;
+      }
+
+      // Parse JSON with truncation recovery
+      let data;
+      try {
+        data = JSON.parse(fullText);
+      } catch {
+        let fixed = fullText.replace(/,\s*"[^"]*$/, "").replace(/,\s*$/, "");
+        const openBraces = (fixed.match(/\{/g) || []).length - (fixed.match(/\}/g) || []).length;
+        const openBrackets = (fixed.match(/\[/g) || []).length - (fixed.match(/\]/g) || []).length;
+        for (let i = 0; i < openBrackets; i++) fixed += "]";
+        for (let i = 0; i < openBraces; i++) fixed += "}";
+        try {
+          data = JSON.parse(fixed);
+        } catch {
+          setMessages((prev) => [...prev, { role: "assistant", content: "Failed to parse response. Please try again." }]);
+          setLoading(false);
+          return;
+        }
+      }
+
       if (data.type === "quiz") {
+        if (!Array.isArray(data.fillInTheBlank)) data.fillInTheBlank = [];
+        if (!Array.isArray(data.trueFalse)) data.trueFalse = [];
+        if (!Array.isArray(data.multipleChoice)) data.multipleChoice = [];
+        if (!Array.isArray(data.flashcards)) data.flashcards = [];
+
         setMessages((prev) => [
           ...prev,
           {

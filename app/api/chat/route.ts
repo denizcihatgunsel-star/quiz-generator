@@ -18,6 +18,7 @@ const SYSTEM_PROMPT = `You are Examina, a friendly AI quiz assistant. Users will
 1. If the user asks for a quiz about a topic, generate educational content about that topic (around 500-800 words) and then generate a quiz from it.
 2. If the user asks a general question, answer it briefly and helpfully.
 3. Always be encouraging and educational.
+4. If the user specifies a language, generate the quiz in that language.
 
 When generating a quiz, respond with ONLY this exact JSON structure (no markdown, no backticks, no commentary):
 {
@@ -30,7 +31,7 @@ When generating a quiz, respond with ONLY this exact JSON structure (no markdown
       "question": "<question>",
       "options": ["<A>", "<B>", "<C>", "<D>"],
       "correctIndex": 0,
-      "explanation": "<explanation>",
+      "explanation": "<concise explanation, 1 sentence>",
       "difficulty": "Easy",
       "bloomLevel": "Remember"
     }
@@ -47,7 +48,7 @@ When generating a quiz, respond with ONLY this exact JSON structure (no markdown
       "id": "fib-1",
       "sentence": "<sentence with ___ for blank>",
       "answer": "<correct word>",
-      "explanation": "<explanation>",
+      "explanation": "<concise explanation>",
       "difficulty": "Medium",
       "bloomLevel": "Apply"
     }
@@ -57,7 +58,7 @@ When generating a quiz, respond with ONLY this exact JSON structure (no markdown
       "id": "tf-1",
       "statement": "<statement>",
       "correct": true,
-      "explanation": "<explanation>",
+      "explanation": "<concise explanation>",
       "difficulty": "Easy",
       "bloomLevel": "Understand"
     }
@@ -71,10 +72,11 @@ When answering a general question (not quiz generation), respond with:
 }
 
 Requirements for quizzes:
-- Generate 5-8 multiple choice questions
-- Generate 8-12 flashcards
-- Generate 3-5 fill-in-the-blank questions
-- Generate 3-5 true/false questions
+- Generate 5-6 multiple choice questions
+- Generate 6-8 flashcards
+- Generate 3-4 fill-in-the-blank questions
+- Generate 3-4 true/false questions
+- Keep explanations to 1 sentence max
 - Distribute across Bloom's Taxonomy levels
 - Tag each with difficulty: Easy, Medium, Hard
 - Always respond with valid JSON only`;
@@ -121,54 +123,63 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  try {
-    const completion = await getClient().chat.completions.create({
-      model: "deepseek-chat",
-      max_tokens: 8000,
-      response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: message.trim() },
-      ],
-    });
+  // --- Stream the response to prevent Vercel timeout ---
+  const encoder = new TextEncoder();
 
-    const rawText = completion.choices[0]?.message?.content?.trim();
-    if (!rawText) {
-      return NextResponse.json(
-        { error: "No response generated. Please try again." },
-        { status: 500 }
-      );
-    }
+  const stream = new ReadableStream({
+    async start(controller) {
+      try {
+        const completion = await getClient().chat.completions.create({
+          model: "deepseek-chat",
+          max_tokens: 8192,
+          response_format: { type: "json_object" },
+          stream: true,
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: message.trim() },
+          ],
+        });
 
-    const parsed = JSON.parse(rawText);
+        let fullText = "";
 
-    // If it's a quiz, increment usage and ensure arrays exist
-    if (parsed.type === "quiz") {
-      if (!Array.isArray(parsed.multipleChoice)) parsed.multipleChoice = [];
-      if (!Array.isArray(parsed.flashcards)) parsed.flashcards = [];
-      if (!Array.isArray(parsed.fillInTheBlank)) parsed.fillInTheBlank = [];
-      if (!Array.isArray(parsed.trueFalse)) parsed.trueFalse = [];
+        for await (const chunk of completion) {
+          const content = chunk.choices[0]?.delta?.content;
+          if (content) {
+            fullText += content;
+            controller.enqueue(encoder.encode(content));
+          }
+        }
 
-      await db.usageRecord.upsert({
-        where: { userId_month: { userId, month } },
-        update: { count: { increment: 1 } },
-        create: { userId, month, count: 1 },
-      });
-    }
+        // After streaming, validate and increment usage if quiz
+        try {
+          const parsed = JSON.parse(fullText);
+          if (parsed.type === "quiz") {
+            await db.usageRecord.upsert({
+              where: { userId_month: { userId, month } },
+              update: { count: { increment: 1 } },
+              create: { userId, month, count: 1 },
+            });
+          }
+        } catch {
+          // JSON parse failed — client will handle recovery
+        }
 
-    return NextResponse.json(parsed);
-  } catch (err) {
-    if (err instanceof SyntaxError) {
-      return NextResponse.json(
-        { error: "Failed to parse the response. Please try again." },
-        { status: 500 }
-      );
-    }
-    const message = err instanceof Error ? err.message : String(err);
-    console.error("Chat error:", message);
-    return NextResponse.json(
-      { error: `Chat failed: ${message}` },
-      { status: 500 }
-    );
-  }
+        controller.close();
+      } catch (err) {
+        let errorMsg = "Chat failed.";
+        if (err instanceof Error) errorMsg = err.message;
+
+        controller.enqueue(encoder.encode(`__EXAMINA_ERROR__:${errorMsg}`));
+        controller.close();
+      }
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Transfer-Encoding": "chunked",
+      "Cache-Control": "no-cache",
+    },
+  });
 }
