@@ -93,7 +93,7 @@ export default function DashboardPage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="min-h-screen bg-[#1c1c1c] flex items-center justify-center">
+      <div className="min-h-screen bg-[#f5f5f0] flex items-center justify-center">
         <div className="flex gap-1">
           {[0, 1, 2].map((i) => (
             <div key={i} className="w-2 h-2 rounded-full bg-violet-500 animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />
@@ -104,9 +104,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#1c1c1c]">
+    <div className="min-h-screen bg-[#f5f5f0]">
       {/* Header */}
-      <header className="border-b border-zinc-800/50 bg-[#1c1c1c]/80 backdrop-blur-xl sticky top-0 z-10">
+      <header className="border-b border-zinc-800/50 bg-[#f5f5f0]/80 backdrop-blur-xl sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
             <img src="/logo.png" alt="Examina" className="w-8 h-8 rounded-xl object-cover" />

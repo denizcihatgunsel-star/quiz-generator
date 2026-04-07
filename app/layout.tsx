@@ -53,7 +53,7 @@ export default function RootLayout({
               (function() {
                 try {
                   var stored = localStorage.getItem('darkMode');
-                  var isDark = stored === null ? true : stored === 'true';
+                  var isDark = stored === 'true';
                   if (isDark) document.documentElement.classList.add('dark');
                 } catch(e) {}
               })();
