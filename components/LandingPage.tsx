@@ -51,7 +51,7 @@ export default function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section id="features" className="py-32 bg-[#1a1a1a]">
+      <section id="features" className="py-32 bg-[#232323]">
         <div className="max-w-5xl mx-auto px-6">
           <p className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-6">How it works</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-white leading-tight mb-20">
@@ -105,7 +105,7 @@ export default function LandingPage() {
               { quote: "Finally a tool that tests understanding, not just memorization. The Bloom's taxonomy mapping is a game changer.", name: "Dr. James L.", role: "Professor" },
               { quote: "I use it to prep for every exam. The flashcards with flip animation make studying actually engaging.", name: "Maria T.", role: "Medical Student" },
             ].map((t, i) => (
-              <div key={i} className="bg-[#1a1a1a] p-10">
+              <div key={i} className="bg-[#232323] p-10">
                 <p className="text-neutral-300 leading-relaxed mb-8">&ldquo;{t.quote}&rdquo;</p>
                 <div>
                   <p className="text-white text-sm font-medium">{t.name}</p>
@@ -118,7 +118,7 @@ export default function LandingPage() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="py-32 bg-[#1a1a1a]">
+      <section id="faq" className="py-32 bg-[#232323]">
         <div className="max-w-3xl mx-auto px-6">
           <p className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-6">FAQ</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-white leading-tight mb-16">

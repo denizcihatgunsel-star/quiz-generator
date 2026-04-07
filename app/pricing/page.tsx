@@ -112,9 +112,9 @@ function PricingContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#141414]">
+    <div className="min-h-screen bg-[#1c1c1c]">
       {/* Header */}
-      <header className="border-b border-zinc-800/50 bg-[#141414]/80 backdrop-blur-xl sticky top-0 z-10">
+      <header className="border-b border-zinc-800/50 bg-[#1c1c1c]/80 backdrop-blur-xl sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
             <img src="/logo.png" alt="Examina" className="w-8 h-8 rounded-xl object-cover" />

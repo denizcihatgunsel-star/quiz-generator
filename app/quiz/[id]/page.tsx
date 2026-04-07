@@ -47,7 +47,7 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#141414] flex items-center justify-center">
+      <div className="min-h-screen bg-[#1c1c1c] flex items-center justify-center">
         <div className="flex gap-1">
           {[0, 1, 2].map((i) => (
             <div key={i} className="w-2 h-2 rounded-full bg-violet-500 animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />
@@ -59,7 +59,7 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
 
   if (error || !quiz) {
     return (
-      <div className="min-h-screen bg-[#141414] flex items-center justify-center">
+      <div className="min-h-screen bg-[#1c1c1c] flex items-center justify-center">
         <div className="text-center">
           <p className="text-zinc-500 mb-4">{error ?? "Quiz not found."}</p>
           <Link href="/" className="text-sm text-violet-400 hover:text-violet-300 transition-colors">
@@ -77,8 +77,8 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
   });
 
   return (
-    <div className="min-h-screen bg-[#141414]">
-      <header className="border-b border-zinc-800/50 bg-[#141414]/80 backdrop-blur-xl sticky top-0 z-10">
+    <div className="min-h-screen bg-[#1c1c1c]">
+      <header className="border-b border-zinc-800/50 bg-[#1c1c1c]/80 backdrop-blur-xl sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
             <img src="/logo.png" alt="Examina" className="w-8 h-8 rounded-xl object-cover" />
