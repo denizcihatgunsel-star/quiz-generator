@@ -93,15 +93,25 @@ export default function ChatBot({ onQuizGenerated }: ChatBotProps) {
       try {
         data = JSON.parse(fullText);
       } catch {
-        let fixed = fullText.replace(/,\s*"[^"]*$/, "").replace(/,\s*$/, "");
-        const openBraces = (fixed.match(/\{/g) || []).length - (fixed.match(/\}/g) || []).length;
+        // Strip markdown wrappers if present
+        let fixed = fullText.replace(/^```json\s*/i, "").replace(/```\s*$/, "").trim();
+        // Remove trailing incomplete key-value pairs and dangling commas
+        fixed = fixed
+          .replace(/,\s*"[^"]*"?\s*:?\s*"?[^"]*$/, "")
+          .replace(/,\s*\{[^}]*$/, "")
+          .replace(/,\s*$/, "");
+        // Close any unterminated strings
+        const quoteCount = (fixed.match(/(?<!\\)"/g) || []).length;
+        if (quoteCount % 2 !== 0) fixed += '"';
+        // Close open brackets/braces
         const openBrackets = (fixed.match(/\[/g) || []).length - (fixed.match(/\]/g) || []).length;
+        const openBraces = (fixed.match(/\{/g) || []).length - (fixed.match(/\}/g) || []).length;
         for (let i = 0; i < openBrackets; i++) fixed += "]";
         for (let i = 0; i < openBraces; i++) fixed += "}";
         try {
           data = JSON.parse(fixed);
         } catch {
-          setMessages((prev) => [...prev, { role: "assistant", content: "Failed to parse response. Please try again." }]);
+          setMessages((prev) => [...prev, { role: "assistant", content: "The response was too long. Please try a simpler topic." }]);
           setLoading(false);
           return;
         }
