@@ -251,6 +251,34 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* About Examina */}
+      <section className="py-32 bg-white">
+        <div className="max-w-3xl mx-auto px-6">
+          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">About</p>
+          <h2 className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight mb-8">
+            What is Examina?
+          </h2>
+          <div className="space-y-6 text-neutral-600 leading-relaxed">
+            <p>
+              Examina is an AI-powered quiz generator designed for students, teachers, and professionals
+              who want to turn any text into interactive practice questions. Whether you call it an AI quiz
+              maker, a flashcard generator, or a test builder, Examina does it all in one place.
+            </p>
+            <p>
+              Unlike traditional assessment platforms, Examina uses artificial intelligence to read your
+              content and generate four types of questions: multiple choice, flashcards, fill-in-the-blank,
+              and true/false. Every question is mapped to Bloom&apos;s Taxonomy, ensuring your quizzes test
+              real understanding across cognitive levels — from basic recall to analysis.
+            </p>
+            <p>
+              Examina supports 29 languages, generates quizzes in under 30 seconds, and works with pasted
+              text, PDF uploads, TXT files, and Markdown. You can share quizzes via a unique link or export
+              them as PDF. Examina is free to get started with 5 quizzes per month, no credit card required.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Bottom CTA */}
       <section className="py-32 bg-neutral-900">
         <div className="max-w-3xl mx-auto px-6 text-center">

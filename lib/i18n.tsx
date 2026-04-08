@@ -15,8 +15,8 @@ const translations: Record<Locale, Record<string, string>> = {
     "nav.getStarted": "Get started",
     "nav.newQuiz": "New quiz",
     // Hero
-    "hero.title1": "Turn any lesson",
-    "hero.title2": "into a quiz",
+    "hero.title1": "Examina — Turn any lesson",
+    "hero.title2": "into a quiz with AI",
     "hero.subtitle": "Paste your content, pick a language, and get multiple choice, flashcards, fill-in-the-blank, and true/false questions in seconds.",
     "hero.createAccount": "Create free account",
     "hero.signIn": "Sign in",
