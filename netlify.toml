@@ -7,3 +7,10 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Redirect non-www to www
+[[redirects]]
+  from = "https://examina.ink/*"
+  to = "https://www.examina.ink/:splat"
+  status = 301
+  force = true

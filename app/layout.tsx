@@ -15,22 +15,35 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Examina — AI Quiz Generator",
+  title: "AI Quiz Generator — Turn Notes into Quizzes | Examina",
   description:
-    "Paste any lesson and instantly generate multiple choice, flashcard, fill-in-the-blank, and true/false questions with AI.",
+    "Generate quizzes from any text in seconds. AI quiz generator for multiple choice, flashcards, fill-in-the-blank & true/false questions. Free to try.",
+  alternates: {
+    canonical: "https://www.examina.ink/",
+  },
   openGraph: {
-    title: "Examina — AI Quiz Generator",
-    description:
-      "Turn any lesson into a quiz instantly. Multiple choice, flashcards, fill-in-the-blank, and true/false — powered by AI.",
     type: "website",
-    images: ["/logo.png"],
+    siteName: "Examina",
+    title: "AI Quiz Generator — Turn Notes into Quizzes Instantly",
+    description:
+      "Paste any lesson and generate multiple choice, flashcards, fill-in-the-blank, and true/false questions in seconds. Free to try.",
+    url: "https://www.examina.ink/",
+    images: [
+      {
+        url: "https://www.examina.ink/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Examina AI Quiz Generator — generate quizzes from any text",
+      },
+    ],
+    locale: "en_US",
   },
   twitter: {
-    card: "summary",
-    title: "Examina — AI Quiz Generator",
+    card: "summary_large_image",
+    title: "AI Quiz Generator — Turn Notes into Quizzes Instantly",
     description:
-      "Turn any lesson into a quiz instantly. Powered by AI.",
-    images: ["/logo.png"],
+      "Paste any lesson and generate multiple choice, flashcards, fill-in-the-blank, and true/false questions in seconds.",
+    images: ["https://www.examina.ink/og-image.png"],
   },
 };
 
