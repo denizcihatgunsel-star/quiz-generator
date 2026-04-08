@@ -95,6 +95,109 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Why active recall works */}
+      <section className="py-32 bg-white">
+        <div className="max-w-3xl mx-auto px-6">
+          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">The science behind it</p>
+          <h2 className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight mb-8">
+            Why testing yourself beats re-reading
+          </h2>
+          <div className="space-y-6 text-neutral-600 leading-relaxed">
+            <p>
+              Most people study by re-reading their notes, highlighting passages, or staring at textbook pages.
+              It feels productive, but decades of cognitive science research tell a different story. Passive review
+              is one of the least effective ways to learn.
+            </p>
+            <p>
+              Active recall — the process of testing yourself on material — is consistently shown to produce
+              stronger, longer-lasting memory. When you force your brain to retrieve information rather than
+              simply recognize it, you build stronger neural pathways. The harder the retrieval, the stronger
+              the learning.
+            </p>
+            <p>
+              Examina is built around this principle. Instead of giving you another way to read your notes,
+              it turns them into questions. Multiple choice tests recognition and reasoning. Fill-in-the-blank
+              tests pure recall. Flashcards enable rapid-fire retrieval practice. True/false checks
+              comprehension of nuanced details. Together, these four formats create a complete active recall
+              system from any source material.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Who it's for */}
+      <section className="py-32 border-t border-black/5">
+        <div className="max-w-5xl mx-auto px-6">
+          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">Built for everyone who learns or teaches</p>
+          <h2 className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight mb-16">
+            Students, teachers, and professionals.
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12">
+            <div>
+              <h3 className="text-neutral-900 font-medium mb-3">Students</h3>
+              <p className="text-sm text-neutral-500 leading-relaxed">
+                Paste your lecture notes after class and generate a practice quiz in seconds. Use flashcards
+                to drill key terms before exams. Switch to fill-in-the-blank when you need to verify you
+                can recall information from memory, not just recognize it from a list. Whether you are
+                preparing for midterms, finals, board exams, or professional certifications, Examina helps
+                you study with purpose instead of hope.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-neutral-900 font-medium mb-3">Teachers</h3>
+              <p className="text-sm text-neutral-500 leading-relaxed">
+                Creating quizzes from scratch is one of the most time-consuming parts of teaching. Paste a
+                chapter summary, a set of learning objectives, or your own lesson notes and Examina generates
+                a balanced assessment in seconds. Questions are tagged with Bloom&apos;s Taxonomy levels and
+                difficulty ratings, so you can verify your quiz covers the right cognitive depth. Use it for
+                formative checks, homework, review sessions, or full practice exams.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-neutral-900 font-medium mb-3">Professionals</h3>
+              <p className="text-sm text-neutral-500 leading-relaxed">
+                Corporate trainers, medical professionals, and certification candidates all need efficient
+                knowledge assessment. Upload your training manual or study guide, generate a quiz, and use
+                it to verify retention across your team or test yourself before a high-stakes exam.
+                Examina works with compliance training, onboarding materials, continuing education content,
+                and any professional development material.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What makes Examina different */}
+      <section className="py-32 bg-white">
+        <div className="max-w-3xl mx-auto px-6">
+          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">What makes Examina different</p>
+          <h2 className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight mb-8">
+            More than a quiz generator.
+          </h2>
+          <div className="space-y-6 text-neutral-600 leading-relaxed">
+            <p>
+              Most AI quiz tools generate shallow multiple choice questions with obvious wrong answers.
+              Examina takes a fundamentally different approach. Every question is mapped to Bloom&apos;s
+              Taxonomy — the same framework educators worldwide use to design exams. You get questions
+              that test remembering, understanding, applying, and analyzing, not just surface-level
+              recognition.
+            </p>
+            <p>
+              Wrong answers are designed to be plausible. Explanations accompany every question so you
+              learn from both correct and incorrect responses. And because Examina generates four distinct
+              question types from a single piece of content, you get a complete study experience instead of
+              just another list of multiple choice questions.
+            </p>
+            <p>
+              Your content stays private. Text is sent to the AI for question generation only and is not
+              stored on our servers. Generated quizzes are saved to your account so you can revisit them
+              anytime, share them via a unique link, or export them as PDF. Everything works in 29 languages
+              with no configuration — just paste content in any supported language and Examina handles the rest.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials */}
       <section className="py-32 bg-white">
         <div className="max-w-5xl mx-auto px-6">
