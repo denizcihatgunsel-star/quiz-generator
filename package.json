@@ -22,7 +22,9 @@
     "pdf-parse": "^2.4.5",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "stripe": "^21.0.1"
+    "stripe": "^21.0.1",
+    "supermemo": "^2.0.23",
+    "tesseract.js": "^7.0.0"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.15.9",

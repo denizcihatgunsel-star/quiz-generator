@@ -12,6 +12,7 @@ import TrueFalseView from "./TrueFalseView";
 import UserMenu from "./UserMenu";
 import LandingPage from "./LandingPage";
 import ChatBot from "./ChatBot";
+import ImageOCR from "./ImageOCR";
 import { useTranslation } from "@/lib/i18n";
 
 const EXAMPLE_LESSON = `The water cycle, also known as the hydrological cycle, describes the continuous movement of water on, above, and below Earth's surface. The main stages are:
@@ -546,6 +547,11 @@ export default function QuizGenerator() {
                         aria-describedby="char-count"
                       />
 
+                      {/* Image OCR */}
+                      <div className="px-5 py-2 border-t border-neutral-100">
+                        <ImageOCR onTextExtracted={(text) => setLesson((prev) => prev ? prev + "\n\n" + text : text)} />
+                      </div>
+
                       <div className="flex items-center justify-between px-5 py-3 border-t border-neutral-100">
                         <div className="flex items-center gap-4">
                           <p id="char-count" className={`text-xs ${charCount < 50 ? "text-neutral-300" : charCount > 14000 ? "text-amber-500" : "text-neutral-400"}`}>
@@ -679,7 +685,7 @@ export default function QuizGenerator() {
 
               <div role="tabpanel">
                 {activeTab === "mcq" && <MultipleChoiceView questions={quiz.multipleChoice} onComplete={handleScoreUpdate} />}
-                {activeTab === "flashcards" && <FlashcardView flashcards={quiz.flashcards} />}
+                {activeTab === "flashcards" && <FlashcardView flashcards={quiz.flashcards} quizId={savedQuizId} />}
                 {activeTab === "fillblank" && quiz.fillInTheBlank?.length > 0 && <FillInTheBlankView questions={quiz.fillInTheBlank} onComplete={handleScoreUpdate} />}
                 {activeTab === "truefalse" && quiz.trueFalse?.length > 0 && <TrueFalseView questions={quiz.trueFalse} onComplete={handleScoreUpdate} />}
               </div>

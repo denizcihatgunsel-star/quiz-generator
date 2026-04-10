@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import StreakWidget from "@/components/StreakWidget";
 
 interface SavedQuizItem {
   id: string;
@@ -131,6 +132,25 @@ export default function DashboardPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-neutral-900 tracking-tight">Dashboard</h1>
           <p className="text-neutral-500 mt-1">Your quiz history and performance overview.</p>
+        </div>
+
+        {/* Streak & XP */}
+        <StreakWidget />
+
+        {/* Quick Actions */}
+        <div className="flex gap-3 mb-8">
+          <Link
+            href="/study"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 text-white text-sm font-medium hover:bg-violet-500 transition-colors shadow-sm"
+          >
+            <span>&#128218;</span> Study Mode
+          </Link>
+          <Link
+            href="/analytics"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors shadow-sm"
+          >
+            <span>&#128202;</span> Analytics
+          </Link>
         </div>
 
         {/* Stats Grid */}

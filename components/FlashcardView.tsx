@@ -5,6 +5,7 @@ import { Flashcard } from "@/types/quiz";
 
 interface FlashcardViewProps {
   flashcards: Flashcard[];
+  quizId?: string | null;
 }
 
 function FlashcardItem({ card }: { card: Flashcard }) {
@@ -53,10 +54,28 @@ function FlashcardItem({ card }: { card: Flashcard }) {
   );
 }
 
-export default function FlashcardView({ flashcards }: FlashcardViewProps) {
+export default function FlashcardView({ flashcards, quizId }: FlashcardViewProps) {
   const [current, setCurrent] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [viewMode, setViewMode] = useState<"single" | "grid">("single");
+  const [addedToStudy, setAddedToStudy] = useState(false);
+  const [addingToStudy, setAddingToStudy] = useState(false);
+
+  const handleAddToStudy = async () => {
+    if (!quizId || addingToStudy || addedToStudy) return;
+    setAddingToStudy(true);
+    try {
+      const res = await fetch("/api/flashcard-review", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quizId, flashcards }),
+      });
+      if (res.ok) setAddedToStudy(true);
+    } catch {
+      // silently ignore
+    }
+    setAddingToStudy(false);
+  };
 
   const goTo = (index: number) => {
     setFlipped(false);
@@ -167,6 +186,21 @@ export default function FlashcardView({ flashcards }: FlashcardViewProps) {
           Next →
         </button>
       </div>
+
+      {/* Add to Study Mode */}
+      {quizId && (
+        <button
+          onClick={handleAddToStudy}
+          disabled={addingToStudy || addedToStudy}
+          className={`w-full mt-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
+            addedToStudy
+              ? "bg-emerald-50 border border-emerald-200 text-emerald-600"
+              : "bg-violet-50 border border-violet-200 text-violet-600 hover:bg-violet-100"
+          } disabled:opacity-60`}
+        >
+          {addedToStudy ? "Added to Study Mode" : addingToStudy ? "Adding..." : "Add to Study Mode (Spaced Repetition)"}
+        </button>
+      )}
 
       {/* Dot progress */}
       <div className="flex justify-center gap-1.5 mt-4">

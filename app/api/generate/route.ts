@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { getPlan, currentMonth, isUnlimited } from "@/lib/subscription";
+import { awardXp, XP_REWARDS } from "@/lib/xp";
 
 export const maxDuration = 60;
 
@@ -197,6 +198,9 @@ export async function POST(req: NextRequest) {
               update: { count: { increment: 1 } },
               create: { userId, month, count: 1 },
             });
+
+            // Award XP for generating a quiz
+            await awardXp(userId, "quiz_generated", XP_REWARDS.quiz_generated);
           }
         } catch {
           controller.enqueue(encoder.encode("\n__EXAMINA_ERROR__:Failed to parse the generated quiz. Please try again."));

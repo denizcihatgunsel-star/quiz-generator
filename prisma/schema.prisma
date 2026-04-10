@@ -15,9 +15,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  subscription Subscription?
-  usages       UsageRecord[]
-  quizzes      SavedQuiz[]
+  subscription     Subscription?
+  usages           UsageRecord[]
+  quizzes          SavedQuiz[]
+  flashcardReviews FlashcardReview[]
+  streak           UserStreak?
+  xpEvents         XpEvent[]
 }
 
 model SavedQuiz {
@@ -54,4 +57,48 @@ model UsageRecord {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, month])
+}
+
+// Spaced repetition cards derived from flashcards
+model FlashcardReview {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quizId       String
+  cardIndex    Int      // index within the quiz's flashcard array
+  front        String
+  back         String
+  interval     Int      @default(0)    // days until next review
+  repetition   Int      @default(0)    // number of consecutive correct reviews
+  efactor      Float    @default(2.5)  // ease factor
+  dueDate      DateTime @default(now())
+  lastReviewed DateTime?
+  createdAt    DateTime @default(now())
+
+  @@unique([userId, quizId, cardIndex])
+}
+
+// Gamification: streaks and XP
+model UserStreak {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currentStreak  Int      @default(0)
+  longestStreak  Int      @default(0)
+  lastActiveDate String?  // "2026-04-10" — date of last quiz/review activity
+  totalXp        Int      @default(0)
+  level          Int      @default(1)
+  streakFreezes  Int      @default(1) // free freezes available
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// XP event log
+model XpEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String   // "quiz_generated", "quiz_scored", "flashcard_reviewed", "streak_bonus"
+  xp        Int
+  createdAt DateTime @default(now())
 }
