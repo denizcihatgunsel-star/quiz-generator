@@ -50,6 +50,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 name: user.name ?? "",
                 email: user.email,
                 password: "",
+                role: "student", // default, updated via set-role redirect
               },
             });
             await db.subscription.create({
@@ -69,19 +70,31 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const dbUser = await db.user.findUnique({
           where: { email: token.email },
         });
-        if (dbUser) token.id = dbUser.id;
+        if (dbUser) {
+          token.id = dbUser.id;
+          token.role = dbUser.role;
+        }
       }
       // For credentials users, id is already set from authorize()
       if (!token.id && token.sub) {
         const dbUser = await db.user.findUnique({
           where: { id: token.sub },
         });
-        if (dbUser) token.id = dbUser.id;
+        if (dbUser) {
+          token.id = dbUser.id;
+          token.role = dbUser.role;
+        }
+      }
+      // Refresh role from DB periodically
+      if (token.id && !token.role) {
+        const dbUser = await db.user.findUnique({ where: { id: token.id as string } });
+        if (dbUser) token.role = dbUser.role;
       }
       return token;
     },
     session({ session, token }) {
       if (token.id) session.user.id = token.id as string;
+      if (token.role) (session.user as unknown as Record<string, unknown>).role = token.role;
       return session;
     },
   },

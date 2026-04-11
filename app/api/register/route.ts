@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, password } = await req.json();
+    const { name, email, password, role } = await req.json();
 
     if (!email || !password) {
       return NextResponse.json(
@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
         email,
         password: hashed,
         name: name?.trim() || null,
+        role: role === "teacher" ? "teacher" : "student",
         subscription: {
           create: { plan: "free", status: "active" },
         },

@@ -25,6 +25,7 @@ export default function DashboardPage() {
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "scored" | "unscored">("all");
   const [startingLive, setStartingLive] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<"student" | "teacher">("student");
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/auth/login");
@@ -36,6 +37,11 @@ export default function DashboardPage() {
         .then((r) => r.json())
         .then((d) => setQuizzes(d.quizzes ?? []))
         .finally(() => setLoading(false));
+
+      fetch("/api/user")
+        .then((r) => r.json())
+        .then((d) => { if (d.role) setUserRole(d.role); })
+        .catch(() => {});
     }
   }, [session]);
 
@@ -139,18 +145,28 @@ export default function DashboardPage() {
         <StreakWidget />
 
         {/* Quick Actions */}
-        <div className="flex gap-3 mb-8">
-          <Link
-            href="/study"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 text-white text-sm font-medium hover:bg-violet-500 transition-colors shadow-sm"
-          >
-            <span>&#128218;</span> Study Mode
-          </Link>
+        <div className="flex flex-wrap gap-3 mb-8">
+          {userRole === "student" && (
+            <Link
+              href="/study"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 text-white text-sm font-medium hover:bg-violet-500 transition-colors shadow-sm"
+            >
+              <span>&#128218;</span> Study Mode
+            </Link>
+          )}
+          {userRole === "teacher" && (
+            <Link
+              href="/classroom/join"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 transition-colors shadow-sm"
+            >
+              <span>&#127979;</span> Classroom
+            </Link>
+          )}
           <Link
             href="/analytics"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors shadow-sm"
           >
-            <span>&#128202;</span> Analytics
+            <span>&#128202;</span> {userRole === "teacher" ? "Class Analytics" : "Analytics"}
           </Link>
         </div>
 
@@ -297,25 +313,27 @@ export default function DashboardPage() {
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      onClick={async () => {
-                        setStartingLive(q.id);
-                        try {
-                          const res = await fetch("/api/classroom", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ quizId: q.id }),
-                          });
-                          const data = await res.json();
-                          if (res.ok) router.push(`/classroom/host/${data.code}`);
-                        } catch { /* ignore */ }
-                        setStartingLive(null);
-                      }}
-                      disabled={startingLive === q.id}
-                      className="px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-xs text-emerald-600 hover:bg-emerald-100 font-medium transition-colors disabled:opacity-60"
-                    >
-                      {startingLive === q.id ? "..." : "Go Live"}
-                    </button>
+                    {userRole === "teacher" && (
+                      <button
+                        onClick={async () => {
+                          setStartingLive(q.id);
+                          try {
+                            const res = await fetch("/api/classroom", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ quizId: q.id }),
+                            });
+                            const data = await res.json();
+                            if (res.ok) router.push(`/classroom/host/${data.code}`);
+                          } catch { /* ignore */ }
+                          setStartingLive(null);
+                        }}
+                        disabled={startingLive === q.id}
+                        className="px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-xs text-emerald-600 hover:bg-emerald-100 font-medium transition-colors disabled:opacity-60"
+                      >
+                        {startingLive === q.id ? "..." : "Go Live"}
+                      </button>
+                    )}
                     {q.shareId && (
                       <button
                         onClick={() => copyShareLink(q.shareId!)}

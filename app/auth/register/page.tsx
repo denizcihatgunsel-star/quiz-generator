@@ -10,6 +10,7 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState<"student" | "teacher">("student");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -21,7 +22,7 @@ export default function RegisterPage() {
     const res = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, password, role }),
     });
 
     const data = await res.json();
@@ -68,9 +69,41 @@ export default function RegisterPage() {
             Start with 5 free quizzes per month
           </p>
 
+          {/* Role Selection */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">I am a...</label>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setRole("student")}
+                className={`py-3 px-4 rounded-xl border text-sm font-medium transition-all ${
+                  role === "student"
+                    ? "border-violet-500 bg-violet-50 text-violet-700 ring-2 ring-violet-500/20"
+                    : "border-neutral-200 bg-neutral-50 text-neutral-500 hover:border-neutral-300"
+                }`}
+              >
+                &#127891; Student
+              </button>
+              <button
+                type="button"
+                onClick={() => setRole("teacher")}
+                className={`py-3 px-4 rounded-xl border text-sm font-medium transition-all ${
+                  role === "teacher"
+                    ? "border-violet-500 bg-violet-50 text-violet-700 ring-2 ring-violet-500/20"
+                    : "border-neutral-200 bg-neutral-50 text-neutral-500 hover:border-neutral-300"
+                }`}
+              >
+                &#128218; Teacher
+              </button>
+            </div>
+          </div>
+
           {/* Google Sign-Up */}
           <button
-            onClick={() => signIn("google", { callbackUrl: "/" })}
+            onClick={() => {
+              localStorage.setItem("examina_pending_role", role);
+              signIn("google", { callbackUrl: `/api/auth/set-role?role=${role}` });
+            }}
             className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-neutral-200 bg-neutral-50 hover:bg-neutral-100 text-sm font-medium text-neutral-700 transition-colors"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
