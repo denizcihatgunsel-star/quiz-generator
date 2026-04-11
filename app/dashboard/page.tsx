@@ -24,6 +24,7 @@ export default function DashboardPage() {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "scored" | "unscored">("all");
+  const [startingLive, setStartingLive] = useState<string | null>(null);
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/auth/login");
@@ -296,6 +297,25 @@ export default function DashboardPage() {
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={async () => {
+                        setStartingLive(q.id);
+                        try {
+                          const res = await fetch("/api/classroom", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ quizId: q.id }),
+                          });
+                          const data = await res.json();
+                          if (res.ok) router.push(`/classroom/host/${data.code}`);
+                        } catch { /* ignore */ }
+                        setStartingLive(null);
+                      }}
+                      disabled={startingLive === q.id}
+                      className="px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-xs text-emerald-600 hover:bg-emerald-100 font-medium transition-colors disabled:opacity-60"
+                    >
+                      {startingLive === q.id ? "..." : "Go Live"}
+                    </button>
                     {q.shareId && (
                       <button
                         onClick={() => copyShareLink(q.shareId!)}

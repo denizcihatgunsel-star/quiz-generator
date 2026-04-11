@@ -21,6 +21,7 @@ model User {
   flashcardReviews FlashcardReview[]
   streak           UserStreak?
   xpEvents         XpEvent[]
+  classroomSessions ClassroomSession[]
 }
 
 model SavedQuiz {
@@ -101,4 +102,32 @@ model XpEvent {
   action    String   // "quiz_generated", "quiz_scored", "flashcard_reviewed", "streak_bonus"
   xp        Int
   createdAt DateTime @default(now())
+}
+
+// Live classroom quiz sessions
+model ClassroomSession {
+  id              String   @id @default(cuid())
+  hostId          String
+  host            User     @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  code            String   @unique // 6-digit join code
+  topic           String
+  quizData        String   // JSON string of questions (multipleChoice + trueFalse)
+  status          String   @default("lobby") // "lobby", "active", "question", "results", "finished"
+  currentQuestion Int      @default(-1) // index of current question, -1 = not started
+  totalQuestions  Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  participants    ClassroomParticipant[]
+}
+
+model ClassroomParticipant {
+  id        String   @id @default(cuid())
+  sessionId String
+  session   ClassroomSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  nickname  String
+  score     Int      @default(0)
+  answers   String   @default("[]") // JSON array of { questionIndex, answerIndex, correct, timeMs }
+  createdAt DateTime @default(now())
+
+  @@unique([sessionId, nickname])
 }
