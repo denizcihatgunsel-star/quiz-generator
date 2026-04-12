@@ -121,6 +121,11 @@ export default function DashboardPage() {
             <span className="font-semibold text-neutral-900 text-lg">Examina</span>
           </Link>
           <div className="flex items-center gap-4">
+            {session?.user?.email === "denizcihatgunsel@gmail.com" && (
+              <Link href="/admin" className="px-2.5 py-1 rounded-lg bg-red-50 border border-red-200 text-red-600 text-xs font-medium hover:bg-red-100 transition-colors">
+                Admin
+              </Link>
+            )}
             <Link href="/pricing" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
               Pricing
             </Link>
