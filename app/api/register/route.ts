@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
+import { getVipPlan } from "@/lib/vip";
 
 export async function POST(req: NextRequest) {
   try {
@@ -37,7 +38,7 @@ export async function POST(req: NextRequest) {
         name: name?.trim() || null,
         role: role === "teacher" ? "teacher" : "student",
         subscription: {
-          create: { plan: "free", status: "active" },
+          create: { plan: getVipPlan(email), status: "active" },
         },
       },
     });

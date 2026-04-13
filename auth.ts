@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
+import { getVipPlan } from "@/lib/vip";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
@@ -54,7 +55,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               },
             });
             await db.subscription.create({
-              data: { userId: newUser.id, plan: "free", status: "active" },
+              data: { userId: newUser.id, plan: getVipPlan(user.email), status: "active" },
             });
           }
         } catch (err) {
