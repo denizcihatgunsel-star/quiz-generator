@@ -5,18 +5,16 @@ import { db } from "@/lib/db";
 // Only this email can access admin
 const ADMIN_EMAIL = "denizcihatgunsel@gmail.com";
 
-async function isAdmin(session: Awaited<ReturnType<typeof auth>>): Promise<boolean> {
+async function isAdmin(): Promise<boolean> {
+  const session = await auth();
   if (!session?.user?.id) return false;
-  if (session.user.email === ADMIN_EMAIL) return true;
-  // Fallback: look up email from DB by user ID
   const user = await db.user.findUnique({ where: { id: session.user.id }, select: { email: true } });
   return user?.email === ADMIN_EMAIL;
 }
 
 // GET: List all users
 export async function GET() {
-  const session = await auth();
-  if (!(await isAdmin(session))) {
+  if (!(await isAdmin())) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
@@ -41,8 +39,7 @@ export async function GET() {
 
 // PATCH: Update a user's plan or role
 export async function PATCH(req: NextRequest) {
-  const session = await auth();
-  if (!(await isAdmin(session))) {
+  if (!(await isAdmin())) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
