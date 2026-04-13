@@ -3,6 +3,7 @@
 export const VIP_EMAILS: Record<string, string> = {
   "macidayhan.melekoglu@bogazici.edu.tr": "pro",
   "macidayhan@gmail.com": "pro",
+  "macidayhan.melekoglu@boun.edu.tr": "pro",
   "sonicihat@gmail.com": "team",
 };
 
