@@ -23,9 +23,13 @@ model User {
   streak           UserStreak?
   xpEvents         XpEvent[]
   classroomSessions ClassroomSession[]
-  referralCode      String?  @unique // unique referral code for this user
-  referredBy        String?  // userId of who referred them
-  bonusQuizzes      Int      @default(0) // extra quizzes earned from referrals
+  referralCode      String?  @unique
+  referredBy        String?
+  bonusQuizzes      Int      @default(0)
+  apiKeys           ApiKey[]
+  teamId            String?  // team this user belongs to
+  team              Team?    @relation("TeamMembers", fields: [teamId], references: [id])
+  ownedTeam         Team?    @relation("TeamOwner")
 }
 
 model SavedQuiz {
@@ -135,4 +139,27 @@ model ClassroomParticipant {
   createdAt DateTime @default(now())
 
   @@unique([sessionId, nickname])
+}
+
+// API Keys for programmatic access
+model ApiKey {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  key       String   @unique // "exm_" prefixed key
+  name      String   @default("Default")
+  lastUsed  DateTime?
+  createdAt DateTime @default(now())
+}
+
+// Teams for shared quiz libraries
+model Team {
+  id        String   @id @default(cuid())
+  name      String
+  ownerId   String   @unique
+  owner     User     @relation("TeamOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members   User[]   @relation("TeamMembers")
+  inviteCode String  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

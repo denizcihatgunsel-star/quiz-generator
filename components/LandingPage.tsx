@@ -1,7 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { motion, type Variants } from "framer-motion";
 import { useTranslation } from "@/lib/i18n";
+
+const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
+const fadeUpContainer: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+};
+const fadeUpItem: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE_OUT } },
+};
+const viewportOnce = { once: true, margin: "-80px" } as const;
 
 const FAQ_ITEMS = [
   { q: "What file types can I upload?", a: "PDF, TXT, and Markdown files. Or just paste text directly." },
@@ -18,25 +30,31 @@ export default function LandingPage() {
   return (
     <div>
       {/* What you get */}
-      <section className="py-32 border-t border-black/5">
+      <motion.section
+        className="py-32 border-t border-black/5"
+        variants={fadeUpContainer}
+        initial="hidden"
+        whileInView="show"
+        viewport={viewportOnce}
+      >
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-            <div>
+            <motion.div variants={fadeUpItem}>
               <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">{t("landing.whatYouGet")}</p>
               <h2 className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight">
                 {t("landing.fourTypes")}
                 <br />
                 {t("landing.oneClick")}
               </h2>
-            </div>
-            <div className="space-y-8">
+            </motion.div>
+            <motion.div className="space-y-8" variants={fadeUpContainer}>
               {[
                 { title: "Multiple Choice", desc: "5-6 questions with explanations, difficulty tags, and Bloom's Taxonomy levels." },
                 { title: "Flashcards", desc: "Interactive cards with 3D flip. Great for active recall before exams." },
                 { title: "Fill in the Blank", desc: "Tests whether you actually know the material, not just recognize it." },
                 { title: "True / False", desc: "Quick comprehension checks with detailed explanations." },
               ].map((item, i) => (
-                <div key={i} className="group">
+                <motion.div key={i} variants={fadeUpItem} className="group">
                   <div className="flex items-baseline gap-4">
                     <span className="text-xs text-neutral-300 font-mono">0{i + 1}</span>
                     <div>
@@ -45,36 +63,48 @@ export default function LandingPage() {
                     </div>
                   </div>
                   {i < 3 && <div className="mt-8 border-b border-black/5" />}
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* How it works */}
-      <section id="features" className="py-32 bg-white">
+      <motion.section
+        id="features"
+        className="py-32 bg-white"
+        variants={fadeUpContainer}
+        initial="hidden"
+        whileInView="show"
+        viewport={viewportOnce}
+      >
         <div className="max-w-5xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">{t("landing.howItWorks")}</p>
-          <h2 className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight mb-20">
+          <motion.p variants={fadeUpItem} className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">
+            {t("landing.howItWorks")}
+          </motion.p>
+          <motion.h2 variants={fadeUpItem} className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight mb-20">
             {t("landing.pasteGenerateStudy")}
-          </h2>
+          </motion.h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12">
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-3 gap-12"
+            variants={fadeUpContainer}
+          >
             {[
               { step: "01", title: "Add your content", desc: "Paste lesson notes, an article, or upload a PDF. Anything between 50 and 15,000 characters." },
               { step: "02", title: "AI builds the quiz", desc: "Examina reads your content and creates questions across difficulty levels and Bloom's Taxonomy." },
               { step: "03", title: "Study and share", desc: "Take the quiz instantly. Track your score. Share it with a link or download as PDF." },
             ].map((item) => (
-              <div key={item.step}>
+              <motion.div key={item.step} variants={fadeUpItem}>
                 <span className="text-xs text-neutral-300 font-mono">{item.step}</span>
                 <h3 className="text-neutral-900 font-medium mt-3 mb-2">{item.title}</h3>
                 <p className="text-sm text-neutral-500 leading-relaxed">{item.desc}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Numbers */}
       <section className="py-32 border-t border-black/5">

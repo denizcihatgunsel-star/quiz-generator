@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.examina.ink)",
+      "Bash(curl -sL https://www.examina.ink -o /tmp/examina.html)",
+      "Read(//tmp/**)",
+      "Bash(curl -sL https://www.examina.ink -o examina-live.html)",
+      "Bash(claude mcp:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run:*)",
+      "Bash(awk -F= '/^[A-Z]/ {print $1}' .env)",
+      "Bash(ls:*)"
+    ]
+  }
+}

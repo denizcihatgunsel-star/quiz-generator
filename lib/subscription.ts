@@ -57,8 +57,8 @@ export const PLANS: Record<PlanId, Plan> = {
     features: [
       "200 quizzes per month",
       "Everything in Plus",
-      "Bulk generation (coming soon)",
-      "API access (coming soon)",
+      "Bulk generation",
+      "API access",
     ],
   },
   team: {
@@ -69,8 +69,8 @@ export const PLANS: Record<PlanId, Plan> = {
     features: [
       "Unlimited quizzes",
       "Everything in Pro",
-      "Up to 5 members (coming soon)",
-      "Shared quiz library (coming soon)",
+      "Up to 5 members",
+      "Shared quiz library",
       "Dedicated support",
     ],
   },

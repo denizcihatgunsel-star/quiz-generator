@@ -75,12 +75,41 @@ const statements: string[] = [
   `CREATE UNIQUE INDEX IF NOT EXISTS "ClassroomParticipant_sessionId_nickname_key" ON "ClassroomParticipant"("sessionId", "nickname")`,
 
   // Referral system columns on User
-  `ALTER TABLE "User" ADD COLUMN "referralCode" TEXT UNIQUE`,
+  `ALTER TABLE "User" ADD COLUMN "referralCode" TEXT`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "User_referralCode_key" ON "User"("referralCode")`,
   `ALTER TABLE "User" ADD COLUMN "referredBy" TEXT`,
   `ALTER TABLE "User" ADD COLUMN "bonusQuizzes" INTEGER NOT NULL DEFAULT 0`,
 
   // Public quiz library column on SavedQuiz
   `ALTER TABLE "SavedQuiz" ADD COLUMN "isPublic" INTEGER NOT NULL DEFAULT 0`,
+
+  // API Keys table
+  `CREATE TABLE IF NOT EXISTS "ApiKey" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "key" TEXT NOT NULL,
+    "name" TEXT NOT NULL DEFAULT 'Default',
+    "lastUsed" DATETIME,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "ApiKey_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "ApiKey_key_key" ON "ApiKey"("key")`,
+
+  // Teams table
+  `CREATE TABLE IF NOT EXISTS "Team" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "name" TEXT NOT NULL,
+    "ownerId" TEXT NOT NULL,
+    "inviteCode" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "Team_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "Team_ownerId_key" ON "Team"("ownerId")`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "Team_inviteCode_key" ON "Team"("inviteCode")`,
+
+  // Team membership column on User
+  `ALTER TABLE "User" ADD COLUMN "teamId" TEXT`,
 ];
 
 async function main() {
