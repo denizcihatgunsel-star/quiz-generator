@@ -12,6 +12,7 @@ interface SavedQuizItem {
   score: number | null;
   total: number | null;
   shareId: string | null;
+  isPublic?: boolean;
   createdAt: string;
 }
 
@@ -172,6 +173,18 @@ export default function DashboardPage() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors shadow-sm"
           >
             <span>&#128202;</span> {userRole === "teacher" ? "Class Analytics" : "Analytics"}
+          </Link>
+          <Link
+            href="/referral"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors shadow-sm"
+          >
+            <span>&#127873;</span> Invite Friends
+          </Link>
+          <Link
+            href="/explore"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors shadow-sm"
+          >
+            <span>&#127760;</span> Explore Quizzes
           </Link>
         </div>
 
@@ -347,6 +360,28 @@ export default function DashboardPage() {
                         {copied === q.shareId ? "Copied!" : "Share"}
                       </button>
                     )}
+                    <button
+                      onClick={async () => {
+                        const newPublic = !q.isPublic;
+                        const res = await fetch("/api/explore", {
+                          method: "PATCH",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ quizId: q.id, isPublic: newPublic }),
+                        });
+                        if (res.ok) {
+                          setQuizzes((prev) =>
+                            prev.map((quiz) => quiz.id === q.id ? { ...quiz, isPublic: newPublic } : quiz)
+                          );
+                        }
+                      }}
+                      className={`px-3 py-1.5 rounded-full border text-xs font-medium transition-colors ${
+                        q.isPublic
+                          ? "border-emerald-200 bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
+                          : "border-neutral-200 text-neutral-400 hover:text-neutral-600 hover:border-neutral-300"
+                      }`}
+                    >
+                      {q.isPublic ? "Public" : "Publish"}
+                    </button>
                     <Link
                       href={`/quiz/${q.shareId}`}
                       className="px-3 py-1.5 rounded-full bg-violet-600/10 border border-violet-500/20 text-xs text-violet-600 hover:bg-violet-600/20 font-medium transition-colors"

@@ -73,6 +73,14 @@ const statements: string[] = [
     CONSTRAINT "ClassroomParticipant_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "ClassroomSession" ("id") ON DELETE CASCADE ON UPDATE CASCADE
   )`,
   `CREATE UNIQUE INDEX IF NOT EXISTS "ClassroomParticipant_sessionId_nickname_key" ON "ClassroomParticipant"("sessionId", "nickname")`,
+
+  // Referral system columns on User
+  `ALTER TABLE "User" ADD COLUMN "referralCode" TEXT UNIQUE`,
+  `ALTER TABLE "User" ADD COLUMN "referredBy" TEXT`,
+  `ALTER TABLE "User" ADD COLUMN "bonusQuizzes" INTEGER NOT NULL DEFAULT 0`,
+
+  // Public quiz library column on SavedQuiz
+  `ALTER TABLE "SavedQuiz" ADD COLUMN "isPublic" INTEGER NOT NULL DEFAULT 0`,
 ];
 
 async function main() {

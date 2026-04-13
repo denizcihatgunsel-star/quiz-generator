@@ -9,6 +9,7 @@ export default function sitemap() {
     { url: 'https://www.examina.ink/for-teachers', lastModified: new Date() },
     { url: 'https://www.examina.ink/for-students', lastModified: new Date() },
     { url: 'https://www.examina.ink/about', lastModified: new Date() },
+    { url: 'https://www.examina.ink/explore', lastModified: new Date() },
     { url: 'https://www.examina.ink/blog', lastModified: new Date() },
   ]
 }

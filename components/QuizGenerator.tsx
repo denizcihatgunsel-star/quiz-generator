@@ -14,6 +14,7 @@ import UserMenu from "./UserMenu";
 import LandingPage from "./LandingPage";
 import ChatBot from "./ChatBot";
 import ImageOCR from "./ImageOCR";
+import QuizEditor from "./QuizEditor";
 import { useTranslation } from "@/lib/i18n";
 
 const EXAMPLE_LESSON = `The water cycle, also known as the hydrological cycle, describes the continuous movement of water on, above, and below Earth's surface. The main stages are:
@@ -96,6 +97,7 @@ export default function QuizGenerator() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [demoUsed, setDemoUsed] = useState(false);
   const [language, setLanguage] = useState("English");
+  const [editing, setEditing] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -711,6 +713,11 @@ export default function QuizGenerator() {
                 <button onClick={downloadPDF} className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
                   {t("quiz.downloadPdf")}
                 </button>
+                {savedQuizId && isLoggedIn && (
+                  <button onClick={() => setEditing(true)} className="text-sm text-violet-600 hover:text-violet-500 transition-colors">
+                    Edit Quiz
+                  </button>
+                )}
               </div>
 
               <div className="flex gap-6 mb-8 border-b border-neutral-200 overflow-x-auto">
@@ -735,12 +742,24 @@ export default function QuizGenerator() {
                 ))}
               </div>
 
-              <div role="tabpanel">
-                {activeTab === "mcq" && <MultipleChoiceView questions={quiz.multipleChoice} onComplete={handleScoreUpdate} />}
-                {activeTab === "flashcards" && <FlashcardView flashcards={quiz.flashcards} quizId={savedQuizId} />}
-                {activeTab === "fillblank" && quiz.fillInTheBlank?.length > 0 && <FillInTheBlankView questions={quiz.fillInTheBlank} onComplete={handleScoreUpdate} />}
-                {activeTab === "truefalse" && quiz.trueFalse?.length > 0 && <TrueFalseView questions={quiz.trueFalse} onComplete={handleScoreUpdate} />}
-              </div>
+              {editing && savedQuizId ? (
+                <QuizEditor
+                  quiz={quiz}
+                  quizId={savedQuizId}
+                  onSave={(updated) => {
+                    setQuiz(updated);
+                    setEditing(false);
+                  }}
+                  onCancel={() => setEditing(false)}
+                />
+              ) : (
+                <div role="tabpanel">
+                  {activeTab === "mcq" && <MultipleChoiceView questions={quiz.multipleChoice} onComplete={handleScoreUpdate} />}
+                  {activeTab === "flashcards" && <FlashcardView flashcards={quiz.flashcards} quizId={savedQuizId} />}
+                  {activeTab === "fillblank" && quiz.fillInTheBlank?.length > 0 && <FillInTheBlankView questions={quiz.fillInTheBlank} onComplete={handleScoreUpdate} />}
+                  {activeTab === "truefalse" && quiz.trueFalse?.length > 0 && <TrueFalseView questions={quiz.trueFalse} onComplete={handleScoreUpdate} />}
+                </div>
+              )}
             </div>
           </div>
         )}

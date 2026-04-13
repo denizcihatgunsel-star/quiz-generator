@@ -18,6 +18,7 @@ export async function GET() {
         score: true,
         total: true,
         shareId: true,
+        isPublic: true,
         createdAt: true,
       },
     });

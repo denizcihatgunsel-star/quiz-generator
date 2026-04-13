@@ -23,6 +23,9 @@ model User {
   streak           UserStreak?
   xpEvents         XpEvent[]
   classroomSessions ClassroomSession[]
+  referralCode      String?  @unique // unique referral code for this user
+  referredBy        String?  // userId of who referred them
+  bonusQuizzes      Int      @default(0) // extra quizzes earned from referrals
 }
 
 model SavedQuiz {
@@ -34,6 +37,7 @@ model SavedQuiz {
   score     Int?
   total     Int?
   shareId   String?  @unique
+  isPublic  Boolean  @default(false) // published to public library
   createdAt DateTime @default(now())
 }
 
