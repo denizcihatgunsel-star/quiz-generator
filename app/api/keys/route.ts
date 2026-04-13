@@ -43,8 +43,8 @@ export async function POST(req: NextRequest) {
   const subscription = await db.subscription.findUnique({ where: { userId: session.user.id } });
   const plan = getPlan(subscription?.plan ?? "free");
 
-  if (plan.id !== "pro" && plan.id !== "team") {
-    return NextResponse.json({ error: "API access requires a Pro or Team plan." }, { status: 403 });
+  if (plan.id !== "plus" && plan.id !== "pro" && plan.id !== "team") {
+    return NextResponse.json({ error: "API access requires a Plus, Pro, or Team plan." }, { status: 403 });
   }
 
   const { name } = await req.json().catch(() => ({ name: "Default" }));

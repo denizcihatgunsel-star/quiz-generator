@@ -46,6 +46,7 @@ export const PLANS: Record<PlanId, Plan> = {
       "Everything in Starter",
       "Share quizzes",
       "Download as PDF",
+      "API access",
       "Priority support",
     ],
   },

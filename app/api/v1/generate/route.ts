@@ -36,8 +36,8 @@ export async function POST(req: NextRequest) {
   await db.apiKey.update({ where: { id: apiKey.id }, data: { lastUsed: new Date() } });
 
   const plan = getPlan(apiKey.user.subscription?.plan ?? "free");
-  if (plan.id !== "pro" && plan.id !== "team") {
-    return NextResponse.json({ error: "API access requires Pro or Team plan" }, { status: 403 });
+  if (plan.id !== "plus" && plan.id !== "pro" && plan.id !== "team") {
+    return NextResponse.json({ error: "API access requires Plus, Pro, or Team plan" }, { status: 403 });
   }
 
   // Usage check
