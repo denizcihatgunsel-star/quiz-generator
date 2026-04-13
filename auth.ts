@@ -60,7 +60,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           }
         } catch (err) {
           console.error("Google signIn callback error:", err);
-          return false;
+          // Don't block sign-in — let user in even if DB fails
         }
       }
       return true;
