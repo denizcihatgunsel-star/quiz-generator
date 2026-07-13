@@ -193,7 +193,8 @@ export default function DashboardPage() {
                 <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Total Revenue</p>
                 <p className="text-2xl font-semibold text-foreground">
                   ${adminUsers.reduce((sum, u) => {
-                    const planPrice = { free: 0, starter: 2, plus: 5, pro: 9, team: 15 }[u.plan as keyof typeof { free: 0, starter: 2, plus: 5, pro: 9, team: 15 }] || 0;
+                    const priceMap = { free: 0, starter: 2, plus: 5, pro: 9, team: 15 };
+                    const planPrice = priceMap[u.plan as keyof typeof priceMap] || 0;
                     return sum + planPrice;
                   }, 0)}
                 </p>
