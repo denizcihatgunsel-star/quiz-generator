@@ -12,9 +12,10 @@ model User {
   email     String   @unique
   password  String
   name      String?
-  role      String   @default("student") // "student" or "teacher"
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role          String   @default("student") // "student", "teacher", or "admin"
+  customLogoUrl String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   subscription     Subscription?
   usages           UsageRecord[]

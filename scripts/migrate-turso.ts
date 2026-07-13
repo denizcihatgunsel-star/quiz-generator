@@ -79,6 +79,7 @@ const statements: string[] = [
   `CREATE UNIQUE INDEX IF NOT EXISTS "User_referralCode_key" ON "User"("referralCode")`,
   `ALTER TABLE "User" ADD COLUMN "referredBy" TEXT`,
   `ALTER TABLE "User" ADD COLUMN "bonusQuizzes" INTEGER NOT NULL DEFAULT 0`,
+  `ALTER TABLE "User" ADD COLUMN "customLogoUrl" TEXT`,
 
   // Public quiz library column on SavedQuiz
   `ALTER TABLE "SavedQuiz" ADD COLUMN "isPublic" INTEGER NOT NULL DEFAULT 0`,

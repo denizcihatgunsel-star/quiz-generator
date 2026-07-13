@@ -38,45 +38,30 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/auth/login",
   },
   callbacks: {
-    async signIn({ user, account }) {
-      if (account?.provider === "google" && user.email) {
-        try {
-          const existing = await db.user.findUnique({
-            where: { email: user.email },
-          });
-
-          if (!existing) {
-            const newUser = await db.user.create({
-              data: {
-                name: user.name ?? "",
-                email: user.email,
-                password: "",
-                role: "student", // default, updated via set-role redirect
-              },
-            });
-            await db.subscription.create({
-              data: { userId: newUser.id, plan: getVipPlan(user.email), status: "active" },
-            });
-          }
-        } catch (err) {
-          console.error("Google signIn callback error:", err);
-          // Don't block sign-in — let user in even if DB fails
-        }
-      }
-      return true;
-    },
-    async jwt({ token, account }) {
-      // For Google users, look up the database ID by email
+    async jwt({ token, account, user }) {
       if (account?.provider === "google" && token.email) {
-        const dbUser = await db.user.findUnique({
-          where: { email: token.email },
-        });
-        if (dbUser) {
+        try {
+          const dbUser = await db.user.upsert({
+            where: { email: token.email },
+            update: {},
+            create: {
+              name: user?.name ?? "",
+              email: token.email,
+              password: "",
+              role: "student",
+              subscription: {
+                create: { plan: getVipPlan(token.email), status: "active" },
+              },
+            },
+            select: { id: true, role: true },
+          });
           token.id = dbUser.id;
           token.role = dbUser.role;
+        } catch (err) {
+          console.error("Google provisioning error:", err);
         }
+        return token;
       }
-      // For credentials users, id is already set from authorize()
       if (!token.id && token.sub) {
         const dbUser = await db.user.findUnique({
           where: { id: token.sub },
@@ -86,7 +71,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           token.role = dbUser.role;
         }
       }
-      // Refresh role from DB periodically
       if (token.id && !token.role) {
         const dbUser = await db.user.findUnique({ where: { id: token.id as string } });
         if (dbUser) token.role = dbUser.role;

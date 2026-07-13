@@ -31,7 +31,7 @@ export default function LandingPage() {
     <div>
       {/* What you get */}
       <motion.section
-        className="py-32 border-t border-black/5"
+        className="py-32 border-t border-border"
         variants={fadeUpContainer}
         initial="hidden"
         whileInView="show"
@@ -40,8 +40,8 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
             <motion.div variants={fadeUpItem}>
-              <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">{t("landing.whatYouGet")}</p>
-              <h2 className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight">
+              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">{t("landing.whatYouGet")}</p>
+              <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight">
                 {t("landing.fourTypes")}
                 <br />
                 {t("landing.oneClick")}
@@ -58,11 +58,11 @@ export default function LandingPage() {
                   <div className="flex items-baseline gap-4">
                     <span className="text-xs text-neutral-300 font-mono">0{i + 1}</span>
                     <div>
-                      <h3 className="text-neutral-900 font-medium mb-1">{item.title}</h3>
-                      <p className="text-sm text-neutral-500 leading-relaxed">{item.desc}</p>
+                      <h3 className="text-foreground font-medium mb-1">{item.title}</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
-                  {i < 3 && <div className="mt-8 border-b border-black/5" />}
+                  {i < 3 && <div className="mt-8 border-b border-border" />}
                 </motion.div>
               ))}
             </motion.div>
@@ -73,17 +73,17 @@ export default function LandingPage() {
       {/* How it works */}
       <motion.section
         id="features"
-        className="py-32 bg-white"
+        className="py-32 bg-card"
         variants={fadeUpContainer}
         initial="hidden"
         whileInView="show"
         viewport={viewportOnce}
       >
         <div className="max-w-5xl mx-auto px-6">
-          <motion.p variants={fadeUpItem} className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">
+          <motion.p variants={fadeUpItem} className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">
             {t("landing.howItWorks")}
           </motion.p>
-          <motion.h2 variants={fadeUpItem} className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight mb-20">
+          <motion.h2 variants={fadeUpItem} className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-20">
             {t("landing.pasteGenerateStudy")}
           </motion.h2>
 
@@ -98,8 +98,8 @@ export default function LandingPage() {
             ].map((item) => (
               <motion.div key={item.step} variants={fadeUpItem}>
                 <span className="text-xs text-neutral-300 font-mono">{item.step}</span>
-                <h3 className="text-neutral-900 font-medium mt-3 mb-2">{item.title}</h3>
-                <p className="text-sm text-neutral-500 leading-relaxed">{item.desc}</p>
+                <h3 className="text-foreground font-medium mt-3 mb-2">{item.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -107,7 +107,7 @@ export default function LandingPage() {
       </motion.section>
 
       {/* Numbers */}
-      <section className="py-32 border-t border-black/5">
+      <section className="py-32 border-t border-border">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-12">
             {[
@@ -117,8 +117,8 @@ export default function LandingPage() {
               { number: "Free", label: "To get started" },
             ].map((stat) => (
               <div key={stat.label}>
-                <p className="text-4xl sm:text-5xl font-medium text-neutral-900">{stat.number}</p>
-                <p className="text-sm text-neutral-400 mt-2">{stat.label}</p>
+                <p className="text-4xl sm:text-5xl font-medium text-foreground">{stat.number}</p>
+                <p className="text-sm text-muted-foreground/70 mt-2">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -126,13 +126,13 @@ export default function LandingPage() {
       </section>
 
       {/* Why active recall works */}
-      <section className="py-32 bg-white">
+      <section className="py-32 bg-card">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">The science behind it</p>
-          <h2 className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight mb-8">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">The science behind it</p>
+          <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-8">
             Why testing yourself beats re-reading
           </h2>
-          <div className="space-y-6 text-neutral-600 leading-relaxed">
+          <div className="space-y-6 text-muted-foreground leading-relaxed">
             <p>
               Most people study by re-reading their notes, highlighting passages, or staring at textbook pages.
               It feels productive, but decades of cognitive science research tell a different story. Passive review
@@ -156,16 +156,16 @@ export default function LandingPage() {
       </section>
 
       {/* Who it's for */}
-      <section className="py-32 border-t border-black/5">
+      <section className="py-32 border-t border-border">
         <div className="max-w-5xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">Built for everyone who learns or teaches</p>
-          <h2 className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight mb-16">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">Built for everyone who learns or teaches</p>
+          <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-16">
             Students, teachers, and professionals.
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-12">
             <div>
-              <h3 className="text-neutral-900 font-medium mb-3">Students</h3>
-              <p className="text-sm text-neutral-500 leading-relaxed">
+              <h3 className="text-foreground font-medium mb-3">Students</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Paste your lecture notes after class and generate a practice quiz in seconds. Use flashcards
                 to drill key terms before exams. Switch to fill-in-the-blank when you need to verify you
                 can recall information from memory, not just recognize it from a list. Whether you are
@@ -174,8 +174,8 @@ export default function LandingPage() {
               </p>
             </div>
             <div>
-              <h3 className="text-neutral-900 font-medium mb-3">Teachers</h3>
-              <p className="text-sm text-neutral-500 leading-relaxed">
+              <h3 className="text-foreground font-medium mb-3">Teachers</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Creating quizzes from scratch is one of the most time-consuming parts of teaching. Paste a
                 chapter summary, a set of learning objectives, or your own lesson notes and Examina generates
                 a balanced assessment in seconds. Questions are tagged with Bloom&apos;s Taxonomy levels and
@@ -184,8 +184,8 @@ export default function LandingPage() {
               </p>
             </div>
             <div>
-              <h3 className="text-neutral-900 font-medium mb-3">Professionals</h3>
-              <p className="text-sm text-neutral-500 leading-relaxed">
+              <h3 className="text-foreground font-medium mb-3">Professionals</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Corporate trainers, medical professionals, and certification candidates all need efficient
                 knowledge assessment. Upload your training manual or study guide, generate a quiz, and use
                 it to verify retention across your team or test yourself before a high-stakes exam.
@@ -198,13 +198,13 @@ export default function LandingPage() {
       </section>
 
       {/* What makes Examina different */}
-      <section className="py-32 bg-white">
+      <section className="py-32 bg-card">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">What makes Examina different</p>
-          <h2 className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight mb-8">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">What makes Examina different</p>
+          <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-8">
             More than a quiz generator.
           </h2>
-          <div className="space-y-6 text-neutral-600 leading-relaxed">
+          <div className="space-y-6 text-muted-foreground leading-relaxed">
             <p>
               Most AI quiz tools generate shallow multiple choice questions with obvious wrong answers.
               Examina takes a fundamentally different approach. Every question is mapped to Bloom&apos;s
@@ -229,22 +229,22 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-32 bg-white">
+      <section className="py-32 bg-card">
         <div className="max-w-5xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">{t("landing.fromUsers")}</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">{t("landing.fromUsers")}</p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-neutral-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-border">
             {[
               { quote: "This saves me hours every week. I paste my lecture notes and get a full quiz in seconds.", name: "Sarah M.", role: "High School Teacher" },
               { quote: "The fill-in-the-blank questions really test whether I know the material. Way better than just re-reading notes.", name: "Alex K.", role: "University Student" },
               { quote: "Finally a tool that tests understanding, not just memorization. The Bloom's taxonomy mapping is a game changer.", name: "Dr. James L.", role: "Professor" },
               { quote: "I use it to prep for every exam. The flashcards with flip animation make studying actually engaging.", name: "Maria T.", role: "Medical Student" },
             ].map((t, i) => (
-              <div key={i} className="bg-[#f5f5f0] p-10">
-                <p className="text-neutral-600 leading-relaxed mb-8">&ldquo;{t.quote}&rdquo;</p>
+              <div key={i} className="bg-muted p-10">
+                <p className="text-muted-foreground leading-relaxed mb-8">&ldquo;{t.quote}&rdquo;</p>
                 <div>
-                  <p className="text-neutral-900 text-sm font-medium">{t.name}</p>
-                  <p className="text-neutral-400 text-xs mt-0.5">{t.role}</p>
+                  <p className="text-foreground text-sm font-medium">{t.name}</p>
+                  <p className="text-muted-foreground/70 text-xs mt-0.5">{t.role}</p>
                 </div>
               </div>
             ))}
@@ -253,27 +253,27 @@ export default function LandingPage() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="py-32 border-t border-black/5">
+      <section id="faq" className="py-32 border-t border-border">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">{t("landing.faq")}</p>
-          <h2 className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight mb-16">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">{t("landing.faq")}</p>
+          <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-16">
             {t("landing.commonQuestions")}
           </h2>
 
-          <div className="divide-y divide-black/5">
+          <div className="divide-y divide-border">
             {FAQ_ITEMS.map((item, i) => (
               <div key={i}>
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full flex items-center justify-between py-6 text-left group"
                 >
-                  <span className="text-neutral-900 text-sm pr-8">{item.q}</span>
+                  <span className="text-foreground text-sm pr-8">{item.q}</span>
                   <span className="text-neutral-300 text-lg shrink-0 transition-transform duration-200" style={{ transform: openFaq === i ? "rotate(45deg)" : "none" }}>
                     +
                   </span>
                 </button>
                 <div className={`overflow-hidden transition-all duration-200 ${openFaq === i ? "max-h-32 pb-6" : "max-h-0"}`}>
-                  <p className="text-sm text-neutral-500 leading-relaxed">{item.a}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{item.a}</p>
                 </div>
               </div>
             ))}
@@ -282,13 +282,13 @@ export default function LandingPage() {
       </section>
 
       {/* About Examina */}
-      <section className="py-32 bg-white">
+      <section className="py-32 bg-card">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-6">About</p>
-          <h2 className="text-3xl sm:text-4xl font-medium text-neutral-900 leading-tight mb-8">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">About</p>
+          <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-8">
             What is Examina?
           </h2>
-          <div className="space-y-6 text-neutral-600 leading-relaxed">
+          <div className="space-y-6 text-muted-foreground leading-relaxed">
             <p>
               Examina is an AI-powered quiz generator designed for students, teachers, and professionals
               who want to turn any text into interactive practice questions. Whether you call it an AI quiz
@@ -310,17 +310,17 @@ export default function LandingPage() {
       </section>
 
       {/* Bottom CTA */}
-      <section className="py-32 bg-neutral-900">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-3xl sm:text-5xl font-medium text-white leading-tight mb-6">
+      <section className="bg-foreground py-32">
+        <div className="mx-auto max-w-3xl px-6 text-center">
+          <h2 className="mb-6 text-3xl font-medium leading-tight text-background sm:text-5xl">
             {t("landing.ctaTitle")}
           </h2>
-          <p className="text-neutral-400 mb-10 max-w-md mx-auto">
+          <p className="mx-auto mb-10 max-w-md text-background/60">
             {t("landing.ctaSubtitle")}
           </p>
           <a
             href="/auth/register"
-            className="inline-block px-8 py-3 border border-white text-white text-sm font-medium hover:bg-white hover:text-black transition-colors duration-200"
+            className="inline-block border border-background/30 px-8 py-3 text-sm font-medium text-background transition-colors duration-200 hover:bg-background hover:text-foreground"
           >
             {t("landing.ctaButton")}
           </a>

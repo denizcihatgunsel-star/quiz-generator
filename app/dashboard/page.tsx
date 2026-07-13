@@ -5,6 +5,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import StreakWidget from "@/components/StreakWidget";
+import SiteHeader from "@/components/SiteHeader";
+import { LoadingDots } from "@/components/ui";
 
 interface SavedQuizItem {
   id: string;
@@ -27,6 +29,9 @@ export default function DashboardPage() {
   const [filter, setFilter] = useState<"all" | "scored" | "unscored">("all");
   const [startingLive, setStartingLive] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<"student" | "teacher">("student");
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [adminUsers, setAdminUsers] = useState<any[]>([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/auth/login");
@@ -45,6 +50,16 @@ export default function DashboardPage() {
         .catch(() => {});
     }
   }, [session]);
+
+  useEffect(() => {
+    if (session && showAdminPanel) {
+      setLoadingUsers(true);
+      fetch("/api/admin/users")
+        .then((r) => r.json())
+        .then((d) => setAdminUsers(d.users ?? []))
+        .finally(() => setLoadingUsers(false));
+    }
+  }, [session, showAdminPanel]);
 
   const copyShareLink = (shareId: string) => {
     const url = `${window.location.origin}/quiz/${shareId}`;
@@ -79,7 +94,6 @@ export default function DashboardPage() {
         )
       : null;
 
-  // Best score
   const bestScore =
     scoredQuizzes.length > 0
       ? Math.round(
@@ -87,14 +101,12 @@ export default function DashboardPage() {
         )
       : null;
 
-  // Filter quizzes
   const filteredQuizzes = quizzes.filter((q) => {
     if (filter === "scored") return q.score !== null && q.total !== null;
     if (filter === "unscored") return q.score === null || q.total === null;
     return true;
   });
 
-  // Score trend (last 10 scored quizzes, oldest first)
   const scoreTrend = scoredQuizzes
     .slice(0, 10)
     .reverse()
@@ -102,136 +114,184 @@ export default function DashboardPage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="min-h-screen bg-[#f5f5f0] flex items-center justify-center">
-        <div className="flex gap-1">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="w-2 h-2 rounded-full bg-violet-500 animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />
-          ))}
-        </div>
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <LoadingDots />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f5f0]">
-      {/* Header */}
-      <header className="border-b border-neutral-200 bg-[#f5f5f0]/80 backdrop-blur-xl sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <img src="/logo.png" alt="Examina" className="w-8 h-8 rounded-xl object-cover" />
-            <span className="font-semibold text-neutral-900 text-lg">Examina</span>
-          </Link>
-          <div className="flex items-center gap-4">
-            {session?.user?.email === "denizcihatgunsel@gmail.com" && (
-              <Link href="/admin" className="px-2.5 py-1 rounded-lg bg-red-50 border border-red-200 text-red-600 text-xs font-medium hover:bg-red-100 transition-colors">
-                Admin
-              </Link>
-            )}
-            <Link href="/pricing" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
-              Pricing
-            </Link>
-            <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-violet-600 hover:text-violet-500 transition-colors">
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              New quiz
-            </Link>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background">
+      <SiteHeader />
 
-      <main className="max-w-5xl mx-auto px-4 py-10">
-        {/* Page Title */}
+      <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-neutral-900 tracking-tight">Dashboard</h1>
-          <p className="text-neutral-500 mt-1">Your quiz history and performance overview.</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">Dashboard</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Your quiz history and performance overview.</p>
         </div>
 
-        {/* Streak & XP */}
         <StreakWidget />
 
-        {/* Quick Actions */}
-        <div className="flex flex-wrap gap-3 mb-8">
+        <div className="mb-8 mt-8 flex flex-wrap gap-3">
           {userRole === "student" && (
             <Link
               href="/study"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 text-white text-sm font-medium hover:bg-violet-500 transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90"
             >
-              <span>&#128218;</span> Study Mode
+              <span>📚</span> Study Mode
             </Link>
           )}
           {userRole === "teacher" && (
             <Link
               href="/classroom/join"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90"
             >
-              <span>&#127979;</span> Classroom
+              <span>🏫</span> Classroom
             </Link>
           )}
           <Link
             href="/analytics"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 rounded-lg border border-border bg-transparent px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
           >
-            <span>&#128202;</span> {userRole === "teacher" ? "Class Analytics" : "Analytics"}
+            <span>📊</span> {userRole === "teacher" ? "Class Analytics" : "Analytics"}
           </Link>
           <Link
             href="/referral"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 rounded-lg border border-border bg-transparent px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
           >
-            <span>&#127873;</span> Invite Friends
+            <span>🎁</span> Invite Friends
           </Link>
           <Link
             href="/explore"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-neutral-200 text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 rounded-lg border border-border bg-transparent px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
           >
-            <span>&#127760;</span> Explore Quizzes
+            <span>🌐</span> Explore Quizzes
           </Link>
+          {session?.user?.email === "denizcihatgunsel@gmail.com" && (
+            <button
+              onClick={() => setShowAdminPanel(!showAdminPanel)}
+              className="inline-flex items-center gap-2 rounded-lg border border-purple-500/20 bg-purple-500/10 px-4 py-2 text-sm font-medium text-purple-600 transition-colors hover:bg-purple-500/20"
+            >
+              <span>👥</span> Admin Panel
+            </button>
+          )}
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
-          <div className="p-5 rounded-2xl bg-white border border-neutral-200 shadow-sm">
-            <p className="text-xs text-neutral-400 uppercase tracking-widest mb-2">Total Quizzes</p>
-            <p className="text-3xl font-bold text-neutral-900">{totalQuizzes}</p>
+        {showAdminPanel && session?.user?.email === "denizcihatgunsel@gmail.com" && (
+          <div className="mb-10 rounded-xl border border-purple-500/20 bg-purple-500/10 p-6 shadow-sm">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-purple-800">Admin Panel - User Management</h2>
+              <p className="text-sm text-purple-600">Email: {session.user.email}</p>
+            </div>
+            
+            <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+              <div className="rounded-lg border border-border bg-card p-4">
+                <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Total Users</p>
+                <p className="text-2xl font-semibold text-foreground">{adminUsers.length}</p>
+              </div>
+              <div className="rounded-lg border border-border bg-card p-4">
+                <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Total Revenue</p>
+                <p className="text-2xl font-semibold text-foreground">
+                  ${adminUsers.reduce((sum, u) => {
+                    const planPrice = { free: 0, starter: 2, plus: 5, pro: 9, team: 15 }[u.plan as keyof typeof { free: 0, starter: 2, plus: 5, pro: 9, team: 15 }] || 0;
+                    return sum + planPrice;
+                  }, 0)}
+                </p>
+              </div>
+              <div className="rounded-lg border border-border bg-card p-4">
+                <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Teacher Accounts</p>
+                <p className="text-2xl font-semibold text-foreground">{adminUsers.filter((u) => u.role === "teacher").length}</p>
+              </div>
+            </div>
+            
+            {loadingUsers ? (
+              <div className="rounded-xl border border-border bg-card py-12 text-center shadow-sm">
+                <LoadingDots />
+                <p className="mt-4 text-muted-foreground">Loading user data...</p>
+              </div>
+            ) : (
+              <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-border bg-muted/50">
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Name</th>
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Email</th>
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Role</th>
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Plan</th>
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Joined</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                      {adminUsers.map((user) => (
+                        <tr key={user.id} className="hover:bg-muted/50">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">{user.name}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">{user.email}</td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
+                              user.role === "teacher"
+                                ? "bg-green-100 text-green-800"
+                                : user.role === "student"
+                                ? "bg-blue-100 text-blue-800"
+                                : "bg-gray-100 text-gray-800"
+                            }`">
+                              {user.role}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">{user.plan}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">{new Date(user.createdAt).toLocaleDateString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </div>
-          <div className="p-5 rounded-2xl bg-white border border-neutral-200 shadow-sm">
-            <p className="text-xs text-neutral-400 uppercase tracking-widest mb-2">Completed</p>
-            <p className="text-3xl font-bold text-neutral-900">{scoredQuizzes.length}</p>
+        )}
+
+        <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+            <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Total Quizzes</p>
+            <p className="text-3xl font-semibold text-foreground">{totalQuizzes}</p>
           </div>
-          <div className="p-5 rounded-2xl bg-white border border-neutral-200 shadow-sm">
-            <p className="text-xs text-neutral-400 uppercase tracking-widest mb-2">Avg Score</p>
-            <p className="text-3xl font-bold text-neutral-900">
+          <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+            <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Completed</p>
+            <p className="text-3xl font-semibold text-foreground">{scoredQuizzes.length}</p>
+          </div>
+          <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+            <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Avg Score</p>
+            <p className="text-3xl font-semibold text-foreground">
               {avgScore !== null ? (
-                <span className={avgScore >= 80 ? "text-emerald-400" : avgScore >= 60 ? "text-amber-400" : "text-red-400"}>
+                <span className={avgScore >= 80 ? "text-[color:var(--success)]" : avgScore >= 60 ? "text-[color:var(--warning)]" : "text-danger"}>
                   {avgScore}%
                 </span>
               ) : "—"}
             </p>
           </div>
-          <div className="p-5 rounded-2xl bg-white border border-neutral-200 shadow-sm">
-            <p className="text-xs text-neutral-400 uppercase tracking-widest mb-2">Best Score</p>
-            <p className="text-3xl font-bold text-neutral-900">
+          <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+            <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Best Score</p>
+            <p className="text-3xl font-semibold text-foreground">
               {bestScore !== null ? (
-                <span className="text-emerald-400">{bestScore}%</span>
+                <span className="text-[color:var(--success)]">{bestScore}%</span>
               ) : "—"}
             </p>
           </div>
         </div>
 
-        {/* Score Trend */}
         {scoreTrend.length >= 2 && (
-          <div className="mb-10 p-6 rounded-2xl bg-white border border-neutral-200 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold text-neutral-900 uppercase tracking-widest">Score Trend</h2>
-              <span className="text-xs text-neutral-400">Last {scoreTrend.length} quizzes</span>
+          <div className="mb-10 rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Score Trend</h2>
+              <span className="text-xs text-muted-foreground">Last {scoreTrend.length} quizzes</span>
             </div>
-            <div className="flex items-end gap-1.5 h-24">
+            <div className="flex h-24 items-end gap-1.5">
               {scoreTrend.map((score, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                  <span className="text-[10px] text-neutral-500">{score}%</span>
+                <div key={i} className="flex flex-1 flex-col items-center gap-1">
+                  <span className="text-[10px] text-muted-foreground">{score}%</span>
                   <div
                     className={`w-full rounded-t-md transition-all ${
-                      score >= 80 ? "bg-emerald-500/80" : score >= 60 ? "bg-amber-500/80" : "bg-red-500/80"
+                      score >= 80 ? "bg-[color:var(--success)]/80" : score >= 60 ? "bg-[color:var(--warning)]/80" : "bg-danger/80"
                     }`}
                     style={{ height: `${Math.max(8, (score / 100) * 80)}px` }}
                   />
@@ -241,18 +301,17 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Quiz History Header */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-neutral-900">Quiz History</h2>
-          <div className="flex gap-1 p-1 bg-neutral-100 border border-neutral-200 rounded-lg">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-foreground">Quiz History</h2>
+          <div className="flex gap-1 rounded-lg border border-border bg-muted p-1">
             {(["all", "scored", "unscored"] as const).map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
+                className={`rounded-md px-3 py-1 text-xs font-medium transition-all ${
                   filter === f
-                    ? "bg-white text-neutral-900 shadow-sm"
-                    : "text-neutral-500 hover:text-neutral-700"
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {f === "all" ? "All" : f === "scored" ? "Scored" : "Unscored"}
@@ -261,24 +320,23 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Quiz List */}
         {filteredQuizzes.length === 0 ? (
-          <div className="text-center py-16 rounded-2xl bg-white border border-neutral-200 shadow-sm">
-            <div className="w-12 h-12 rounded-2xl bg-neutral-100 flex items-center justify-center mx-auto mb-4">
-              <svg className="w-6 h-6 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="rounded-xl border border-border bg-card py-16 text-center shadow-sm">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-muted">
+              <svg className="h-6 w-6 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <p className="text-neutral-500 mb-4">
+            <p className="mb-4 text-muted-foreground">
               {filter === "all" ? "No quizzes yet" : `No ${filter} quizzes`}
             </p>
             {filter === "all" && (
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-sm font-medium transition-all shadow-lg shadow-violet-500/20"
+                className="inline-flex items-center gap-2 rounded-lg bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90"
               >
                 Generate your first quiz
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </Link>
@@ -294,29 +352,29 @@ export default function DashboardPage() {
               return (
                 <div
                   key={q.id}
-                  className="group p-5 rounded-2xl bg-white border border-neutral-200 shadow-sm flex items-center justify-between gap-4"
+                  className="flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-5 shadow-sm"
                 >
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-3 mb-1">
+                    <div className="mb-1 flex items-center gap-3">
                       <Link
                         href={`/quiz/${q.shareId}`}
-                        className="text-sm font-medium text-neutral-900 hover:text-violet-600 transition-colors truncate"
+                        className="truncate text-sm font-medium text-foreground transition-colors hover:text-accent"
                       >
                         {q.topic}
                       </Link>
                       {scorePercent !== null && (
-                        <span className={`shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full ${
+                        <span className={`shrink-0 rounded-md border px-2 py-0.5 text-xs font-semibold ${
                           scorePercent >= 80
-                            ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                            ? "border-[color:var(--success)]/20 bg-[color:var(--success)]/10 text-[color:var(--success)]"
                             : scorePercent >= 60
-                            ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
-                            : "bg-red-500/10 text-red-400 border border-red-500/20"
+                            ? "border-[color:var(--warning)]/20 bg-[color:var(--warning)]/10 text-[color:var(--warning)]"
+                            : "border-danger/20 bg-danger-soft text-danger"
                         }`}>
                           {scorePercent}%
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-3 text-xs text-neutral-400">
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
                       <span>
                         {new Date(q.createdAt).toLocaleDateString("en-US", {
                           month: "short",
@@ -330,7 +388,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex shrink-0 items-center gap-2">
                     {userRole === "teacher" && (
                       <button
                         onClick={async () => {
@@ -347,7 +405,7 @@ export default function DashboardPage() {
                           setStartingLive(null);
                         }}
                         disabled={startingLive === q.id}
-                        className="px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-xs text-emerald-600 hover:bg-emerald-100 font-medium transition-colors disabled:opacity-60"
+                        className="rounded-lg border border-[color:var(--success)]/20 bg-[color:var(--success)]/10 px-3 py-1.5 text-xs font-medium text-[color:var(--success)] transition-colors hover:opacity-80 disabled:opacity-60"
                       >
                         {startingLive === q.id ? "..." : "Go Live"}
                       </button>
@@ -355,7 +413,7 @@ export default function DashboardPage() {
                     {q.shareId && (
                       <button
                         onClick={() => copyShareLink(q.shareId!)}
-                        className="px-3 py-1.5 rounded-full border border-neutral-200 text-xs text-neutral-500 hover:text-neutral-900 hover:border-neutral-400 transition-colors"
+                        className="rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
                       >
                         {copied === q.shareId ? "Copied!" : "Share"}
                       </button>
@@ -374,17 +432,17 @@ export default function DashboardPage() {
                           );
                         }
                       }}
-                      className={`px-3 py-1.5 rounded-full border text-xs font-medium transition-colors ${
+                      className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
                         q.isPublic
-                          ? "border-emerald-200 bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
-                          : "border-neutral-200 text-neutral-400 hover:text-neutral-600 hover:border-neutral-300"
+                          ? "border-[color:var(--success)]/20 bg-[color:var(--success)]/10 text-[color:var(--success)] hover:opacity-80"
+                          : "border-border text-muted-foreground hover:text-foreground"
                       }`}
                     >
                       {q.isPublic ? "Public" : "Publish"}
                     </button>
                     <Link
                       href={`/quiz/${q.shareId}`}
-                      className="px-3 py-1.5 rounded-full bg-violet-600/10 border border-violet-500/20 text-xs text-violet-600 hover:bg-violet-600/20 font-medium transition-colors"
+                      className="rounded-lg border border-accent/20 bg-accent-soft px-3 py-1.5 text-xs font-medium text-accent transition-colors hover:opacity-80"
                     >
                       View
                     </Link>
@@ -393,13 +451,13 @@ export default function DashboardPage() {
                         <button
                           onClick={() => deleteQuiz(q.id)}
                           disabled={deleting === q.id}
-                          className="px-2.5 py-1.5 rounded-full bg-red-50 border border-red-200 text-xs text-red-500 hover:bg-red-100 font-medium transition-colors disabled:opacity-50"
+                          className="rounded-lg border border-danger/20 bg-danger-soft px-2.5 py-1.5 text-xs font-medium text-danger transition-colors disabled:opacity-50"
                         >
                           {deleting === q.id ? "..." : "Confirm"}
                         </button>
                         <button
                           onClick={() => setConfirmDelete(null)}
-                          className="px-2.5 py-1.5 rounded-full border border-neutral-200 text-xs text-neutral-500 hover:text-neutral-700 transition-colors"
+                          className="rounded-lg border border-border px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
                         >
                           Cancel
                         </button>
@@ -407,7 +465,7 @@ export default function DashboardPage() {
                     ) : (
                       <button
                         onClick={() => setConfirmDelete(q.id)}
-                        className="px-3 py-1.5 rounded-full border border-neutral-200 text-xs text-neutral-400 hover:text-red-500 hover:border-red-200 transition-colors"
+                        className="rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-danger/20 hover:text-danger"
                       >
                         Delete
                       </button>

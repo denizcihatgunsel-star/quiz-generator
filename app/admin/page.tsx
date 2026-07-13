@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import SiteHeader from "@/components/SiteHeader";
+import { LoadingDots } from "@/components/ui";
 
 interface UserItem {
   id: string;
@@ -74,84 +76,67 @@ export default function AdminPage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="min-h-screen bg-[#f5f5f0] flex items-center justify-center">
-        <div className="flex gap-1">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="w-2 h-2 rounded-full bg-violet-500 animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />
-          ))}
-        </div>
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <LoadingDots />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#f5f5f0] flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
-          <p className="text-red-500 font-medium mb-2">Access Denied</p>
-          <p className="text-sm text-neutral-500">You are not authorized to view this page.</p>
-          <Link href="/" className="text-sm text-violet-600 hover:underline mt-4 block">Go home</Link>
+          <p className="mb-2 font-medium text-danger">Access Denied</p>
+          <p className="text-sm text-muted-foreground">You are not authorized to view this page.</p>
+          <Link href="/" className="mt-4 block text-sm text-accent hover:underline">Go home</Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f5f0]">
-      <header className="border-b border-neutral-200 bg-[#f5f5f0]/80 backdrop-blur-xl sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <img src="/logo.png" alt="Examina" className="w-8 h-8 rounded-xl object-cover" />
-            <span className="font-semibold text-neutral-900 text-lg">Examina</span>
-            <span className="px-2 py-0.5 rounded-full bg-red-50 border border-red-200 text-red-600 text-xs font-medium">Admin</span>
-          </Link>
-          <Link href="/dashboard" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
-            Dashboard
-          </Link>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background">
+      <SiteHeader />
 
-      <main className="max-w-6xl mx-auto px-4 py-10">
+      <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-neutral-900 tracking-tight">Admin Panel</h1>
-          <p className="text-neutral-500 mt-1">{users.length} total users</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">Admin</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{users.length} total users</p>
         </div>
 
-        {/* Search */}
         <div className="mb-6">
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name or email..."
-            className="w-full max-w-md px-4 py-2.5 rounded-xl border border-neutral-200 bg-white text-neutral-900 placeholder-neutral-400 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 transition"
+            className="flex h-10 w-full max-w-md rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus-visible:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
         </div>
 
-        {/* Users table */}
-        <div className="rounded-2xl border border-neutral-200 bg-white shadow-sm overflow-hidden">
+        <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-neutral-100">
-                <th className="text-left px-5 py-3 text-xs font-semibold text-neutral-400 uppercase tracking-widest">User</th>
-                <th className="text-left px-5 py-3 text-xs font-semibold text-neutral-400 uppercase tracking-widest">Role</th>
-                <th className="text-left px-5 py-3 text-xs font-semibold text-neutral-400 uppercase tracking-widest">Plan</th>
-                <th className="text-left px-5 py-3 text-xs font-semibold text-neutral-400 uppercase tracking-widest">Joined</th>
+              <tr className="border-b border-border">
+                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-widest text-muted-foreground">User</th>
+                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-widest text-muted-foreground">Role</th>
+                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-widest text-muted-foreground">Plan</th>
+                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-widest text-muted-foreground">Joined</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((u) => (
-                <tr key={u.id} className="border-b border-neutral-50 hover:bg-neutral-50/50 transition-colors">
+                <tr key={u.id} className="border-b border-border transition-colors last:border-0 hover:bg-muted/50">
                   <td className="px-5 py-4">
-                    <p className="text-sm font-medium text-neutral-900">{u.name || "—"}</p>
-                    <p className="text-xs text-neutral-400">{u.email}</p>
+                    <p className="text-sm font-medium text-foreground">{u.name || "—"}</p>
+                    <p className="text-xs text-muted-foreground">{u.email}</p>
                   </td>
                   <td className="px-5 py-4">
                     <select
                       value={u.role}
                       onChange={(e) => updateUser(u.id, { role: e.target.value })}
                       disabled={updating === u.id}
-                      className="px-2 py-1 rounded-lg border border-neutral-200 bg-neutral-50 text-sm text-neutral-700 focus:outline-none focus:ring-2 focus:ring-violet-500/40 disabled:opacity-50"
+                      className="rounded-lg border border-border bg-background px-2 py-1 text-sm text-foreground transition-colors focus-visible:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
                     >
                       {ROLES.map((r) => (
                         <option key={r} value={r}>{r}</option>
@@ -163,16 +148,16 @@ export default function AdminPage() {
                       value={u.plan}
                       onChange={(e) => updateUser(u.id, { plan: e.target.value })}
                       disabled={updating === u.id}
-                      className={`px-2 py-1 rounded-lg border text-sm font-medium focus:outline-none focus:ring-2 focus:ring-violet-500/40 disabled:opacity-50 ${
+                      className={`rounded-lg border px-2 py-1 text-sm font-medium transition-colors focus-visible:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 ${
                         u.plan === "team"
-                          ? "border-violet-200 bg-violet-50 text-violet-700"
+                          ? "border-accent/20 bg-accent-soft text-accent"
                           : u.plan === "pro"
-                          ? "border-amber-200 bg-amber-50 text-amber-700"
+                          ? "border-[color:var(--warning)]/20 bg-[color:var(--warning)]/10 text-[color:var(--warning)]"
                           : u.plan === "plus"
-                          ? "border-blue-200 bg-blue-50 text-blue-700"
+                          ? "border-accent/20 bg-accent-soft text-accent"
                           : u.plan === "starter"
-                          ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                          : "border-neutral-200 bg-neutral-50 text-neutral-700"
+                          ? "border-[color:var(--success)]/20 bg-[color:var(--success)]/10 text-[color:var(--success)]"
+                          : "border-border bg-background text-foreground"
                       }`}
                     >
                       {PLANS.map((p) => (
@@ -180,7 +165,7 @@ export default function AdminPage() {
                       ))}
                     </select>
                   </td>
-                  <td className="px-5 py-4 text-xs text-neutral-400">
+                  <td className="px-5 py-4 text-xs text-muted-foreground">
                     {new Date(u.createdAt).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
@@ -191,7 +176,7 @@ export default function AdminPage() {
               ))}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-5 py-8 text-center text-sm text-neutral-400">
+                  <td colSpan={4} className="px-5 py-8 text-center text-sm text-muted-foreground">
                     No users found
                   </td>
                 </tr>

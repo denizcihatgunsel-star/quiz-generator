@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeToggle } from "./ThemeToggle";
 
 export default function LandingPageLayout({
   children,
@@ -6,19 +7,23 @@ export default function LandingPageLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#f5f5f0]">
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#f5f5f0]/80 border-b border-black/5">
-        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="text-neutral-900 font-medium text-sm">
+    <div className="min-h-screen bg-background">
+      <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
+        <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
+          <Link href="/" className="text-[15px] font-semibold tracking-tight text-foreground">
             Examina
           </Link>
-          <nav className="flex items-center gap-6">
-            <Link href="/pricing" className="text-xs text-neutral-500 hover:text-neutral-900 transition-colors">
+          <nav className="flex items-center gap-3">
+            <ThemeToggle className="h-8 w-8" />
+            <Link
+              href="/pricing"
+              className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+            >
               Pricing
             </Link>
             <Link
               href="/auth/register"
-              className="text-xs px-4 py-2 border border-neutral-900 text-neutral-900 font-medium hover:bg-neutral-900 hover:text-white transition-colors"
+              className="inline-flex h-8 items-center rounded-lg border border-border bg-foreground px-3 text-xs font-medium text-background transition-opacity hover:opacity-90"
             >
               Get Started Free
             </Link>
@@ -26,17 +31,17 @@ export default function LandingPageLayout({
         </div>
       </header>
       <main>{children}</main>
-      <section className="py-32 bg-neutral-900">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-3xl sm:text-5xl font-medium text-white leading-tight mb-6">
+      <section className="bg-foreground py-32">
+        <div className="mx-auto max-w-3xl px-6 text-center">
+          <h2 className="mb-6 text-3xl font-medium leading-tight text-background sm:text-5xl">
             Start studying smarter.
           </h2>
-          <p className="text-neutral-400 mb-10 max-w-md mx-auto">
+          <p className="mx-auto mb-10 max-w-md text-background/60">
             Paste your first lesson and generate a quiz in under 30 seconds. No credit card required.
           </p>
           <a
             href="/auth/register"
-            className="inline-block px-8 py-3 border border-white text-white text-sm font-medium hover:bg-white hover:text-black transition-colors duration-200"
+            className="inline-block border border-background/30 bg-transparent px-8 py-3 text-sm font-medium text-background transition-colors duration-200 hover:bg-background hover:text-foreground"
           >
             Try Examina Free
           </a>

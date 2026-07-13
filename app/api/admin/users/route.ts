@@ -2,14 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 
-// Only this email can access admin
-const ADMIN_EMAIL = "denizcihatgunsel@gmail.com";
-
 async function isAdmin(): Promise<boolean> {
   const session = await auth();
   if (!session?.user?.id) return false;
-  const user = await db.user.findUnique({ where: { id: session.user.id }, select: { email: true } });
-  return user?.email === ADMIN_EMAIL;
+  const user = await db.user.findUnique({ where: { id: session.user.id }, select: { role: true } });
+  return user?.role === "admin";
 }
 
 // GET: List all users

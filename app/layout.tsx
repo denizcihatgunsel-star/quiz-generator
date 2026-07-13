@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -65,9 +66,12 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  var stored = localStorage.getItem('darkMode');
-                  var isDark = stored === 'true';
-                  if (isDark) document.documentElement.classList.add('dark');
+                  var key = 'examina-theme';
+                  var stored = localStorage.getItem(key);
+                  if (stored === null) stored = localStorage.getItem('darkMode');
+                  var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  var isDark = stored === null ? sysDark : (stored === 'dark' || stored === 'true');
+                  document.documentElement.classList.toggle('dark', isDark);
                 } catch(e) {}
               })();
             `,
@@ -75,7 +79,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
-        <SessionProviderWrapper>{children}</SessionProviderWrapper>
+        <ThemeProvider>
+          <SessionProviderWrapper>{children}</SessionProviderWrapper>
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>

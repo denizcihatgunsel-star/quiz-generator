@@ -11,6 +11,7 @@ import FlashcardView from "./FlashcardView";
 import FillInTheBlankView from "./FillInTheBlankView";
 import TrueFalseView from "./TrueFalseView";
 import UserMenu from "./UserMenu";
+import { ThemeToggle } from "./ThemeToggle";
 import LandingPage from "./LandingPage";
 import ChatBot from "./ChatBot";
 import ImageOCR from "./ImageOCR";
@@ -93,7 +94,6 @@ export default function QuizGenerator() {
   const [uploading, setUploading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [score, setScore] = useState<{ correct: number; total: number } | null>(null);
-  const [darkMode, setDarkMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [demoUsed, setDemoUsed] = useState(false);
   const [language, setLanguage] = useState("English");
@@ -106,24 +106,11 @@ export default function QuizGenerator() {
   const isLoggedIn = !!session;
   const canGenerateDemo = !isLoggedIn && !demoUsed;
 
-  // Dark mode — default to dark
   useEffect(() => {
-    const stored = localStorage.getItem("darkMode");
-    const isDark = stored === "true";
-    setDarkMode(isDark);
-    document.documentElement.classList.toggle("dark", isDark);
-    // Check demo usage
     if (localStorage.getItem("examina_demo_used") === "true") {
       setDemoUsed(true);
     }
   }, []);
-
-  const toggleDarkMode = () => {
-    const next = !darkMode;
-    setDarkMode(next);
-    localStorage.setItem("darkMode", String(next));
-    document.documentElement.classList.toggle("dark", next);
-  };
 
   const fetchUsage = useCallback(async () => {
     if (!session?.user?.id) return;
@@ -410,54 +397,55 @@ export default function QuizGenerator() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f5f0]">
+    <div className="min-h-screen bg-background">
       {/* ========== NAVIGATION ========== */}
       <motion.nav
         initial={{ y: -16, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4, ease: EASE_OUT }}
-        className="fixed top-0 left-0 right-0 z-50 bg-[#f5f5f0]/80 backdrop-blur-md border-b border-black/5"
+        className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border"
       >
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-2.5">
               <img src="/logo.png" alt="Examina" className="w-7 h-7 rounded-lg object-cover" />
-              <span className="font-medium text-neutral-900 tracking-tight">Examina</span>
+              <span className="font-medium text-foreground tracking-tight">Examina</span>
             </Link>
             <div className="hidden sm:flex items-center gap-6">
-              <a href="#features" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors duration-200">{t("nav.features")}</a>
-              <Link href="/pricing" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors duration-200">{t("nav.pricing")}</Link>
-              <a href="#faq" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors duration-200">{t("nav.faq")}</a>
+              <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">{t("nav.features")}</a>
+              <Link href="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">{t("nav.pricing")}</Link>
+              <a href="#faq" className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">{t("nav.faq")}</a>
               {isLoggedIn && (
-                <Link href="/dashboard" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors duration-200">{t("nav.dashboard")}</Link>
+                <Link href="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">{t("nav.dashboard")}</Link>
               )}
             </div>
           </div>
 
           <div className="flex items-center gap-4">
+            <ThemeToggle className="hidden sm:inline-flex" />
             {quiz && (
-              <button onClick={handleReset} className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors duration-200">
+              <button onClick={handleReset} className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">
                 {t("nav.newQuiz")}
               </button>
             )}
 
             {sessionStatus === "loading" ? (
-              <div className="w-7 h-7 rounded-full bg-neutral-200 animate-pulse" />
+              <div className="w-7 h-7 rounded-full bg-muted animate-pulse" />
             ) : isLoggedIn && usage ? (
               <UserMenu used={usedCount} limit={limitCount} planId={planId} />
             ) : !isLoggedIn ? (
               <div className="flex items-center gap-4">
-                <Link href="/auth/login" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors duration-200">
+                <Link href="/auth/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">
                   {t("nav.login")}
                 </Link>
-                <Link href="/auth/register" className="text-sm font-medium px-4 py-2 bg-neutral-900 text-white hover:bg-neutral-700 transition-colors duration-200">
+                <Link href="/auth/register" className="text-sm font-medium px-4 py-2 bg-foreground text-background hover:opacity-90 transition-colors duration-200">
                   {t("nav.getStarted")}
                 </Link>
               </div>
             ) : null}
 
             <button
-              className="sm:hidden text-neutral-500 hover:text-neutral-900"
+              className="sm:hidden text-muted-foreground hover:text-foreground"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -476,13 +464,13 @@ export default function QuizGenerator() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
-            className="sm:hidden border-t border-black/5 px-6 py-4 space-y-3 bg-[#f5f5f0]"
+            className="sm:hidden border-t border-border px-6 py-4 space-y-3 bg-background"
           >
-            <a href="#features" onClick={() => setMobileMenuOpen(false)} className="block text-sm text-neutral-500 hover:text-neutral-900 transition-colors duration-200">Features</a>
-            <Link href="/pricing" onClick={() => setMobileMenuOpen(false)} className="block text-sm text-neutral-500 hover:text-neutral-900 transition-colors duration-200">Pricing</Link>
-            <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="block text-sm text-neutral-500 hover:text-neutral-900 transition-colors duration-200">FAQ</a>
+            <a href="#features" onClick={() => setMobileMenuOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">Features</a>
+            <Link href="/pricing" onClick={() => setMobileMenuOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">Pricing</Link>
+            <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">FAQ</a>
             {isLoggedIn && (
-              <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="block text-sm text-neutral-500 hover:text-neutral-900 transition-colors duration-200">Dashboard</Link>
+              <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">Dashboard</Link>
             )}
           </motion.div>
         )}
@@ -503,7 +491,7 @@ export default function QuizGenerator() {
                 >
                   <motion.h1
                     variants={heroItem}
-                    className="text-4xl sm:text-6xl lg:text-7xl font-medium text-neutral-900 tracking-tight leading-[1.08] mb-8"
+                    className="text-4xl sm:text-6xl lg:text-7xl font-medium text-foreground tracking-tight leading-[1.08] mb-8"
                   >
                     {t("hero.title1")}
                     <br />
@@ -512,7 +500,7 @@ export default function QuizGenerator() {
 
                   <motion.p
                     variants={heroItem}
-                    className="text-lg text-neutral-500 max-w-xl mb-16 leading-relaxed"
+                    className="text-lg text-muted-foreground max-w-xl mb-16 leading-relaxed"
                   >
                     {t("hero.subtitle")}
                   </motion.p>
@@ -527,10 +515,10 @@ export default function QuizGenerator() {
                 {/* Demo used — sign up CTA */}
                 {!isLoggedIn && sessionStatus !== "loading" && demoUsed && (
                   <motion.div variants={heroItem} className="mb-12 flex items-center gap-6">
-                    <Link href="/auth/register" className="px-6 py-3 bg-neutral-900 text-white text-sm font-medium hover:bg-neutral-700 transition-colors duration-200">
+                    <Link href="/auth/register" className="px-6 py-3 bg-foreground text-background text-sm font-medium hover:opacity-90 transition-colors duration-200">
                       {t("hero.createAccount")}
                     </Link>
-                    <Link href="/auth/login" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors duration-200">
+                    <Link href="/auth/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">
                       {t("hero.signIn")}
                     </Link>
                   </motion.div>
@@ -538,19 +526,19 @@ export default function QuizGenerator() {
 
                 {/* Demo hint */}
                 {!isLoggedIn && sessionStatus !== "loading" && canGenerateDemo && (
-                  <motion.p variants={heroItem} className="text-xs text-neutral-400 mb-6">{t("hero.demoHint")}</motion.p>
+                  <motion.p variants={heroItem} className="text-xs text-muted-foreground mb-6">{t("hero.demoHint")}</motion.p>
                 )}
 
                 {/* Limit reached */}
                 {isLoggedIn && atLimit && !limitReached && (
-                  <motion.div variants={heroItem} className="mb-8 p-5 rounded-2xl border border-neutral-200 bg-white shadow-sm flex items-center justify-between gap-4 max-w-2xl">
+                  <motion.div variants={heroItem} className="mb-8 p-5 rounded-2xl border border-border bg-card shadow-sm flex items-center justify-between gap-4 max-w-2xl">
                     <div>
-                      <p className="text-sm text-neutral-900">Monthly limit reached</p>
-                      <p className="text-xs text-neutral-500 mt-0.5">
+                      <p className="text-sm text-foreground">Monthly limit reached</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
                         {limitCount}/{limitCount} quizzes used on the {plan.name} plan.
                       </p>
                     </div>
-                    <Link href="/pricing" className="shrink-0 px-4 py-2 bg-neutral-900 text-white text-sm font-medium hover:bg-neutral-700 transition-colors duration-200">
+                    <Link href="/pricing" className="shrink-0 px-4 py-2 bg-foreground text-background text-sm font-medium hover:opacity-90 transition-colors duration-200">
                       Upgrade
                     </Link>
                   </motion.div>
@@ -567,22 +555,22 @@ export default function QuizGenerator() {
                         transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.4 }}
                       />
                     </div>
-                    <span className="text-xs text-neutral-400 shrink-0">{usedCount}/{limitCount}</span>
+                    <span className="text-xs text-muted-foreground shrink-0">{usedCount}/{limitCount}</span>
                   </motion.div>
                 )}
 
                 {/* Quiz Input */}
                 {(isLoggedIn || canGenerateDemo) && (
                   <motion.div variants={heroItem} className="max-w-2xl">
-                    <div className="rounded-xl border border-neutral-200 bg-white shadow-sm overflow-hidden">
+                    <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
                       <div className="flex items-center justify-between px-5 pt-4 pb-2">
-                        <span className="text-xs text-neutral-400 uppercase tracking-[0.2em]">{t("input.content")}</span>
+                        <span className="text-xs text-muted-foreground uppercase tracking-[0.2em]">{t("input.content")}</span>
                         <div className="flex items-center gap-4">
                           <input ref={fileInputRef} type="file" accept=".pdf,.txt,.md" onChange={handleFileUpload} className="hidden" id="file-upload" />
-                          <button onClick={() => fileInputRef.current?.click()} disabled={uploading} className="text-xs text-neutral-400 hover:text-neutral-900 disabled:opacity-50 transition-colors duration-200">
+                          <button onClick={() => fileInputRef.current?.click()} disabled={uploading} className="text-xs text-muted-foreground hover:text-foreground disabled:opacity-50 transition-colors duration-200">
                             {uploading ? t("input.extracting") : t("input.upload")}
                           </button>
-                          <button onClick={loadExample} className="text-xs text-neutral-400 hover:text-neutral-900 transition-colors duration-200">
+                          <button onClick={loadExample} className="text-xs text-muted-foreground hover:text-foreground transition-colors duration-200">
                             {t("input.example")}
                           </button>
                         </div>
@@ -594,7 +582,7 @@ export default function QuizGenerator() {
                         value={lesson}
                         onChange={(e) => setLesson(e.target.value)}
                         placeholder={t("input.placeholder")}
-                        className="w-full px-5 pb-4 min-h-40 text-sm text-neutral-900 placeholder-neutral-400 bg-transparent resize-y focus:outline-none leading-relaxed"
+                        className="w-full px-5 pb-4 min-h-40 text-sm text-foreground placeholder-neutral-400 bg-transparent resize-y focus:outline-none leading-relaxed"
                         aria-describedby="char-count"
                       />
 
@@ -605,16 +593,16 @@ export default function QuizGenerator() {
 
                       <div className="flex items-center justify-between px-5 py-3 border-t border-neutral-100">
                         <div className="flex items-center gap-4">
-                          <p id="char-count" className={`text-xs ${charCount < 50 ? "text-neutral-300" : charCount > 14000 ? "text-amber-500" : "text-neutral-400"}`}>
+                          <p id="char-count" className={`text-xs ${charCount < 50 ? "text-neutral-300" : charCount > 14000 ? "text-amber-500" : "text-muted-foreground"}`}>
                             {charCount.toLocaleString()}/15k
                           </p>
                           <select
                             value={language}
                             onChange={(e) => setLanguage(e.target.value)}
-                            className="appearance-none bg-transparent border-none text-xs text-neutral-400 focus:outline-none cursor-pointer hover:text-neutral-900 transition-colors duration-200"
+                            className="appearance-none bg-transparent border-none text-xs text-muted-foreground focus:outline-none cursor-pointer hover:text-foreground transition-colors duration-200"
                           >
                             {LANGUAGES.map((lang) => (
-                              <option key={lang.code} value={lang.code} className="bg-white text-neutral-900">
+                              <option key={lang.code} value={lang.code} className="bg-card text-foreground">
                                 {lang.flag} {lang.label}
                               </option>
                             ))}
@@ -626,7 +614,7 @@ export default function QuizGenerator() {
                           disabled={!isReady || status === "loading" || atLimit}
                           whileHover={!isReady || status === "loading" || atLimit ? undefined : { scale: 1.02 }}
                           whileTap={!isReady || status === "loading" || atLimit ? undefined : { scale: 0.98 }}
-                          className="px-5 py-2 bg-neutral-900 text-white text-sm font-medium hover:bg-neutral-700 disabled:bg-neutral-50 disabled:text-neutral-300 transition-colors duration-200 disabled:cursor-not-allowed"
+                          className="px-5 py-2 bg-foreground text-background text-sm font-medium hover:opacity-90 disabled:opacity-60 transition-colors duration-200 disabled:cursor-not-allowed"
                           aria-busy={status === "loading"}
                         >
                           {status === "loading" ? t("input.generating") : t("input.generate")}
@@ -635,16 +623,16 @@ export default function QuizGenerator() {
                     </div>
 
                     {status === "error" && error && (
-                      <div className="mt-4 p-4 rounded-2xl border border-neutral-200 bg-white shadow-sm text-sm text-neutral-600">
+                      <div className="mt-4 p-4 rounded-2xl border border-border bg-card shadow-sm text-sm text-muted-foreground">
                         {error}
                         {limitReached && (
-                          <Link href="/pricing" className="ml-2 underline text-neutral-900">Upgrade</Link>
+                          <Link href="/pricing" className="ml-2 underline text-foreground">Upgrade</Link>
                         )}
                       </div>
                     )}
 
                     {status === "loading" && (
-                      <div className="mt-8 flex items-center gap-3 text-neutral-400">
+                      <div className="mt-8 flex items-center gap-3 text-muted-foreground">
                         <div className="w-3 h-3 border border-neutral-300 border-t-neutral-900 rounded-full animate-spin" />
                         <p className="text-xs">{t("input.reading")}</p>
                       </div>
@@ -652,7 +640,7 @@ export default function QuizGenerator() {
 
                     {status === "idle" && (
                       <div className="mt-12">
-                        <p className="text-xs text-neutral-400 uppercase tracking-[0.2em] mb-4">{t("input.orAsk")}</p>
+                        <p className="text-xs text-muted-foreground uppercase tracking-[0.2em] mb-4">{t("input.orAsk")}</p>
                         <ChatBot onQuizGenerated={handleChatQuiz} />
                       </div>
                     )}
@@ -669,13 +657,13 @@ export default function QuizGenerator() {
           <div className="pt-28 pb-16">
             <div className="max-w-3xl mx-auto px-6">
               {!isLoggedIn && (
-                <div className="mb-8 p-6 border border-neutral-200 bg-white">
+                <div className="mb-8 p-6 border border-border bg-card">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm text-neutral-900">{t("quiz.yourQuizReady")}</p>
-                      <p className="text-xs text-neutral-500 mt-1">{t("quiz.signUpToSave")}</p>
+                      <p className="text-sm text-foreground">{t("quiz.yourQuizReady")}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{t("quiz.signUpToSave")}</p>
                     </div>
-                    <Link href="/auth/register" className="shrink-0 px-5 py-2 bg-neutral-900 text-white text-sm font-medium hover:bg-neutral-700 transition-colors">
+                    <Link href="/auth/register" className="shrink-0 px-5 py-2 bg-foreground text-background text-sm font-medium hover:opacity-90 transition-colors">
                       {t("quiz.createAccount")}
                     </Link>
                   </div>
@@ -683,9 +671,9 @@ export default function QuizGenerator() {
               )}
 
               <div className="mb-8">
-                <p className="text-xs text-neutral-400 uppercase tracking-[0.15em] mb-3">{t("quiz.ready")}</p>
-                <h2 className="text-2xl font-medium text-neutral-900">{quiz.topic}</h2>
-                <p className="text-sm text-neutral-500 mt-2">
+                <p className="text-xs text-muted-foreground uppercase tracking-[0.15em] mb-3">{t("quiz.ready")}</p>
+                <h2 className="text-2xl font-medium text-foreground">{quiz.topic}</h2>
+                <p className="text-sm text-muted-foreground mt-2">
                   {quiz.multipleChoice.length} MCQ · {quiz.flashcards.length} flashcards
                   {quiz.fillInTheBlank?.length > 0 && ` · ${quiz.fillInTheBlank.length} fill-in-blank`}
                   {quiz.trueFalse?.length > 0 && ` · ${quiz.trueFalse.length} true/false`}
@@ -693,34 +681,34 @@ export default function QuizGenerator() {
               </div>
 
               {score && (
-                <div className="mb-8 p-6 border border-neutral-200 bg-white">
+                <div className="mb-8 p-6 border border-border bg-card">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-neutral-900">{t("quiz.complete")}</p>
-                      <p className="text-xs text-neutral-500 mt-0.5">{score.correct}/{score.total} {t("quiz.correct")}</p>
+                      <p className="text-sm text-foreground">{t("quiz.complete")}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{score.correct}/{score.total} {t("quiz.correct")}</p>
                     </div>
-                    <p className="text-3xl font-medium text-neutral-900">{Math.round((score.correct / score.total) * 100)}%</p>
+                    <p className="text-3xl font-medium text-foreground">{Math.round((score.correct / score.total) * 100)}%</p>
                   </div>
                 </div>
               )}
 
               <div className="flex flex-wrap gap-3 mb-8">
                 {savedShareId && (
-                  <button onClick={copyShareLink} className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+                  <button onClick={copyShareLink} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                     {copied ? t("quiz.copied") : t("quiz.shareLink")}
                   </button>
                 )}
-                <button onClick={downloadPDF} className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+                <button onClick={downloadPDF} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   {t("quiz.downloadPdf")}
                 </button>
                 {savedQuizId && isLoggedIn && (
-                  <button onClick={() => setEditing(true)} className="text-sm text-violet-600 hover:text-violet-500 transition-colors">
+                  <button onClick={() => setEditing(true)} className="text-sm text-accent hover:opacity-80 transition-colors">
                     Edit Quiz
                   </button>
                 )}
               </div>
 
-              <div className="flex gap-6 mb-8 border-b border-neutral-200 overflow-x-auto">
+              <div className="flex gap-6 mb-8 border-b border-border overflow-x-auto">
                 {TABS.filter((tab) => {
                   if (tab.id === "fillblank") return (quiz.fillInTheBlank?.length ?? 0) > 0;
                   if (tab.id === "truefalse") return (quiz.trueFalse?.length ?? 0) > 0;
@@ -731,8 +719,8 @@ export default function QuizGenerator() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`pb-3 text-sm font-medium whitespace-nowrap transition-colors border-b-2 -mb-px ${
                       activeTab === tab.id
-                        ? "text-neutral-900 border-neutral-900"
-                        : "text-neutral-400 border-transparent hover:text-neutral-600"
+                        ? "text-foreground border-neutral-900"
+                        : "text-muted-foreground border-transparent hover:text-muted-foreground"
                     }`}
                     role="tab"
                     aria-selected={activeTab === tab.id}
@@ -766,22 +754,22 @@ export default function QuizGenerator() {
       </main>
 
       {/* ========== FOOTER ========== */}
-      <footer className="border-t border-black/5">
+      <footer className="border-t border-border">
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div className="flex items-center gap-2.5">
               <img src="/logo.png" alt="Examina" className="w-6 h-6 rounded-lg object-cover" />
-              <span className="text-sm text-neutral-500">Examina</span>
+              <span className="text-sm text-muted-foreground">Examina</span>
             </div>
-            <div className="flex flex-wrap gap-6 text-sm text-neutral-400">
-              <a href="#features" className="hover:text-neutral-900 transition-colors">Features</a>
-              <Link href="/pricing" className="hover:text-neutral-900 transition-colors">Pricing</Link>
-              <a href="#faq" className="hover:text-neutral-900 transition-colors">FAQ</a>
-              <Link href="/dashboard" className="hover:text-neutral-900 transition-colors">Dashboard</Link>
+            <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
+              <a href="#features" className="hover:text-foreground transition-colors">Features</a>
+              <Link href="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
+              <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
+              <Link href="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-black/5">
-            <p className="text-xs text-neutral-400">&copy; {new Date().getFullYear()} Examina</p>
+          <div className="mt-8 pt-8 border-t border-border">
+            <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Examina</p>
           </div>
         </div>
       </footer>
