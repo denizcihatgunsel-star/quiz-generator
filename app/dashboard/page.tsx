@@ -235,9 +235,7 @@ export default function DashboardPage() {
                                 : user.role === "student"
                                 ? "bg-blue-100 text-blue-800"
                                 : "bg-gray-100 text-gray-800"
-                            }`">
-                              {user.role}
-                            </span>
+                            }`}>{user.role}</span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">{user.plan}</td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">{new Date(user.createdAt).toLocaleDateString()}</td>
