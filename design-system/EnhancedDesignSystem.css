@@ -1,0 +1,295 @@
+/* ----------------------------------------------------------------------------
+   Enhanced Design System — Human-like feel, subtle animations, natural depth.
+   More warmth, softer interactions, less sterile AI appearance.
+---------------------------------------------------------------------------- */
+
+/* Color Palette - Warmer, more human-like */
+:root {
+  /* Primary colors - softer, warmer accents */
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+
+  --muted: #f8f8f8;
+  --muted-foreground: #666666;
+
+  --border: #e8e8e8;
+  --input: #f2f2f2;
+  --ring: #d4d4d4;
+
+  /* Primary accent - warmer violet */
+  --accent: #8b5cf6;
+  --accent-foreground: #ffffff;
+  --accent-soft: #f3f0ff;
+
+  /* Status colors - more natural */
+  --success: #22c55e;
+  --success-soft: #f0fdf4;
+  --warning: #eab308;
+  --warning-soft: #fefce8;
+  --danger: #ef4444;
+  --danger-soft: #fef2f2;
+
+  --radius: 0.5rem;
+}
+
+.dark {
+  /* Dark mode - warmer than pure black */
+  --background: #0f0f0f;
+  --foreground: #e8e8e8;
+
+  --card: #171717;
+  --card-foreground: #e8e8e8;
+
+  --muted: #1f1f1f;
+  --muted-foreground: #a8a8a8;
+
+  --border: #2a2a2a;
+  --input: #252525;
+  --ring: #404040;
+
+  --accent: #a78bfa;
+  --accent-foreground: #ffffff;
+  --accent-soft: rgba(167, 139, 250, 0.15);
+
+  --success: #22c55e;
+  --success-soft: rgba(34, 197, 94, 0.15);
+  --warning: #fbbf24;
+  --warning-soft: rgba(251, 191, 36, 0.15);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.15);
+}
+
+/* Typography - more human scale */
+:root {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+}
+
+/* Spacing - more generous */
+:root {
+  --section-padding: 4rem;
+  --container-max: 1200px;
+  --card-gap: 1.5rem;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--accent-foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+/* Enhanced animations - more human, subtle */
+@keyframes subtle-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes gentle-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-subtle {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Enhanced component styles */
+@layer components {
+  /* Cards with subtle depth */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-color: var(--accent);
+  }
+
+  /* Buttons with more human touch */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: calc(var(--radius) - 2px);
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-foreground);
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  }
+
+  .btn-primary:hover {
+    background: var(--accent);
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(139, 92, 246, 0.2);
+  }
+
+  .btn-secondary {
+    background: var(--background);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+  }
+
+  .btn-secondary:hover {
+    background: var(--muted);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Input fields - more forgiving */
+  .input {
+    background: var(--input);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) - 2px);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    color: var(--foreground);
+  }
+
+  .input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+    background: var(--background);
+  }
+
+  /* Interactive elements with subtle feedback */
+  .interactive {
+    transition: all 0.2s ease;
+  }
+
+  .interactive:hover {
+    transform: translateY(-1px);
+  }
+
+  .interactive:active {
+    transform: translateY(0);
+  }
+
+  /* Human-like text hierarchy */
+  .text-balance {
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  /* More forgiving color contrasts */
+  .text-primary {
+    color: var(--foreground);
+  }
+
+  .text-secondary {
+    color: var(--muted-foreground);
+  }
+
+  .text-muted {
+    color: var(--muted-foreground);
+    opacity: 0.8;
+  }
+}
+
+/* Enhanced scrollbar - subtle and unobtrusive */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 4px;
+  opacity: 0.3;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+/* Print styles - cleaner on paper */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  * {
+    color: black !important;
+    background: white !important;
+  }
+}

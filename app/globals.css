@@ -1,0 +1,288 @@
+@import "tailwindcss";
+
+/* ----------------------------------------------------------------------------
+   Human-Friendly Design System - Less AI, More Human Touch
+   Softer colors, natural curves, approachable animations
+---------------------------------------------------------------------------- */
+
+:root {
+  /* Warm, approachable colors - less harsh than traditional AI designs */
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  --muted: #f8f8f8;
+  --muted-foreground: #666666;
+  --border: #e8e8e8;
+  --input: #f2f2f2;
+  --ring: #d4d4d4;
+
+  /* Warm accent - friendly purple that's not too digital */
+  --accent: #8b5cf6;
+  --accent-foreground: #ffffff;
+  --accent-soft: #f3f0ff;
+
+  /* Natural status colors - human-friendly */
+  --success: #16a34a;
+  --success-soft: #f0fdf4;
+  --warning: #ea580c;
+  --warning-soft: #fff7ed;
+  --danger: #dc2626;
+  --danger-soft: #fef2f2;
+
+  /* More generous spacing and softer radius */
+  --radius: 0.5rem;
+  --radius-lg: 0.75rem;
+
+  /* Human-friendly typography - easier on the eyes */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+
+  /* Softer shadows - less harsh than sharp digital depth */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Dark mode - warmer than harsh black backgrounds */
+.dark {
+  --background: #0f0f0f;
+  --foreground: #e8e8e8;
+  --card: #171717;
+  --card-foreground: #e8e8e8;
+  --muted: #1f1f1f;
+  --muted-foreground: #a8a8a8;
+  --border: #2a2a2a;
+  --input: #252525;
+  --ring: #404040;
+  --accent: #a78bfa;
+  --accent-foreground: #ffffff;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-family: var(--font-sans);
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--accent-foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: var(--radius);
+  }
+}
+
+/* Natural animations - human-like, not robotic */
+@keyframes gentle-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes natural-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes fade-in-smooth {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-gentle {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@layer components {
+  /* Human-friendly card system */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  /* Human touch buttons - softer interactions */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: calc(var(--radius) - 2px);
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-foreground);
+    border: none;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-primary:hover {
+    background: var(--accent);
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-secondary {
+    background: var(--background);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+  }
+
+  .btn-secondary:hover {
+    background: var(--muted);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* More forgiving input fields */
+  .input {
+    background: var(--input);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) - 2px);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    color: var(--foreground);
+  }
+
+  .input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+    background: var(--background);
+  }
+
+  /* Natural hover states - not too sharp */
+  .natural-hover {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .natural-hover:hover {
+    transform: translateY(-1px);
+    background: var(--muted);
+  }
+
+  /* Human-like text hierarchy */
+  .text-balance {
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  /* Approachable color relationships */
+  .text-primary {
+    color: var(--foreground);
+  }
+
+  .text-secondary {
+    color: var(--muted-foreground);
+  }
+
+  .text-muted {
+    color: var(--muted-foreground);
+    opacity: 0.8;
+  }
+}
+
+/* Human-friendly scrollbar - subtle and unobtrusive */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 4px;
+  opacity: 0.3;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+/* Print styles - cleaner on paper */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  * {
+    color: black !important;
+    background: white !important;
+  }
+}
