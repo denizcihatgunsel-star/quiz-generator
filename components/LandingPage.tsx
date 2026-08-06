@@ -269,7 +269,7 @@ export default function LandingPage() {
       </section>
 
       {/* About Examina */}
-      <section className="py-32 bg-card">
+      <section id="about" className="py-32 bg-card">
         <div className="max-w-3xl mx-auto px-6">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">About</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-8">

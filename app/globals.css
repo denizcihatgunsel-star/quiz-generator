@@ -78,6 +78,7 @@
 
   --font-sans: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
 
   --radius-lg: var(--radius);
 }

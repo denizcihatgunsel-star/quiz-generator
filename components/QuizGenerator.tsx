@@ -13,6 +13,8 @@ import TrueFalseView from "./TrueFalseView";
 import UserMenu from "./UserMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import LandingPage from "./LandingPage";
+import EditorialNav from "./EditorialNav";
+import DotMap from "./DotMap";
 import ChatBot from "./ChatBot";
 import ImageOCR from "./ImageOCR";
 import QuizEditor from "./QuizEditor";
@@ -399,6 +401,7 @@ export default function QuizGenerator() {
   return (
     <div className="min-h-screen bg-background">
       {/* ========== NAVIGATION ========== */}
+      {isLoggedIn || quiz || sessionStatus === "loading" ? (
       <motion.nav
         initial={{ y: -16, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -475,14 +478,18 @@ export default function QuizGenerator() {
           </motion.div>
         )}
       </motion.nav>
+      ) : (
+        <EditorialNav />
+      )}
 
       {/* ========== MAIN CONTENT ========== */}
       <main>
         {!quiz ? (
           <>
             {/* Hero */}
-            <section className="pt-36 sm:pt-48 pb-32">
+            <section className={`pb-32 ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-[#FBFBFA] pt-52 sm:pt-60"}`}>
               <div className="max-w-5xl mx-auto px-6">
+                {isLoggedIn ? (
                 <motion.div
                   className="max-w-3xl"
                   variants={heroContainer}
@@ -505,6 +512,16 @@ export default function QuizGenerator() {
                     {t("hero.subtitle")}
                   </motion.p>
                 </motion.div>
+                ) : (
+                <div className="mx-auto max-w-5xl text-center">
+                  <h1 className="font-serif text-5xl font-medium tracking-tight leading-[1.08] sm:text-6xl lg:text-7xl">
+                    Turn your study notes into
+                    <br />
+                    structured quizzes, instantly.
+                  </h1>
+                  <DotMap className="mx-auto mt-20 w-full max-w-3xl" />
+                </div>
+                )}
 
                 <motion.div
                   variants={heroContainer}
@@ -514,7 +531,7 @@ export default function QuizGenerator() {
                 >
                 {/* Demo used — sign up CTA */}
                 {!isLoggedIn && sessionStatus !== "loading" && demoUsed && (
-                  <motion.div variants={heroItem} className="mb-12 flex items-center gap-6">
+                  <motion.div variants={heroItem} className={`mb-12 flex items-center gap-6 ${isLoggedIn ? "" : "justify-center"}`}>
                     <Link href="/auth/register" className="px-6 py-3 bg-foreground text-background text-sm font-medium hover:opacity-90 transition-colors duration-200">
                       {t("hero.createAccount")}
                     </Link>
@@ -526,7 +543,7 @@ export default function QuizGenerator() {
 
                 {/* Demo hint */}
                 {!isLoggedIn && sessionStatus !== "loading" && canGenerateDemo && (
-                  <motion.p variants={heroItem} className="text-xs text-muted-foreground mb-6">{t("hero.demoHint")}</motion.p>
+                  <motion.p variants={heroItem} className={`text-xs text-muted-foreground mb-6 ${isLoggedIn ? "" : "text-center"}`}>{t("hero.demoHint")}</motion.p>
                 )}
 
                 {/* Limit reached */}
@@ -561,7 +578,7 @@ export default function QuizGenerator() {
 
                 {/* Quiz Input */}
                 {(isLoggedIn || canGenerateDemo) && (
-                  <motion.div variants={heroItem} className="max-w-2xl">
+                  <motion.div variants={heroItem} className={`max-w-2xl ${isLoggedIn ? "" : "mx-auto"}`}>
                     <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
                       <div className="flex items-center justify-between px-5 pt-4 pb-2">
                         <span className="text-xs text-muted-foreground uppercase tracking-[0.2em]">{t("input.content")}</span>
