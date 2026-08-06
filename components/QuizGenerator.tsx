@@ -514,9 +514,26 @@ export default function QuizGenerator() {
                 ) : (
                 <div className="mx-auto max-w-5xl text-center">
                   <h1 className="font-serif text-5xl font-medium tracking-tight leading-[1.08] sm:text-6xl lg:text-7xl">
-                    Turn your study notes into
-                    <br />
-                    structured quizzes, instantly.
+                    <span className="block overflow-hidden pb-1">
+                      <motion.span
+                        className="block"
+                        initial={{ y: "110%" }}
+                        animate={{ y: 0 }}
+                        transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.15 }}
+                      >
+                        Turn your study notes into
+                      </motion.span>
+                    </span>
+                    <span className="block overflow-hidden pb-1">
+                      <motion.span
+                        className="block"
+                        initial={{ y: "110%" }}
+                        animate={{ y: 0 }}
+                        transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.3 }}
+                      >
+                        structured quizzes, instantly.
+                      </motion.span>
+                    </span>
                   </h1>
                   <DotMap className="mx-auto mt-20 w-full max-w-3xl" />
                 </div>

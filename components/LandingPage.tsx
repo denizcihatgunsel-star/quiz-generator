@@ -1,7 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
+import { motion } from "framer-motion";
 import { useTranslation } from "@/lib/i18n";
+
+const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
+
+function FadeInSection({ id, className, children }: { id?: string; className?: string; children: ReactNode }) {
+  return (
+    <motion.section
+      id={id}
+      className={className}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, ease: EASE_OUT }}
+    >
+      {children}
+    </motion.section>
+  );
+}
 
 const FAQ_ITEMS = [
   { q: "What file types can I upload?", a: "PDF, TXT, and Markdown files. Or just paste text directly." },
@@ -18,7 +36,7 @@ export default function LandingPage() {
   return (
     <div>
       {/* What you get */}
-      <section className="py-32 border-t border-border">
+      <FadeInSection className="py-32 border-t border-border">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
             <div>
@@ -52,10 +70,10 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
-      </section>
+      </FadeInSection>
 
       {/* How it works */}
-      <section id="features" className="py-32 bg-card">
+      <FadeInSection id="features" className="py-32 bg-card">
         <div className="max-w-5xl mx-auto px-6">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">
             {t("landing.howItWorks")}
@@ -78,10 +96,10 @@ export default function LandingPage() {
             ))}
           </div>
         </div>
-      </section>
+      </FadeInSection>
 
       {/* Numbers */}
-      <section className="py-32 border-t border-border">
+      <FadeInSection className="py-32 border-t border-border">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-12">
             {[
@@ -97,10 +115,10 @@ export default function LandingPage() {
             ))}
           </div>
         </div>
-      </section>
+      </FadeInSection>
 
       {/* Why active recall works */}
-      <section className="py-32 bg-card">
+      <FadeInSection className="py-32 bg-card">
         <div className="max-w-3xl mx-auto px-6">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">The science behind it</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-8">
@@ -127,10 +145,10 @@ export default function LandingPage() {
             </p>
           </div>
         </div>
-      </section>
+      </FadeInSection>
 
       {/* Who it's for */}
-      <section className="py-32 border-t border-border">
+      <FadeInSection className="py-32 border-t border-border">
         <div className="max-w-5xl mx-auto px-6">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">Built for everyone who learns or teaches</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-16">
@@ -169,10 +187,10 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
-      </section>
+      </FadeInSection>
 
       {/* What makes Examina different */}
-      <section className="py-32 bg-card">
+      <FadeInSection className="py-32 bg-card">
         <div className="max-w-3xl mx-auto px-6">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">What makes Examina different</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-8">
@@ -200,10 +218,10 @@ export default function LandingPage() {
             </p>
           </div>
         </div>
-      </section>
+      </FadeInSection>
 
       {/* Testimonials */}
-      <section className="py-32 bg-card">
+      <FadeInSection className="py-32 bg-card">
         <div className="max-w-5xl mx-auto px-6">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">{t("landing.fromUsers")}</p>
 
@@ -221,10 +239,10 @@ export default function LandingPage() {
             ))}
           </div>
         </div>
-      </section>
+      </FadeInSection>
 
       {/* FAQ */}
-      <section id="faq" className="py-32 border-t border-border">
+      <FadeInSection id="faq" className="py-32 border-t border-border">
         <div className="max-w-3xl mx-auto px-6">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">{t("landing.faq")}</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-16">
@@ -266,10 +284,10 @@ export default function LandingPage() {
             })}
           </div>
         </div>
-      </section>
+      </FadeInSection>
 
       {/* About Examina */}
-      <section id="about" className="py-32 bg-card">
+      <FadeInSection id="about" className="py-32 bg-card">
         <div className="max-w-3xl mx-auto px-6">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">About</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-8">
@@ -285,10 +303,10 @@ export default function LandingPage() {
             </p>
           </div>
         </div>
-      </section>
+      </FadeInSection>
 
       {/* Bottom CTA */}
-      <section className="bg-foreground py-32">
+      <FadeInSection className="bg-foreground py-32">
         <div className="mx-auto max-w-3xl px-6 text-center">
           <h2 className="mb-6 text-3xl font-medium leading-tight text-background sm:text-5xl">
             {t("landing.ctaTitle")}
@@ -303,7 +321,7 @@ export default function LandingPage() {
             {t("landing.ctaButton")}
           </a>
         </div>
-      </section>
+      </FadeInSection>
     </div>
   );
 }
