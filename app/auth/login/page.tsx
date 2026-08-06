@@ -76,21 +76,26 @@ function LoginForm() {
               />
             </div>
 
-            <div>
-              <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-foreground">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                autoComplete="current-password"
-                placeholder="••••••••"
-                className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus-visible:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              />
-            </div>
+              <div>
+                <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-foreground">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus-visible:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                />
+                <div className="mt-1.5 text-right">
+                  <Link href="/auth/forgot-password" className="text-xs font-medium text-accent hover:underline">
+                    Forgot password?
+                  </Link>
+                </div>
+              </div>
 
             {error && (
               <p className="rounded-lg border border-border bg-danger-soft px-3 py-2 text-sm text-danger">

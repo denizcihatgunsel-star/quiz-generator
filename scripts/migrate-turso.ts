@@ -111,6 +111,16 @@ const statements: string[] = [
 
   // Team membership column on User
   `ALTER TABLE "User" ADD COLUMN "teamId" TEXT`,
+
+  // Password reset tokens table
+  `CREATE TABLE IF NOT EXISTS "PasswordResetToken" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "token" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "expiresAt" DATETIME NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "PasswordResetToken_token_key" ON "PasswordResetToken"("token")`,
 ];
 
 async function main() {

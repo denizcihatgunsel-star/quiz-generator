@@ -164,3 +164,12 @@ model Team {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// Password reset tokens
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
