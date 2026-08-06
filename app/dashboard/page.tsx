@@ -61,6 +61,23 @@ export default function DashboardPage() {
     }
   }, [session, showAdminPanel]);
 
+  const updateAdminUser = async (userId: string, plan: string) => {
+    setLoadingUsers(true);
+    try {
+      const res = await fetch("/api/admin/users", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, plan }),
+      });
+      if (res.ok) {
+        setAdminUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, plan } : u)));
+      }
+    } catch {
+      // ignore
+    }
+    setLoadingUsers(false);
+  };
+
   const copyShareLink = (shareId: string) => {
     const url = `${window.location.origin}/quiz/${shareId}`;
     navigator.clipboard.writeText(url);
@@ -237,7 +254,17 @@ export default function DashboardPage() {
                                 : "bg-gray-100 text-gray-800"
                             }`}>{user.role}</span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">{user.plan}</td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <select
+                              value={user.plan}
+                              onChange={(e) => updateAdminUser(user.id, e.target.value)}
+                              className="rounded-lg border border-border bg-background px-2 py-1 text-sm font-medium text-foreground transition-colors focus-visible:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            >
+                              {["free", "starter", "plus", "pro", "team"].map((p) => (
+                                <option key={p} value={p}>{p}</option>
+                              ))}
+                            </select>
+                          </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">{new Date(user.createdAt).toLocaleDateString()}</td>
                         </tr>
                       ))}

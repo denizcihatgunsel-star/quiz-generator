@@ -223,7 +223,7 @@ export default function EssayGenerator() {
                     element.click();
                     document.body.removeChild(element);
                   }}
-                  classn                    className="px-4 py-2 rounded-lg border border-zinc-200 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 text-sm font-medium hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors"
+                  className="px-4 py-2 rounded-lg border border-zinc-200 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 text-sm font-medium hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors"
                 >
                   Download
                 </button>
