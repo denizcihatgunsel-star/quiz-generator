@@ -1,19 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, type Variants } from "framer-motion";
 import { useTranslation } from "@/lib/i18n";
-
-const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
-const fadeUpContainer: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
-};
-const fadeUpItem: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE_OUT } },
-};
-const viewportOnce = { once: true, margin: "-80px" } as const;
 
 const FAQ_ITEMS = [
   { q: "What file types can I upload?", a: "PDF, TXT, and Markdown files. Or just paste text directly." },
@@ -30,81 +18,67 @@ export default function LandingPage() {
   return (
     <div>
       {/* What you get */}
-      <motion.section
-        className="py-32 border-t border-border"
-        variants={fadeUpContainer}
-        initial="hidden"
-        whileInView="show"
-        viewport={viewportOnce}
-      >
+      <section className="py-32 border-t border-border">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-            <motion.div variants={fadeUpItem}>
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">{t("landing.whatYouGet")}</p>
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">{t("landing.whatYouGet")}</p>
               <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight">
                 {t("landing.fourTypes")}
                 <br />
                 {t("landing.oneClick")}
               </h2>
-            </motion.div>
-            <motion.div className="space-y-8" variants={fadeUpContainer}>
+            </div>
+            <div className="space-y-8">
               {[
                 { title: "Multiple Choice", desc: "5-6 questions with explanations, difficulty tags, and Bloom's Taxonomy levels." },
                 { title: "Flashcards", desc: "Interactive cards with 3D flip. Great for active recall before exams." },
                 { title: "Fill in the Blank", desc: "Tests whether you actually know the material, not just recognize it." },
                 { title: "True / False", desc: "Quick comprehension checks with detailed explanations." },
               ].map((item, i) => (
-                <motion.div key={i} variants={fadeUpItem} className="group">
+                <div key={i} className="group">
                   <div className="flex items-baseline gap-4">
-                    <span className="text-xs text-neutral-300 font-mono">0{i + 1}</span>
+                    <span className="text-xs text-neutral-300 font-mono transition-colors duration-200 group-hover:text-foreground">
+                      0{i + 1}
+                    </span>
                     <div>
                       <h3 className="text-foreground font-medium mb-1">{item.title}</h3>
                       <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
                   {i < 3 && <div className="mt-8 border-b border-border" />}
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
+            </div>
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* How it works */}
-      <motion.section
-        id="features"
-        className="py-32 bg-card"
-        variants={fadeUpContainer}
-        initial="hidden"
-        whileInView="show"
-        viewport={viewportOnce}
-      >
+      <section id="features" className="py-32 bg-card">
         <div className="max-w-5xl mx-auto px-6">
-          <motion.p variants={fadeUpItem} className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">
             {t("landing.howItWorks")}
-          </motion.p>
-          <motion.h2 variants={fadeUpItem} className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-20">
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-20">
             {t("landing.pasteGenerateStudy")}
-          </motion.h2>
+          </h2>
 
-          <motion.div
-            className="grid grid-cols-1 sm:grid-cols-3 gap-12"
-            variants={fadeUpContainer}
-          >
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12">
             {[
               { step: "01", title: "Add your content", desc: "Paste lesson notes, an article, or upload a PDF. Anything between 50 and 15,000 characters." },
               { step: "02", title: "AI builds the quiz", desc: "Examina reads your content and creates questions across difficulty levels and Bloom's Taxonomy." },
               { step: "03", title: "Study and share", desc: "Take the quiz instantly. Track your score. Share it with a link or download as PDF." },
             ].map((item) => (
-              <motion.div key={item.step} variants={fadeUpItem}>
+              <div key={item.step}>
                 <span className="text-xs text-neutral-300 font-mono">{item.step}</span>
                 <h3 className="text-foreground font-medium mt-3 mb-2">{item.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Numbers */}
       <section className="py-32 border-t border-border">
@@ -118,7 +92,7 @@ export default function LandingPage() {
             ].map((stat) => (
               <div key={stat.label}>
                 <p className="text-4xl sm:text-5xl font-medium text-foreground">{stat.number}</p>
-                <p className="text-sm text-muted-foreground/70 mt-2">{stat.label}</p>
+                <p className="text-sm text-muted-foreground mt-2">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -128,7 +102,7 @@ export default function LandingPage() {
       {/* Why active recall works */}
       <section className="py-32 bg-card">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">The science behind it</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">The science behind it</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-8">
             Why testing yourself beats re-reading
           </h2>
@@ -158,7 +132,7 @@ export default function LandingPage() {
       {/* Who it's for */}
       <section className="py-32 border-t border-border">
         <div className="max-w-5xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">Built for everyone who learns or teaches</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">Built for everyone who learns or teaches</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-16">
             Students, teachers, and professionals.
           </h2>
@@ -200,7 +174,7 @@ export default function LandingPage() {
       {/* What makes Examina different */}
       <section className="py-32 bg-card">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">What makes Examina different</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">What makes Examina different</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-8">
             More than a quiz generator.
           </h2>
@@ -231,21 +205,18 @@ export default function LandingPage() {
       {/* Testimonials */}
       <section className="py-32 bg-card">
         <div className="max-w-5xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">{t("landing.fromUsers")}</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">{t("landing.fromUsers")}</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-border">
             {[
-              { quote: "This saves me hours every week. I paste my lecture notes and get a full quiz in seconds.", name: "Sarah M.", role: "High School Teacher" },
-              { quote: "The fill-in-the-blank questions really test whether I know the material. Way better than just re-reading notes.", name: "Alex K.", role: "University Student" },
-              { quote: "Finally a tool that tests understanding, not just memorization. The Bloom's taxonomy mapping is a game changer.", name: "Dr. James L.", role: "Professor" },
-              { quote: "I use it to prep for every exam. The flashcards with flip animation make studying actually engaging.", name: "Maria T.", role: "Medical Student" },
-            ].map((t, i) => (
-              <div key={i} className="bg-muted p-10">
-                <p className="text-muted-foreground leading-relaxed mb-8">&ldquo;{t.quote}&rdquo;</p>
-                <div>
-                  <p className="text-foreground text-sm font-medium">{t.name}</p>
-                  <p className="text-muted-foreground/70 text-xs mt-0.5">{t.role}</p>
-                </div>
+              { quote: "I paste my lecture notes and have a full practice quiz before my coffee cools. The fill-in-the-blank questions are the ones that expose what I don't actually know.", role: "University student" },
+              { quote: "Quiz generation used to take me an evening per chapter. Now it's a paste and a wait.", role: "High school teacher" },
+              { quote: "Questions arrive tagged by Bloom's level, so I can check that a quiz covers recall and application — not just memorization.", role: "Professor" },
+              { quote: "The flashcards drill the same material I'd normally re-read. I stopped re-reading entirely.", role: "Medical student" },
+            ].map((item, i) => (
+              <div key={i} className="bg-muted p-10 transition-colors duration-200 hover:bg-white">
+                <p className="text-muted-foreground leading-relaxed mb-8">&ldquo;{item.quote}&rdquo;</p>
+                <p className="text-foreground text-sm font-medium">{item.role}</p>
               </div>
             ))}
           </div>
@@ -255,28 +226,44 @@ export default function LandingPage() {
       {/* FAQ */}
       <section id="faq" className="py-32 border-t border-border">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">{t("landing.faq")}</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">{t("landing.faq")}</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-16">
             {t("landing.commonQuestions")}
           </h2>
 
           <div className="divide-y divide-border">
-            {FAQ_ITEMS.map((item, i) => (
-              <div key={i}>
-                <button
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between py-6 text-left group"
-                >
-                  <span className="text-foreground text-sm pr-8">{item.q}</span>
-                  <span className="text-neutral-300 text-lg shrink-0 transition-transform duration-200" style={{ transform: openFaq === i ? "rotate(45deg)" : "none" }}>
-                    +
-                  </span>
-                </button>
-                <div className={`overflow-hidden transition-all duration-200 ${openFaq === i ? "max-h-32 pb-6" : "max-h-0"}`}>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{item.a}</p>
+            {FAQ_ITEMS.map((item, i) => {
+              const isOpen = openFaq === i;
+              return (
+                <div key={i}>
+                  <button
+                    onClick={() => setOpenFaq(isOpen ? null : i)}
+                    className="w-full flex items-center justify-between py-6 text-left group"
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-panel-${i}`}
+                    id={`faq-button-${i}`}
+                  >
+                    <span className={`text-sm pr-8 transition-colors duration-200 ${isOpen ? "text-foreground" : "text-foreground group-hover:text-neutral-900"}`}>
+                      {item.q}
+                    </span>
+                    <span
+                      className={`text-neutral-300 text-lg shrink-0 transition-transform duration-200 ${isOpen ? "rotate-45" : ""}`}
+                      aria-hidden="true"
+                    >
+                      +
+                    </span>
+                  </button>
+                  <div
+                    id={`faq-panel-${i}`}
+                    role="region"
+                    aria-labelledby={`faq-button-${i}`}
+                    className={`overflow-hidden transition-all duration-200 ease-out ${isOpen ? "max-h-48 pb-6" : "max-h-0"}`}
+                  >
+                    <p className="text-sm text-muted-foreground leading-relaxed">{item.a}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -284,26 +271,17 @@ export default function LandingPage() {
       {/* About Examina */}
       <section className="py-32 bg-card">
         <div className="max-w-3xl mx-auto px-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70 mb-6">About</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">About</p>
           <h2 className="text-3xl sm:text-4xl font-medium text-foreground leading-tight mb-8">
             What is Examina?
           </h2>
           <div className="space-y-6 text-muted-foreground leading-relaxed">
             <p>
-              Examina is an AI-powered quiz generator designed for students, teachers, and professionals
-              who want to turn any text into interactive practice questions. Whether you call it an AI quiz
-              maker, a flashcard generator, or a test builder, Examina does it all in one place.
-            </p>
-            <p>
-              Unlike traditional assessment platforms, Examina uses artificial intelligence to read your
-              content and generate four types of questions: multiple choice, flashcards, fill-in-the-blank,
-              and true/false. Every question is mapped to Bloom&apos;s Taxonomy, ensuring your quizzes test
-              real understanding across cognitive levels — from basic recall to analysis.
-            </p>
-            <p>
-              Examina supports 29 languages, generates quizzes in under 30 seconds, and works with pasted
-              text, PDF uploads, TXT files, and Markdown. You can share quizzes via a unique link or export
-              them as PDF. Examina is free to get started with 5 quizzes per month, no credit card required.
+              Examina is an AI-powered quiz generator that reads any text you give it — pasted notes,
+              PDFs, TXT, or Markdown — and produces multiple choice, flashcards, fill-in-the-blank,
+              and true/false questions mapped to Bloom&apos;s Taxonomy. It supports 29 languages,
+              generates in under 30 seconds, and is free to start with 5 quizzes per month, no credit
+              card required.
             </p>
           </div>
         </div>

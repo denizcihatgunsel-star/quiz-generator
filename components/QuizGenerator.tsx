@@ -33,43 +33,43 @@ const EXAMPLE_LESSON = `The water cycle, also known as the hydrological cycle, d
 The water cycle is powered primarily by solar energy and gravity. It plays a critical role in distributing freshwater, regulating temperature, and shaping weather patterns across the globe.`;
 
 const TABS = [
-  { id: "mcq", label: "Multiple Choice", icon: "\ud83e\udde0" },
-  { id: "flashcards", label: "Flashcards", icon: "\ud83c\udccf" },
-  { id: "fillblank", label: "Fill in Blank", icon: "\u270d\ufe0f" },
-  { id: "truefalse", label: "True / False", icon: "\u2696\ufe0f" },
+  { id: "mcq", label: "Multiple Choice" },
+  { id: "flashcards", label: "Flashcards" },
+  { id: "fillblank", label: "Fill in Blank" },
+  { id: "truefalse", label: "True / False" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
 
 const LANGUAGES = [
-  { code: "English", label: "English", flag: "🇺🇸" },
-  { code: "Spanish", label: "Espa\u00f1ol", flag: "🇪🇸" },
-  { code: "French", label: "Fran\u00e7ais", flag: "🇫🇷" },
-  { code: "German", label: "Deutsch", flag: "🇩🇪" },
-  { code: "Italian", label: "Italiano", flag: "🇮🇹" },
-  { code: "Portuguese", label: "Portugu\u00eas", flag: "🇧🇷" },
-  { code: "Dutch", label: "Nederlands", flag: "🇳🇱" },
-  { code: "Russian", label: "\u0420\u0443\u0441\u0441\u043a\u0438\u0439", flag: "🇷🇺" },
-  { code: "Chinese", label: "\u4e2d\u6587", flag: "🇨🇳" },
-  { code: "Japanese", label: "\u65e5\u672c\u8a9e", flag: "🇯🇵" },
-  { code: "Korean", label: "\ud55c\uad6d\uc5b4", flag: "🇰🇷" },
-  { code: "Arabic", label: "\u0627\u0644\u0639\u0631\u0628\u064a\u0629", flag: "🇸🇦" },
-  { code: "Turkish", label: "T\u00fcrk\u00e7e", flag: "🇹🇷" },
-  { code: "Hindi", label: "\u0939\u093f\u0928\u094d\u0926\u0940", flag: "🇮🇳" },
-  { code: "Polish", label: "Polski", flag: "🇵🇱" },
-  { code: "Swedish", label: "Svenska", flag: "🇸🇪" },
-  { code: "Norwegian", label: "Norsk", flag: "🇳🇴" },
-  { code: "Danish", label: "Dansk", flag: "🇩🇰" },
-  { code: "Finnish", label: "Suomi", flag: "🇫🇮" },
-  { code: "Greek", label: "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac", flag: "🇬🇷" },
-  { code: "Czech", label: "\u010ce\u0161tina", flag: "🇨🇿" },
-  { code: "Romanian", label: "Rom\u00e2n\u0103", flag: "🇷🇴" },
-  { code: "Hungarian", label: "Magyar", flag: "🇭🇺" },
-  { code: "Vietnamese", label: "Ti\u1ebfng Vi\u1ec7t", flag: "🇻🇳" },
-  { code: "Thai", label: "\u0e44\u0e17\u0e22", flag: "🇹🇭" },
-  { code: "Indonesian", label: "Bahasa Indonesia", flag: "🇮🇩" },
-  { code: "Ukrainian", label: "\u0423\u043a\u0440\u0430\u0457\u043d\u0441\u044c\u043a\u0430", flag: "🇺🇦" },
-  { code: "Hebrew", label: "\u05e2\u05d1\u05e8\u05d9\u05ea", flag: "🇮🇱" },
+  { code: "English", label: "English" },
+  { code: "Spanish", label: "Espa\u00f1ol" },
+  { code: "French", label: "Fran\u00e7ais" },
+  { code: "German", label: "Deutsch" },
+  { code: "Italian", label: "Italiano" },
+  { code: "Portuguese", label: "Portugu\u00eas" },
+  { code: "Dutch", label: "Nederlands" },
+  { code: "Russian", label: "\u0420\u0443\u0441\u0441\u043a\u0438\u0439" },
+  { code: "Chinese", label: "\u4e2d\u6587" },
+  { code: "Japanese", label: "\u65e5\u672c\u8a9e" },
+  { code: "Korean", label: "\ud55c\uad6d\uc5b4" },
+  { code: "Arabic", label: "\u0627\u0644\u0639\u0631\u0628\u064a\u0629" },
+  { code: "Turkish", label: "T\u00fcrk\u00e7e" },
+  { code: "Hindi", label: "\u0939\u093f\u0928\u094d\u0926\u0940" },
+  { code: "Polish", label: "Polski" },
+  { code: "Swedish", label: "Svenska" },
+  { code: "Norwegian", label: "Norsk" },
+  { code: "Danish", label: "Dansk" },
+  { code: "Finnish", label: "Suomi" },
+  { code: "Greek", label: "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac" },
+  { code: "Czech", label: "\u010ce\u0161tina" },
+  { code: "Romanian", label: "Rom\u00e2n\u0103" },
+  { code: "Hungarian", label: "Magyar" },
+  { code: "Vietnamese", label: "Ti\u1ebfng Vi\u1ec7t" },
+  { code: "Thai", label: "\u0e44\u0e17\u0e22" },
+  { code: "Indonesian", label: "Bahasa Indonesia" },
+  { code: "Ukrainian", label: "\u0423\u043a\u0440\u0430\u0457\u043d\u0441\u044c\u043a\u0430" },
+  { code: "Hebrew", label: "\u05e2\u05d1\u05e8\u05d9\u05ea" },
 ];
 
 interface UsageInfo {
@@ -603,7 +603,7 @@ export default function QuizGenerator() {
                           >
                             {LANGUAGES.map((lang) => (
                               <option key={lang.code} value={lang.code} className="bg-card text-foreground">
-                                {lang.flag} {lang.label}
+                                {lang.label}
                               </option>
                             ))}
                           </select>
@@ -633,7 +633,15 @@ export default function QuizGenerator() {
 
                     {status === "loading" && (
                       <div className="mt-8 flex items-center gap-3 text-muted-foreground">
-                        <div className="w-3 h-3 border border-neutral-300 border-t-neutral-900 rounded-full animate-spin" />
+                        <div className="flex items-center gap-1.5">
+                          {[0, 1, 2].map((i) => (
+                            <span
+                              key={i}
+                              className="h-1.5 w-1.5 rounded-full bg-muted-foreground animate-bounce"
+                              style={{ animationDelay: `${i * 0.15}s` }}
+                            />
+                          ))}
+                        </div>
                         <p className="text-xs">{t("input.reading")}</p>
                       </div>
                     )}
@@ -717,15 +725,20 @@ export default function QuizGenerator() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`pb-3 text-sm font-medium whitespace-nowrap transition-colors border-b-2 -mb-px ${
-                      activeTab === tab.id
-                        ? "text-foreground border-neutral-900"
-                        : "text-muted-foreground border-transparent hover:text-muted-foreground"
+                    className={`relative pb-3 text-sm font-medium whitespace-nowrap transition-colors duration-200 ${
+                      activeTab === tab.id ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                     }`}
                     role="tab"
                     aria-selected={activeTab === tab.id}
                   >
                     {tab.label}
+                    {activeTab === tab.id && (
+                      <motion.span
+                        layoutId="active-tab-underline"
+                        className="absolute left-0 right-0 -bottom-px h-0.5 bg-neutral-900"
+                        transition={{ duration: 0.3, ease: EASE_OUT }}
+                      />
+                    )}
                   </button>
                 ))}
               </div>

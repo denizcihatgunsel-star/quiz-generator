@@ -15,9 +15,9 @@ const translations: Record<Locale, Record<string, string>> = {
     "nav.getStarted": "Get started",
     "nav.newQuiz": "New quiz",
     // Hero
-    "hero.title1": "Examina — Turn any lesson",
-    "hero.title2": "into a quiz with AI",
-    "hero.subtitle": "Paste your content, pick a language, and get multiple choice, flashcards, fill-in-the-blank, and true/false questions in seconds.",
+    "hero.title1": "Stop re-reading your notes.",
+    "hero.title2": "Start testing yourself.",
+    "hero.subtitle": "Paste any lesson — notes, an article, a PDF — and get multiple choice, flashcards, fill-in-the-blank, and true/false questions in seconds.",
     "hero.createAccount": "Create free account",
     "hero.signIn": "Sign in",
     "hero.demoHint": "Try one quiz free — no account needed.",
@@ -82,7 +82,7 @@ const translations: Record<Locale, Record<string, string>> = {
     "landing.faq": "FAQ",
     "landing.commonQuestions": "Common questions",
     // Landing - CTA
-    "landing.ctaTitle": "Start studying smarter.",
+    "landing.ctaTitle": "Put your notes to work.",
     "landing.ctaSubtitle": "5 free quizzes per month. No credit card required.",
     "landing.ctaButton": "Create free account",
     // Footer
