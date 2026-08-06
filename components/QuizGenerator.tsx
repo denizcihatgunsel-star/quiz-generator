@@ -401,7 +401,7 @@ export default function QuizGenerator() {
   return (
     <div className="min-h-screen bg-background">
       {/* ========== NAVIGATION ========== */}
-      {isLoggedIn || quiz || sessionStatus === "loading" ? (
+      {sessionStatus === "loading" ? null : isLoggedIn || quiz ? (
       <motion.nav
         initial={{ y: -16, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -432,9 +432,7 @@ export default function QuizGenerator() {
               </button>
             )}
 
-            {sessionStatus === "loading" ? (
-              <div className="w-7 h-7 rounded-full bg-muted animate-pulse" />
-            ) : isLoggedIn && usage ? (
+            {isLoggedIn && usage ? (
               <UserMenu used={usedCount} limit={limitCount} planId={planId} />
             ) : !isLoggedIn ? (
               <div className="flex items-center gap-4">
@@ -487,6 +485,7 @@ export default function QuizGenerator() {
         {!quiz ? (
           <>
             {/* Hero */}
+            {sessionStatus === "loading" ? null : (
             <section className={`pb-32 ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-[#FBFBFA] pt-52 sm:pt-60"}`}>
               <div className="max-w-5xl mx-auto px-6">
                 {isLoggedIn ? (
@@ -530,7 +529,7 @@ export default function QuizGenerator() {
                   transition={{ delayChildren: 0.25, staggerChildren: 0.08 }}
                 >
                 {/* Demo used — sign up CTA */}
-                {!isLoggedIn && sessionStatus !== "loading" && demoUsed && (
+                {!isLoggedIn && demoUsed && (
                   <motion.div variants={heroItem} className={`mb-12 flex items-center gap-6 ${isLoggedIn ? "" : "justify-center"}`}>
                     <Link href="/auth/register" className="px-6 py-3 bg-foreground text-background text-sm font-medium hover:opacity-90 transition-colors duration-200">
                       {t("hero.createAccount")}
@@ -542,7 +541,7 @@ export default function QuizGenerator() {
                 )}
 
                 {/* Demo hint */}
-                {!isLoggedIn && sessionStatus !== "loading" && canGenerateDemo && (
+                {!isLoggedIn && canGenerateDemo && (
                   <motion.p variants={heroItem} className={`text-xs text-muted-foreground mb-6 ${isLoggedIn ? "" : "text-center"}`}>{t("hero.demoHint")}</motion.p>
                 )}
 
@@ -674,6 +673,7 @@ export default function QuizGenerator() {
                 </motion.div>
               </div>
             </section>
+            )}
 
             {status === "idle" && <LandingPage />}
           </>
