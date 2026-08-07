@@ -692,7 +692,7 @@ export default function QuizGenerator() {
             </section>
             )}
 
-            {status === "idle" && <LandingPage />}
+            {sessionStatus === "loading" ? null : !isLoggedIn && status === "idle" && <LandingPage />}
           </>
         ) : (
           /* ========== QUIZ RESULTS ========== */
