@@ -590,10 +590,10 @@ export default function QuizGenerator() {
                 {/* Demo used — sign up CTA */}
                 {!isLoggedIn && demoUsed && (
                   <motion.div variants={heroItem} className={`mb-12 flex items-center gap-6 ${isLoggedIn ? "" : "justify-center"}`}>
-                    <Link href="/auth/register" className="px-6 py-3 bg-foreground text-background text-sm font-medium hover:opacity-90 transition-colors duration-200">
+                    <Link href="/auth/register" className="px-6 py-3 bg-[#3B2027] text-[#F6E3E8] text-sm font-medium hover:bg-[#52303B] transition-colors duration-200">
                       {t("hero.createAccount")}
                     </Link>
-                    <Link href="/auth/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">
+                    <Link href="/auth/login" className="text-sm text-[#9A7280] hover:text-[#3B2027] transition-colors duration-200">
                       {t("hero.signIn")}
                     </Link>
                   </motion.div>
@@ -601,19 +601,19 @@ export default function QuizGenerator() {
 
                 {/* Demo hint */}
                 {!isLoggedIn && canGenerateDemo && (
-                  <motion.p variants={heroItem} className={`text-xs text-muted-foreground mb-6 ${isLoggedIn ? "" : "text-center"}`}>{t("hero.demoHint")}</motion.p>
+                  <motion.p variants={heroItem} className={`text-xs text-[#9A7280] mb-6 ${isLoggedIn ? "" : "text-center"}`}>{t("hero.demoHint")}</motion.p>
                 )}
 
                 {/* Limit reached */}
                 {isLoggedIn && atLimit && !limitReached && (
-                  <motion.div variants={heroItem} className="mb-8 p-5 rounded-2xl border border-border bg-card shadow-sm flex items-center justify-between gap-4 max-w-2xl">
+                  <motion.div variants={heroItem} className="mb-8 p-5 rounded-2xl border border-[#F3D5DC] bg-white/70 backdrop-blur-xl shadow-sm flex items-center justify-between gap-4 max-w-2xl">
                     <div>
-                      <p className="text-sm text-foreground">Monthly limit reached</p>
-                      <p className="text-xs text-muted-foreground mt-0.5">
+                      <p className="text-sm text-[#4A3038]">Monthly limit reached</p>
+                      <p className="text-xs text-[#9A7280] mt-0.5">
                         {limitCount}/{limitCount} quizzes used on the {plan.name} plan.
                       </p>
                     </div>
-                    <Link href="/pricing" className="shrink-0 px-4 py-2 bg-foreground text-background text-sm font-medium hover:opacity-90 transition-colors duration-200">
+                    <Link href="/pricing" className="shrink-0 px-4 py-2 bg-[#3B2027] text-[#F6E3E8] text-sm font-medium hover:bg-[#52303B] transition-colors duration-200">
                       Upgrade
                     </Link>
                   </motion.div>
@@ -622,31 +622,31 @@ export default function QuizGenerator() {
                 {/* Usage bar */}
                 {isLoggedIn && usage && !isUnlimited && !atLimit && (
                   <motion.div variants={heroItem} className="max-w-md mb-8 flex items-center gap-3">
-                    <div className="flex-1 h-px bg-neutral-300 relative overflow-hidden">
+                    <div className="flex-1 h-px bg-[#F6E4EA] relative overflow-hidden">
                       <motion.div
-                        className="h-full bg-neutral-900 absolute left-0 top-0"
+                        className="h-full bg-gradient-to-r from-[#E9A8B8] to-[#B0607A] absolute left-0 top-0"
                         initial={{ width: 0 }}
                         animate={{ width: `${Math.min(100, (usedCount / limitCount) * 100)}%` }}
                         transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.4 }}
                       />
                     </div>
-                    <span className="text-xs text-muted-foreground shrink-0">{usedCount}/{limitCount}</span>
+                    <span className="text-xs text-[#9A7280] shrink-0">{usedCount}/{limitCount}</span>
                   </motion.div>
                 )}
 
                 {/* Quiz Input */}
                 {(isLoggedIn || canGenerateDemo) && (
                   <motion.div variants={heroItem} id="generate" className={`max-w-2xl scroll-mt-28 ${isLoggedIn ? "" : "mx-auto"}`}>
-                    <div className="animate-border rounded-xl">
-                    <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden transition-all duration-300 hover:shadow-[0_16px_50px_-20px_rgba(91,91,214,0.35)] hover:border-accent/30 focus-within:border-accent/40 focus-within:shadow-[0_16px_50px_-20px_rgba(91,91,214,0.4)]">
+                    <div className="animate-border rounded-3xl">
+                    <div className="rounded-3xl border border-[#F3D5DC] bg-white/70 backdrop-blur-xl shadow-[0_24px_70px_-30px_rgba(176,96,122,0.5)] overflow-hidden transition-all duration-300 hover:shadow-[0_28px_80px_-30px_rgba(176,96,122,0.6)] hover:border-[#E9B8C4] focus-within:border-[#E9B8C4] focus-within:shadow-[0_28px_80px_-30px_rgba(176,96,122,0.65)]">
                       <div className="flex items-center justify-between px-5 pt-4 pb-2">
-                        <span className="text-xs text-muted-foreground uppercase tracking-[0.2em]">{t("input.content")}</span>
+                        <span className="text-xs text-[#A87680] uppercase tracking-[0.2em]">{t("input.content")}</span>
                         <div className="flex items-center gap-4">
                           <input ref={fileInputRef} type="file" accept=".pdf,.txt,.md" onChange={handleFileUpload} className="hidden" id="file-upload" />
-                          <button onClick={() => fileInputRef.current?.click()} disabled={uploading} className="text-xs text-muted-foreground hover:text-foreground disabled:opacity-50 transition-colors duration-200">
+                          <button onClick={() => fileInputRef.current?.click()} disabled={uploading} className="text-xs text-[#9A7280] hover:text-[#3B2027] disabled:opacity-50 transition-colors duration-200">
                             {uploading ? t("input.extracting") : t("input.upload")}
                           </button>
-                          <button onClick={loadExample} className="text-xs text-muted-foreground hover:text-foreground transition-colors duration-200">
+                          <button onClick={loadExample} className="text-xs text-[#9A7280] hover:text-[#3B2027] transition-colors duration-200">
                             {t("input.example")}
                           </button>
                         </div>
@@ -658,35 +658,35 @@ export default function QuizGenerator() {
                         value={lesson}
                         onChange={(e) => setLesson(e.target.value)}
                         placeholder={t("input.placeholder")}
-                        className="w-full px-5 pb-4 min-h-40 text-sm text-foreground placeholder-neutral-400 bg-transparent resize-y focus:outline-none leading-relaxed"
+                        className="w-full px-5 pb-4 min-h-40 text-sm text-[#4A3038] placeholder-neutral-400 bg-transparent resize-y focus:outline-none leading-relaxed"
                         aria-describedby="char-count"
                       />
 
                       {/* Character progress bar */}
-                      <div className="h-0.5 bg-neutral-100">
+                      <div className="h-0.5 bg-[#F6E4EA]">
                         <div
-                          className={`h-full transition-all duration-200 ${charCount > 14000 ? "bg-warning" : "bg-accent/60"}`}
+                          className={`h-full transition-all duration-200 ${charCount > 14000 ? "bg-warning" : "bg-gradient-to-r from-[#E9A8B8] to-[#B0607A]"}`}
                           style={{ width: `${Math.min(100, (charCount / 15000) * 100)}%` }}
                         />
                       </div>
 
                       {/* Image OCR */}
-                      <div className="px-5 py-2 border-t border-neutral-100">
+                      <div className="px-5 py-2 border-t border-[#F6E4EA]">
                         <ImageOCR onTextExtracted={(text) => setLesson((prev) => prev ? prev + "\n\n" + text : text)} />
                       </div>
 
-                      <div className="flex items-center justify-between px-5 py-3 border-t border-neutral-100">
+                      <div className="flex items-center justify-between px-5 py-3 border-t border-[#F6E4EA]">
                         <div className="flex items-center gap-4">
-                          <p id="char-count" className={`text-xs ${charCount < 50 ? "text-neutral-300" : charCount > 14000 ? "text-amber-500" : "text-muted-foreground"}`}>
+                          <p id="char-count" className={`text-xs ${charCount < 50 ? "text-[#E9B8C4]" : charCount > 14000 ? "text-amber-500" : "text-[#9A7280]"}`}>
                             {charCount.toLocaleString()}/15k
                           </p>
                           <select
                             value={language}
                             onChange={(e) => setLanguage(e.target.value)}
-                            className="appearance-none bg-transparent border-none text-xs text-muted-foreground focus:outline-none cursor-pointer hover:text-foreground transition-colors duration-200"
+                            className="appearance-none bg-transparent border-none text-xs text-[#9A7280] focus:outline-none cursor-pointer hover:text-[#3B2027] transition-colors duration-200"
                           >
                             {LANGUAGES.map((lang) => (
-                              <option key={lang.code} value={lang.code} className="bg-card text-foreground">
+                              <option key={lang.code} value={lang.code} className="bg-white text-[#4A3038]">
                                 {lang.label}
                               </option>
                             ))}
@@ -698,7 +698,7 @@ export default function QuizGenerator() {
                           disabled={!isReady || status === "loading" || atLimit}
                           whileHover={!isReady || status === "loading" || atLimit ? undefined : { scale: 1.02 }}
                           whileTap={!isReady || status === "loading" || atLimit ? undefined : { scale: 0.98 }}
-                          className={`btn-sheen px-5 py-2 bg-foreground text-background text-sm font-medium hover:opacity-90 disabled:opacity-60 transition-colors duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready" : ""}`}
+                          className={`btn-sheen px-5 py-2 bg-[#3B2027] text-[#F6E3E8] text-sm font-medium hover:bg-[#52303B] disabled:opacity-60 transition-colors duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready" : ""}`}
                           aria-busy={status === "loading"}
                         >
                           {status === "loading" ? t("input.generating") : t("input.generate")}
@@ -708,37 +708,37 @@ export default function QuizGenerator() {
                     </div>
 
                     {status === "error" && error && (
-                      <div className="mt-4 p-4 rounded-2xl border border-border bg-card shadow-sm text-sm text-muted-foreground">
+                      <div className="mt-4 p-4 rounded-2xl border border-[#F3D5DC] bg-white/70 backdrop-blur-xl shadow-sm text-sm text-[#9A7280]">
                         {error}
                         {limitReached && (
-                          <Link href="/pricing" className="ml-2 underline text-foreground">Upgrade</Link>
+                          <Link href="/pricing" className="ml-2 underline text-[#3B2027]">Upgrade</Link>
                         )}
                       </div>
                     )}
 
                     {status === "loading" && (
                       <>
-                      <div className="mt-8 flex items-center gap-3 text-muted-foreground">
+                      <div className="mt-8 flex items-center gap-3 text-[#9A7280]">
                         <div className="flex items-center gap-1.5">
                           {[0, 1, 2].map((i) => (
                             <span
                               key={i}
-                              className="h-1.5 w-1.5 rounded-full bg-muted-foreground animate-bounce"
+                              className="h-1.5 w-1.5 rounded-full bg-[#B0607A] animate-bounce"
                               style={{ animationDelay: `${i * 0.15}s` }}
                             />
                           ))}
                         </div>
                         <p className="text-xs">{t("input.reading")}</p>
                       </div>
-                      <div className="mt-2 h-0.5 overflow-hidden rounded-full bg-neutral-100">
-                        <div className="shimmer-slide h-full w-1/3 rounded-full bg-accent" />
+                      <div className="mt-2 h-0.5 overflow-hidden rounded-full bg-[#F6E4EA]">
+                        <div className="shimmer-slide h-full w-1/3 rounded-full bg-gradient-to-r from-[#E9A8B8] to-[#B0607A]" />
                       </div>
                       </>
                     )}
 
                     {status === "idle" && (
                       <div className="mt-12">
-                        <p className="text-xs text-muted-foreground uppercase tracking-[0.2em] mb-4">{t("input.orAsk")}</p>
+                        <p className="text-xs text-[#A87680] uppercase tracking-[0.2em] mb-4">{t("input.orAsk")}</p>
                         <div className="relative">
                           <ChatBot onQuizGenerated={handleChatQuiz} />
                           <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-8 h-24">
@@ -767,13 +767,13 @@ export default function QuizGenerator() {
           <div className="pt-28 pb-16">
             <div className="max-w-3xl mx-auto px-6">
               {!isLoggedIn && (
-                <div className="mb-8 p-6 border border-border bg-card">
+                <div className="mb-8 p-6 border border-[#F3D5DC] bg-white/70 backdrop-blur-xl shadow-[0_16px_50px_-24px_rgba(176,96,122,0.4)]">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm text-foreground">{t("quiz.yourQuizReady")}</p>
-                      <p className="text-xs text-muted-foreground mt-1">{t("quiz.signUpToSave")}</p>
+                      <p className="text-sm text-[#4A3038]">{t("quiz.yourQuizReady")}</p>
+                      <p className="text-xs text-[#9A7280] mt-1">{t("quiz.signUpToSave")}</p>
                     </div>
-                    <Link href="/auth/register" className="shrink-0 px-5 py-2 bg-foreground text-background text-sm font-medium hover:opacity-90 transition-colors">
+                    <Link href="/auth/register" className="shrink-0 px-5 py-2 bg-[#3B2027] text-[#F6E3E8] text-sm font-medium hover:bg-[#52303B] transition-colors">
                       {t("quiz.createAccount")}
                     </Link>
                   </div>
@@ -781,9 +781,9 @@ export default function QuizGenerator() {
               )}
 
               <div className="mb-8">
-                <p className="text-xs text-muted-foreground uppercase tracking-[0.15em] mb-3">{t("quiz.ready")}</p>
-                <h2 className="text-2xl font-medium text-foreground">{quiz.topic}</h2>
-                <p className="text-sm text-muted-foreground mt-2">
+                <p className="text-xs text-[#A87680] uppercase tracking-[0.15em] mb-3">{t("quiz.ready")}</p>
+                <h2 className="text-2xl font-medium text-[#4A3038]">{quiz.topic}</h2>
+                <p className="text-sm text-[#9A7280] mt-2">
                   {quiz.multipleChoice.length} MCQ · {quiz.flashcards.length} flashcards
                   {quiz.fillInTheBlank?.length > 0 && ` · ${quiz.fillInTheBlank.length} fill-in-blank`}
                   {quiz.trueFalse?.length > 0 && ` · ${quiz.trueFalse.length} true/false`}
@@ -791,34 +791,34 @@ export default function QuizGenerator() {
               </div>
 
               {score && (
-                <div className="mb-8 p-6 border border-border bg-card">
+                <div className="mb-8 p-6 border border-[#F3D5DC] bg-white/70 backdrop-blur-xl shadow-[0_16px_50px_-24px_rgba(176,96,122,0.4)]">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-foreground">{t("quiz.complete")}</p>
-                      <p className="text-xs text-muted-foreground mt-0.5">{score.correct}/{score.total} {t("quiz.correct")}</p>
+                      <p className="text-sm text-[#4A3038]">{t("quiz.complete")}</p>
+                      <p className="text-xs text-[#9A7280] mt-0.5">{score.correct}/{score.total} {t("quiz.correct")}</p>
                     </div>
-                    <p className="text-3xl font-medium text-foreground">{Math.round((score.correct / score.total) * 100)}%</p>
+                    <p className="text-3xl font-medium text-[#B0607A]">{Math.round((score.correct / score.total) * 100)}%</p>
                   </div>
                 </div>
               )}
 
               <div className="flex flex-wrap gap-3 mb-8">
                 {savedShareId && (
-                  <button onClick={copyShareLink} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  <button onClick={copyShareLink} className="text-sm text-[#9A7280] hover:text-[#3B2027] transition-colors">
                     {copied ? t("quiz.copied") : t("quiz.shareLink")}
                   </button>
                 )}
-                <button onClick={downloadPDF} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <button onClick={downloadPDF} className="text-sm text-[#9A7280] hover:text-[#3B2027] transition-colors">
                   {t("quiz.downloadPdf")}
                 </button>
                 {savedQuizId && isLoggedIn && (
-                  <button onClick={() => setEditing(true)} className="text-sm text-accent hover:opacity-80 transition-colors">
+                  <button onClick={() => setEditing(true)} className="text-sm text-[#B0607A] hover:opacity-80 transition-colors">
                     Edit Quiz
                   </button>
                 )}
               </div>
 
-              <div className="flex gap-6 mb-8 border-b border-border overflow-x-auto">
+              <div className="flex gap-6 mb-8 border-b border-[#F3D5DC] overflow-x-auto">
                 {TABS.filter((tab) => {
                   if (tab.id === "fillblank") return (quiz.fillInTheBlank?.length ?? 0) > 0;
                   if (tab.id === "truefalse") return (quiz.trueFalse?.length ?? 0) > 0;
@@ -828,7 +828,7 @@ export default function QuizGenerator() {
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={`relative pb-3 text-sm font-medium whitespace-nowrap transition-colors duration-200 ${
-                      activeTab === tab.id ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                      activeTab === tab.id ? "text-[#4A3038]" : "text-[#9A7280] hover:text-[#4A3038]"
                     }`}
                     role="tab"
                     aria-selected={activeTab === tab.id}
@@ -837,7 +837,7 @@ export default function QuizGenerator() {
                     {activeTab === tab.id && (
                       <motion.span
                         layoutId="active-tab-underline"
-                        className="absolute left-0 right-0 -bottom-px h-0.5 bg-neutral-900"
+                        className="absolute left-0 right-0 -bottom-px h-0.5 bg-[#B0607A]"
                         transition={{ duration: 0.3, ease: EASE_OUT }}
                       />
                     )}
@@ -869,22 +869,22 @@ export default function QuizGenerator() {
       </main>
 
       {/* ========== FOOTER ========== */}
-      <footer className="border-t border-border">
+      <footer className="border-t border-[#F3D5DC]">
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div className="flex items-center gap-2.5">
               <img src="/logo.png" alt="Examina" className="w-6 h-6 rounded-lg object-cover" />
-              <span className="text-sm text-muted-foreground">Examina</span>
+              <span className="text-sm text-[#9A7280]">Examina</span>
             </div>
-            <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
-              <a href="#features" className="hover:text-foreground transition-colors">Features</a>
-              <Link href="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
-              <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
-              <Link href="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link>
+            <div className="flex flex-wrap gap-6 text-sm text-[#9A7280]">
+              <a href="#features" className="hover:text-[#3B2027] transition-colors">Features</a>
+              <Link href="/pricing" className="hover:text-[#3B2027] transition-colors">Pricing</Link>
+              <a href="#faq" className="hover:text-[#3B2027] transition-colors">FAQ</a>
+              <Link href="/dashboard" className="hover:text-[#3B2027] transition-colors">Dashboard</Link>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-border">
-            <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Examina</p>
+          <div className="mt-8 pt-8 border-t border-[#F3D5DC]">
+            <p className="text-xs text-[#9A7280]">&copy; {new Date().getFullYear()} Examina</p>
           </div>
         </div>
       </footer>
