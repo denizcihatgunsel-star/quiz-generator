@@ -508,7 +508,6 @@ export default function QuizGenerator() {
                   <div className="fog-layer -top-32 left-1/4 h-[30rem] w-[30rem]" style={{ animationDelay: "-6s" }} />
                   <div className="fog-layer top-1/4 -right-24 h-[26rem] w-[26rem]" style={{ animationDelay: "-14s" }} />
                   <div className="fog-layer -bottom-24 left-1/3 h-[34rem] w-[34rem]" style={{ animationDelay: "-22s" }} />
-                  <div className="absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-b from-[#E9A8B8] via-[#B96E85] to-[#8E4A63]" />
                   <WaterCanvas className="pointer-events-none absolute inset-0 h-full w-full" />
                 </div>
               )}
