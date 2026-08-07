@@ -25,7 +25,7 @@ void main() {
   float u = texture(u_a, v_uv - vec2(0.0, u_texel.y)).r * 2.0 - 1.0;
   float d = texture(u_a, v_uv + vec2(0.0, u_texel.y)).r * 2.0 - 1.0;
   float nxt = (l + r + u + d) * 0.5 - p;
-  nxt *= 0.985;
+  nxt *= 0.988;
   o = vec4(nxt * 0.5 + 0.5, h * 0.5 + 0.5, 0.0, 1.0);
 }`;
 
@@ -56,7 +56,7 @@ out vec4 o;
 float heightAt(vec2 uv) { return texture(u_h, uv).r * 2.0 - 1.0; }
 
 vec3 skyColor(vec2 uv) {
-  float t = clamp((uv.y - 0.62) * 3.4, 0.0, 1.0);
+  float t = clamp((uv.y - 0.5) * 2.8, 0.0, 1.0);
   vec3 near = vec3(0.988, 0.910, 0.929);
   vec3 far = vec3(0.984, 0.945, 0.933);
   return mix(near, far, t);
@@ -64,39 +64,49 @@ vec3 skyColor(vec2 uv) {
 
 void main() {
   float hy = u_horizon;
-  if (v_uv.y < hy - 0.04) discard;
-  float a = smoothstep(hy - 0.04, hy - 0.006, v_uv.y);
-  if (a < 0.005) discard;
+  float t = clamp((v_uv.y - hy) / (1.0 - hy), 0.0, 1.0);
+  float edge = smoothstep(0.0, 0.025, t);
+  if (edge < 0.004) discard;
 
-  float hl = heightAt(v_uv - vec2(u_texel.x, 0.0));
-  float hr = heightAt(v_uv + vec2(u_texel.x, 0.0));
-  float hd = heightAt(v_uv - vec2(0.0, u_texel.y));
-  float hu = heightAt(v_uv + vec2(0.0, u_texel.y));
+  float dist = clamp(((1.0 - t) / t) * 0.22, 0.0, 1.0);
+  vec2 hf = vec2(v_uv.x, 1.0 - dist);
+
+  float pGain = min(t / (1.0 - t) * 0.5, 4.5);
+
+  vec2 hf2 = clamp(vec2(hf.x, hf.y + heightAt(hf) * pGain * 0.4), 0.0, 1.0);
+  float hc = heightAt(hf2);
+  float hl = heightAt(vec2(hf2.x - u_texel.x, hf2.y));
+  float hr = heightAt(vec2(hf2.x + u_texel.x, hf2.y));
+  float hd = heightAt(vec2(hf2.x, hf2.y - u_texel.y));
+  float hu = heightAt(vec2(hf2.x, hf2.y + u_texel.y));
   vec2 g = vec2(hr - hl, hu - hd);
-  vec3 N = normalize(vec3(-g.x * 10.0, 1.0, -g.y * 10.0));
 
-  vec2 ruv = vec2(v_uv.x, hy + (hy - v_uv.y));
-  vec3 reflectCol = skyColor(ruv);
+  vec3 N = normalize(vec3(-g.x * 9.0, 1.0, -g.y * 9.0 * (0.45 + t * 1.6)));
 
-  vec3 deep = vec3(0.72, 0.40, 0.52);
-  vec3 refrCol = mix(deep, skyColor(v_uv + N.xy * 0.014), 0.5);
+  vec3 deep = mix(vec3(0.90, 0.70, 0.78), vec3(0.42, 0.16, 0.31), pow(t, 0.8));
+  vec3 reflectCol = skyColor(vec2(v_uv.x, hy + (hy - v_uv.y) * 1.4));
+  vec3 refrCol = skyColor(clamp(vec2(v_uv.x + g.x * 0.06, v_uv.y + g.y * 0.05 * (0.4 + t * 1.5)), 0.0, 1.0));
 
-  float dist = clamp((hy - v_uv.y) / 0.14, 0.0, 1.0);
-  float F = 0.035 + 0.965 * pow(1.0 - N.y, 3.0);
-  F = max(F, dist * 0.85);
+  float F = 0.045 + 0.955 * pow(1.0 - N.y, 2.0);
+  F = max(F, smoothstep(0.0, 0.2, 1.0 - t) * 0.82);
 
-  vec3 L = normalize(vec3(0.45, 0.75, 0.32));
-  vec3 V = vec3(0.0, 0.0, 1.0);
-  vec3 H = normalize(L + V);
-  float s = pow(max(dot(N, H), 0.0), 240.0) * 0.85
-          + pow(max(dot(N, H), 0.0), 12.0) * 0.10;
-  s *= 0.85 + 0.15 * sin(u_time * 2.0 + v_uv.x * 80.0);
+  float diffuse = clamp(dot(N, normalize(vec3(0.3, 0.85, 0.35))), 0.0, 1.0);
 
   vec3 col = mix(refrCol, reflectCol, F);
-  col += vec3(1.0, 0.97, 0.92) * s;
-  col = mix(col, reflectCol, dist * 0.12);
+  col = mix(col, deep, 0.6 + (1.0 - F) * 0.25);
+  col *= 0.8 + 0.4 * diffuse;
 
-  o = vec4(col, a);
+  vec3 L = normalize(vec3(0.45, 0.8, 0.35));
+  vec3 H = normalize(L + vec3(0.0, 0.0, 1.0));
+  float spec = pow(max(dot(N, H), 0.0), 80.0);
+  spec *= 0.85 + 0.15 * sin(u_time * 1.5 + v_uv.x * 90.0);
+  float sx = 0.64;
+  float glitter = exp(-pow((v_uv.x - sx) * 7.0, 2.0)) * exp(-pow((t - 0.10) * 8.0, 2.0));
+  col += vec3(1.0, 0.94, 0.9) * (spec * (0.25 + t * 0.35) + glitter * 0.45);
+
+  col = mix(col, reflectCol, smoothstep(0.0, 0.035, 1.0 - t) * 0.55);
+
+  o = vec4(col, edge);
 }`;
 
 export default function WaterCanvas({ className }: { className?: string }) {
@@ -165,12 +175,23 @@ export default function WaterCanvas({ className }: { className?: string }) {
       gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     };
 
+    const uni = (p: WebGLProgram, name: string) => gl.getUniformLocation(p, name);
+    const simU = { a: uni(simProg, "u_a"), texel: uni(simProg, "u_texel") };
+    const splatU = { b: uni(splatProg, "u_b"), pos: uni(splatProg, "u_pos"), force: uni(splatProg, "u_force") };
+    const renU = {
+      h: uni(renderProg, "u_h"),
+      texel: uni(renderProg, "u_texel"),
+      time: uni(renderProg, "u_time"),
+      horizon: uni(renderProg, "u_horizon"),
+    };
+
     let simW = 0;
     let simH = 0;
     let texA: WebGLTexture | null = null;
     let texB: WebGLTexture | null = null;
     let fboA: WebGLFramebuffer | null = null;
     let fboB: WebGLFramebuffer | null = null;
+    let resScale = 1;
 
     const makeTex = () => {
       const t = gl.createTexture();
@@ -194,12 +215,16 @@ export default function WaterCanvas({ className }: { className?: string }) {
 
     const rebuild = () => {
       const rect = canvas.parentElement?.getBoundingClientRect();
-      if (!rect) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, rect.width < 768 ? 1.25 : 1.5);
+      if (!rect || rect.width < 4 || rect.height < 4) return;
+      const dpr = Math.min(
+        window.devicePixelRatio || 1,
+        1.5,
+        Math.sqrt(2.4e6 / (rect.width * rect.height))
+      );
       canvas.width = Math.max(1, Math.round(rect.width * dpr));
       canvas.height = Math.max(1, Math.round(rect.height * dpr));
-      simW = Math.max(128, Math.min(512, Math.round(rect.width / 3.2)));
-      simH = Math.max(128, Math.min(512, Math.round(rect.height / 3.2)));
+      simW = Math.max(160, Math.min(384, Math.round((rect.width / 5) * resScale)));
+      simH = Math.max(160, Math.min(384, Math.round((rect.height / 5) * resScale)));
       texA = makeTex();
       texB = makeTex();
       fboA = texA ? makeFbo(texA) : null;
@@ -244,22 +269,23 @@ export default function WaterCanvas({ className }: { className?: string }) {
       gl.useProgram(splatProg);
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, texB);
-      gl.uniform1i(gl.getUniformLocation(splatProg, "u_b"), 0);
-      gl.uniform2f(gl.getUniformLocation(splatProg, "u_pos"), x, y);
-      gl.uniform1f(gl.getUniformLocation(splatProg, "u_force"), force);
+      gl.uniform1i(splatU.b, 0);
+      gl.uniform2f(splatU.pos, x, y);
+      gl.uniform1f(splatU.force, force);
       aPos(splatProg);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
-    const renderOnce = () => {
+    const renderOnce = (time: number) => {
       if (!fboB || !texA || !renderProg || !simProg || !texB) return;
+
       gl.bindFramebuffer(gl.FRAMEBUFFER, fboB);
       gl.viewport(0, 0, simW, simH);
       gl.useProgram(simProg);
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, texA);
-      gl.uniform1i(gl.getUniformLocation(simProg, "u_a"), 0);
-      gl.uniform2f(gl.getUniformLocation(simProg, "u_texel"), 1 / simW, 1 / simH);
+      gl.uniform1i(simU.a, 0);
+      gl.uniform2f(simU.texel, 1 / simW, 1 / simH);
       aPos(simProg);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
 
@@ -275,10 +301,10 @@ export default function WaterCanvas({ className }: { className?: string }) {
       gl.useProgram(renderProg);
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, texA);
-      gl.uniform1i(gl.getUniformLocation(renderProg, "u_h"), 0);
-      gl.uniform2f(gl.getUniformLocation(renderProg, "u_texel"), 1 / simW, 1 / simH);
-      gl.uniform1f(gl.getUniformLocation(renderProg, "u_time"), (performance.now() * 0.001));
-      gl.uniform1f(gl.getUniformLocation(renderProg, "u_horizon"), 1 - 0.36);
+      gl.uniform1i(renU.h, 0);
+      gl.uniform2f(renU.texel, 1 / simW, 1 / simH);
+      gl.uniform1f(renU.time, time * 0.001);
+      gl.uniform1f(renU.horizon, 1 - 0.42);
       gl.enable(gl.BLEND);
       gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
       aPos(renderProg);
@@ -289,26 +315,39 @@ export default function WaterCanvas({ className }: { className?: string }) {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     let raf = 0;
+    let lastNow = performance.now();
+
     const loop = (time: number) => {
       const since = time - lastMove;
       if (cursorUv.x > -1 && since < 90 && velLen > 0.02) {
-        splat(cursorUv.x, Math.min(cursorUv.y, 0.98), Math.min(0.22, velLen * 0.03));
+        splat(cursorUv.x, Math.min(cursorUv.y, 0.98), Math.min(0.3, velLen * 0.035));
         velLen = 0;
       }
       velLen *= 0.86;
 
       windAcc += 16.6;
-      if (windAcc > 110 + Math.random() * 90) {
+      if (windAcc > 130 + Math.random() * 100) {
         windAcc = 0;
-        splat(Math.random(), 0.72 + Math.random() * 0.26, 0.008);
+        splat(Math.random(), 0.72 + Math.random() * 0.26, 0.012);
       }
 
-      renderOnce();
+      renderOnce(time);
+
+      const frameDt = time - lastNow;
+      lastNow = time;
+      if (frameDt > 45 && resScale > 0.55) {
+        resScale *= 0.8;
+        rebuild();
+      } else if (frameDt < 25 && resScale < 1) {
+        resScale = Math.min(1, resScale * 1.2);
+        rebuild();
+      }
+
       if (!reduced) raf = requestAnimationFrame(loop);
     };
 
     if (reduced) {
-      renderOnce();
+      renderOnce(0);
     } else {
       raf = requestAnimationFrame(loop);
     }
