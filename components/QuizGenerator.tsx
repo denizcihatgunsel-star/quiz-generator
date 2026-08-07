@@ -597,6 +597,7 @@ export default function QuizGenerator() {
                 {/* Quiz Input */}
                 {(isLoggedIn || canGenerateDemo) && (
                   <motion.div variants={heroItem} className={`max-w-2xl ${isLoggedIn ? "" : "mx-auto"}`}>
+                    <div className="animate-border rounded-xl">
                     <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden transition-all duration-300 hover:shadow-[0_16px_50px_-20px_rgba(91,91,214,0.35)] hover:border-accent/30 focus-within:border-accent/40 focus-within:shadow-[0_16px_50px_-20px_rgba(91,91,214,0.4)]">
                       <div className="flex items-center justify-between px-5 pt-4 pb-2">
                         <span className="text-xs text-muted-foreground uppercase tracking-[0.2em]">{t("input.content")}</span>
@@ -620,6 +621,14 @@ export default function QuizGenerator() {
                         className="w-full px-5 pb-4 min-h-40 text-sm text-foreground placeholder-neutral-400 bg-transparent resize-y focus:outline-none leading-relaxed"
                         aria-describedby="char-count"
                       />
+
+                      {/* Character progress bar */}
+                      <div className="h-0.5 bg-neutral-100">
+                        <div
+                          className={`h-full transition-all duration-200 ${charCount > 14000 ? "bg-warning" : "bg-accent/60"}`}
+                          style={{ width: `${Math.min(100, (charCount / 15000) * 100)}%` }}
+                        />
+                      </div>
 
                       {/* Image OCR */}
                       <div className="px-5 py-2 border-t border-neutral-100">
@@ -649,12 +658,13 @@ export default function QuizGenerator() {
                           disabled={!isReady || status === "loading" || atLimit}
                           whileHover={!isReady || status === "loading" || atLimit ? undefined : { scale: 1.02 }}
                           whileTap={!isReady || status === "loading" || atLimit ? undefined : { scale: 0.98 }}
-                          className="btn-sheen px-5 py-2 bg-foreground text-background text-sm font-medium hover:opacity-90 disabled:opacity-60 transition-colors duration-200 disabled:cursor-not-allowed"
+                          className={`btn-sheen px-5 py-2 bg-foreground text-background text-sm font-medium hover:opacity-90 disabled:opacity-60 transition-colors duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready" : ""}`}
                           aria-busy={status === "loading"}
                         >
                           {status === "loading" ? t("input.generating") : t("input.generate")}
                         </motion.button>
                       </div>
+                    </div>
                     </div>
 
                     {status === "error" && error && (
@@ -667,6 +677,7 @@ export default function QuizGenerator() {
                     )}
 
                     {status === "loading" && (
+                      <>
                       <div className="mt-8 flex items-center gap-3 text-muted-foreground">
                         <div className="flex items-center gap-1.5">
                           {[0, 1, 2].map((i) => (
@@ -679,12 +690,27 @@ export default function QuizGenerator() {
                         </div>
                         <p className="text-xs">{t("input.reading")}</p>
                       </div>
+                      <div className="mt-2 h-0.5 overflow-hidden rounded-full bg-neutral-100">
+                        <div className="shimmer-slide h-full w-1/3 rounded-full bg-accent" />
+                      </div>
+                      </>
                     )}
 
                     {status === "idle" && (
                       <div className="mt-12">
                         <p className="text-xs text-muted-foreground uppercase tracking-[0.2em] mb-4">{t("input.orAsk")}</p>
-                        <ChatBot onQuizGenerated={handleChatQuiz} />
+                        <div className="relative">
+                          <ChatBot onQuizGenerated={handleChatQuiz} />
+                          <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-8 h-24">
+                            {[8, 26, 44, 62, 80].map((left, i) => (
+                              <span
+                                key={i}
+                                className="ambient-particle"
+                                style={{ left: `${left}%`, animationDelay: `${i * 1.1}s` }}
+                              />
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     )}
                   </motion.div>

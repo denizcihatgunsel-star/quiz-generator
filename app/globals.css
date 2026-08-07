@@ -251,3 +251,98 @@
     display: none;
   }
 }
+
+/* ----------------------------------------------------------------------------
+   Quiz page micro-animations
+---------------------------------------------------------------------------- */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Rotating iris ring that appears when the quiz card is focused */
+.animate-border {
+  position: relative;
+}
+.animate-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--angle),
+    transparent 0%,
+    color-mix(in srgb, var(--accent) 70%, transparent) 20%,
+    transparent 40%,
+    color-mix(in srgb, var(--accent) 70%, transparent) 60%,
+    transparent 80%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  animation: spin-angle 4s linear infinite;
+  pointer-events: none;
+}
+.animate-border:focus-within::before {
+  opacity: 1;
+}
+@keyframes spin-angle {
+  to { --angle: 360deg; }
+}
+
+/* Gentle glow pulse on the generate button when ready */
+.btn-ready {
+  animation: ready-pulse 2.4s ease-in-out infinite;
+}
+@keyframes ready-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+}
+
+/* Particles floating up near the chatbot */
+.ambient-particle {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: var(--accent);
+  opacity: 0;
+  animation: particle-float 6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes particle-float {
+  0% { transform: translateY(0); opacity: 0; }
+  20% { opacity: 0.35; }
+  80% { opacity: 0.25; }
+  100% { transform: translateY(-90px); opacity: 0; }
+}
+
+/* Indeterminate shimmer bar while generating */
+.shimmer-slide {
+  animation: shimmer-slide 1.2s ease-in-out infinite;
+}
+@keyframes shimmer-slide {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(420%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-border::before,
+  .btn-ready,
+  .ambient-particle,
+  .shimmer-slide {
+    animation: none !important;
+  }
+  .animate-border::before {
+    display: none;
+  }
+}
