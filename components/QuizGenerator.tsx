@@ -16,6 +16,8 @@ import EditorialNav from "./EditorialNav";
 import AmbientBackground from "./AmbientBackground";
 import Preloader from "./Preloader";
 import UnseenLanding from "./UnseenLanding";
+import WaterCanvas from "./WaterCanvas";
+import InteractiveWordmark from "./InteractiveWordmark";
 import ChatBot from "./ChatBot";
 import ImageOCR from "./ImageOCR";
 import QuizEditor from "./QuizEditor";
@@ -489,8 +491,13 @@ export default function QuizGenerator() {
           <>
             {/* Hero */}
             {sessionStatus === "loading" ? null : (
-            <section className={`pb-32 ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-[#FBFBFA] pt-40 sm:pt-48"}`}>
-              <div className="max-w-5xl mx-auto px-6">
+            <section className={`relative pb-32 ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-[#FBFBFA] pt-40 sm:pt-48"}`}>
+              {!isLoggedIn && (
+                <div className="absolute inset-0 overflow-hidden">
+                  <WaterCanvas className="pointer-events-none h-full w-full" />
+                </div>
+              )}
+              <div className="relative z-10 max-w-5xl mx-auto px-6">
                 {isLoggedIn ? (
                 <motion.div
                   className="max-w-3xl"
@@ -520,16 +527,7 @@ export default function QuizGenerator() {
                     A quiz generator
                   </p>
                   <h1 className="mt-8 font-serif text-7xl font-medium tracking-tight leading-[0.95] sm:text-8xl lg:text-9xl">
-                    <span className="block overflow-hidden pb-2">
-                      <motion.span
-                        className="block"
-                        initial={{ y: "110%" }}
-                        animate={{ y: 0 }}
-                        transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.15 }}
-                      >
-                        Examina
-                      </motion.span>
-                    </span>
+                    <InteractiveWordmark />
                   </h1>
                   <motion.p
                     initial={{ opacity: 0 }}
