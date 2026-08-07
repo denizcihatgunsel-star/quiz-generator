@@ -90,7 +90,7 @@ export default function SoundToggle() {
     <button
       onClick={toggle}
       aria-pressed={on}
-      className="fixed bottom-5 right-5 z-[90] flex items-center gap-2.5 rounded-full border border-neutral-200 bg-white/75 px-4 py-2 text-xs font-medium text-neutral-700 shadow-sm backdrop-blur-md transition-colors duration-200 hover:border-neutral-300 hover:text-black"
+      className="fixed right-5 top-20 z-[90] flex items-center gap-2.5 rounded-full border border-neutral-200 bg-white/75 px-4 py-2 text-xs font-medium text-neutral-700 shadow-sm backdrop-blur-md transition-colors duration-200 hover:border-neutral-300 hover:text-black sm:bottom-5 sm:right-5 sm:top-auto"
     >
       {on ? (
         <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

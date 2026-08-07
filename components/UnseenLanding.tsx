@@ -86,7 +86,7 @@ function Marquee() {
   );
 
   return (
-    <div className="overflow-hidden border-y border-neutral-200 py-5">
+    <div className="overflow-hidden border-y border-neutral-200 bg-gradient-to-b from-[#FDE8EC]/60 via-white to-white py-5">
       <div className="marquee-track">
         {row(false)}
         {row(true)}
