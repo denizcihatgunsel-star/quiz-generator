@@ -187,3 +187,67 @@
     animation: none !important;
   }
 }
+
+/* ----------------------------------------------------------------------------
+   Ambient background — soft iris aurora + breathing dot grid
+---------------------------------------------------------------------------- */
+.ambient-blob {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 20%, transparent) 0%,
+    transparent 70%
+  );
+  filter: blur(72px);
+  animation: blob-drift var(--dur, 28s) ease-in-out infinite alternate;
+  will-change: transform;
+}
+.ambient-dotgrid {
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--foreground) 12%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 26px 26px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 15%, black 25%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 15%, black 25%, transparent 72%);
+  animation: dotgrid-breathe 9s ease-in-out infinite alternate;
+}
+@keyframes blob-drift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(6%, 4%, 0) scale(1.15); }
+  100% { transform: translate3d(-4%, -6%, 0) scale(0.95); }
+}
+@keyframes dotgrid-breathe {
+  from { opacity: 0.3; }
+  to { opacity: 0.55; }
+}
+
+/* Sheen sweep for primary buttons */
+.btn-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.btn-sheen::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -160%;
+  width: 60%;
+  height: 100%;
+  transform: skewX(-20deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.6s ease;
+}
+.btn-sheen:hover::after {
+  left: 160%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ambient-blob,
+  .ambient-dotgrid {
+    animation: none !important;
+  }
+  .btn-sheen::after {
+    display: none;
+  }
+}

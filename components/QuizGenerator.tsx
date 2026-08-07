@@ -15,6 +15,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import LandingPage from "./LandingPage";
 import EditorialNav from "./EditorialNav";
 import DotMap from "./DotMap";
+import AmbientBackground from "./AmbientBackground";
 import ChatBot from "./ChatBot";
 import ImageOCR from "./ImageOCR";
 import QuizEditor from "./QuizEditor";
@@ -400,6 +401,7 @@ export default function QuizGenerator() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AmbientBackground />
       {/* ========== NAVIGATION ========== */}
       {sessionStatus === "loading" ? null : isLoggedIn || quiz ? (
       <motion.nav
@@ -481,7 +483,7 @@ export default function QuizGenerator() {
       )}
 
       {/* ========== MAIN CONTENT ========== */}
-      <main>
+      <main className="relative z-10">
         {!quiz ? (
           <>
             {/* Hero */}
@@ -501,7 +503,7 @@ export default function QuizGenerator() {
                   >
                     {t("hero.title1")}
                     <br />
-                    {t("hero.title2")}
+                    <span className="font-serif italic text-accent">{t("hero.title2")}</span>
                   </motion.h1>
 
                   <motion.p
@@ -595,7 +597,7 @@ export default function QuizGenerator() {
                 {/* Quiz Input */}
                 {(isLoggedIn || canGenerateDemo) && (
                   <motion.div variants={heroItem} className={`max-w-2xl ${isLoggedIn ? "" : "mx-auto"}`}>
-                    <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+                    <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden transition-all duration-300 hover:shadow-[0_16px_50px_-20px_rgba(91,91,214,0.35)] hover:border-accent/30 focus-within:border-accent/40 focus-within:shadow-[0_16px_50px_-20px_rgba(91,91,214,0.4)]">
                       <div className="flex items-center justify-between px-5 pt-4 pb-2">
                         <span className="text-xs text-muted-foreground uppercase tracking-[0.2em]">{t("input.content")}</span>
                         <div className="flex items-center gap-4">
@@ -647,7 +649,7 @@ export default function QuizGenerator() {
                           disabled={!isReady || status === "loading" || atLimit}
                           whileHover={!isReady || status === "loading" || atLimit ? undefined : { scale: 1.02 }}
                           whileTap={!isReady || status === "loading" || atLimit ? undefined : { scale: 0.98 }}
-                          className="px-5 py-2 bg-foreground text-background text-sm font-medium hover:opacity-90 disabled:opacity-60 transition-colors duration-200 disabled:cursor-not-allowed"
+                          className="btn-sheen px-5 py-2 bg-foreground text-background text-sm font-medium hover:opacity-90 disabled:opacity-60 transition-colors duration-200 disabled:cursor-not-allowed"
                           aria-busy={status === "loading"}
                         >
                           {status === "loading" ? t("input.generating") : t("input.generate")}
