@@ -18,15 +18,15 @@ in vec2 v_uv;
 out vec4 o;
 void main() {
   vec4 c = texture(u_a, v_uv);
-  float h = c.r;
-  float p = c.g;
-  float l = texture(u_a, v_uv - vec2(u_texel.x, 0.0)).r;
-  float r = texture(u_a, v_uv + vec2(u_texel.x, 0.0)).r;
-  float u = texture(u_a, v_uv - vec2(0.0, u_texel.y)).r;
-  float d = texture(u_a, v_uv + vec2(0.0, u_texel.y)).r;
+  float h = c.r * 2.0 - 1.0;
+  float p = c.g * 2.0 - 1.0;
+  float l = texture(u_a, v_uv - vec2(u_texel.x, 0.0)).r * 2.0 - 1.0;
+  float r = texture(u_a, v_uv + vec2(u_texel.x, 0.0)).r * 2.0 - 1.0;
+  float u = texture(u_a, v_uv - vec2(0.0, u_texel.y)).r * 2.0 - 1.0;
+  float d = texture(u_a, v_uv + vec2(0.0, u_texel.y)).r * 2.0 - 1.0;
   float nxt = (l + r + u + d) * 0.5 - p;
   nxt *= 0.985;
-  o = vec4(nxt, h, 0.0, 1.0);
+  o = vec4(nxt * 0.5 + 0.5, h * 0.5 + 0.5, 0.0, 1.0);
 }`;
 
 const SPLAT_FRAG = `#version 300 es
@@ -41,7 +41,7 @@ void main() {
   vec2 dd = v_uv - u_pos;
   float g = exp(-dot(dd, dd) * 240.0) * u_force;
   if (g < 0.002) { o = c; return; }
-  o = vec4(c.r + g, c.g, 0.0, 1.0);
+  o = vec4(c.r + g * 0.5, c.g, 0.0, 1.0);
 }`;
 
 const RENDER_FRAG = `#version 300 es
@@ -53,7 +53,7 @@ uniform float u_horizon;
 in vec2 v_uv;
 out vec4 o;
 
-float heightAt(vec2 uv) { return texture(u_h, uv).r; }
+float heightAt(vec2 uv) { return texture(u_h, uv).r * 2.0 - 1.0; }
 
 vec3 skyColor(vec2 uv) {
   float t = clamp((uv.y - 0.62) * 3.4, 0.0, 1.0);
@@ -73,13 +73,13 @@ void main() {
   float hd = heightAt(v_uv - vec2(0.0, u_texel.y));
   float hu = heightAt(v_uv + vec2(0.0, u_texel.y));
   vec2 g = vec2(hr - hl, hu - hd);
-  vec3 N = normalize(vec3(-g.x * 7.0, 1.0, -g.y * 7.0));
+  vec3 N = normalize(vec3(-g.x * 10.0, 1.0, -g.y * 10.0));
 
   vec2 ruv = vec2(v_uv.x, hy + (hy - v_uv.y));
   vec3 reflectCol = skyColor(ruv);
 
-  vec3 deep = vec3(0.76, 0.44, 0.56);
-  vec3 refrCol = mix(deep, skyColor(v_uv + N.xy * 0.014), 0.62);
+  vec3 deep = vec3(0.72, 0.40, 0.52);
+  vec3 refrCol = mix(deep, skyColor(v_uv + N.xy * 0.014), 0.5);
 
   float dist = clamp((hy - v_uv.y) / 0.14, 0.0, 1.0);
   float F = 0.035 + 0.965 * pow(1.0 - N.y, 3.0);
@@ -111,7 +111,10 @@ export default function WaterCanvas({ className }: { className?: string }) {
       depth: false,
       stencil: false,
     });
-    if (!gl) return;
+    if (!gl) {
+      console.warn("[water] WebGL2 not supported, skipping water simulation");
+      return;
+    }
 
     const compile = (type: number, src: string) => {
       const sh = gl.createShader(type);
@@ -144,7 +147,11 @@ export default function WaterCanvas({ className }: { className?: string }) {
     const simProg = link(VERT, SIM_FRAG);
     const splatProg = link(VERT, SPLAT_FRAG);
     const renderProg = link(VERT, RENDER_FRAG);
-    if (!simProg || !splatProg || !renderProg) return;
+    if (!simProg || !splatProg || !renderProg) {
+      console.warn("[water] shader compile failed, skipping water simulation");
+      return;
+    }
+    console.info("[water] WebGL2 water simulation initialized");
 
     const quad = gl.createBuffer();
     if (!quad) return;
@@ -199,7 +206,7 @@ export default function WaterCanvas({ className }: { className?: string }) {
       fboB = texB ? makeFbo(texB) : null;
       if (fboA && fboB) {
         gl.bindFramebuffer(gl.FRAMEBUFFER, fboA);
-        gl.clearColor(0, 0, 0, 1);
+        gl.clearColor(0.5, 0.5, 0, 1);
         gl.clear(gl.COLOR_BUFFER_BIT);
         gl.bindFramebuffer(gl.FRAMEBUFFER, fboB);
         gl.clear(gl.COLOR_BUFFER_BIT);
@@ -285,7 +292,7 @@ export default function WaterCanvas({ className }: { className?: string }) {
     const loop = (time: number) => {
       const since = time - lastMove;
       if (cursorUv.x > -1 && since < 90 && velLen > 0.02) {
-        splat(cursorUv.x, Math.min(cursorUv.y, 0.98), Math.min(0.16, velLen * 0.02));
+        splat(cursorUv.x, Math.min(cursorUv.y, 0.98), Math.min(0.22, velLen * 0.03));
         velLen = 0;
       }
       velLen *= 0.86;
@@ -293,7 +300,7 @@ export default function WaterCanvas({ className }: { className?: string }) {
       windAcc += 16.6;
       if (windAcc > 110 + Math.random() * 90) {
         windAcc = 0;
-        splat(Math.random(), 0.72 + Math.random() * 0.26, 0.005);
+        splat(Math.random(), 0.72 + Math.random() * 0.26, 0.008);
       }
 
       renderOnce();
