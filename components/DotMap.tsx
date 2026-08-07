@@ -93,12 +93,12 @@ export default function DotMap({ className }: { className?: string }) {
       role="img"
     >
       <title>Live study activity across the globe</title>
-      <g fill="#E9E8E5" className="dot-grid-fade" style={{ animationDelay: "0.5s" }}>
+      <g fill="#F1D3DA" className="dot-grid-fade" style={{ animationDelay: "0.5s" }}>
         {GRID_DOTS.map((d, i) => (
           <circle key={`g${i}`} cx={d.x} cy={d.y} r={1.2} />
         ))}
       </g>
-      <g fill="#000000">
+      <g fill="#8C5563">
         {CLUSTER_DOTS.map((d, i) => (
           <circle
             key={`c${i}`}
@@ -110,7 +110,7 @@ export default function DotMap({ className }: { className?: string }) {
           />
         ))}
       </g>
-      <g fill="none" stroke="#000000" strokeWidth={1.5}>
+      <g fill="none" stroke="#B0607A" strokeWidth={1.5}>
         {PINGS.map((p, i) => (
           <circle
             key={`p${i}`}

@@ -501,7 +501,7 @@ export default function QuizGenerator() {
             {sessionStatus === "loading" ? null : (
             <section
               ref={heroRef}
-              className={`relative overflow-hidden pb-32 ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#FBFBFA] pt-40 sm:pt-48"}`}
+              className={`relative overflow-hidden pb-32 ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#FDE8EC] pt-40 sm:pt-48"}`}
             >
               {!isLoggedIn && (
                 <div className="absolute inset-0 overflow-hidden">
@@ -540,7 +540,7 @@ export default function QuizGenerator() {
                 </motion.div>
                 ) : (
                 <div className="mx-auto max-w-5xl text-center">
-                  <p className="text-[11px] uppercase tracking-[0.4em] text-neutral-500">
+                  <p className="text-[11px] uppercase tracking-[0.4em] text-[#A87680]">
                     A quiz generator
                   </p>
                   <h1 className="mt-8 font-serif text-7xl font-medium tracking-tight leading-[0.95] sm:text-8xl lg:text-9xl">
@@ -550,7 +550,7 @@ export default function QuizGenerator() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.7, delay: 0.55 }}
-                    className="mx-auto mt-8 max-w-xl font-serif text-xl italic leading-relaxed text-neutral-600 sm:text-2xl"
+                    className="mx-auto mt-8 max-w-xl font-serif text-xl italic leading-relaxed text-[#8C5A68] sm:text-2xl"
                   >
                     Turn your study notes into structured quizzes, instantly.
                   </motion.p>
@@ -562,10 +562,10 @@ export default function QuizGenerator() {
                   >
                     <a
                       href="#generate"
-                      className="group flex items-center gap-3 rounded-full bg-black py-3 pl-6 pr-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-neutral-800"
+                      className="group flex items-center gap-3 rounded-full bg-[#3B2027] py-3 pl-6 pr-2 text-sm font-medium text-[#F6E3E8] transition-colors duration-200 hover:bg-[#52303B]"
                     >
                       <span>Start generating</span>
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-black transition-transform duration-200 group-hover:translate-x-0.5">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027] transition-transform duration-200 group-hover:translate-x-0.5">
                         <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
                         </svg>
@@ -573,7 +573,7 @@ export default function QuizGenerator() {
                     </a>
                     <a
                       href="#selected"
-                      className="text-sm text-neutral-500 underline underline-offset-4 transition-colors duration-200 hover:text-black"
+                      className="text-sm text-[#9A7280] underline underline-offset-4 transition-colors duration-200 hover:text-[#3B2027]"
                     >
                       How it works
                     </a>
