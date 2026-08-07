@@ -504,7 +504,7 @@ export default function QuizGenerator() {
               className={`relative overflow-hidden pb-32 ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#FDE8EC] pt-40 sm:pt-48"}`}
             >
               {!isLoggedIn && (
-                <div className="absolute inset-0 overflow-hidden">
+                <div className="pointer-events-none absolute inset-0 overflow-hidden">
                   <div className="fog-layer -top-32 left-1/4 h-[30rem] w-[30rem]" style={{ animationDelay: "-6s" }} />
                   <div className="fog-layer top-1/4 -right-24 h-[26rem] w-[26rem]" style={{ animationDelay: "-14s" }} />
                   <div className="fog-layer -bottom-24 left-1/3 h-[34rem] w-[34rem]" style={{ animationDelay: "-22s" }} />

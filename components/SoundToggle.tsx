@@ -2,24 +2,44 @@
 
 import { useRef, useState } from "react";
 
+type Pad = {
+  ctx: AudioContext;
+  master: GainNode;
+  voices: { osc: OscillatorNode; gain: GainNode }[][];
+  timers: number[];
+  sparkleTimer: number;
+};
+
+const CHORDS: number[][] = [
+  [220, 261.63, 329.63, 440],
+  [174.61, 220, 261.63, 349.23],
+  [261.63, 329.63, 392, 523.25],
+  [196, 246.94, 293.66, 392],
+];
+
+const SPARKLES = [880, 1046.5, 1174.66, 1318.51, 1567.98, 1760];
+const CHORD_LEVEL = 0.045;
+const SWELL_MS = 2600;
+const HOLD_MS = 5200;
+
 export default function SoundToggle() {
   const [on, setOn] = useState(false);
-  const audioRef = useRef<{
-    ctx: AudioContext;
-    nodes: OscillatorNode[];
-  } | null>(null);
+  const padRef = useRef<Pad | null>(null);
 
-  const chime = (ctx: AudioContext) => {
+  const sparkle = (ctx: AudioContext) => {
+    const f = SPARKLES[Math.floor(Math.random() * SPARKLES.length)];
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "sine";
-    osc.frequency.value = 660;
-    gain.gain.setValueAtTime(0.04, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.18);
+    osc.frequency.value = f;
+    const t0 = ctx.currentTime;
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(0.013, t0 + 0.07);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.7);
     osc.connect(gain);
     gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 0.2);
+    osc.start(t0);
+    osc.stop(t0 + 1.8);
   };
 
   const start = () => {
@@ -28,53 +48,96 @@ export default function SoundToggle() {
       (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!Ctor) return;
     const ctx = new Ctor();
-    const gain = ctx.createGain();
-    gain.gain.value = 0;
-
+    const master = ctx.createGain();
+    master.gain.value = 0;
     const filter = ctx.createBiquadFilter();
     filter.type = "lowpass";
-    filter.frequency.value = 420;
+    filter.frequency.value = 1500;
+    filter.Q.value = 0.4;
+    master.connect(ctx.destination);
+    filter.connect(master);
 
-    const o1 = ctx.createOscillator();
-    o1.type = "sine";
-    o1.frequency.value = 110;
-    const o2 = ctx.createOscillator();
-    o2.type = "sine";
-    o2.frequency.value = 110.6;
+    const voices = CHORDS.map((chord) =>
+      chord.map((freq) => {
+        const osc = ctx.createOscillator();
+        osc.type = "triangle";
+        osc.frequency.value = freq;
+        osc.detune.value = (Math.random() - 0.5) * 7;
+        const gain = ctx.createGain();
+        gain.gain.value = 0;
+        osc.connect(gain);
+        gain.connect(filter);
+        osc.start();
+        return { osc, gain };
+      })
+    );
 
-    const lfo = ctx.createOscillator();
-    lfo.frequency.value = 0.08;
-    const lfoGain = ctx.createGain();
-    lfoGain.gain.value = 0.02;
+    const pad: Pad = { ctx, master, voices, timers: [], sparkleTimer: 0 };
+    padRef.current = pad;
 
-    o1.connect(filter);
-    o2.connect(filter);
-    filter.connect(gain);
-    gain.connect(ctx.destination);
-    lfo.connect(lfoGain);
-    lfoGain.connect(gain.gain);
+    let chordIndex = 0;
+    const setChord = (i: number) => {
+      const now = ctx.currentTime;
+      voices.forEach((chord, ci) => {
+        const target = ci === i ? CHORD_LEVEL : 0;
+        chord.forEach(({ gain }) => {
+          gain.gain.cancelScheduledValues(now);
+          gain.gain.setValueAtTime(gain.gain.value, now);
+          gain.gain.linearRampToValueAtTime(target, now + SWELL_MS / 1000);
+        });
+      });
+    };
 
-    o1.start();
-    o2.start();
-    lfo.start();
-    gain.gain.linearRampToValueAtTime(0.045, ctx.currentTime + 1.5);
+    setChord(0);
+    master.gain.linearRampToValueAtTime(1, ctx.currentTime + 2);
+    sparkle(ctx);
 
-    audioRef.current = { ctx, nodes: [o1, o2, lfo] };
-    chime(ctx);
+    const step = () => {
+      if (!padRef.current || padRef.current !== pad) return;
+      chordIndex = (chordIndex + 1) % CHORDS.length;
+      setChord(chordIndex);
+      const timer = window.setTimeout(step, SWELL_MS + HOLD_MS);
+      pad.timers.push(timer);
+    };
+    pad.timers.push(window.setTimeout(step, SWELL_MS + HOLD_MS));
+
+    const sparkleLoop = () => {
+      if (!padRef.current || padRef.current !== pad) return;
+      sparkle(ctx);
+      pad.sparkleTimer = window.setTimeout(sparkleLoop, 4500 + Math.random() * 9000);
+    };
+    pad.sparkleTimer = window.setTimeout(sparkleLoop, 3500);
   };
 
   const stop = () => {
-    if (!audioRef.current) return;
-    const { ctx, nodes } = audioRef.current;
-    for (const n of nodes) {
-      try {
-        n.stop();
-      } catch {
-        // already stopped
-      }
-    }
-    void ctx.close();
-    audioRef.current = null;
+    const pad = padRef.current;
+    if (!pad) return;
+    const { ctx, master, voices, timers, sparkleTimer } = pad;
+    timers.forEach((t) => window.clearTimeout(t));
+    window.clearTimeout(sparkleTimer);
+    const now = ctx.currentTime;
+    master.gain.cancelScheduledValues(now);
+    master.gain.setValueAtTime(master.gain.value, now);
+    master.gain.linearRampToValueAtTime(0, now + 0.4);
+    voices.forEach((chord) =>
+      chord.forEach(({ gain }) => {
+        gain.gain.cancelScheduledValues(now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.4);
+      })
+    );
+    window.setTimeout(() => {
+      voices.forEach((chord) =>
+        chord.forEach(({ osc }) => {
+          try {
+            osc.stop();
+          } catch {
+            // already stopped
+          }
+        })
+      );
+      void ctx.close();
+    }, 500);
+    padRef.current = null;
   };
 
   const toggle = () => {
