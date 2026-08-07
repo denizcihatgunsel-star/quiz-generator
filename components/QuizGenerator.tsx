@@ -12,10 +12,10 @@ import FillInTheBlankView from "./FillInTheBlankView";
 import TrueFalseView from "./TrueFalseView";
 import UserMenu from "./UserMenu";
 import { ThemeToggle } from "./ThemeToggle";
-import LandingPage from "./LandingPage";
 import EditorialNav from "./EditorialNav";
-import DotMap from "./DotMap";
 import AmbientBackground from "./AmbientBackground";
+import Preloader from "./Preloader";
+import UnseenLanding from "./UnseenLanding";
 import ChatBot from "./ChatBot";
 import ImageOCR from "./ImageOCR";
 import QuizEditor from "./QuizEditor";
@@ -402,6 +402,7 @@ export default function QuizGenerator() {
   return (
     <div className="min-h-screen bg-background">
       <AmbientBackground />
+      {!isLoggedIn && !quiz && sessionStatus !== "loading" && <Preloader />}
       {/* ========== NAVIGATION ========== */}
       {sessionStatus === "loading" ? null : isLoggedIn || quiz ? (
       <motion.nav
@@ -488,7 +489,7 @@ export default function QuizGenerator() {
           <>
             {/* Hero */}
             {sessionStatus === "loading" ? null : (
-            <section className={`pb-32 ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-[#FBFBFA] pt-52 sm:pt-60"}`}>
+            <section className={`pb-32 ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-[#FBFBFA] pt-40 sm:pt-48"}`}>
               <div className="max-w-5xl mx-auto px-6">
                 {isLoggedIn ? (
                 <motion.div
@@ -515,29 +516,53 @@ export default function QuizGenerator() {
                 </motion.div>
                 ) : (
                 <div className="mx-auto max-w-5xl text-center">
-                  <h1 className="font-serif text-5xl font-medium tracking-tight leading-[1.08] sm:text-6xl lg:text-7xl">
-                    <span className="block overflow-hidden pb-1">
+                  <p className="text-[11px] uppercase tracking-[0.4em] text-neutral-500">
+                    A quiz generator
+                  </p>
+                  <h1 className="mt-8 font-serif text-7xl font-medium tracking-tight leading-[0.95] sm:text-8xl lg:text-9xl">
+                    <span className="block overflow-hidden pb-2">
                       <motion.span
                         className="block"
                         initial={{ y: "110%" }}
                         animate={{ y: 0 }}
                         transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.15 }}
                       >
-                        Turn your study notes into
-                      </motion.span>
-                    </span>
-                    <span className="block overflow-hidden pb-1">
-                      <motion.span
-                        className="block"
-                        initial={{ y: "110%" }}
-                        animate={{ y: 0 }}
-                        transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.3 }}
-                      >
-                        structured quizzes, instantly.
+                        Examina
                       </motion.span>
                     </span>
                   </h1>
-                  <DotMap className="mx-auto mt-20 w-full max-w-3xl" />
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.7, delay: 0.55 }}
+                    className="mx-auto mt-8 max-w-xl font-serif text-xl italic leading-relaxed text-neutral-600 sm:text-2xl"
+                  >
+                    Turn your study notes into structured quizzes, instantly.
+                  </motion.p>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.7, delay: 0.75 }}
+                    className="mt-12 flex flex-col items-center justify-center gap-5 sm:flex-row"
+                  >
+                    <a
+                      href="#generate"
+                      className="group flex items-center gap-3 rounded-full bg-black py-3 pl-6 pr-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-neutral-800"
+                    >
+                      <span>Start generating</span>
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-black transition-transform duration-200 group-hover:translate-x-0.5">
+                        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
+                        </svg>
+                      </span>
+                    </a>
+                    <a
+                      href="#selected"
+                      className="text-sm text-neutral-500 underline underline-offset-4 transition-colors duration-200 hover:text-black"
+                    >
+                      How it works
+                    </a>
+                  </motion.div>
                 </div>
                 )}
 
@@ -596,7 +621,7 @@ export default function QuizGenerator() {
 
                 {/* Quiz Input */}
                 {(isLoggedIn || canGenerateDemo) && (
-                  <motion.div variants={heroItem} className={`max-w-2xl ${isLoggedIn ? "" : "mx-auto"}`}>
+                  <motion.div variants={heroItem} id="generate" className={`max-w-2xl scroll-mt-28 ${isLoggedIn ? "" : "mx-auto"}`}>
                     <div className="animate-border rounded-xl">
                     <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden transition-all duration-300 hover:shadow-[0_16px_50px_-20px_rgba(91,91,214,0.35)] hover:border-accent/30 focus-within:border-accent/40 focus-within:shadow-[0_16px_50px_-20px_rgba(91,91,214,0.4)]">
                       <div className="flex items-center justify-between px-5 pt-4 pb-2">
@@ -720,7 +745,7 @@ export default function QuizGenerator() {
             </section>
             )}
 
-            {sessionStatus === "loading" ? null : !isLoggedIn && status === "idle" && <LandingPage />}
+            {sessionStatus === "loading" ? null : !isLoggedIn && status === "idle" && <UnseenLanding />}
           </>
         ) : (
           /* ========== QUIZ RESULTS ========== */

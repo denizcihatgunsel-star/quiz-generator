@@ -346,3 +346,21 @@
     display: none;
   }
 }
+
+/* ----------------------------------------------------------------------------
+   Unseen-style editorial landing
+---------------------------------------------------------------------------- */
+.marquee-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: marquee 26s linear infinite;
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
