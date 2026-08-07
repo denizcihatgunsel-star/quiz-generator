@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { motion, type Variants } from "framer-motion";
+import { motion, useScroll, useTransform, type Variants } from "framer-motion";
 import { QuizData, GenerateStatus } from "@/types/quiz";
 import { PLANS, type PlanId } from "@/lib/subscription";
 import MultipleChoiceView from "./MultipleChoiceView";
@@ -14,10 +14,10 @@ import UserMenu from "./UserMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import EditorialNav from "./EditorialNav";
 import AmbientBackground from "./AmbientBackground";
-import Preloader from "./Preloader";
 import UnseenLanding from "./UnseenLanding";
 import WaterCanvas from "./WaterCanvas";
 import InteractiveWordmark from "./InteractiveWordmark";
+import SoundToggle from "./SoundToggle";
 import ChatBot from "./ChatBot";
 import ImageOCR from "./ImageOCR";
 import QuizEditor from "./QuizEditor";
@@ -105,6 +105,14 @@ export default function QuizGenerator() {
   const [editing, setEditing] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const heroRef = useRef<HTMLElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const diveScale = useTransform(scrollYProgress, [0, 1], [1, 0.88]);
+  const diveOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0.1]);
+  const diveY = useTransform(scrollYProgress, [0, 1], [0, 140]);
 
   const charCount = lesson.trim().length;
   const isReady = charCount >= 50 && charCount <= 15000;
@@ -403,8 +411,8 @@ export default function QuizGenerator() {
 
   return (
     <div className="min-h-screen bg-background">
-      <AmbientBackground />
-      {!isLoggedIn && !quiz && sessionStatus !== "loading" && <Preloader />}
+      {(isLoggedIn || quiz) && <AmbientBackground />}
+      {!isLoggedIn && !quiz && <SoundToggle />}
       {/* ========== NAVIGATION ========== */}
       {sessionStatus === "loading" ? null : isLoggedIn || quiz ? (
       <motion.nav
@@ -491,13 +499,22 @@ export default function QuizGenerator() {
           <>
             {/* Hero */}
             {sessionStatus === "loading" ? null : (
-            <section className={`relative pb-32 ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-[#FBFBFA] pt-40 sm:pt-48"}`}>
+            <section
+              ref={heroRef}
+              className={`relative overflow-hidden pb-32 ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#FBFBFA] pt-40 sm:pt-48"}`}
+            >
               {!isLoggedIn && (
                 <div className="absolute inset-0 overflow-hidden">
-                  <WaterCanvas className="pointer-events-none h-full w-full" />
+                  <div className="fog-layer -top-32 left-1/4 h-[30rem] w-[30rem]" style={{ animationDelay: "-6s" }} />
+                  <div className="fog-layer top-1/4 -right-24 h-[26rem] w-[26rem]" style={{ animationDelay: "-14s" }} />
+                  <div className="fog-layer -bottom-24 left-1/3 h-[34rem] w-[34rem]" style={{ animationDelay: "-22s" }} />
+                  <WaterCanvas className="pointer-events-none absolute inset-0 h-full w-full" />
                 </div>
               )}
-              <div className="relative z-10 max-w-5xl mx-auto px-6">
+              <motion.div
+                style={isLoggedIn ? undefined : { scale: diveScale, opacity: diveOpacity, y: diveY }}
+                className="relative z-10 max-w-5xl mx-auto px-6"
+              >
                 {isLoggedIn ? (
                 <motion.div
                   className="max-w-3xl"
@@ -739,7 +756,7 @@ export default function QuizGenerator() {
                   </motion.div>
                 )}
                 </motion.div>
-              </div>
+                </motion.div>
             </section>
             )}
 

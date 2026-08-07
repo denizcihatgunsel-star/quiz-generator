@@ -364,3 +364,24 @@
     animation: none;
   }
 }
+
+/* ----------------------------------------------------------------------------
+   Dreamy pastel fog layers (Unseen-style atmosphere)
+---------------------------------------------------------------------------- */
+.fog-layer {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, transparent 70%);
+  animation: fog-drift 30s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes fog-drift {
+  from { transform: translate3d(-4%, -2%, 0) scale(1); }
+  to { transform: translate3d(5%, 4%, 0) scale(1.25); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fog-layer {
+    animation: none;
+  }
+}
