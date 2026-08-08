@@ -445,10 +445,11 @@
 .water-band {
   background: linear-gradient(
     to bottom,
-    #fdf3f0 0%,
-    #f8e2e7 52%,
-    #eab3c0 78%,
-    #d89aa9 100%
+    #f8f3ee 0%,
+    #ecf0f1 45%,
+    #d6e1e8 58%,
+    #9db6c9 82%,
+    #7e9ab1 100%
   );
 }
 .water-band::after {
