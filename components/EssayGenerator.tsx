@@ -73,7 +73,7 @@ export default function EssayGenerator() {
     <div className="space-y-6">
       <div className="bg-white dark:bg-zinc-800/50 rounded-2xl border border-zinc-200 dark:border-zinc-700 p-6">
         <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-emerald-600 flex items-center justify-center text-white text-xs font-bold">E</span>
+          <span className="w-7 h-7 rounded-lg bg-[#B0607A] flex items-center justify-center text-white text-xs font-bold">E</span>
           Essay Generator
         </h3>
 
@@ -86,7 +86,7 @@ export default function EssayGenerator() {
                 value={formData.topic}
                 onChange={(e) => setFormData(prev => ({ ...prev, topic: e.target.value }))}
                 placeholder="e.g., The Impact of Climate Change"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#B0607A]/40 focus:border-[#B0607A] transition"
                 required
               />
             </div>
@@ -96,7 +96,7 @@ export default function EssayGenerator() {
               <select
                 value={formData.length}
                 onChange={(e) => setFormData(prev => ({ ...prev, length: e.target.value }))}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[#B0607A]/40 focus:border-[#B0607A] transition"
               >
                 <option value="short">Short (500-800 words)</option>
                 <option value="medium">Medium (800-1200 words)</option>
@@ -109,7 +109,7 @@ export default function EssayGenerator() {
               <select
                 value={formData.tone}
                 onChange={(e) => setFormData(prev => ({ ...prev, tone: e.target.value }))}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[#B0607A]/40 focus:border-[#B0607A] transition"
               >
                 <option value="academic">Academic</option>
                 <option value="professional">Professional</option>
@@ -122,7 +122,7 @@ export default function EssayGenerator() {
               <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Language</label>
               <select
                 defaultValue="en"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[#B0607A]/40 focus:border-[#B0607A] transition"
               >
                 <option value="en">English</option>
                 <option value="es">Spanish</option>
@@ -158,7 +158,7 @@ export default function EssayGenerator() {
           <button
             type="submit"
             disabled={loading || !formData.topic.trim()}
-            className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-zinc-300 dark:disabled:bg-zinc-700 text-white disabled:text-zinc-400 text-sm font-medium transition-all disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-3 rounded-xl bg-[#3B2027] hover:bg-[#52303B] disabled:bg-zinc-300 dark:disabled:bg-zinc-700 text-white disabled:text-zinc-400 text-sm font-medium transition-all disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               "Generating Essay..."
@@ -198,7 +198,7 @@ export default function EssayGenerator() {
                   <ul className="space-y-1">
                     {essay.keyPoints.map((point, idx) => (
                       <li key={idx} className="text-sm text-zinc-600 dark:text-zinc-400 flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#B0607A] mt-1.5 flex-shrink-0" />
                         {point}
                       </li>
                     ))}
@@ -209,7 +209,7 @@ export default function EssayGenerator() {
               <div className="flex gap-2 mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-700">
                 <button
                   onClick={() => router.push(`/essay?generated=${encodeURIComponent(essay.content)}&title=${encodeURIComponent(essay.title)}`)}
-                  className="px-4 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-sm font-medium hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors"
+                  className="px-4 py-2 rounded-lg bg-[#FDE8EC] dark:bg-[#B0607A]/20 text-[#9A4F68] dark:text-[#EE97AE] text-sm font-medium hover:bg-[#F6D5DD] dark:hover:bg-[#B0607A]/30 transition-colors"
                 >
                   View Full Essay
                 </button>

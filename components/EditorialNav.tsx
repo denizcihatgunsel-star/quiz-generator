@@ -13,22 +13,22 @@ export default function EditorialNav() {
       transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.1 }}
       className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4"
     >
-      <div className="flex w-full max-w-3xl items-center justify-between gap-4 rounded-full border border-[#EFEFED] bg-white/85 px-4 py-2.5 shadow-sm backdrop-blur-md sm:px-5">
+      <div className="flex w-full max-w-3xl items-center justify-between gap-4 rounded-full border border-[#F3D5DC] bg-white/85 px-4 py-2.5 shadow-sm backdrop-blur-md sm:px-5">
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-black text-white">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3B2027] text-white">
             <span className="font-serif text-sm leading-none">E</span>
           </span>
-          <span className="text-sm font-medium text-black">Examina</span>
+          <span className="text-sm font-medium text-[#3B2027]">Examina</span>
         </Link>
 
         <div className="hidden items-center gap-7 md:flex">
-          <a href="#features" className="text-sm text-neutral-500 transition-colors duration-200 hover:text-black">
+          <a href="#features" className="text-sm text-neutral-500 transition-colors duration-200 hover:text-[#3B2027]">
             Features
           </a>
-          <Link href="/pricing" className="text-sm text-neutral-500 transition-colors duration-200 hover:text-black">
+          <Link href="/pricing" className="text-sm text-neutral-500 transition-colors duration-200 hover:text-[#3B2027]">
             Pricing
           </Link>
-          <a href="#about" className="text-sm text-neutral-500 transition-colors duration-200 hover:text-black">
+          <a href="#about" className="text-sm text-neutral-500 transition-colors duration-200 hover:text-[#3B2027]">
             About
           </a>
         </div>
@@ -36,16 +36,16 @@ export default function EditorialNav() {
         <div className="flex items-center gap-3">
           <Link
             href="/auth/login"
-            className="hidden text-sm text-neutral-500 transition-colors duration-200 hover:text-black sm:block"
+            className="hidden text-sm text-neutral-500 transition-colors duration-200 hover:text-[#3B2027] sm:block"
           >
             Log in
           </Link>
           <Link
             href="/auth/register"
-            className="group flex items-center gap-2.5 rounded-full bg-[#EFEFED] py-1 pl-4 pr-1 transition-colors duration-200 hover:bg-[#E6E6E3]"
+            className="group flex items-center gap-2.5 rounded-full bg-[#F6EBEE] py-1 pl-4 pr-1 transition-colors duration-200 hover:bg-[#EBD8DE]"
           >
-            <span className="text-sm font-medium text-black">Create Quiz</span>
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-black text-white transition-transform duration-200 group-hover:translate-x-0.5">
+            <span className="text-sm font-medium text-[#3B2027]">Create Quiz</span>
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3B2027] text-white transition-transform duration-200 group-hover:translate-x-0.5">
               <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
               </svg>

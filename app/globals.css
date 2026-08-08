@@ -9,22 +9,22 @@
    dark mode "just works" without per-component dark: variants.
 ---------------------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #09090b;
+  --background: #fbf1ee;
+  --foreground: #3b2027;
 
   --card: #ffffff;
-  --card-foreground: #09090b;
+  --card-foreground: #3b2027;
 
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
+  --muted: #f6e4ea;
+  --muted-foreground: #9a7280;
 
-  --border: #e9e9ec;
-  --input: #e9e9ec;
-  --ring: #5b5bd6;
+  --border: #f3d5dc;
+  --input: #f3d5dc;
+  --ring: #b0607a;
 
-  --accent: #5b5bd6;
+  --accent: #b0607a;
   --accent-foreground: #ffffff;
-  --accent-soft: #efeffc;
+  --accent-soft: #fde8ec;
 
   --success: #16a34a;
   --warning: #d97706;
@@ -35,22 +35,22 @@
 }
 
 .dark {
-  --background: #09090b;
-  --foreground: #fafafa;
+  --background: #241318;
+  --foreground: #f6e3e8;
 
-  --card: #131316;
-  --card-foreground: #fafafa;
+  --card: #311a22;
+  --card-foreground: #f6e3e8;
 
-  --muted: #1a1a1f;
-  --muted-foreground: #a1a1aa;
+  --muted: #3f242e;
+  --muted-foreground: #d9b3bf;
 
-  --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.12);
-  --ring: #7c7dff;
+  --border: rgba(243, 213, 220, 0.16);
+  --input: rgba(243, 213, 220, 0.22);
+  --ring: #d988a3;
 
-  --accent: #7c7dff;
-  --accent-foreground: #ffffff;
-  --accent-soft: rgba(124, 125, 255, 0.12);
+  --accent: #d988a3;
+  --accent-foreground: #3b2027;
+  --accent-soft: rgba(217, 136, 163, 0.16);
 
   --success: #22c55e;
   --warning: #f59e0b;
@@ -79,8 +79,53 @@
   --font-sans: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
+  --font-display: var(--font-space-grotesk), var(--font-geist-sans), Arial, Helvetica, sans-serif;
 
   --radius-lg: var(--radius);
+}
+
+/* ----------------------------------------------------------------------------
+   Pastel sweep — remap the legacy violet/zinc/neutral scales to the rose
+   identity so every pre-token component inherits the new palette.
+   Semantic colors (emerald/amber/red for correctness & difficulty) are
+   deliberately left untouched.
+---------------------------------------------------------------------------- */
+@theme {
+  --color-violet-50: #fde8ec;
+  --color-violet-100: #fadbe2;
+  --color-violet-200: #f5bccb;
+  --color-violet-300: #ee97ae;
+  --color-violet-400: #e07998;
+  --color-violet-500: #b0607a;
+  --color-violet-600: #9a4f68;
+  --color-violet-700: #7e3e55;
+  --color-violet-800: #633044;
+  --color-violet-900: #4a2a36;
+  --color-violet-950: #3b2027;
+
+  --color-zinc-50: #fbf4f6;
+  --color-zinc-100: #f6ebee;
+  --color-zinc-200: #ecdce0;
+  --color-zinc-300: #d9bfc6;
+  --color-zinc-400: #b797a1;
+  --color-zinc-500: #96747f;
+  --color-zinc-600: #7a5b66;
+  --color-zinc-700: #614852;
+  --color-zinc-800: #4c3941;
+  --color-zinc-900: #3b2d33;
+  --color-zinc-950: #281e23;
+
+  --color-neutral-50: #fbf4f6;
+  --color-neutral-100: #f6ebee;
+  --color-neutral-200: #ecdce0;
+  --color-neutral-300: #d9bfc6;
+  --color-neutral-400: #b797a1;
+  --color-neutral-500: #96747f;
+  --color-neutral-600: #7a5b66;
+  --color-neutral-700: #614852;
+  --color-neutral-800: #4c3941;
+  --color-neutral-900: #3b2d33;
+  --color-neutral-950: #281e23;
 }
 
 @layer base {
@@ -108,6 +153,15 @@
   :focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
   }
 }
 
@@ -384,6 +438,29 @@
   .fog-layer {
     animation: none;
   }
+}
+
+/* Water fallback band — sits behind the WebGL canvas; if the simulation
+   can't run (no WebGL2 / too slow) the band alone carries the hero. */
+.water-band {
+  background: linear-gradient(
+    to bottom,
+    #fdf3f0 0%,
+    #f8e2e7 52%,
+    #eab3c0 78%,
+    #d89aa9 100%
+  );
+}
+.water-band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    60% 34% at 52% 62%,
+    rgba(255, 243, 232, 0.9),
+    transparent 70%
+  );
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
