@@ -18,6 +18,53 @@ interface SavedQuizItem {
   createdAt: string;
 }
 
+const BOOK = (
+  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+  </svg>
+);
+
+const USERS = (
+  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+  </svg>
+);
+
+const CHART = (
+  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+  </svg>
+);
+
+const GIFT = (
+  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M20 12v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8m4 10v-10m8 10v-10M9 2h6M9 2a3 3 0 00-3 3h0a3 3 0 013 3M15 2a3 3 0 013 3h0a3 3 0 01-3 3M3 8h18a1 1 0 011 1v2a1 1 0 01-1 1H3a1 1 0 01-1-1V9a1 1 0 011-1z" />
+  </svg>
+);
+
+const GLOBE = (
+  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+  </svg>
+);
+
+const SHIELD = (
+  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+  </svg>
+);
+
+const ARROW = (
+  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+  </svg>
+);
+
+const primaryBtn =
+  "inline-flex items-center gap-2 rounded-full bg-[#3B2027] px-5 py-2.5 text-sm font-medium text-[#F6E3E8] shadow-[0_10px_30px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] hover:shadow-[0_14px_36px_-12px_rgba(59,32,39,0.65)] active:scale-[0.98]";
+const ghostBtn =
+  "inline-flex items-center gap-2 rounded-full border border-[#F3D5DC] bg-white/70 px-5 py-2.5 text-sm font-medium text-[#7E3E55] transition-all hover:border-[#E9B8C4] hover:bg-[#F6EBEE] active:scale-[0.98]";
+
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -129,6 +176,10 @@ export default function DashboardPage() {
     .reverse()
     .map((q) => Math.round((q.score! / q.total!) * 100));
 
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+  const firstName = session?.user?.name?.split(" ")[0];
+
   if (status === "loading" || loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -141,74 +192,64 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-background">
       <SiteHeader />
 
-      <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
-        <div className="mb-8">
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">Dashboard</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Your quiz history and performance overview.</p>
+      <main className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6">
+        <div className="mb-10">
+          <p className="mb-3 font-serif text-sm italic text-[#B0607A]">{greeting}, {firstName}</p>
+          <h1 className="text-4xl font-medium tracking-tight text-[#3B2027] sm:text-5xl">
+            Your learning, <span className="font-serif italic text-[#B0607A]">at a glance.</span>
+          </h1>
+          <p className="mt-3 max-w-md text-sm leading-relaxed text-[#9A7280]">
+            A quiet corner for your quizzes, scores, and streaks.
+          </p>
         </div>
 
         <StreakWidget />
 
-        <div className="mb-8 mt-8 flex flex-wrap gap-3">
+        <div className="mb-10 flex flex-wrap gap-3">
           {userRole === "student" && (
-            <Link
-              href="/study"
-              className="inline-flex items-center gap-2 rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90"
-            >
-              <span>📚</span> Study Mode
+            <Link href="/study" className={primaryBtn}>
+              {BOOK} Study Mode
             </Link>
           )}
           {userRole === "teacher" && (
-            <Link
-              href="/classroom/join"
-              className="inline-flex items-center gap-2 rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90"
-            >
-              <span>🏫</span> Classroom
+            <Link href="/classroom/join" className={primaryBtn}>
+              {USERS} Classroom
             </Link>
           )}
-          <Link
-            href="/analytics"
-            className="inline-flex items-center gap-2 rounded-lg border border-border bg-transparent px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-          >
-            <span>📊</span> {userRole === "teacher" ? "Class Analytics" : "Analytics"}
+          <Link href="/analytics" className={ghostBtn}>
+            {CHART} {userRole === "teacher" ? "Class Analytics" : "Analytics"}
           </Link>
-          <Link
-            href="/referral"
-            className="inline-flex items-center gap-2 rounded-lg border border-border bg-transparent px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-          >
-            <span>🎁</span> Invite Friends
+          <Link href="/referral" className={ghostBtn}>
+            {GIFT} Invite Friends
           </Link>
-          <Link
-            href="/explore"
-            className="inline-flex items-center gap-2 rounded-lg border border-border bg-transparent px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-          >
-            <span>🌐</span> Explore Quizzes
+          <Link href="/explore" className={ghostBtn}>
+            {GLOBE} Explore Quizzes
           </Link>
           {session?.user?.email === "denizcihatgunsel@gmail.com" && (
             <button
               onClick={() => setShowAdminPanel(!showAdminPanel)}
-              className="inline-flex items-center gap-2 rounded-lg border border-purple-500/20 bg-purple-500/10 px-4 py-2 text-sm font-medium text-purple-600 transition-colors hover:bg-purple-500/20"
+              className="inline-flex items-center gap-2 rounded-full border border-[#B0607A]/25 bg-[#FDE8EC]/70 px-5 py-2.5 text-sm font-medium text-[#9A4F68] transition-all hover:bg-[#F6D5DD] active:scale-[0.98]"
             >
-              <span>👥</span> Admin Panel
+              {SHIELD} Admin Panel
             </button>
           )}
         </div>
 
         {showAdminPanel && session?.user?.email === "denizcihatgunsel@gmail.com" && (
-          <div className="mb-10 rounded-xl border border-purple-500/20 bg-purple-500/10 p-6 shadow-sm">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-purple-800">Admin Panel - User Management</h2>
-              <p className="text-sm text-purple-600">Email: {session.user.email}</p>
+          <div className="mb-12 rounded-2xl border border-[#F3D5DC] bg-white/70 p-6 shadow-[0_16px_50px_-24px_rgba(176,96,122,0.4)] backdrop-blur-xl">
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+              <h2 className="font-serif text-2xl italic text-[#3B2027]">Admin — user management</h2>
+              <p className="text-sm text-[#9A7280]">Signed in as {session.user.email}</p>
             </div>
-            
+
             <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-              <div className="rounded-lg border border-border bg-card p-4">
-                <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Total Users</p>
-                <p className="text-2xl font-semibold text-foreground">{adminUsers.length}</p>
+              <div className="rounded-xl border border-[#F3D5DC] bg-white p-4">
+                <p className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#9A7280]">Total Users</p>
+                <p className="font-serif text-3xl text-[#3B2027]">{adminUsers.length}</p>
               </div>
-              <div className="rounded-lg border border-border bg-card p-4">
-                <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Total Revenue</p>
-                <p className="text-2xl font-semibold text-foreground">
+              <div className="rounded-xl border border-[#F3D5DC] bg-white p-4">
+                <p className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#9A7280]">Total Revenue</p>
+                <p className="font-serif text-3xl text-[#3B2027]">
                   ${adminUsers.reduce((sum, u) => {
                     const priceMap = { free: 0, starter: 2, plus: 5, pro: 9, team: 15 };
                     const planPrice = priceMap[u.plan as keyof typeof priceMap] || 0;
@@ -216,56 +257,56 @@ export default function DashboardPage() {
                   }, 0)}
                 </p>
               </div>
-              <div className="rounded-lg border border-border bg-card p-4">
-                <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Teacher Accounts</p>
-                <p className="text-2xl font-semibold text-foreground">{adminUsers.filter((u) => u.role === "teacher").length}</p>
+              <div className="rounded-xl border border-[#F3D5DC] bg-white p-4">
+                <p className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#9A7280]">Teacher Accounts</p>
+                <p className="font-serif text-3xl text-[#3B2027]">{adminUsers.filter((u) => u.role === "teacher").length}</p>
               </div>
             </div>
-            
+
             {loadingUsers ? (
-              <div className="rounded-xl border border-border bg-card py-12 text-center shadow-sm">
+              <div className="rounded-xl border border-[#F3D5DC] bg-white py-12 text-center">
                 <LoadingDots />
-                <p className="mt-4 text-muted-foreground">Loading user data...</p>
+                <p className="mt-4 text-sm text-[#9A7280]">Loading user data...</p>
               </div>
             ) : (
-              <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+              <div className="overflow-hidden rounded-xl border border-[#F3D5DC] bg-white">
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
-                      <tr className="border-b border-border bg-muted/50">
-                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Name</th>
-                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Email</th>
-                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Role</th>
-                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Plan</th>
-                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Joined</th>
+                      <tr className="border-b border-[#F3D5DC] bg-[#FBF4F6]">
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#9A7280]">Name</th>
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#9A7280]">Email</th>
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#9A7280]">Role</th>
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#9A7280]">Plan</th>
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#9A7280]">Joined</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-border">
+                    <tbody className="divide-y divide-[#F6EBEE]">
                       {adminUsers.map((user) => (
-                        <tr key={user.id} className="hover:bg-muted/50">
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">{user.name}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">{user.email}</td>
+                        <tr key={user.id} className="transition-colors hover:bg-[#FBF4F6]">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#3B2027]">{user.name}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-[#9A7280]">{user.email}</td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
                               user.role === "teacher"
-                                ? "bg-green-100 text-green-800"
+                                ? "bg-[#E9F5EC] text-[#2F7D46]"
                                 : user.role === "student"
-                                ? "bg-blue-100 text-blue-800"
-                                : "bg-gray-100 text-gray-800"
+                                ? "bg-[#FDE8EC] text-[#9A4F68]"
+                                : "bg-[#F3EDEC] text-[#8A7A75]"
                             }`}>{user.role}</span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <select
                               value={user.plan}
                               onChange={(e) => updateAdminUser(user.id, e.target.value)}
-                              className="rounded-lg border border-border bg-background px-2 py-1 text-sm font-medium text-foreground transition-colors focus-visible:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                              className="rounded-lg border border-[#F3D5DC] bg-white px-2 py-1 text-sm font-medium text-[#3B2027] transition-colors focus-visible:border-[#B0607A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B0607A]/40"
                             >
                               {["free", "starter", "plus", "pro", "team"].map((p) => (
                                 <option key={p} value={p}>{p}</option>
                               ))}
                             </select>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">{new Date(user.createdAt).toLocaleDateString()}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-[#9A7280]">{new Date(user.createdAt).toLocaleDateString()}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -276,28 +317,28 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
-            <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Total Quizzes</p>
-            <p className="text-3xl font-semibold text-foreground">{totalQuizzes}</p>
+        <div className="mb-12 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-5 shadow-[0_16px_50px_-28px_rgba(176,96,122,0.5)] backdrop-blur-xl">
+            <p className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#9A7280]">Total Quizzes</p>
+            <p className="font-serif text-4xl text-[#3B2027]">{totalQuizzes}</p>
           </div>
-          <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
-            <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Completed</p>
-            <p className="text-3xl font-semibold text-foreground">{scoredQuizzes.length}</p>
+          <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-5 shadow-[0_16px_50px_-28px_rgba(176,96,122,0.5)] backdrop-blur-xl">
+            <p className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#9A7280]">Completed</p>
+            <p className="font-serif text-4xl text-[#3B2027]">{scoredQuizzes.length}</p>
           </div>
-          <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
-            <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Avg Score</p>
-            <p className="text-3xl font-semibold text-foreground">
+          <div className="rounded-2xl border border-[#F3D5DC] bg-gradient-to-br from-[#FDE8EC] to-[#FBF1EE] p-5 shadow-[0_16px_50px_-28px_rgba(176,96,122,0.5)]">
+            <p className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#9A4F68]">Avg Score</p>
+            <p className="font-serif text-4xl text-[#3B2027]">
               {avgScore !== null ? (
-                <span className={avgScore >= 80 ? "text-[color:var(--success)]" : avgScore >= 60 ? "text-[color:var(--warning)]" : "text-danger"}>
+                <span className={avgScore >= 80 ? "text-[color:var(--success)]" : avgScore >= 60 ? "text-[#C98A98]" : "text-danger"}>
                   {avgScore}%
                 </span>
               ) : "—"}
             </p>
           </div>
-          <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
-            <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Best Score</p>
-            <p className="text-3xl font-semibold text-foreground">
+          <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-5 shadow-[0_16px_50px_-28px_rgba(176,96,122,0.5)] backdrop-blur-xl">
+            <p className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#9A7280]">Best Score</p>
+            <p className="font-serif text-4xl text-[#3B2027]">
               {bestScore !== null ? (
                 <span className="text-[color:var(--success)]">{bestScore}%</span>
               ) : "—"}
@@ -306,20 +347,24 @@ export default function DashboardPage() {
         </div>
 
         {scoreTrend.length >= 2 && (
-          <div className="mb-10 rounded-xl border border-border bg-card p-6 shadow-sm">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Score Trend</h2>
-              <span className="text-xs text-muted-foreground">Last {scoreTrend.length} quizzes</span>
+          <div className="mb-12 rounded-2xl border border-[#F3D5DC] bg-white/70 p-6 shadow-[0_16px_50px_-28px_rgba(176,96,122,0.4)] backdrop-blur-xl">
+            <div className="mb-5 flex items-center justify-between">
+              <h2 className="font-serif text-xl italic text-[#3B2027]">Score trend</h2>
+              <span className="text-xs text-[#9A7280]">Last {scoreTrend.length} quizzes</span>
             </div>
-            <div className="flex h-24 items-end gap-1.5">
+            <div className="flex h-28 items-end gap-2">
               {scoreTrend.map((score, i) => (
-                <div key={i} className="flex flex-1 flex-col items-center gap-1">
-                  <span className="text-[10px] text-muted-foreground">{score}%</span>
+                <div key={i} className="group flex flex-1 flex-col items-center gap-1.5">
+                  <span className="text-[10px] font-medium text-[#9A7280] opacity-0 transition-opacity group-hover:opacity-100">{score}%</span>
                   <div
-                    className={`w-full rounded-t-md transition-all ${
-                      score >= 80 ? "bg-[color:var(--success)]/80" : score >= 60 ? "bg-[color:var(--warning)]/80" : "bg-danger/80"
+                    className={`w-full rounded-full transition-all ${
+                      score >= 80
+                        ? "bg-gradient-to-t from-[#B0607A] to-[#E9A8B8]"
+                        : score >= 60
+                        ? "bg-gradient-to-t from-[#C98A98] to-[#F0C3CE]"
+                        : "bg-gradient-to-t from-[#9A6A78] to-[#D9AAB6]"
                     }`}
-                    style={{ height: `${Math.max(8, (score / 100) * 80)}px` }}
+                    style={{ height: `${Math.max(10, (score / 100) * 88)}px` }}
                   />
                 </div>
               ))}
@@ -327,17 +372,17 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-foreground">Quiz History</h2>
-          <div className="flex gap-1 rounded-lg border border-border bg-muted p-1">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+          <h2 className="font-serif text-2xl italic text-[#3B2027]">Quiz history</h2>
+          <div className="flex gap-1 rounded-full border border-[#F3D5DC] bg-white/70 p-1 backdrop-blur-xl">
             {(["all", "scored", "unscored"] as const).map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`rounded-md px-3 py-1 text-xs font-medium transition-all ${
+                className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
                   filter === f
-                    ? "bg-card text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "bg-[#3B2027] text-[#F6E3E8] shadow-sm"
+                    : "text-[#9A7280] hover:text-[#3B2027]"
                 }`}
               >
                 {f === "all" ? "All" : f === "scored" ? "Scored" : "Unscored"}
@@ -347,24 +392,18 @@ export default function DashboardPage() {
         </div>
 
         {filteredQuizzes.length === 0 ? (
-          <div className="rounded-xl border border-border bg-card py-16 text-center shadow-sm">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-muted">
-              <svg className="h-6 w-6 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 px-6 py-20 text-center backdrop-blur-xl">
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#FDE8EC] to-[#FBF1EE]">
+              <svg className="h-7 w-7 text-[#B0607A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <p className="mb-4 text-muted-foreground">
-              {filter === "all" ? "No quizzes yet" : `No ${filter} quizzes`}
+            <p className="mb-6 font-serif text-2xl italic text-[#3B2027]">
+              {filter === "all" ? "Nothing here — yet." : `No ${filter} quizzes`}
             </p>
             {filter === "all" && (
-              <Link
-                href="/"
-                className="inline-flex items-center gap-2 rounded-lg bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90"
-              >
-                Generate your first quiz
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
+              <Link href="/" className={primaryBtn}>
+                Generate your first quiz {ARROW}
               </Link>
             )}
           </div>
@@ -378,29 +417,29 @@ export default function DashboardPage() {
               return (
                 <div
                   key={q.id}
-                  className="flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-5 shadow-sm"
+                  className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#F3D5DC] bg-white/70 p-5 shadow-[0_12px_40px_-28px_rgba(176,96,122,0.45)] backdrop-blur-xl transition-all hover:border-[#E9B8C4] hover:shadow-[0_16px_48px_-24px_rgba(176,96,122,0.5)]"
                 >
                   <div className="min-w-0 flex-1">
-                    <div className="mb-1 flex items-center gap-3">
+                    <div className="mb-1.5 flex flex-wrap items-center gap-3">
                       <Link
                         href={`/quiz/${q.shareId}`}
-                        className="truncate text-sm font-medium text-foreground transition-colors hover:text-accent"
+                        className="truncate font-medium text-[#3B2027] transition-colors hover:text-[#B0607A]"
                       >
                         {q.topic}
                       </Link>
                       {scorePercent !== null && (
-                        <span className={`shrink-0 rounded-md border px-2 py-0.5 text-xs font-semibold ${
+                        <span className={`shrink-0 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
                           scorePercent >= 80
                             ? "border-[color:var(--success)]/20 bg-[color:var(--success)]/10 text-[color:var(--success)]"
                             : scorePercent >= 60
-                            ? "border-[color:var(--warning)]/20 bg-[color:var(--warning)]/10 text-[color:var(--warning)]"
+                            ? "border-[#C98A98]/20 bg-[#C98A98]/10 text-[#9A4F68]"
                             : "border-danger/20 bg-danger-soft text-danger"
                         }`}>
                           {scorePercent}%
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-[#9A7280]">
                       <span>
                         {new Date(q.createdAt).toLocaleDateString("en-US", {
                           month: "short",
@@ -414,7 +453,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
 
-                  <div className="flex shrink-0 items-center gap-2">
+                  <div className="flex shrink-0 flex-wrap items-center gap-2">
                     {userRole === "teacher" && (
                       <button
                         onClick={async () => {
@@ -431,7 +470,7 @@ export default function DashboardPage() {
                           setStartingLive(null);
                         }}
                         disabled={startingLive === q.id}
-                        className="rounded-lg border border-[color:var(--success)]/20 bg-[color:var(--success)]/10 px-3 py-1.5 text-xs font-medium text-[color:var(--success)] transition-colors hover:opacity-80 disabled:opacity-60"
+                        className="rounded-full border border-[color:var(--success)]/20 bg-[color:var(--success)]/10 px-3.5 py-1.5 text-xs font-medium text-[color:var(--success)] transition-colors hover:opacity-80 disabled:opacity-60"
                       >
                         {startingLive === q.id ? "..." : "Go Live"}
                       </button>
@@ -439,7 +478,7 @@ export default function DashboardPage() {
                     {q.shareId && (
                       <button
                         onClick={() => copyShareLink(q.shareId!)}
-                        className="rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+                        className="rounded-full border border-[#F3D5DC] px-3.5 py-1.5 text-xs text-[#9A7280] transition-colors hover:text-[#3B2027]"
                       >
                         {copied === q.shareId ? "Copied!" : "Share"}
                       </button>
@@ -458,32 +497,32 @@ export default function DashboardPage() {
                           );
                         }
                       }}
-                      className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+                      className={`rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors ${
                         q.isPublic
                           ? "border-[color:var(--success)]/20 bg-[color:var(--success)]/10 text-[color:var(--success)] hover:opacity-80"
-                          : "border-border text-muted-foreground hover:text-foreground"
+                          : "border-[#F3D5DC] text-[#9A7280] hover:text-[#3B2027]"
                       }`}
                     >
                       {q.isPublic ? "Public" : "Publish"}
                     </button>
                     <Link
                       href={`/quiz/${q.shareId}`}
-                      className="rounded-lg border border-accent/20 bg-accent-soft px-3 py-1.5 text-xs font-medium text-accent transition-colors hover:opacity-80"
+                      className="rounded-full bg-[#3B2027] px-4 py-1.5 text-xs font-medium text-[#F6E3E8] transition-all hover:bg-[#52303B]"
                     >
                       View
                     </Link>
                     {confirmDelete === q.id ? (
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1.5">
                         <button
                           onClick={() => deleteQuiz(q.id)}
                           disabled={deleting === q.id}
-                          className="rounded-lg border border-danger/20 bg-danger-soft px-2.5 py-1.5 text-xs font-medium text-danger transition-colors disabled:opacity-50"
+                          className="rounded-full border border-danger/20 bg-danger-soft px-3 py-1.5 text-xs font-medium text-danger transition-colors disabled:opacity-50"
                         >
                           {deleting === q.id ? "..." : "Confirm"}
                         </button>
                         <button
                           onClick={() => setConfirmDelete(null)}
-                          className="rounded-lg border border-border px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+                          className="rounded-full border border-[#F3D5DC] px-3 py-1.5 text-xs text-[#9A7280] transition-colors hover:text-[#3B2027]"
                         >
                           Cancel
                         </button>
@@ -491,7 +530,7 @@ export default function DashboardPage() {
                     ) : (
                       <button
                         onClick={() => setConfirmDelete(q.id)}
-                        className="rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-danger/20 hover:text-danger"
+                        className="rounded-full border border-[#F3D5DC] px-3.5 py-1.5 text-xs text-[#9A7280] transition-colors hover:border-danger/20 hover:text-danger"
                       >
                         Delete
                       </button>
