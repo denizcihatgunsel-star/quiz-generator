@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, type MouseEvent } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { motion, useScroll, useTransform, type Variants } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring, type Variants } from "framer-motion";
 import { QuizData, GenerateStatus } from "@/types/quiz";
 import { PLANS, type PlanId } from "@/lib/subscription";
 import MultipleChoiceView from "./MultipleChoiceView";
@@ -113,6 +113,22 @@ export default function QuizGenerator() {
   const diveScale = useTransform(scrollYProgress, [0, 1], [1, 0.88]);
   const diveOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0.1]);
   const diveY = useTransform(scrollYProgress, [0, 1], [0, 140]);
+
+  const tiltX = useSpring(0, { stiffness: 150, damping: 20 });
+  const tiltY = useSpring(0, { stiffness: 150, damping: 20 });
+  const onTiltMove = (e: MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    tiltY.set(px * 8);
+    tiltX.set(-py * 8);
+    e.currentTarget.style.setProperty("--mx", `${((e.clientX - rect.left) / rect.width) * 100}%`);
+    e.currentTarget.style.setProperty("--my", `${((e.clientY - rect.top) / rect.height) * 100}%`);
+  };
+  const onTiltLeave = () => {
+    tiltX.set(0);
+    tiltY.set(0);
+  };
 
   const charCount = lesson.trim().length;
   const isReady = charCount >= 50 && charCount <= 15000;
@@ -636,9 +652,35 @@ export default function QuizGenerator() {
 
                 {/* Quiz Input */}
                 {(isLoggedIn || canGenerateDemo) && (
-                  <motion.div variants={heroItem} id="generate" className={`max-w-2xl scroll-mt-28 ${isLoggedIn ? "" : "mx-auto"}`}>
+                  <motion.div variants={heroItem} id="generate" className={`relative max-w-2xl scroll-mt-28 ${isLoggedIn ? "" : "mx-auto"}`}>
+                    <div aria-hidden className="pointer-events-none absolute -inset-12 -z-10">
+                      <div className="orb-drift h-44 w-44 bg-[#E9A8B8]/70" style={{ animationDelay: "-3s", top: "-3rem", left: "-4rem" }} />
+                      <div className="orb-drift h-36 w-36 bg-[#F6DCE5]/90" style={{ animationDelay: "-8s", bottom: "-2rem", right: "-3.5rem" }} />
+                      <div className="orb-drift h-28 w-28 bg-[#C98A98]/50" style={{ animationDelay: "-12s", top: "40%", right: "-6rem" }} />
+                      <span className="twinkle absolute -top-3 left-8 h-1.5 w-1.5 rounded-full bg-[#B0607A]" />
+                      <span className="twinkle absolute -top-6 right-1/4 h-2 w-2 rounded-full bg-[#E9A8B8]" style={{ animationDelay: "-1s" }} />
+                      <span className="twinkle absolute -bottom-4 left-1/3 h-1.5 w-1.5 rounded-full bg-[#C98A98]" style={{ animationDelay: "-1.8s" }} />
+                      <span className="twinkle absolute bottom-10 -right-4 h-2 w-2 rounded-full bg-[#F6DCE5]" style={{ animationDelay: "-0.6s" }} />
+                      <span className="float-glyph -left-10 top-6 text-lg text-[#E9A8B8]">✦</span>
+                      <span className="float-glyph -right-12 top-16 text-sm text-[#C98A98]" style={{ animationDelay: "-3s" }}>❀</span>
+                      <span className="float-glyph left-6 -bottom-8 text-sm text-[#B0607A]/70" style={{ animationDelay: "-5s" }}>✦</span>
+                    </div>
+                    <motion.div
+                      style={{ rotateX: tiltX, rotateY: tiltY, transformPerspective: 900 }}
+                      onMouseMove={onTiltMove}
+                      onMouseLeave={onTiltLeave}
+                      className="relative will-change-transform"
+                    >
                     <div className="animate-border rounded-3xl">
-                    <div className="rounded-3xl border border-[#F3D5DC] bg-white/70 backdrop-blur-xl shadow-[0_24px_70px_-30px_rgba(176,96,122,0.5)] overflow-hidden transition-all duration-300 hover:shadow-[0_28px_80px_-30px_rgba(176,96,122,0.6)] hover:border-[#E9B8C4] focus-within:border-[#E9B8C4] focus-within:shadow-[0_28px_80px_-30px_rgba(176,96,122,0.65)]">
+                    <div className="rounded-3xl border border-[#F3D5DC] bg-white/70 backdrop-blur-xl card-breathe overflow-hidden transition-all duration-300 hover:border-[#E9B8C4] focus-within:border-[#E9B8C4]">
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-300 hover:opacity-100"
+                        style={{
+                          background:
+                            "radial-gradient(240px circle at var(--mx,50%) var(--my,50%), rgba(233,168,184,0.28), transparent 70%)",
+                        }}
+                      />
                       <div className="flex items-center justify-between px-5 pt-4 pb-2">
                         <span className="text-xs text-[#A87680] uppercase tracking-[0.2em]">{t("input.content")}</span>
                         <div className="flex items-center gap-4">
@@ -698,7 +740,7 @@ export default function QuizGenerator() {
                           disabled={!isReady || status === "loading" || atLimit}
                           whileHover={!isReady || status === "loading" || atLimit ? undefined : { scale: 1.02 }}
                           whileTap={!isReady || status === "loading" || atLimit ? undefined : { scale: 0.98 }}
-                          className={`btn-sheen px-5 py-2 bg-[#3B2027] text-[#F6E3E8] text-sm font-medium hover:bg-[#52303B] disabled:opacity-60 transition-colors duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready" : ""}`}
+                          className={`btn-sheen px-5 py-2 bg-[linear-gradient(120deg,#3B2027,#6A3A4C,#3B2027)] gradient-shift text-[#F6E3E8] text-sm font-medium disabled:opacity-60 transition-opacity duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready-rose" : ""}`}
                           aria-busy={status === "loading"}
                         >
                           {status === "loading" ? t("input.generating") : t("input.generate")}
@@ -706,6 +748,7 @@ export default function QuizGenerator() {
                       </div>
                     </div>
                     </div>
+                    </motion.div>
 
                     {status === "error" && error && (
                       <div className="mt-4 p-4 rounded-2xl border border-[#F3D5DC] bg-white/70 backdrop-blur-xl shadow-sm text-sm text-[#9A7280]">
@@ -727,6 +770,7 @@ export default function QuizGenerator() {
                               style={{ animationDelay: `${i * 0.15}s` }}
                             />
                           ))}
+                          <span className="spin-slow ml-1.5 inline-block text-xs text-[#B0607A]">✦</span>
                         </div>
                         <p className="text-xs">{t("input.reading")}</p>
                       </div>
@@ -782,7 +826,7 @@ export default function QuizGenerator() {
 
               <div className="mb-8">
                 <p className="text-xs text-[#A87680] uppercase tracking-[0.15em] mb-3">{t("quiz.ready")}</p>
-                <h2 className="text-2xl font-medium text-[#4A3038]">{quiz.topic}</h2>
+                <h2 className="animate-gradient-text text-2xl font-medium">{quiz.topic}</h2>
                 <p className="text-sm text-[#9A7280] mt-2">
                   {quiz.multipleChoice.length} MCQ · {quiz.flashcards.length} flashcards
                   {quiz.fillInTheBlank?.length > 0 && ` · ${quiz.fillInTheBlank.length} fill-in-blank`}
@@ -797,7 +841,27 @@ export default function QuizGenerator() {
                       <p className="text-sm text-[#4A3038]">{t("quiz.complete")}</p>
                       <p className="text-xs text-[#9A7280] mt-0.5">{score.correct}/{score.total} {t("quiz.correct")}</p>
                     </div>
-                    <p className="text-3xl font-medium text-[#B0607A]">{Math.round((score.correct / score.total) * 100)}%</p>
+                    <div className="relative h-20 w-20">
+                      <svg viewBox="0 0 80 80" className="h-20 w-20 -rotate-90">
+                        <circle cx="40" cy="40" r="34" fill="none" stroke="#F6E4EA" strokeWidth="7" />
+                        <motion.circle
+                          cx="40"
+                          cy="40"
+                          r="34"
+                          fill="none"
+                          stroke="#B0607A"
+                          strokeWidth="7"
+                          strokeLinecap="round"
+                          strokeDasharray={2 * Math.PI * 34}
+                          initial={{ strokeDashoffset: 2 * Math.PI * 34 }}
+                          animate={{ strokeDashoffset: 2 * Math.PI * 34 * (1 - score.correct / score.total) }}
+                          transition={{ duration: 1.3, ease: EASE_OUT, delay: 0.25 }}
+                        />
+                      </svg>
+                      <span className="absolute inset-0 flex items-center justify-center text-xl font-medium text-[#B0607A]">
+                        {Math.round((score.correct / score.total) * 100)}%
+                      </span>
+                    </div>
                   </div>
                 </div>
               )}
@@ -856,12 +920,21 @@ export default function QuizGenerator() {
                   onCancel={() => setEditing(false)}
                 />
               ) : (
-                <div role="tabpanel">
-                  {activeTab === "mcq" && <MultipleChoiceView questions={quiz.multipleChoice} onComplete={handleScoreUpdate} />}
-                  {activeTab === "flashcards" && <FlashcardView flashcards={quiz.flashcards} quizId={savedQuizId} />}
-                  {activeTab === "fillblank" && quiz.fillInTheBlank?.length > 0 && <FillInTheBlankView questions={quiz.fillInTheBlank} onComplete={handleScoreUpdate} />}
-                  {activeTab === "truefalse" && quiz.trueFalse?.length > 0 && <TrueFalseView questions={quiz.trueFalse} onComplete={handleScoreUpdate} />}
-                </div>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeTab}
+                    role="tabpanel"
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.25, ease: EASE_OUT }}
+                  >
+                    {activeTab === "mcq" && <MultipleChoiceView questions={quiz.multipleChoice} onComplete={handleScoreUpdate} />}
+                    {activeTab === "flashcards" && <FlashcardView flashcards={quiz.flashcards} quizId={savedQuizId} />}
+                    {activeTab === "fillblank" && quiz.fillInTheBlank?.length > 0 && <FillInTheBlankView questions={quiz.fillInTheBlank} onComplete={handleScoreUpdate} />}
+                    {activeTab === "truefalse" && quiz.trueFalse?.length > 0 && <TrueFalseView questions={quiz.trueFalse} onComplete={handleScoreUpdate} />}
+                  </motion.div>
+                </AnimatePresence>
               )}
             </div>
           </div>

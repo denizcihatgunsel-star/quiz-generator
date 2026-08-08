@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { QuizData } from "@/types/quiz";
 
 interface Message {
@@ -188,7 +189,13 @@ export default function ChatBot({ onQuizGenerated }: ChatBotProps) {
       {/* Messages */}
       <div className="h-80 overflow-y-auto px-4 py-3 space-y-3">
         {messages.map((msg, i) => (
-          <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 12, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.3, ease: [0.2, 0.65, 0.3, 0.9] }}
+            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+          >
             <div
               className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm ${
                 msg.role === "user"
@@ -206,7 +213,7 @@ export default function ChatBot({ onQuizGenerated }: ChatBotProps) {
                 </button>
               )}
             </div>
-          </div>
+          </motion.div>
         ))}
 
         {loading && (
@@ -231,14 +238,19 @@ export default function ChatBot({ onQuizGenerated }: ChatBotProps) {
       {/* Suggestions */}
       {messages.length <= 1 && (
         <div className="px-4 pb-2 flex flex-wrap gap-1.5">
-          {SUGGESTIONS.map((s) => (
-            <button
+          {SUGGESTIONS.map((s, i) => (
+            <motion.button
               key={s}
               onClick={() => sendMessage(s)}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.3 + i * 0.1, ease: [0.2, 0.65, 0.3, 0.9] }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               className="text-xs px-3 py-1.5 rounded-full border border-[#F3D5DC] text-[#B0607A] hover:bg-[#FDE8EC] transition-colors"
             >
               {s}
-            </button>
+            </motion.button>
           ))}
         </div>
       )}

@@ -391,3 +391,114 @@
     scroll-behavior: smooth;
   }
 }
+
+/* ----------------------------------------------------------------------------
+   Quiz generator page — extra life
+--------------------------------------------------------------------------- */
+/* Ambient rose orbs drifting around the generator card */
+.orb-drift {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  pointer-events: none;
+  animation: orb-drift 14s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes orb-drift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(8%, -10%, 0) scale(1.25); }
+  100% { transform: translate3d(-8%, 6%, 0) scale(0.9); }
+}
+
+/* Gentle bobbing */
+.float-y {
+  animation: float-y 5s ease-in-out infinite;
+}
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Twinkling sparkles */
+.twinkle {
+  animation: twinkle 2.6s ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.7); }
+  50% { opacity: 0.9; transform: scale(1.15); }
+}
+
+/* Slow spin for decorative rings */
+.spin-slow {
+  animation: spin-slow 14s linear infinite;
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+/* Animated gradient backgrounds (buttons, bars) */
+.gradient-shift {
+  background-size: 200% 200%;
+  animation: gradient-shift 6s ease infinite;
+}
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Shimmering gradient text */
+.animate-gradient-text {
+  background: linear-gradient(90deg, #B0607A, #E9A8B8, #8C5563, #B0607A);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-text-slide 8s linear infinite;
+}
+@keyframes gradient-text-slide {
+  to { background-position: -300% 0; }
+}
+
+/* Breathing rose glow for the generator card */
+.card-breathe {
+  animation: card-breathe 5s ease-in-out infinite;
+}
+@keyframes card-breathe {
+  0%, 100% { box-shadow: 0 24px 70px -30px rgba(176, 96, 122, 0.5); }
+  50% { box-shadow: 0 28px 90px -26px rgba(176, 96, 122, 0.72); }
+}
+
+/* Rose glow pulse for the generate button */
+.btn-ready-rose {
+  animation: ready-pulse-rose 2.4s ease-in-out infinite;
+}
+@keyframes ready-pulse-rose {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(176, 96, 122, 0); }
+  50% { box-shadow: 0 0 0 6px rgba(176, 96, 122, 0.22); }
+}
+
+/* Floating decorative glyphs */
+.float-glyph {
+  position: absolute;
+  pointer-events: none;
+  animation: float-glyph 7s ease-in-out infinite;
+}
+@keyframes float-glyph {
+  0%, 100% { transform: translateY(0) rotate(-6deg); opacity: 0.5; }
+  50% { transform: translateY(-14px) rotate(8deg); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb-drift,
+  .float-y,
+  .twinkle,
+  .spin-slow,
+  .gradient-shift,
+  .animate-gradient-text,
+  .card-breathe,
+  .btn-ready-rose,
+  .float-glyph {
+    animation: none !important;
+  }
+}
