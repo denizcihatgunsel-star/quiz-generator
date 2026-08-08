@@ -521,7 +521,6 @@ export default function QuizGenerator() {
             >
               {!isLoggedIn && (
                 <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                  <div className="water-band absolute inset-0" aria-hidden />
                   <WaterCanvas className="pointer-events-none absolute inset-0 h-full w-full" />
                 </div>
               )}

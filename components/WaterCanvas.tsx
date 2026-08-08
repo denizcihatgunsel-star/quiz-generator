@@ -2,89 +2,12 @@
 
 import { useEffect, useRef } from "react";
 
-const VERT = `#version 300 es
-in vec2 a_pos;
-out vec2 v_uv;
-void main() {
-  v_uv = a_pos * 0.5 + 0.5;
-  gl_Position = vec4(a_pos, 0.0, 1.0);
-}`;
-
-const SIM_FRAG = `#version 300 es
-precision highp float;
-uniform sampler2D u_a;
-uniform vec2 u_texel;
-in vec2 v_uv;
-out vec4 o;
-void main() {
-  vec4 c = texture(u_a, v_uv);
-  float h = c.r * 2.0 - 1.0;
-  float p = c.g * 2.0 - 1.0;
-  float l = texture(u_a, v_uv - vec2(u_texel.x, 0.0)).r * 2.0 - 1.0;
-  float r = texture(u_a, v_uv + vec2(u_texel.x, 0.0)).r * 2.0 - 1.0;
-  float u = texture(u_a, v_uv - vec2(0.0, u_texel.y)).r * 2.0 - 1.0;
-  float d = texture(u_a, v_uv + vec2(0.0, u_texel.y)).r * 2.0 - 1.0;
-  float nxt = (l + r + u + d) * 0.5 - p;
-  nxt *= 0.985;
-  o = vec4(nxt * 0.5 + 0.5, h * 0.5 + 0.5, 0.0, 1.0);
-}`;
-
-const SPLAT_FRAG = `#version 300 es
-precision highp float;
-uniform sampler2D u_b;
-uniform vec2 u_pos;
-uniform float u_force;
-in vec2 v_uv;
-out vec4 o;
-void main() {
-  vec4 c = texture(u_b, v_uv);
-  vec2 dd = v_uv - u_pos;
-  float g = exp(-dot(dd, dd) * 260.0) * u_force;
-  if (g < 0.002) { o = c; return; }
-  o = vec4(c.r + g * 0.5, c.g, 0.0, 1.0);
-}`;
-
-const RENDER_FRAG = `#version 300 es
-precision highp float;
-uniform sampler2D u_h;
-uniform sampler2D u_scene;
-uniform vec2 u_texel;
-uniform float u_time;
-uniform vec2 u_cursor;
-in vec2 v_uv;
-out vec4 o;
-
-float hAt(vec2 uv) { return texture(u_h, uv).r * 2.0 - 1.0; }
-
-void main() {
-  vec2 uv = v_uv;
-
-  float hl = hAt(vec2(uv.x - u_texel.x, uv.y));
-  float hr = hAt(vec2(uv.x + u_texel.x, uv.y));
-  float hu = hAt(vec2(uv.x, uv.y - u_texel.y));
-  float hd = hAt(vec2(uv.x, uv.y + u_texel.y));
-  vec2 g = vec2(hr - hl, hd - hu);
-  float slope = length(g);
-
-  vec2 off = g * 0.11 + g * 0.10 * smoothstep(0.02, 0.18, slope);
-  vec3 col = texture(u_scene, clamp(uv + off, 0.001, 0.999)).rgb;
-
-  vec3 N = normalize(vec3(-g.x * 12.0, 1.0, -g.y * 12.0));
-  vec3 L = normalize(vec3(0.5, 0.5, 2.0));
-  vec3 H = normalize(L + vec3(0.0, 0.0, 1.0));
-  float spec = pow(max(dot(N, H), 0.0), 96.0);
-  float fres = pow(1.0 - N.y, 3.0);
-
-  vec2 dc = uv - u_cursor;
-  float glare = exp(-dot(dc, dc) * 16.0) * 0.55;
-  float sparks = pow(clamp(slope * 6.0, 0.0, 1.0), 3.0) * 0.5;
-
-  col += vec3(1.0, 0.975, 0.94) * (spec * (0.22 + glare * 0.8) + sparks * 0.5);
-  col += vec3(1.0, 0.985, 0.955) * fres * 0.14;
-  col = mix(col, vec3(0.975, 0.98, 0.99), 0.035 + 0.06 * fres);
-
-  o = vec4(col, 1.0);
-}`;
+interface Ripple {
+  x: number;
+  y: number;
+  r: number;
+  alpha: number;
+}
 
 export default function WaterCanvas({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -92,433 +15,127 @@ export default function WaterCanvas({ className }: { className?: string }) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const gl = canvas.getContext("webgl2", {
-      alpha: false,
-      antialias: false,
-      depth: false,
-      stencil: false,
-      powerPreference: "high-performance",
-    });
-    if (!gl) {
-      console.warn("[water] WebGL2 not supported, showing static band");
-      return;
-    }
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-    const compile = (type: number, src: string) => {
-      const sh = gl.createShader(type);
-      if (!sh) return null;
-      gl.shaderSource(sh, src);
-      gl.compileShader(sh);
-      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
-        console.error(gl.getShaderInfoLog(sh));
-        return null;
-      }
-      return sh;
+    let width = 0;
+    let height = 0;
+    let raf = 0;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const ripples: Ripple[] = [];
+    let tx = -999;
+    let ty = -999;
+    let cx = -999;
+    let cy = -999;
+    let lastX = 0;
+    let lastY = 0;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const parent = canvas.parentElement!;
+
+    const resize = () => {
+      const rect = parent.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      canvas.width = Math.max(1, Math.round(width * dpr));
+      canvas.height = Math.max(1, Math.round(height * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
-
-    const link = (vsSrc: string, fsSrc: string) => {
-      const vs = compile(gl.VERTEX_SHADER, vsSrc);
-      const fs = compile(gl.FRAGMENT_SHADER, fsSrc);
-      if (!vs || !fs) return null;
-      const p = gl.createProgram();
-      if (!p) return null;
-      gl.attachShader(p, vs);
-      gl.attachShader(p, fs);
-      gl.linkProgram(p);
-      if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
-        console.error(gl.getProgramInfoLog(p));
-        return null;
-      }
-      return p;
-    };
-
-    const simProg = link(VERT, SIM_FRAG);
-    const splatProg = link(VERT, SPLAT_FRAG);
-    const renderProg = link(VERT, RENDER_FRAG);
-    if (!simProg || !splatProg || !renderProg) {
-      console.warn("[water] shader compile failed, showing static band");
-      return;
-    }
-    console.info("[water] WebGL2 liquid-glass layer initialized");
-
-    const quad = gl.createBuffer();
-    if (!quad) return;
-    gl.bindBuffer(gl.ARRAY_BUFFER, quad);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-
-    const aPos = (p: WebGLProgram) => {
-      const loc = gl.getAttribLocation(p, "a_pos");
-      gl.bindBuffer(gl.ARRAY_BUFFER, quad);
-      gl.enableVertexAttribArray(loc);
-      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-    };
-
-    const uni = (p: WebGLProgram, name: string) => gl.getUniformLocation(p, name);
-    const simU = { a: uni(simProg, "u_a"), texel: uni(simProg, "u_texel") };
-    const splatU = { b: uni(splatProg, "u_b"), pos: uni(splatProg, "u_pos"), force: uni(splatProg, "u_force") };
-    const renU = {
-      h: uni(renderProg, "u_h"),
-      scene: uni(renderProg, "u_scene"),
-      texel: uni(renderProg, "u_texel"),
-      time: uni(renderProg, "u_time"),
-      cursor: uni(renderProg, "u_cursor"),
-    };
-
-    let simW = 0;
-    let simH = 0;
-    let texA: WebGLTexture | null = null;
-    let texB: WebGLTexture | null = null;
-    let fboA: WebGLFramebuffer | null = null;
-    let fboB: WebGLFramebuffer | null = null;
-    let sceneTex: WebGLTexture | null = null;
-    let simScale = 1;
-    const rectCache = { left: 0, top: 0, width: 0, height: 0 };
-
-    const makeTex = () => {
-      const t = gl.createTexture();
-      if (!t) return null;
-      gl.bindTexture(gl.TEXTURE_2D, t);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, simW, simH, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-      return t;
-    };
-
-    const makeFbo = (t: WebGLTexture) => {
-      const f = gl.createFramebuffer();
-      if (!f) return null;
-      gl.bindFramebuffer(gl.FRAMEBUFFER, f);
-      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t, 0);
-      return f;
-    };
-
-    const buildBackdrop = (w: number, h: number) => {
-      const b = document.createElement("canvas");
-      b.width = w;
-      b.height = h;
-      const c = b.getContext("2d");
-      if (!c) return null;
-      const hy = h * 0.44;
-
-      const sky = c.createLinearGradient(0, 0, 0, hy);
-      sky.addColorStop(0, "#FDF8F1");
-      sky.addColorStop(0.55, "#F3EEE7");
-      sky.addColorStop(0.88, "#E2EBEE");
-      sky.addColorStop(1, "#DAE8ED");
-      c.fillStyle = sky;
-      c.fillRect(0, 0, w, hy);
-
-      const sun = c.createRadialGradient(w * 0.62, hy - h * 0.05, 0, w * 0.62, hy - h * 0.05, w * 0.5);
-      sun.addColorStop(0, "rgba(255, 247, 233, 0.98)");
-      sun.addColorStop(0.3, "rgba(255, 246, 232, 0.5)");
-      sun.addColorStop(1, "rgba(255, 246, 232, 0)");
-      c.fillStyle = sun;
-      c.fillRect(0, 0, w, hy);
-
-      const cloud = (bx: number, by: number, s: number) => {
-        const blobs = [
-          [0, 0, 40],
-          [36, -8, 32],
-          [72, 2, 26],
-          [-32, 4, 28],
-        ];
-        for (const [ox, oy, br] of blobs) {
-          const g = c.createRadialGradient(bx + ox * s, by + oy * s, 0, bx + ox * s, by + oy * s, br * s);
-          g.addColorStop(0, "rgba(255, 253, 250, 0.85)");
-          g.addColorStop(1, "rgba(255, 253, 250, 0)");
-          c.fillStyle = g;
-          c.fillRect(0, 0, w, hy);
-        }
-      };
-      cloud(w * 0.22, hy * 0.35, 1.5);
-      cloud(w * 0.55, hy * 0.55, 1.9);
-      cloud(w * 0.78, hy * 0.28, 1.3);
-
-      const ridge = (x: number, base: number, s: number) =>
-        base -
-        h *
-          (0.024 +
-            0.017 * Math.sin(x * 0.012 * s + 1.2) +
-            0.01 * Math.sin(x * 0.028 * s + 3.9) +
-            0.007 * Math.sin(x * 0.05 * s + 0.4));
-      const hills = (color: string, base: number, s: number) => {
-        c.beginPath();
-        c.moveTo(0, h);
-        c.lineTo(0, ridge(0, base, s));
-        for (let x = 0; x <= w; x += w / 64) c.lineTo(x, ridge(x, base, s));
-        c.lineTo(w, h);
-        c.closePath();
-        c.fillStyle = color;
-        c.fill();
-      };
-      hills("#E9E6DE", hy + h * 0.065, 1);
-      hills("#DCCDC2", hy + h * 0.115, 1.4);
-
-      const sea = c.createLinearGradient(0, hy, 0, h);
-      sea.addColorStop(0, "#CFDEE7");
-      sea.addColorStop(0.3, "#B4CBD9");
-      sea.addColorStop(0.65, "#8FACBF");
-      sea.addColorStop(1, "#6E8FA8");
-      c.fillStyle = sea;
-      c.fillRect(0, hy, w, h - hy);
-
-      const streak = (sx: number, len: number, alpha: number, angle: number) => {
-        c.save();
-        c.translate(w * sx, hy + h * 0.04);
-        c.rotate(angle);
-        const g = c.createLinearGradient(0, 0, len, 0);
-        g.addColorStop(0, "rgba(255, 251, 244, 0)");
-        g.addColorStop(0.5, `rgba(255, 251, 244, ${alpha})`);
-        g.addColorStop(1, "rgba(255, 251, 244, 0)");
-        c.fillStyle = g;
-        c.fillRect(0, -h * 0.012, len, h * 0.024);
-        c.restore();
-      };
-      streak(0.32, w * 0.85, 0.06, 0.09);
-      streak(0.55, w * 0.95, 0.08, 0.05);
-      streak(0.78, w * 0.8, 0.05, 0.12);
-
-      for (let i = 0; i < 22; i++) {
-        const yy = hy + Math.pow(Math.random(), 1.3) * h * 0.5;
-        c.fillStyle = `rgba(255, 250, 240, ${0.12 + Math.random() * 0.2})`;
-        c.fillRect(w * 0.62 + (Math.random() - 0.5) * w * 0.1, yy, 1 + Math.random() * 2, 1);
-      }
-
-      const haze = c.createLinearGradient(0, hy - h * 0.01, 0, hy + h * 0.13);
-      haze.addColorStop(0, "rgba(232, 240, 243, 0.85)");
-      haze.addColorStop(1, "rgba(232, 240, 243, 0)");
-      c.fillStyle = haze;
-      c.fillRect(0, hy - h * 0.01, w, h * 0.14);
-
-      return b;
-    };
-
-    // Canvas is the render target: 0.6x CSS resolution (soft upscale fits the
-    // glass look and cuts the fill-rate ~3x). Backdrop only rebuilt when the
-    // canvas SIZE changes — never on sim adaptation.
-    let canvasW = 0;
-    let canvasH = 0;
-    const sizeCanvas = () => {
-      const rect = canvas.parentElement?.getBoundingClientRect();
-      if (!rect || rect.width < 4 || rect.height < 4) return false;
-      rectCache.left = rect.left;
-      rectCache.top = rect.top;
-      rectCache.width = rect.width;
-      rectCache.height = rect.height;
-      let s = Math.min(window.devicePixelRatio || 1, 1) * 0.6;
-      const px = rect.width * s * rect.height * s;
-      if (px > 0.8e6) s *= Math.sqrt(0.8e6 / px);
-      canvasW = Math.max(1, Math.round(rect.width * s));
-      canvasH = Math.max(1, Math.round(rect.height * s));
-      if (canvasW === canvas.width && canvasH === canvas.height) return false;
-      canvas.width = canvasW;
-      canvas.height = canvasH;
-      return true;
-    };
-
-    const rebuildSim = () => {
-      simW = Math.max(96, Math.min(160, Math.round((rectCache.width / 10) * simScale)));
-      simH = Math.max(96, Math.min(160, Math.round((rectCache.height / 10) * simScale)));
-      texA = makeTex();
-      texB = makeTex();
-      fboA = texA ? makeFbo(texA) : null;
-      fboB = texB ? makeFbo(texB) : null;
-      if (fboA && fboB) {
-        gl.bindFramebuffer(gl.FRAMEBUFFER, fboA);
-        gl.clearColor(0.5, 0.5, 0, 1);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.bindFramebuffer(gl.FRAMEBUFFER, fboB);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-      }
-    };
-
-    const uploadBackdrop = () => {
-      if (sceneTex) gl.deleteTexture(sceneTex);
-      sceneTex = null;
-      const backdrop = buildBackdrop(canvas.width, canvas.height);
-      if (!backdrop) return;
-      const t = gl.createTexture();
-      if (!t) return;
-      sceneTex = t;
-      gl.bindTexture(gl.TEXTURE_2D, t);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, backdrop);
-    };
-
-    const rebuildAll = () => {
-      if (sizeCanvas()) uploadBackdrop();
-      rebuildSim();
-    };
-    rebuildAll();
-
-    const ro = new ResizeObserver(rebuildAll);
-    if (canvas.parentElement) ro.observe(canvas.parentElement);
-
-    let targetX = 0;
-    let targetY = 0;
-    let currentX = 0;
-    let currentY = 0;
-    let prevX = 0;
-    let prevY = 0;
-    let velX = 0;
-    let velY = 0;
-    let userInteracting = false;
-    let windAcc = 0;
-    let ambientAcc = 0;
-    let cursor = { x: 0.62, y: 0.5 };
+    resize();
+    const ro = new ResizeObserver(resize);
+    ro.observe(parent);
 
     const onMove = (e: PointerEvent) => {
-      targetX = e.clientX;
-      targetY = e.clientY;
-      userInteracting = true;
-    };
-    window.addEventListener("pointermove", onMove, { passive: true });
-
-    const splat = (x: number, y: number, force: number) => {
-      if (!fboA || !texB || !splatProg) return;
-      gl.bindFramebuffer(gl.FRAMEBUFFER, fboA);
-      gl.viewport(0, 0, simW, simH);
-      gl.useProgram(splatProg);
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, texB);
-      gl.uniform1i(splatU.b, 0);
-      gl.uniform2f(splatU.pos, x, y);
-      gl.uniform1f(splatU.force, force);
-      aPos(splatProg);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      const rect = parent.getBoundingClientRect();
+      tx = e.clientX - rect.left;
+      ty = e.clientY - rect.top;
+      if (Math.hypot(tx - lastX, ty - lastY) > 14) {
+        ripples.push({ x: tx, y: ty, r: 2, alpha: 0.55 });
+        lastX = tx;
+        lastY = ty;
+        if (ripples.length > 28) ripples.shift();
+      }
     };
 
-    const renderOnce = (time: number) => {
-      if (!fboB || !texA || !renderProg || !simProg || !texB || !sceneTex) return;
+    const waveCount = 14;
 
-      gl.bindFramebuffer(gl.FRAMEBUFFER, fboB);
-      gl.viewport(0, 0, simW, simH);
-      gl.useProgram(simProg);
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, texA);
-      gl.uniform1i(simU.a, 0);
-      gl.uniform2f(simU.texel, 1 / simW, 1 / simH);
-      aPos(simProg);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    const draw = (t: number) => {
+      ctx.clearRect(0, 0, width, height);
 
-      const tmpT = texA;
-      texA = texB;
-      texB = tmpT;
-      const tmpF = fboA;
-      fboA = fboB;
-      fboB = tmpF;
-
-      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      gl.useProgram(renderProg);
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, texA);
-      gl.uniform1i(renU.h, 0);
-      gl.activeTexture(gl.TEXTURE1);
-      gl.bindTexture(gl.TEXTURE_2D, sceneTex);
-      gl.uniform1i(renU.scene, 1);
-      gl.uniform2f(renU.texel, 1 / simW, 1 / simH);
-      gl.uniform1f(renU.time, time * 0.001);
-      gl.uniform2f(renU.cursor, cursor.x, cursor.y);
-      aPos(renderProg);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-    };
-
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    let raf = 0;
-    let lastNow = performance.now();
-    const frameHist: number[] = [];
-    let slowCount = 0;
-    let stopped = false;
-
-    const loop = (time: number) => {
-      if (stopped) return;
-
-      if (userInteracting) {
-        currentX += (targetX - currentX) * 0.18;
-        currentY += (targetY - currentY) * 0.18;
-        velX = currentX - prevX;
-        velY = currentY - prevY;
-        prevX = currentX;
-        prevY = currentY;
-        userInteracting = false;
-      } else {
-        velX *= 0.9;
-        velY *= 0.9;
+      if (tx > -900) {
+        cx += (tx - cx) * 0.09;
+        cy += (ty - cy) * 0.09;
       }
 
-      const uvX = (currentX - rectCache.left) / rectCache.width;
-      const uvY = 1 - (currentY - rectCache.top) / rectCache.height;
-      const speed = Math.hypot(velX, velY);
-      if (uvX >= 0 && uvX <= 1 && uvY >= 0 && uvY <= 1 && speed > 1.2) {
-        splat(uvX, Math.min(uvY, 0.98), Math.min(0.25, speed * 0.07));
-      }
-      cursor = { x: uvX, y: uvY };
+      for (let i = 0; i < waveCount; i++) {
+        const y = (height / (waveCount - 1)) * i;
+        const amp = 7 + (i % 4) * 5;
+        const speed = 0.0012 + (i % 5) * 0.00045;
+        const phase = i * 1.9;
+        const alpha = 0.28 + ((i % 6) / 6) * 0.32;
 
-      ambientAcc += 16.6;
-      if (ambientAcc > 180 + Math.random() * 120) {
-        ambientAcc = 0;
-        splat(0.08 + Math.random() * 0.84, 0.52 + Math.random() * 0.42, 0.006 + Math.random() * 0.012);
-      }
+        ctx.beginPath();
+        for (let x = 0; x <= width; x += 3) {
+          let yy =
+            y +
+            Math.sin(x * 0.005 + t * speed + phase) * amp +
+            Math.sin(x * 0.002 + phase * 1.3) * amp * 0.8;
 
-      windAcc += 16.6;
-      if (windAcc > 400 + Math.random() * 250) {
-        windAcc = 0;
-        splat(Math.random(), 0.66 + Math.random() * 0.3, 0.007);
-      }
+          const dx = x - cx;
+          const dy = yy - cy;
+          const d2 = dx * dx + dy * dy;
+          const push = Math.exp(-d2 / 7000) * Math.sin(dx * 0.06 - t * 0.006) * 34;
+          yy += push;
 
-      renderOnce(time);
-
-      // Rolling average frame time — smooth adaptation with hysteresis.
-      // Sim resolution only: backdrop is untouched, so adaptation is cheap.
-      const frameDt = time - lastNow;
-      lastNow = time;
-      frameHist.push(frameDt);
-      if (frameHist.length > 30) frameHist.shift();
-      if (frameHist.length === 30) {
-        const avg = frameHist.reduce((a, b) => a + b, 0) / 30;
-        if (avg > 26 && simScale > 0.5) {
-          simScale = Math.max(0.5, simScale * 0.7);
-          rebuildSim();
-        } else if (avg < 20 && simScale < 1) {
-          simScale = Math.min(1, simScale * 1.3);
-          rebuildSim();
+          if (x === 0) ctx.moveTo(x, yy);
+          else ctx.lineTo(x, yy);
         }
-        if (avg > 60) {
-          slowCount += 1;
-          if (slowCount > 45) {
-            console.warn("[water] sustained slow frames, switching to static band");
-            stopped = true;
-            canvas.style.display = "none";
-            return;
-          }
-        } else if (slowCount > 0) {
-          slowCount = 0;
+
+        ctx.strokeStyle = `rgba(255,255,255,${alpha * 0.4})`;
+        ctx.lineWidth = 7;
+        ctx.globalAlpha = 0.6;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+
+        ctx.strokeStyle = `rgba(188,98,124,${alpha})`;
+        ctx.lineWidth = 1.6;
+        ctx.stroke();
+      }
+
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const rp = ripples[i];
+        rp.r += 1.4;
+        rp.alpha *= 0.95;
+        if (rp.alpha < 0.02) {
+          ripples.splice(i, 1);
+          continue;
+        }
+        for (let ring = 0; ring < 4; ring++) {
+          const rr = rp.r + ring * 14;
+          ctx.beginPath();
+          ctx.arc(rp.x, rp.y, rr, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(190,100,124,${rp.alpha * (1 - ring / 4)})`;
+          ctx.lineWidth = 1.8 - ring * 0.35;
+          ctx.stroke();
         }
       }
-
-      if (!reduced) raf = requestAnimationFrame(loop);
     };
+
+    window.addEventListener("pointermove", onMove);
 
     if (reduced) {
-      renderOnce(0);
+      draw(0);
     } else {
+      const loop = (t: number) => {
+        draw(t);
+        raf = requestAnimationFrame(loop);
+      };
       raf = requestAnimationFrame(loop);
     }
 
     return () => {
-      stopped = true;
       cancelAnimationFrame(raf);
       ro.disconnect();
       window.removeEventListener("pointermove", onMove);
-      const ext = gl.getExtension("WEBGL_lose_context");
-      ext?.loseContext();
     };
   }, []);
 

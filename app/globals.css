@@ -440,30 +440,6 @@
   }
 }
 
-/* Water fallback band — sits behind the WebGL canvas; if the simulation
-   can't run (no WebGL2 / too slow) the band alone carries the hero. */
-.water-band {
-  background: linear-gradient(
-    to bottom,
-    #f8f3ee 0%,
-    #ecf0f1 45%,
-    #d6e1e8 58%,
-    #9db6c9 82%,
-    #7e9ab1 100%
-  );
-}
-.water-band::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    60% 34% at 52% 62%,
-    rgba(255, 243, 232, 0.9),
-    transparent 70%
-  );
-  pointer-events: none;
-}
-
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
