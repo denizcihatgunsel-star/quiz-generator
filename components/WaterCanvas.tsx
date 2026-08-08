@@ -215,7 +215,7 @@ export default function WaterCanvas({ className }: { className?: string }) {
       b.height = h;
       const c = b.getContext("2d");
       if (!c) return null;
-      const hy = h * 0.42;
+      const hy = h * 0.44;
 
       const sky = c.createLinearGradient(0, 0, 0, hy);
       sky.addColorStop(0, "#FDF8F1");
@@ -291,29 +291,9 @@ export default function WaterCanvas({ className }: { className?: string }) {
         c.fillRect(0, -h * 0.012, len, h * 0.024);
         c.restore();
       };
-      streak(0.32, w * 0.85, 0.09, 0.09);
-      streak(0.55, w * 0.95, 0.12, 0.05);
-      streak(0.78, w * 0.8, 0.07, 0.12);
-
-      // static painted swell so the scene reads as open water
-      for (let i = 0; i < 18; i++) {
-        const depth = Math.pow((i + 1) / 18, 1.4);
-        const y = hy + depth * (h - hy);
-        const amp = 0.8 + depth * depth * 9;
-        const phase = i * 1.73;
-        const near = depth > 0.45;
-        c.strokeStyle = near
-          ? "rgba(96, 128, 150, 0.35)"
-          : "rgba(214, 230, 240, 0.5)";
-        c.lineWidth = 0.6 + depth * 1.6;
-        c.beginPath();
-        for (let x = 0; x <= w; x += w / 48) {
-          const yy = y + Math.sin(x * 0.018 * (1 + depth * 2) + phase) * amp;
-          if (x === 0) c.moveTo(x, yy);
-          else c.lineTo(x, yy);
-        }
-        c.stroke();
-      }
+      streak(0.32, w * 0.85, 0.06, 0.09);
+      streak(0.55, w * 0.95, 0.08, 0.05);
+      streak(0.78, w * 0.8, 0.05, 0.12);
 
       // quiet sparkle dots under the sun
       for (let i = 0; i < 22; i++) {
@@ -334,6 +314,10 @@ export default function WaterCanvas({ className }: { className?: string }) {
     const rebuild = () => {
       const rect = canvas.parentElement?.getBoundingClientRect();
       if (!rect || rect.width < 4 || rect.height < 4) return;
+      rectCache.left = rect.left;
+      rectCache.top = rect.top;
+      rectCache.width = rect.width;
+      rectCache.height = rect.height;
       const scale = Math.min(window.devicePixelRatio || 1, 1.15, Math.sqrt(1.2e6 / (rect.width * rect.height)));
       canvas.width = Math.max(1, Math.round(rect.width * scale * 0.85));
       canvas.height = Math.max(1, Math.round(rect.height * scale * 0.85));
@@ -367,27 +351,28 @@ export default function WaterCanvas({ className }: { className?: string }) {
     const ro = new ResizeObserver(rebuild);
     if (canvas.parentElement) ro.observe(canvas.parentElement);
 
-    let cursorUv = { x: -2, y: -2 };
-    let lastUv = { x: 0, y: 0 };
-    let lastMove = -999;
-    let velLen = 0;
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let prevX = 0;
+    let prevY = 0;
+    let velX = 0;
+    let velY = 0;
+    let userInteracting = false;
     let windAcc = 0;
+    let ambientAcc = 0;
     let cursor = { x: 0.62, y: 0.5 };
+    const rectCache = { left: 0, top: 0, width: 0, height: 0 };
 
+    // Rule 1: the listener ONLY records raw coordinates. No rect queries,
+    // no math, no velocity. Passive so the browser never blocks on it.
     const onMove = (e: PointerEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      if (rect.width === 0 || rect.height === 0) return;
-      const x = (e.clientX - rect.left) / rect.width;
-      const y = 1 - (e.clientY - rect.top) / rect.height;
-      const now = performance.now();
-      const dt = Math.max(8, now - lastMove);
-      velLen = Math.hypot(((x - lastUv.x) / dt) * 1000, ((y - lastUv.y) / dt) * 1000);
-      lastUv = { x, y };
-      lastMove = now;
-      cursorUv = { x, y };
-      cursor = { x, y };
+      targetX = e.clientX;
+      targetY = e.clientY;
+      userInteracting = true;
     };
-    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointermove", onMove, { passive: true });
 
     const splat = (x: number, y: number, force: number) => {
       if (!fboA || !texB || !splatProg) return;
@@ -448,19 +433,43 @@ export default function WaterCanvas({ className }: { className?: string }) {
 
     const loop = (time: number) => {
       if (stopped) return;
-      const since = time - lastMove;
-      const overCanvas =
-        cursorUv.x >= 0 && cursorUv.x <= 1 && cursorUv.y >= 0 && cursorUv.y <= 1;
-      if (overCanvas && since < 90 && velLen > 0.02) {
-        splat(cursorUv.x, Math.min(cursorUv.y, 0.98), Math.min(0.3, velLen * 0.04));
-        velLen = 0;
+
+      // Rule 2: velocity is computed exactly once per frame, here in the loop.
+      if (userInteracting) {
+        currentX += (targetX - currentX) * 0.18;
+        currentY += (targetY - currentY) * 0.18;
+        velX = currentX - prevX;
+        velY = currentY - prevY;
+        prevX = currentX;
+        prevY = currentY;
+        userInteracting = false;
+      } else {
+        velX *= 0.9;
+        velY *= 0.9;
       }
-      velLen *= 0.86;
+
+      const uvX = (currentX - rectCache.left) / rectCache.width;
+      const uvY = 1 - (currentY - rectCache.top) / rectCache.height;
+      const speed = Math.hypot(velX, velY);
+      if (uvX >= 0 && uvX <= 1 && uvY >= 0 && uvY <= 1 && speed > 0.3) {
+        splat(uvX, Math.min(uvY, 0.98), Math.min(0.3, speed * 0.09));
+      }
+      cursor = { x: uvX, y: uvY };
+
+      // The water is never still: constant small ambient ripples
+      ambientAcc += 16.6;
+      if (ambientAcc > 130 + Math.random() * 90) {
+        ambientAcc = 0;
+        const n = 1 + Math.floor(Math.random() * 2);
+        for (let i = 0; i < n; i++) {
+          splat(0.08 + Math.random() * 0.84, 0.52 + Math.random() * 0.42, 0.006 + Math.random() * 0.014);
+        }
+      }
 
       windAcc += 16.6;
-      if (windAcc > 240 + Math.random() * 160) {
+      if (windAcc > 320 + Math.random() * 200) {
         windAcc = 0;
-        splat(Math.random(), 0.7 + Math.random() * 0.28, 0.007);
+        splat(Math.random(), 0.66 + Math.random() * 0.3, 0.008);
       }
 
       renderOnce(time);
