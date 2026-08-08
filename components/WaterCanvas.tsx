@@ -187,6 +187,7 @@ export default function WaterCanvas({ className }: { className?: string }) {
     let fboB: WebGLFramebuffer | null = null;
     let sceneTex: WebGLTexture | null = null;
     let resScale = 1;
+    const rectCache = { left: 0, top: 0, width: 0, height: 0 };
 
     const makeTex = () => {
       const t = gl.createTexture();
@@ -363,7 +364,6 @@ export default function WaterCanvas({ className }: { className?: string }) {
     let windAcc = 0;
     let ambientAcc = 0;
     let cursor = { x: 0.62, y: 0.5 };
-    const rectCache = { left: 0, top: 0, width: 0, height: 0 };
 
     // Rule 1: the listener ONLY records raw coordinates. No rect queries,
     // no math, no velocity. Passive so the browser never blocks on it.
