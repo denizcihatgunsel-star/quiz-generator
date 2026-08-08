@@ -10,8 +10,6 @@ void main() {
   gl_Position = vec4(a_pos, 0.0, 1.0);
 }`;
 
-// Phase 2 — discrete 2D wave equation on a ping-pong FBO heightfield.
-// Heights are stored with a 0.5 bias so troughs survive unsigned RGBA8.
 const SIM_FRAG = `#version 300 es
 precision highp float;
 uniform sampler2D u_a;
@@ -31,7 +29,6 @@ void main() {
   o = vec4(nxt * 0.5 + 0.5, h * 0.5 + 0.5, 0.0, 1.0);
 }`;
 
-// Mouse velocity impulses drawn into the heightfield.
 const SPLAT_FRAG = `#version 300 es
 precision highp float;
 uniform sampler2D u_b;
@@ -47,10 +44,6 @@ void main() {
   o = vec4(c.r + g * 0.5, c.g, 0.0, 1.0);
 }`;
 
-// Phase 3+4 — the liquid glass layer. Samples the STILL backdrop texture
-// with Sobel-gradient offsets (Snell's-law refraction) so the scene bends
-// like thick gel under the cursor. Phase 5 — Blinn-Phong specular + softbox
-// glare + crest sparks on top. No opaque water color: the scene stays visible.
 const RENDER_FRAG = `#version 300 es
 precision highp float;
 uniform sampler2D u_h;
@@ -73,30 +66,21 @@ void main() {
   vec2 g = vec2(hr - hl, hd - hu);
   float slope = length(g);
 
-  // refraction: bend the backdrop lookup by the local slope
   vec2 off = g * 0.11 + g * 0.10 * smoothstep(0.02, 0.18, slope);
   vec3 col = texture(u_scene, clamp(uv + off, 0.001, 0.999)).rgb;
 
-  // surface normal from the Sobel gradient
   vec3 N = normalize(vec3(-g.x * 12.0, 1.0, -g.y * 12.0));
-
-  // Blinn-Phong studio light (Z toward the screen, per the reference)
   vec3 L = normalize(vec3(0.5, 0.5, 2.0));
   vec3 H = normalize(L + vec3(0.0, 0.0, 1.0));
   float spec = pow(max(dot(N, H), 0.0), 96.0);
   float fres = pow(1.0 - N.y, 3.0);
 
-  // softbox glare streak following the cursor
   vec2 dc = uv - u_cursor;
   float glare = exp(-dot(dc, dc) * 16.0) * 0.55;
-
-  // bright sparks on near-horizontal wave slopes (sun on water)
   float sparks = pow(clamp(slope * 6.0, 0.0, 1.0), 3.0) * 0.5;
 
   col += vec3(1.0, 0.975, 0.94) * (spec * (0.22 + glare * 0.8) + sparks * 0.5);
   col += vec3(1.0, 0.985, 0.955) * fres * 0.14;
-
-  // faint gel veil so the glass reads as a material
   col = mix(col, vec3(0.975, 0.98, 0.99), 0.035 + 0.06 * fres);
 
   o = vec4(col, 1.0);
@@ -109,10 +93,11 @@ export default function WaterCanvas({ className }: { className?: string }) {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const gl = canvas.getContext("webgl2", {
-      alpha: true,
+      alpha: false,
       antialias: false,
       depth: false,
       stencil: false,
+      powerPreference: "high-performance",
     });
     if (!gl) {
       console.warn("[water] WebGL2 not supported, showing static band");
@@ -186,7 +171,7 @@ export default function WaterCanvas({ className }: { className?: string }) {
     let fboA: WebGLFramebuffer | null = null;
     let fboB: WebGLFramebuffer | null = null;
     let sceneTex: WebGLTexture | null = null;
-    let resScale = 1;
+    let simScale = 1;
     const rectCache = { left: 0, top: 0, width: 0, height: 0 };
 
     const makeTex = () => {
@@ -209,7 +194,6 @@ export default function WaterCanvas({ className }: { className?: string }) {
       return f;
     };
 
-    // ---------- Backdrop: the still, realistic pastel seascape ----------
     const buildBackdrop = (w: number, h: number) => {
       const b = document.createElement("canvas");
       b.width = w;
@@ -296,7 +280,6 @@ export default function WaterCanvas({ className }: { className?: string }) {
       streak(0.55, w * 0.95, 0.08, 0.05);
       streak(0.78, w * 0.8, 0.05, 0.12);
 
-      // quiet sparkle dots under the sun
       for (let i = 0; i < 22; i++) {
         const yy = hy + Math.pow(Math.random(), 1.3) * h * 0.5;
         c.fillStyle = `rgba(255, 250, 240, ${0.12 + Math.random() * 0.2})`;
@@ -312,18 +295,32 @@ export default function WaterCanvas({ className }: { className?: string }) {
       return b;
     };
 
-    const rebuild = () => {
+    // Canvas is the render target: 0.6x CSS resolution (soft upscale fits the
+    // glass look and cuts the fill-rate ~3x). Backdrop only rebuilt when the
+    // canvas SIZE changes — never on sim adaptation.
+    let canvasW = 0;
+    let canvasH = 0;
+    const sizeCanvas = () => {
       const rect = canvas.parentElement?.getBoundingClientRect();
-      if (!rect || rect.width < 4 || rect.height < 4) return;
+      if (!rect || rect.width < 4 || rect.height < 4) return false;
       rectCache.left = rect.left;
       rectCache.top = rect.top;
       rectCache.width = rect.width;
       rectCache.height = rect.height;
-      const scale = Math.min(window.devicePixelRatio || 1, 1.15, Math.sqrt(1.2e6 / (rect.width * rect.height)));
-      canvas.width = Math.max(1, Math.round(rect.width * scale * 0.85));
-      canvas.height = Math.max(1, Math.round(rect.height * scale * 0.85));
-      simW = Math.max(112, Math.min(200, Math.round((rect.width / 8) * resScale)));
-      simH = Math.max(112, Math.min(200, Math.round((rect.height / 8) * resScale)));
+      let s = Math.min(window.devicePixelRatio || 1, 1) * 0.6;
+      const px = rect.width * s * rect.height * s;
+      if (px > 0.8e6) s *= Math.sqrt(0.8e6 / px);
+      canvasW = Math.max(1, Math.round(rect.width * s));
+      canvasH = Math.max(1, Math.round(rect.height * s));
+      if (canvasW === canvas.width && canvasH === canvas.height) return false;
+      canvas.width = canvasW;
+      canvas.height = canvasH;
+      return true;
+    };
+
+    const rebuildSim = () => {
+      simW = Math.max(96, Math.min(160, Math.round((rectCache.width / 10) * simScale)));
+      simH = Math.max(96, Math.min(160, Math.round((rectCache.height / 10) * simScale)));
       texA = makeTex();
       texB = makeTex();
       fboA = texA ? makeFbo(texA) : null;
@@ -335,21 +332,31 @@ export default function WaterCanvas({ className }: { className?: string }) {
         gl.bindFramebuffer(gl.FRAMEBUFFER, fboB);
         gl.clear(gl.COLOR_BUFFER_BIT);
       }
-      if (sceneTex) gl.deleteTexture(sceneTex);
-      const backdrop = buildBackdrop(canvas.width, canvas.height);
-      if (backdrop) {
-        sceneTex = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, sceneTex);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, backdrop);
-      }
     };
-    rebuild();
 
-    const ro = new ResizeObserver(rebuild);
+    const uploadBackdrop = () => {
+      if (sceneTex) gl.deleteTexture(sceneTex);
+      sceneTex = null;
+      const backdrop = buildBackdrop(canvas.width, canvas.height);
+      if (!backdrop) return;
+      const t = gl.createTexture();
+      if (!t) return;
+      sceneTex = t;
+      gl.bindTexture(gl.TEXTURE_2D, t);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, backdrop);
+    };
+
+    const rebuildAll = () => {
+      if (sizeCanvas()) uploadBackdrop();
+      rebuildSim();
+    };
+    rebuildAll();
+
+    const ro = new ResizeObserver(rebuildAll);
     if (canvas.parentElement) ro.observe(canvas.parentElement);
 
     let targetX = 0;
@@ -365,8 +372,6 @@ export default function WaterCanvas({ className }: { className?: string }) {
     let ambientAcc = 0;
     let cursor = { x: 0.62, y: 0.5 };
 
-    // Rule 1: the listener ONLY records raw coordinates. No rect queries,
-    // no math, no velocity. Passive so the browser never blocks on it.
     const onMove = (e: PointerEvent) => {
       targetX = e.clientX;
       targetY = e.clientY;
@@ -428,13 +433,13 @@ export default function WaterCanvas({ className }: { className?: string }) {
 
     let raf = 0;
     let lastNow = performance.now();
-    let slowFrames = 0;
+    const frameHist: number[] = [];
+    let slowCount = 0;
     let stopped = false;
 
     const loop = (time: number) => {
       if (stopped) return;
 
-      // Rule 2: velocity is computed exactly once per frame, here in the loop.
       if (userInteracting) {
         currentX += (targetX - currentX) * 0.18;
         currentY += (targetY - currentY) * 0.18;
@@ -451,49 +456,51 @@ export default function WaterCanvas({ className }: { className?: string }) {
       const uvX = (currentX - rectCache.left) / rectCache.width;
       const uvY = 1 - (currentY - rectCache.top) / rectCache.height;
       const speed = Math.hypot(velX, velY);
-      if (uvX >= 0 && uvX <= 1 && uvY >= 0 && uvY <= 1 && speed > 0.3) {
-        splat(uvX, Math.min(uvY, 0.98), Math.min(0.3, speed * 0.09));
+      if (uvX >= 0 && uvX <= 1 && uvY >= 0 && uvY <= 1 && speed > 1.2) {
+        splat(uvX, Math.min(uvY, 0.98), Math.min(0.25, speed * 0.07));
       }
       cursor = { x: uvX, y: uvY };
 
-      // The water is never still: constant small ambient ripples
       ambientAcc += 16.6;
-      if (ambientAcc > 130 + Math.random() * 90) {
+      if (ambientAcc > 180 + Math.random() * 120) {
         ambientAcc = 0;
-        const n = 1 + Math.floor(Math.random() * 2);
-        for (let i = 0; i < n; i++) {
-          splat(0.08 + Math.random() * 0.84, 0.52 + Math.random() * 0.42, 0.006 + Math.random() * 0.014);
-        }
+        splat(0.08 + Math.random() * 0.84, 0.52 + Math.random() * 0.42, 0.006 + Math.random() * 0.012);
       }
 
       windAcc += 16.6;
-      if (windAcc > 320 + Math.random() * 200) {
+      if (windAcc > 400 + Math.random() * 250) {
         windAcc = 0;
-        splat(Math.random(), 0.66 + Math.random() * 0.3, 0.008);
+        splat(Math.random(), 0.66 + Math.random() * 0.3, 0.007);
       }
 
       renderOnce(time);
 
+      // Rolling average frame time — smooth adaptation with hysteresis.
+      // Sim resolution only: backdrop is untouched, so adaptation is cheap.
       const frameDt = time - lastNow;
       lastNow = time;
-      if (frameDt > 45 && resScale > 0.55) {
-        resScale *= 0.8;
-        rebuild();
-      } else if (frameDt < 25 && resScale < 1) {
-        resScale = Math.min(1, resScale * 1.2);
-        rebuild();
-      }
-
-      if (frameDt > 55) {
-        slowFrames += 1;
-        if (slowFrames > 60) {
-          console.warn("[water] sustained slow frames, switching to static band");
-          stopped = true;
-          canvas.style.display = "none";
-          return;
+      frameHist.push(frameDt);
+      if (frameHist.length > 30) frameHist.shift();
+      if (frameHist.length === 30) {
+        const avg = frameHist.reduce((a, b) => a + b, 0) / 30;
+        if (avg > 26 && simScale > 0.5) {
+          simScale = Math.max(0.5, simScale * 0.7);
+          rebuildSim();
+        } else if (avg < 20 && simScale < 1) {
+          simScale = Math.min(1, simScale * 1.3);
+          rebuildSim();
         }
-      } else if (slowFrames > 0) {
-        slowFrames = 0;
+        if (avg > 60) {
+          slowCount += 1;
+          if (slowCount > 45) {
+            console.warn("[water] sustained slow frames, switching to static band");
+            stopped = true;
+            canvas.style.display = "none";
+            return;
+          }
+        } else if (slowCount > 0) {
+          slowCount = 0;
+        }
       }
 
       if (!reduced) raf = requestAnimationFrame(loop);
