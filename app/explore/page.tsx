@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import SiteHeader from "@/components/SiteHeader";
 
 interface PublicQuiz {
   id: string;
@@ -11,6 +12,18 @@ interface PublicQuiz {
   questionCount: number;
   createdAt: string;
 }
+
+const SEARCH = (
+  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+  </svg>
+);
+
+const ARROW = (
+  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M7 17L17 7m0 0H8m9 0v9" />
+  </svg>
+);
 
 export default function ExplorePage() {
   const [quizzes, setQuizzes] = useState<PublicQuiz[]>([]);
@@ -39,92 +52,101 @@ export default function ExplorePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f5f0]">
-      <header className="border-b border-neutral-200 bg-[#f5f5f0]/80 backdrop-blur-xl sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <img src="/logo.png" alt="Examina" className="w-8 h-8 rounded-xl object-cover" />
-            <span className="font-semibold text-neutral-900 text-lg">Examina</span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/dashboard" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">Dashboard</Link>
-            <Link href="/" className="text-sm text-violet-600 hover:text-violet-500 transition-colors">Create Quiz</Link>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background">
+      <SiteHeader />
 
-      <main className="max-w-5xl mx-auto px-4 py-10">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-neutral-900 tracking-tight">Explore Quizzes</h1>
-          <p className="text-neutral-500 mt-1">Browse quizzes shared by the Examina community</p>
+      <main className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6">
+        <div className="mb-10">
+          <p className="mb-3 font-serif text-sm italic text-[#B0607A]">Community library</p>
+          <h1 className="text-4xl font-medium tracking-tight text-[#3B2027] sm:text-5xl">
+            Explore <span className="font-serif italic text-[#B0607A]">quizzes</span>
+          </h1>
+          <p className="mt-3 max-w-md text-sm leading-relaxed text-[#9A7280]">
+            Browse quizzes shared by the Examina community.
+          </p>
         </div>
 
         {/* Search */}
-        <div className="mb-8">
+        <div className="relative mb-8 max-w-md">
+          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#B4939F]">
+            {SEARCH}
+          </span>
           <input
             type="text"
             value={search}
             onChange={(e) => handleSearch(e.target.value)}
             placeholder="Search by topic..."
-            className="w-full max-w-md px-4 py-2.5 rounded-xl border border-neutral-200 bg-white text-neutral-900 placeholder-neutral-400 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 transition shadow-sm"
+            className="w-full rounded-full border border-[#F3D5DC] bg-white/70 py-3 pl-11 pr-4 text-sm text-[#3B2027] shadow-[0_12px_40px_-24px_rgba(176,96,122,0.5)] backdrop-blur-xl transition-all placeholder:text-[#B4939F] focus:border-[#E9B8C4] focus:outline-none focus:ring-2 focus:ring-[#B0607A]/30"
           />
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-16">
-            <div className="flex gap-1">
+          <div className="flex justify-center py-24">
+            <div className="flex gap-1.5">
               {[0, 1, 2].map((i) => (
-                <div key={i} className="w-2 h-2 rounded-full bg-violet-500 animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />
+                <div
+                  key={i}
+                  className="h-2 w-2 animate-bounce rounded-full bg-[#B0607A]"
+                  style={{ animationDelay: `${i * 150}ms` }}
+                />
               ))}
             </div>
           </div>
         ) : quizzes.length === 0 ? (
-          <div className="text-center py-16 rounded-2xl bg-white border border-neutral-200 shadow-sm">
-            <p className="text-neutral-500 mb-2">No quizzes found</p>
-            <p className="text-sm text-neutral-400">Be the first to publish a quiz from your dashboard!</p>
+          <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 px-6 py-20 text-center backdrop-blur-xl">
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#FDE8EC] to-[#FBF1EE]">
+              <svg className="h-7 w-7 text-[#B0607A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <p className="mb-2 font-serif text-2xl italic text-[#3B2027]">No quizzes found</p>
+            <p className="text-sm text-[#9A7280]">Be the first to publish a quiz from your dashboard!</p>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {quizzes.map((q) => (
                 <Link
                   key={q.id}
                   href={`/quiz/${q.shareId}`}
-                  className="group p-5 rounded-2xl bg-white border border-neutral-200 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all"
+                  className="group flex flex-col rounded-2xl border border-[#F3D5DC] bg-white/70 p-6 shadow-[0_16px_50px_-28px_rgba(176,96,122,0.45)] backdrop-blur-xl transition-all hover:border-[#E9B8C4] hover:shadow-[0_24px_60px_-24px_rgba(176,96,122,0.55)]"
                 >
-                  <h3 className="text-sm font-medium text-neutral-900 group-hover:text-violet-600 transition-colors mb-2 line-clamp-2">
+                  <h3 className="mb-4 line-clamp-2 font-medium text-[#3B2027] transition-colors group-hover:text-[#B0607A]">
                     {q.topic}
                   </h3>
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs text-neutral-400">
-                      {q.questionCount} questions
-                    </p>
-                    <p className="text-xs text-neutral-400">
-                      by {q.author}
-                    </p>
+                  <div className="mt-auto">
+                    <div className="mb-3 flex items-center justify-between border-b border-[#F6EBEE] pb-3">
+                      <p className="text-xs text-[#9A7280]">{q.questionCount} questions</p>
+                      <p className="max-w-[45%] truncate text-xs text-[#9A7280]">by {q.author}</p>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs text-[#B4939F]">
+                        {new Date(q.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                      </p>
+                      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#FDE8EC] text-[#B0607A] transition-all group-hover:bg-[#B0607A] group-hover:text-white">
+                        {ARROW}
+                      </span>
+                    </div>
                   </div>
-                  <p className="text-xs text-neutral-300 mt-2">
-                    {new Date(q.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                  </p>
                 </Link>
               ))}
             </div>
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 mt-8">
+              <div className="mt-10 flex items-center justify-center gap-2">
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="px-3 py-1.5 rounded-lg border border-neutral-200 text-sm text-neutral-600 hover:bg-neutral-50 disabled:opacity-40 transition-colors"
+                  className="rounded-full border border-[#F3D5DC] bg-white/70 px-4 py-2 text-sm text-[#9A7280] transition-all hover:text-[#3B2027] disabled:opacity-40"
                 >
                   Previous
                 </button>
-                <span className="text-sm text-neutral-400">Page {page} of {totalPages}</span>
+                <span className="px-3 text-sm text-[#9A7280]">Page {page} of {totalPages}</span>
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  className="px-3 py-1.5 rounded-lg border border-neutral-200 text-sm text-neutral-600 hover:bg-neutral-50 disabled:opacity-40 transition-colors"
+                  className="rounded-full border border-[#F3D5DC] bg-white/70 px-4 py-2 text-sm text-[#9A7280] transition-all hover:text-[#3B2027] disabled:opacity-40"
                 >
                   Next
                 </button>
