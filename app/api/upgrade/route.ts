@@ -11,25 +11,22 @@ export async function POST(req: NextRequest) {
 
   const { plan } = await req.json();
 
-  if (!plan || !(plan in PLANS)) {
-    return NextResponse.json({ error: "Invalid plan." }, { status: 400 });
+  // Only the free plan can be granted here — paid plans require a verified
+  // Stripe payment through /api/checkout + webhook/verify.
+  if (plan !== "free") {
+    return NextResponse.json({ error: "Paid plans must be purchased through checkout." }, { status: 400 });
   }
-
-  const planDetails = PLANS[plan as PlanId];
 
   await db.subscription.upsert({
     where: { userId: session.user.id },
-    update: { plan, status: "active" },
-    create: { userId: session.user.id, plan, status: "active" },
+    update: { plan: "free", status: "active" },
+    create: { userId: session.user.id, plan: "free", status: "active" },
   });
 
   return NextResponse.json({
     success: true,
-    plan,
-    name: planDetails.name,
-    message:
-      plan === "free"
-        ? "Downgraded to Free."
-        : `Upgraded to ${planDetails.name}! Enjoy your ${planDetails.quizzesPerMonth === Infinity ? "unlimited" : planDetails.quizzesPerMonth + "/month"} quizzes.`,
+    plan: "free",
+    name: PLANS.free.name,
+    message: "Downgraded to Free.",
   });
 }

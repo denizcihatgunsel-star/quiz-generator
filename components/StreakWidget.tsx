@@ -41,7 +41,7 @@ export default function StreakWidget() {
   useEffect(() => {
     fetch("/api/streak")
       .then((r) => r.json())
-      .then(setData)
+      .then((d) => { if (!d.error) setData(d); })
       .catch(() => {});
   }, []);
 

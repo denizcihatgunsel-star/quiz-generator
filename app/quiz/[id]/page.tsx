@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, use, useRef } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { QuizData } from "@/types/quiz";
@@ -38,6 +38,7 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
   const [copied, setCopied] = useState(false);
   const [taking, setTaking] = useState(false);
   const [attempts, setAttempts] = useState<Attempt[] | null>(null);
+  const submittingRef = useRef(false);
 
   const theme = getQuizTheme(quiz?.theme);
 
@@ -79,13 +80,17 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
   };
 
   const handleTakeComplete = async (correct: number, total: number) => {
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     try {
       await fetch(`/api/quiz/${id}/take`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ score: correct, total }),
       });
-    } catch { /* ignore */ }
+    } catch { /* ignore */ } finally {
+      submittingRef.current = false;
+    }
     setTaking(false);
     loadAttempts();
   };

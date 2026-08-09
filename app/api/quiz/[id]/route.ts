@@ -14,17 +14,31 @@ export async function GET(
     let quiz = await db.savedQuiz.findUnique({ where: { shareId: id } });
 
     if (!quiz) {
-      quiz = await db.savedQuiz.findUnique({ where: { id } });
+      const byId = await db.savedQuiz.findUnique({ where: { id } });
+      if (byId) {
+        // Internal-id access requires ownership (or the quiz being public)
+        if (byId.userId !== session?.user?.id && !byId.isPublic) {
+          return NextResponse.json({ error: "Quiz not found." }, { status: 404 });
+        }
+        quiz = byId;
+      }
     }
 
     if (!quiz) {
       return NextResponse.json({ error: "Quiz not found." }, { status: 404 });
     }
 
+    let data: unknown;
+    try {
+      data = JSON.parse(quiz.data);
+    } catch {
+      return NextResponse.json({ error: "This quiz is corrupted." }, { status: 500 });
+    }
+
     return NextResponse.json({
       id: quiz.id,
       topic: quiz.topic,
-      data: JSON.parse(quiz.data),
+      data,
       theme: quiz.theme,
       isOwner: quiz.userId === session?.user?.id,
       score: quiz.score,

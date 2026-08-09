@@ -292,51 +292,6 @@ export default function DashboardPage() {
 
         {showAdminPanel && session?.user?.email === "denizcihatgunsel@gmail.com" && (
           <div className="mb-12 rounded-2xl border border-[#F3D5DC] bg-white/70 p-6 shadow-[0_16px_50px_-24px_rgba(176,96,122,0.4)] backdrop-blur-xl">
-        {achievements.length > 0 && (
-          <div className="mb-12 rounded-2xl border border-[#F3D5DC] bg-white/70 p-6 shadow-[0_16px_50px_-28px_rgba(176,96,122,0.4)] backdrop-blur-xl">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="font-serif text-xl italic text-[#3B2027]">Achievements</h2>
-              <span className="text-xs text-[#9A7280]">
-                {achievements.filter((a) => a.unlocked).length} of {achievements.length} unlocked
-              </span>
-            </div>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-              {achievements.map((a) => (
-                <div
-                  key={a.code}
-                  title={a.unlocked ? a.description : `Locked — ${a.description}`}
-                  className={`flex flex-col items-center gap-2 rounded-2xl border p-4 text-center transition-all ${
-                    a.unlocked
-                      ? "border-[#E9B8C4] bg-gradient-to-br from-[#FDE8EC] to-[#FBF1EE] shadow-[0_10px_30px_-18px_rgba(176,96,122,0.6)]"
-                      : "border-[#F3D5DC] bg-white/50 opacity-60"
-                  }`}
-                >
-                  <div
-                    className={`flex h-11 w-11 items-center justify-center rounded-full ${
-                      a.unlocked
-                        ? "bg-gradient-to-br from-[#B0607A] to-[#E9A8B8] text-white"
-                        : "border border-[#F3D5DC] bg-[#F6EBEE] text-[#B4939F]"
-                    }`}
-                  >
-                    {a.unlocked ? (
-                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                      </svg>
-                    ) : (
-                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                      </svg>
-                    )}
-                  </div>
-                  <div>
-                    <p className={`text-xs font-semibold ${a.unlocked ? "text-[#7E3E55]" : "text-[#9A7280]"}`}>{a.name}</p>
-                    <p className="mt-0.5 text-[10px] leading-tight text-[#B4939F]">{a.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
               <h2 className="font-serif text-2xl italic text-[#3B2027]">Admin — user management</h2>
@@ -415,6 +370,52 @@ export default function DashboardPage() {
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {achievements.length > 0 && (
+          <div className="mb-12 rounded-2xl border border-[#F3D5DC] bg-white/70 p-6 shadow-[0_16px_50px_-28px_rgba(176,96,122,0.4)] backdrop-blur-xl">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="font-serif text-xl italic text-[#3B2027]">Achievements</h2>
+              <span className="text-xs text-[#9A7280]">
+                {achievements.filter((a) => a.unlocked).length} of {achievements.length} unlocked
+              </span>
+            </div>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+              {achievements.map((a) => (
+                <div
+                  key={a.code}
+                  title={a.unlocked ? a.description : `Locked — ${a.description}`}
+                  className={`flex flex-col items-center gap-2 rounded-2xl border p-4 text-center transition-all ${
+                    a.unlocked
+                      ? "border-[#E9B8C4] bg-gradient-to-br from-[#FDE8EC] to-[#FBF1EE] shadow-[0_10px_30px_-18px_rgba(176,96,122,0.6)]"
+                      : "border-[#F3D5DC] bg-white/50 opacity-60"
+                  }`}
+                >
+                  <div
+                    className={`flex h-11 w-11 items-center justify-center rounded-full ${
+                      a.unlocked
+                        ? "bg-gradient-to-br from-[#B0607A] to-[#E9A8B8] text-white"
+                        : "border border-[#F3D5DC] bg-[#F6EBEE] text-[#B4939F]"
+                    }`}
+                  >
+                    {a.unlocked ? (
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                      </svg>
+                    ) : (
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div>
+                    <p className={`text-xs font-semibold ${a.unlocked ? "text-[#7E3E55]" : "text-[#9A7280]"}`}>{a.name}</p>
+                    <p className="mt-0.5 text-[10px] leading-tight text-[#B4939F]">{a.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 

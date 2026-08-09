@@ -78,7 +78,7 @@ export const PLANS: Record<PlanId, Plan> = {
 };
 
 export function getPlan(planId: string): Plan {
-  return PLANS[planId as PlanId] ?? PLANS.free;
+  return Object.hasOwn(PLANS, planId) ? PLANS[planId as PlanId] : PLANS.free;
 }
 
 export function currentMonth(): string {

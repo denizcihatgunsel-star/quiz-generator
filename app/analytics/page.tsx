@@ -39,7 +39,7 @@ export default function AnalyticsPage() {
     if (session) {
       fetch("/api/analytics")
         .then((r) => r.json())
-        .then(setData)
+        .then((d) => { if (!d.error) setData(d); })
         .finally(() => setLoading(false));
     }
   }, [session]);

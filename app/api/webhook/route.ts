@@ -29,6 +29,9 @@ export async function POST(req: NextRequest) {
         const userId = session.metadata?.userId;
         const planId = session.metadata?.planId;
 
+        // Only grant the plan once funds are actually collected
+        if (session.payment_status !== "paid") break;
+
         if (userId && planId) {
           await db.subscription.upsert({
             where: { userId },

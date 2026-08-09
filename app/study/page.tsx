@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -32,6 +32,14 @@ export default function StudyPage() {
   const [totalCards, setTotalCards] = useState(0);
   const [reviewed, setReviewed] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  const submittingRef = useRef(false);
+  const advanceTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (advanceTimerRef.current !== null) window.clearTimeout(advanceTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (sessionStatus === "unauthenticated") router.push("/auth/login");
@@ -53,27 +61,32 @@ export default function StudyPage() {
   }, [session, fetchCards]);
 
   const handleGrade = async (grade: number) => {
-    if (submitting || !cards[currentIndex]) return;
+    if (submittingRef.current || !cards[currentIndex]) return;
+    submittingRef.current = true;
     setSubmitting(true);
 
-    await fetch("/api/flashcard-review", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cardId: cards[currentIndex].id, grade }),
-    });
+    try {
+      await fetch("/api/flashcard-review", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cardId: cards[currentIndex].id, grade }),
+      });
+    } catch { /* ignore */ }
 
     setReviewed((r) => r + 1);
     setFlipped(false);
 
     if (currentIndex < cards.length - 1) {
-      setTimeout(() => {
+      advanceTimerRef.current = window.setTimeout(() => {
         setCurrentIndex((i) => i + 1);
         setSubmitting(false);
+        submittingRef.current = false;
       }, 200);
     } else {
       // All done
       setCards([]);
       setSubmitting(false);
+      submittingRef.current = false;
     }
   };
 

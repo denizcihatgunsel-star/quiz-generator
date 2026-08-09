@@ -265,7 +265,9 @@ export default function QuizGenerator() {
         }
       }
 
-      // Ensure arrays exist
+      // Ensure arrays exist (guards against truncated-stream recovery)
+      if (!Array.isArray(data.multipleChoice)) data.multipleChoice = [];
+      if (!Array.isArray(data.flashcards)) data.flashcards = [];
       if (!Array.isArray(data.fillInTheBlank)) data.fillInTheBlank = [];
       if (!Array.isArray(data.trueFalse)) data.trueFalse = [];
 

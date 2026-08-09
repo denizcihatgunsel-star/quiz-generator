@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Pad = {
   ctx: AudioContext;
@@ -43,6 +43,7 @@ export default function SoundToggle() {
   };
 
   const start = () => {
+    if (padRef.current) return; // already running
     const Ctor =
       window.AudioContext ||
       (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
@@ -148,6 +149,12 @@ export default function SoundToggle() {
     }
     setOn(!on);
   };
+
+  useEffect(() => {
+    return () => {
+      if (padRef.current) stop();
+    };
+  }, []);
 
   return (
     <button

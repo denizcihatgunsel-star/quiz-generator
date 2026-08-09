@@ -79,7 +79,14 @@ export async function POST(req: NextRequest) {
   }
 
   const { quizId, score, total } = await req.json();
-  if (!quizId || typeof score !== "number" || typeof total !== "number" || total <= 0) {
+  if (
+    !quizId ||
+    !Number.isInteger(score) ||
+    !Number.isInteger(total) ||
+    score < 0 ||
+    total <= 0 ||
+    score > total
+  ) {
     return NextResponse.json({ error: "Invalid input" }, { status: 400 });
   }
 
@@ -102,6 +109,13 @@ export async function POST(req: NextRequest) {
 
   const xp = score === total ? XP_REWARDS.quiz_perfect : XP_REWARDS.daily_challenge;
   await awardXp(session.user.id, score === total ? "quiz_perfect" : "daily_challenge", xp);
+
+  // Mark the challenge as done for today (gates replays + double XP)
+  await db.userStreak.upsert({
+    where: { userId: session.user.id },
+    update: { lastChallengeDate: today() },
+    create: { userId: session.user.id, lastChallengeDate: today() },
+  });
 
   streak = await db.userStreak.findUnique({ where: { userId: session.user.id } });
 

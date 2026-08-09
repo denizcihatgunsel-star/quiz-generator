@@ -55,6 +55,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Card not found" }, { status: 404 });
   }
 
+  // Only due cards can be reviewed (prevents XP farming on the same card)
+  const now = new Date();
+  if (card.dueDate > now) {
+    return NextResponse.json({ error: "This card is not due yet." }, { status: 400 });
+  }
+  const lastReviewedDay = card.lastReviewed?.toISOString().slice(0, 10);
+  if (lastReviewedDay === now.toISOString().slice(0, 10)) {
+    return NextResponse.json({ error: "Card already reviewed today." }, { status: 400 });
+  }
+
   // Run SM-2 algorithm
   const result = supermemo(
     { interval: card.interval, repetition: card.repetition, efactor: card.efactor },

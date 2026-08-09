@@ -16,8 +16,14 @@ export async function POST(
 
   const { id } = await params;
   const { score, total } = await req.json();
-  if (typeof score !== "number" || typeof total !== "number" || total <= 0) {
-    return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+  if (
+    !Number.isInteger(score) ||
+    !Number.isInteger(total) ||
+    score < 0 ||
+    total <= 0 ||
+    score > total
+  ) {
+    return NextResponse.json({ error: "Invalid score." }, { status: 400 });
   }
 
   const quiz = await db.savedQuiz.findUnique({ where: { id } });
@@ -25,17 +31,35 @@ export async function POST(
     return NextResponse.json({ error: "Quiz not found" }, { status: 404 });
   }
 
+  // Only public quizzes (or the owner's own) can be taken for XP
+  if (quiz.userId !== session.user.id && !quiz.isPublic) {
+    return NextResponse.json({ error: "Quiz not found" }, { status: 404 });
+  }
+
   await db.quizAttempt.create({
     data: { quizId: id, userId: session.user.id, score, total },
   });
 
-  const isPerfect = score === total;
-  await awardXp(
-    session.user.id,
-    isPerfect ? "quiz_perfect" : "quiz_scored",
-    isPerfect ? XP_REWARDS.quiz_perfect : XP_REWARDS.quiz_scored
-  );
-  if (isPerfect) await unlockAchievement(session.user.id, "perfect_score");
+  // Award XP only for the first completion of this quiz per day (anti-farm)
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const attemptsToday = await db.quizAttempt.count({
+    where: {
+      quizId: id,
+      userId: session.user.id,
+      createdAt: { gte: todayStart },
+    },
+  });
+
+  if (attemptsToday <= 1) {
+    const isPerfect = score === total;
+    await awardXp(
+      session.user.id,
+      isPerfect ? "quiz_perfect" : "quiz_scored",
+      isPerfect ? XP_REWARDS.quiz_perfect : XP_REWARDS.quiz_scored
+    );
+    if (isPerfect) await unlockAchievement(session.user.id, "perfect_score");
+  }
 
   return NextResponse.json({ success: true });
 }

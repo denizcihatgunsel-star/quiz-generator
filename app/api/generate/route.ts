@@ -147,6 +147,28 @@ export async function POST(req: NextRequest) {
   // --- Stream the response to prevent Vercel timeout ---
   const encoder = new TextEncoder();
 
+  // Reserve the quota before calling the LLM so aborted/crashed
+  // streams still count (prevents unlimited free generations)
+  const rollbackUsage = async () => {
+    if (!isDemo) {
+      await db.usageRecord.updateMany({
+        where: { userId: session.user.id, month: currentMonth(), count: { gt: 0 } },
+        data: { count: { decrement: 1 } },
+      });
+    }
+  };
+
+  if (!isDemo) {
+    const userId = session.user.id;
+    const month = currentMonth();
+    await db.usageRecord.upsert({
+      where: { userId_month: { userId, month } },
+      update: { count: { increment: 1 } },
+      create: { userId, month, count: 1 },
+    });
+    await awardXp(userId, "quiz_generated", XP_REWARDS.quiz_generated);
+  }
+
   const stream = new ReadableStream({
     async start(controller) {
       try {
@@ -172,7 +194,7 @@ export async function POST(req: NextRequest) {
           }
         }
 
-        // After streaming completes, validate and increment usage
+        // After streaming completes, validate the response
         try {
           const quiz = JSON.parse(fullText);
 
@@ -186,24 +208,12 @@ export async function POST(req: NextRequest) {
             // Send error as a special marker the client can detect
             controller.enqueue(encoder.encode("\n__EXAMINA_ERROR__:Generated quiz has an invalid structure. Please try again."));
             controller.close();
+            await rollbackUsage();
             return;
-          }
-
-          // Increment usage (skip for demo)
-          if (!isDemo) {
-            const userId = session.user.id;
-            const month = currentMonth();
-            await db.usageRecord.upsert({
-              where: { userId_month: { userId, month } },
-              update: { count: { increment: 1 } },
-              create: { userId, month, count: 1 },
-            });
-
-            // Award XP for generating a quiz
-            await awardXp(userId, "quiz_generated", XP_REWARDS.quiz_generated);
           }
         } catch {
           controller.enqueue(encoder.encode("\n__EXAMINA_ERROR__:Failed to parse the generated quiz. Please try again."));
+          await rollbackUsage();
         }
 
         controller.close();

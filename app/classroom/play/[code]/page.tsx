@@ -32,9 +32,13 @@ export default function PlayPage({ params }: { params: Promise<{ code: string }>
   useEffect(() => {
     const stored = sessionStorage.getItem("classroom_participant");
     if (stored) {
-      const data = JSON.parse(stored);
-      setParticipantId(data.participantId);
-      setNickname(data.nickname);
+      try {
+        const data = JSON.parse(stored);
+        setParticipantId(data.participantId);
+        setNickname(data.nickname);
+      } catch {
+        sessionStorage.removeItem("classroom_participant");
+      }
     }
   }, []);
 
@@ -212,7 +216,7 @@ export default function PlayPage({ params }: { params: Promise<{ code: string }>
               {myRank === 0 ? "\u{1F947}" : myRank === 1 ? "\u{1F948}" : myRank === 2 ? "\u{1F949}" : "\u{1F389}"}
             </div>
             <h2 className="text-3xl font-bold text-neutral-900 mb-2">
-              {myRank === 0 ? "You won!" : `#${myRank + 1} place!`}
+              {myRank >= 0 ? (myRank === 0 ? "You won!" : `#${myRank + 1} place!`) : "Not ranked"}
             </h2>
             <p className="text-lg text-violet-600 font-bold mb-6">{myScore} points</p>
 

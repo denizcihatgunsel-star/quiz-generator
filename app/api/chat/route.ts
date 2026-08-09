@@ -93,12 +93,28 @@ export async function POST(req: NextRequest) {
 
   const userId = session.user.id;
 
-  // Usage check
+  const { message } = await req.json();
+
+  if (!message || typeof message !== "string" || message.trim().length < 2) {
+    return NextResponse.json(
+      { error: "Please type a message." },
+      { status: 400 }
+    );
+  }
+
+  // Only quiz-generation requests consume the monthly quota
+  const looksLikeQuizRequest = (msg: string) => {
+    const s = msg.toLowerCase();
+    const keywords = ["quiz", "question", "generate", "create", "lesson", "study", "test", "exam", "flashcard"];
+    return s.length >= 50 || keywords.some((k) => s.includes(k));
+  };
+  const isQuizRequest = looksLikeQuizRequest(message);
+
   const subscription = await db.subscription.findUnique({ where: { userId } });
   const plan = getPlan(subscription?.plan ?? "free");
   const month = currentMonth();
 
-  if (!isUnlimited(plan)) {
+  if (isQuizRequest && !isUnlimited(plan)) {
     const usage = await db.usageRecord.findUnique({
       where: { userId_month: { userId, month } },
     });
@@ -115,13 +131,20 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const { message } = await req.json();
+  // Reserve quota before the LLM call; roll back if the response isn't a quiz
+  const rollbackUsage = async () => {
+    await db.usageRecord.updateMany({
+      where: { userId, month, count: { gt: 0 } },
+      data: { count: { decrement: 1 } },
+    });
+  };
 
-  if (!message || typeof message !== "string" || message.trim().length < 2) {
-    return NextResponse.json(
-      { error: "Please type a message." },
-      { status: 400 }
-    );
+  if (isQuizRequest) {
+    await db.usageRecord.upsert({
+      where: { userId_month: { userId, month } },
+      update: { count: { increment: 1 } },
+      create: { userId, month, count: 1 },
+    });
   }
 
   // --- Stream the response to prevent Vercel timeout ---
@@ -151,22 +174,20 @@ export async function POST(req: NextRequest) {
           }
         }
 
-        // After streaming, validate and increment usage if quiz
+        // Validate the response; roll back quota if it wasn't a quiz
         try {
           const parsed = JSON.parse(fullText);
-          if (parsed.type === "quiz") {
-            await db.usageRecord.upsert({
-              where: { userId_month: { userId, month } },
-              update: { count: { increment: 1 } },
-              create: { userId, month, count: 1 },
-            });
+          if (isQuizRequest && parsed.type !== "quiz") {
+            await rollbackUsage();
           }
         } catch {
+          if (isQuizRequest) await rollbackUsage();
           // JSON parse failed — client will handle recovery
         }
 
         controller.close();
       } catch (err) {
+        if (isQuizRequest) await rollbackUsage();
         let errorMsg = "Chat failed.";
         if (err instanceof Error) errorMsg = err.message;
 

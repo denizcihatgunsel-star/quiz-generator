@@ -5,7 +5,8 @@ import { unlockAchievement } from "@/lib/achievements";
 
 // GET: List public quizzes
 export async function GET(req: NextRequest) {
-  const page = parseInt(req.nextUrl.searchParams.get("page") || "1");
+  const rawPage = parseInt(req.nextUrl.searchParams.get("page") || "1");
+  const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
   const search = req.nextUrl.searchParams.get("q") || "";
   const limit = 20;
   const offset = (page - 1) * limit;
@@ -29,22 +30,32 @@ export async function GET(req: NextRequest) {
   ]);
 
   return NextResponse.json({
-    quizzes: quizzes.map((q) => {
-      const data = JSON.parse(q.data);
-      const questionCount =
-        (data.multipleChoice?.length || 0) +
-        (data.flashcards?.length || 0) +
-        (data.fillInTheBlank?.length || 0) +
-        (data.trueFalse?.length || 0);
+    quizzes: quizzes.flatMap((q) => {
+      let data: Record<string, unknown> = {};
+      try {
+        data = JSON.parse(q.data);
+      } catch {
+        return []; // skip corrupted quizzes
+      }
+      const questions = data.multipleChoice as unknown[] | undefined;
+      const flashcards = data.flashcards as unknown[] | undefined;
+      const fillInTheBlank = data.fillInTheBlank as unknown[] | undefined;
+      const trueFalse = data.trueFalse as unknown[] | undefined;
 
-      return {
-        id: q.id,
-        topic: q.topic,
-        shareId: q.shareId,
-        author: q.user.name || "Anonymous",
-        questionCount,
-        createdAt: q.createdAt,
-      };
+      return [
+        {
+          id: q.id,
+          topic: q.topic,
+          shareId: q.shareId,
+          author: q.user.name || "Anonymous",
+          questionCount:
+            (questions?.length || 0) +
+            (flashcards?.length || 0) +
+            (fillInTheBlank?.length || 0) +
+            (trueFalse?.length || 0),
+          createdAt: q.createdAt,
+        },
+      ];
     }),
     total,
     page,

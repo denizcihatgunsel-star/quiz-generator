@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 
@@ -31,8 +31,10 @@ export default function ExplorePage() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const requestIdRef = useRef(0);
 
   useEffect(() => {
+    const requestId = ++requestIdRef.current;
     setLoading(true);
     const params = new URLSearchParams({ page: String(page) });
     if (search) params.set("q", search);
@@ -40,10 +42,13 @@ export default function ExplorePage() {
     fetch(`/api/explore?${params}`)
       .then((r) => r.json())
       .then((data) => {
+        if (requestId !== requestIdRef.current) return; // stale response
         setQuizzes(data.quizzes || []);
         setTotalPages(data.totalPages || 1);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (requestId === requestIdRef.current) setLoading(false);
+      });
   }, [page, search]);
 
   const handleSearch = (value: string) => {

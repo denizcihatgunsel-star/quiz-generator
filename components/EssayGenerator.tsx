@@ -21,14 +21,17 @@ export default function EssayGenerator() {
     prompt: "",
     instructions: "",
     length: "medium",
-    tone: "academic"
+    tone: "academic",
+    language: "en"
   });
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.topic.trim()) return;
 
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch("/api/generate/essay", {
         method: "POST",
@@ -39,16 +42,16 @@ export default function EssayGenerator() {
       if (!res.ok) {
         let data;
         try { data = await res.json(); } catch { data = { error: "Failed to generate essay" }; }
-        console.error("Essay generation failed:", data.error);
+        setError(data.error ?? "Failed to generate essay.");
         return;
       }
 
       const data = await res.json();
       setEssays([data.essay, ...essays]);
 
-      setFormData({ topic: "", prompt: "", instructions: "", length: "medium", tone: "academic" });
+      setFormData({ topic: "", prompt: "", instructions: "", length: "medium", tone: "academic", language: "en" });
     } catch (err) {
-      console.error("Essay generation error:", err);
+      setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -121,7 +124,8 @@ export default function EssayGenerator() {
             <div className="space-y-2">
               <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Language</label>
               <select
-                defaultValue="en"
+                value={formData.language}
+                onChange={(e) => setFormData(prev => ({ ...prev, language: e.target.value }))}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[#B0607A]/40 focus:border-[#B0607A] transition"
               >
                 <option value="en">English</option>
@@ -166,6 +170,10 @@ export default function EssayGenerator() {
               "Generate Essay"
             )}
           </button>
+
+          {error && (
+            <p className="text-sm text-red-500 dark:text-red-400 text-center">{error}</p>
+          )}
         </form>
       </div>
 

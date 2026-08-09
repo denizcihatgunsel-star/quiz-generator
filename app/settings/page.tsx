@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -52,61 +52,84 @@ export default function SettingsPage() {
     }
   }, [session]);
 
+  const busyRef = useRef(false);
+
   const createKey = async () => {
+    if (busyRef.current) return;
+    busyRef.current = true;
     setError(null);
-    const res = await fetch("/api/keys", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newKeyName || "Default" }),
-    });
-    const data = await res.json();
-    if (res.ok) {
-      setCreatedKey(data.key);
-      setNewKeyName("");
-      // Refresh keys
-      const keysRes = await fetch("/api/keys");
-      const keysData = await keysRes.json();
-      setApiKeys(keysData.keys || []);
-    } else {
-      setError(data.error);
+    try {
+      const res = await fetch("/api/keys", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newKeyName || "Default" }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setCreatedKey(data.key);
+        setNewKeyName("");
+        // Refresh keys
+        const keysRes = await fetch("/api/keys");
+        const keysData = await keysRes.json();
+        setApiKeys(keysData.keys || []);
+      } else {
+        setError(data.error);
+      }
+    } finally {
+      busyRef.current = false;
     }
   };
 
   const deleteKey = async (keyId: string) => {
-    await fetch("/api/keys", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ keyId }),
-    });
-    setApiKeys((prev) => prev.filter((k) => k.id !== keyId));
+    if (busyRef.current) return;
+    busyRef.current = true;
+    try {
+      await fetch("/api/keys", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ keyId }),
+      });
+      setApiKeys((prev) => prev.filter((k) => k.id !== keyId));
+    } finally {
+      busyRef.current = false;
+    }
   };
 
   const createTeam = async () => {
+    if (busyRef.current) return;
+    busyRef.current = true;
     setError(null);
-    const res = await fetch("/api/team", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: teamName || "My Team" }),
-    });
-    const data = await res.json();
-    if (res.ok) {
-      setTeam(data.team);
-      setIsOwner(true);
-      setTeamName("");
-    } else {
-      setError(data.error);
+    try {
+      const res = await fetch("/api/team", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: teamName || "My Team" }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setTeam(data.team);
+        setIsOwner(true);
+        setTeamName("");
+      } else {
+        setError(data.error);
+      }
+    } finally {
+      busyRef.current = false;
     }
   };
 
   const joinTeam = async () => {
+    if (busyRef.current) return;
+    busyRef.current = true;
     setError(null);
-    const res = await fetch("/api/team", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ inviteCode: joinCode }),
-    });
-    const data = await res.json();
-    if (res.ok) {
+    try {
+      const res = await fetch("/api/team", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ inviteCode: joinCode }),
+      });
+      const data = await res.json();
+      if (res.ok) {
       // Refresh team
       const teamRes = await fetch("/api/team");
       const teamData = await teamRes.json();
@@ -114,6 +137,9 @@ export default function SettingsPage() {
       setJoinCode("");
     } else {
       setError(data.error);
+    }
+    } finally {
+      busyRef.current = false;
     }
   };
 
