@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { awardXp, XP_REWARDS } from "@/lib/xp";
+import { unlockAchievement } from "@/lib/achievements";
 
 export async function PATCH(
   req: NextRequest,
@@ -26,6 +27,10 @@ export async function PATCH(
       data: { score, total },
     });
 
+    await db.quizAttempt.create({
+      data: { quizId: id, userId: session.user.id, score, total },
+    });
+
     // Award XP for scoring a quiz
     const isPerfect = score === total;
     await awardXp(
@@ -33,6 +38,7 @@ export async function PATCH(
       isPerfect ? "quiz_perfect" : "quiz_scored",
       isPerfect ? XP_REWARDS.quiz_perfect : XP_REWARDS.quiz_scored
     );
+    if (isPerfect) await unlockAchievement(session.user.id, "perfect_score");
 
     return NextResponse.json({ success: true });
   } catch (err) {

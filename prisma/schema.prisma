@@ -23,6 +23,7 @@ model User {
   flashcardReviews FlashcardReview[]
   streak           UserStreak?
   xpEvents         XpEvent[]
+  achievements     UserAchievement[]
   classroomSessions ClassroomSession[]
   referralCode      String?  @unique
   referredBy        String?
@@ -39,11 +40,35 @@ model SavedQuiz {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   topic     String
   data      String   // JSON string of full quiz
+  theme     String   @default("rose") // quiz theme id
   score     Int?
   total     Int?
   shareId   String?  @unique
   isPublic  Boolean  @default(false) // published to public library
   createdAt DateTime @default(now())
+  attempts  QuizAttempt[]
+}
+
+// Score history for a quiz (retake & compare)
+model QuizAttempt {
+  id        String   @id @default(cuid())
+  quizId    String
+  quiz      SavedQuiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  userId    String
+  score     Int
+  total     Int
+  createdAt DateTime @default(now())
+}
+
+// Unlocked achievements
+model UserAchievement {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  code       String
+  unlockedAt DateTime @default(now())
+
+  @@unique([userId, code])
 }
 
 model Subscription {
@@ -97,6 +122,7 @@ model UserStreak {
   currentStreak  Int      @default(0)
   longestStreak  Int      @default(0)
   lastActiveDate String?  // "2026-04-10" — date of last quiz/review activity
+  lastChallengeDate String? // "2026-04-10" — last daily challenge completed
   totalXp        Int      @default(0)
   level          Int      @default(1)
   streakFreezes  Int      @default(1) // free freezes available

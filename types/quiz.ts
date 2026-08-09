@@ -41,6 +41,7 @@ export interface QuizData {
   fillInTheBlank: FillInTheBlankQuestion[];
   trueFalse: TrueFalseQuestion[];
   topic: string;
+  theme?: string; // quiz theme id, default "rose"
 }
 
 export type GenerateStatus = "idle" | "loading" | "success" | "error";

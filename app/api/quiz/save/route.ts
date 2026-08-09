@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { unlockAchievement } from "@/lib/achievements";
 import { randomBytes } from "crypto";
 
 export async function POST(req: NextRequest) {
@@ -28,6 +29,8 @@ export async function POST(req: NextRequest) {
         shareId,
       },
     });
+
+    await unlockAchievement(session.user.id, "first_quiz");
 
     return NextResponse.json({ id: quiz.id, shareId });
   } catch (err) {

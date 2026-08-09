@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { unlockAchievement } from "@/lib/achievements";
 
 // XP rewards for actions
 export const XP_REWARDS = {
@@ -6,6 +7,7 @@ export const XP_REWARDS = {
   quiz_scored: 50,
   quiz_perfect: 100,
   flashcard_reviewed: 5,
+  daily_challenge: 25,
   streak_bonus_7: 50,
   streak_bonus_30: 200,
 } as const;
@@ -95,6 +97,14 @@ export async function awardXp(userId: string, action: string, xp: number) {
   // Streak milestones
   if (newStreak === 7 && existing.currentStreak < 7) bonusXp = XP_REWARDS.streak_bonus_7;
   if (newStreak === 30 && existing.currentStreak < 30) bonusXp = XP_REWARDS.streak_bonus_30;
+
+  // Achievements
+  if (newStreak === 7 && existing.currentStreak < 7) {
+    await unlockAchievement(userId, "streak_7");
+  }
+  if (newStreak === 30 && existing.currentStreak < 30) {
+    await unlockAchievement(userId, "streak_30");
+  }
 
   if (bonusXp > 0) {
     await db.xpEvent.create({

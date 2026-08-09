@@ -8,6 +8,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+    const session = await auth();
 
     // Try by shareId first (public), then by id (owner only)
     let quiz = await db.savedQuiz.findUnique({ where: { shareId: id } });
@@ -24,6 +25,8 @@ export async function GET(
       id: quiz.id,
       topic: quiz.topic,
       data: JSON.parse(quiz.data),
+      theme: quiz.theme,
+      isOwner: quiz.userId === session?.user?.id,
       score: quiz.score,
       total: quiz.total,
       shareId: quiz.shareId,

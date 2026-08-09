@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { auth } from "@/auth";
+import { unlockAchievement } from "@/lib/achievements";
 
 // GET: List public quizzes
 export async function GET(req: NextRequest) {
@@ -69,6 +70,10 @@ export async function PATCH(req: NextRequest) {
     where: { id: quizId },
     data: { isPublic: !!isPublic },
   });
+
+  if (isPublic && !quiz.isPublic) {
+    await unlockAchievement(session.user.id, "first_publish");
+  }
 
   return NextResponse.json({ success: true, isPublic: !!isPublic });
 }

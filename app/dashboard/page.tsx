@@ -79,6 +79,15 @@ export default function DashboardPage() {
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [adminUsers, setAdminUsers] = useState<any[]>([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
+  const [daily, setDaily] = useState<{
+    quiz: { id: string; topic: string; author: string } | null;
+    completedToday: boolean;
+    todayBest: number;
+    reward: number;
+  } | null>(null);
+  const [achievements, setAchievements] = useState<
+    { code: string; name: string; description: string; unlocked: boolean; unlockedAt: string | null }[]
+  >([]);
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/auth/login");
@@ -94,6 +103,18 @@ export default function DashboardPage() {
       fetch("/api/user")
         .then((r) => r.json())
         .then((d) => { if (d.role) setUserRole(d.role); })
+        .catch(() => {});
+
+      fetch("/api/daily-challenge")
+        .then((r) => r.json())
+        .then((d) => {
+          if (!d.error) setDaily(d);
+        })
+        .catch(() => {});
+
+      fetch("/api/achievements")
+        .then((r) => r.json())
+        .then((d) => { if (d.achievements) setAchievements(d.achievements); })
         .catch(() => {});
     }
   }, [session]);
@@ -205,6 +226,40 @@ export default function DashboardPage() {
 
         <StreakWidget />
 
+        {daily && (
+          <Link
+            href="/daily-challenge"
+            className="group mb-10 flex flex-wrap items-center justify-between gap-5 rounded-2xl border border-[#E9B8C4] bg-gradient-to-r from-[#FDE8EC] via-[#FBF1EE] to-[#FDF4F6] p-6 shadow-[0_20px_60px_-30px_rgba(176,96,122,0.6)] transition-all hover:border-[#B0607A]/50 hover:shadow-[0_24px_70px_-30px_rgba(176,96,122,0.65)]"
+          >
+            <div className="flex items-center gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#B0607A] to-[#E9A8B8] text-white shadow-[0_10px_25px_-10px_rgba(176,96,122,0.8)]">
+                <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <p className="mb-1 font-serif text-lg italic text-[#9A4F68]">Daily challenge</p>
+                {daily.completedToday ? (
+                  <>
+                    <p className="text-sm font-medium text-[#3B2027]">Done for today — best {daily.todayBest}%</p>
+                    <p className="text-xs text-[#9A7280]">Come back tomorrow for a new quiz.</p>
+                  </>
+                ) : daily.quiz ? (
+                  <>
+                    <p className="text-sm font-medium text-[#3B2027]">&ldquo;{daily.quiz.topic}&rdquo; awaits</p>
+                    <p className="text-xs text-[#9A7280]">by {daily.quiz.author} · earn +{daily.reward} XP and streak credit</p>
+                  </>
+                ) : (
+                  <p className="text-sm font-medium text-[#3B2027]">No community quizzes yet</p>
+                )}
+              </div>
+            </div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-[#3B2027] px-5 py-2.5 text-sm font-medium text-[#F6E3E8] transition-all group-hover:bg-[#52303B]">
+              {daily.completedToday ? "Review" : "Play now"} {ARROW}
+            </span>
+          </Link>
+        )}
+
         <div className="mb-10 flex flex-wrap gap-3">
           {userRole === "student" && (
             <Link href="/study" className={primaryBtn}>
@@ -237,7 +292,53 @@ export default function DashboardPage() {
 
         {showAdminPanel && session?.user?.email === "denizcihatgunsel@gmail.com" && (
           <div className="mb-12 rounded-2xl border border-[#F3D5DC] bg-white/70 p-6 shadow-[0_16px_50px_-24px_rgba(176,96,122,0.4)] backdrop-blur-xl">
-            <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+        {achievements.length > 0 && (
+          <div className="mb-12 rounded-2xl border border-[#F3D5DC] bg-white/70 p-6 shadow-[0_16px_50px_-28px_rgba(176,96,122,0.4)] backdrop-blur-xl">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="font-serif text-xl italic text-[#3B2027]">Achievements</h2>
+              <span className="text-xs text-[#9A7280]">
+                {achievements.filter((a) => a.unlocked).length} of {achievements.length} unlocked
+              </span>
+            </div>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+              {achievements.map((a) => (
+                <div
+                  key={a.code}
+                  title={a.unlocked ? a.description : `Locked — ${a.description}`}
+                  className={`flex flex-col items-center gap-2 rounded-2xl border p-4 text-center transition-all ${
+                    a.unlocked
+                      ? "border-[#E9B8C4] bg-gradient-to-br from-[#FDE8EC] to-[#FBF1EE] shadow-[0_10px_30px_-18px_rgba(176,96,122,0.6)]"
+                      : "border-[#F3D5DC] bg-white/50 opacity-60"
+                  }`}
+                >
+                  <div
+                    className={`flex h-11 w-11 items-center justify-center rounded-full ${
+                      a.unlocked
+                        ? "bg-gradient-to-br from-[#B0607A] to-[#E9A8B8] text-white"
+                        : "border border-[#F3D5DC] bg-[#F6EBEE] text-[#B4939F]"
+                    }`}
+                  >
+                    {a.unlocked ? (
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                      </svg>
+                    ) : (
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div>
+                    <p className={`text-xs font-semibold ${a.unlocked ? "text-[#7E3E55]" : "text-[#9A7280]"}`}>{a.name}</p>
+                    <p className="mt-0.5 text-[10px] leading-tight text-[#B4939F]">{a.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
               <h2 className="font-serif text-2xl italic text-[#3B2027]">Admin — user management</h2>
               <p className="text-sm text-[#9A7280]">Signed in as {session.user.email}</p>
             </div>

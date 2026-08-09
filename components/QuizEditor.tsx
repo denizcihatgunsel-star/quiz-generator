@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { QuizData } from "@/types/quiz";
+import { QUIZ_THEMES, type QuizThemeId } from "@/lib/themes";
 
 interface QuizEditorProps {
   quiz: QuizData;
@@ -121,6 +122,33 @@ export default function QuizEditor({ quiz, quizId, onSave, onCancel }: QuizEdito
           onChange={(e) => setEditedQuiz({ ...editedQuiz, topic: e.target.value })}
           className="w-full px-3 py-2 rounded-xl border border-neutral-200 bg-white text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
         />
+      </div>
+
+      {/* Theme */}
+      <div>
+        <label className="block text-xs text-neutral-400 uppercase tracking-widest mb-2">Theme</label>
+        <div className="flex flex-wrap gap-2">
+          {QUIZ_THEMES.map((t) => {
+            const active = (editedQuiz.theme ?? "rose") === t.id;
+            return (
+              <button
+                key={t.id}
+                onClick={() => setEditedQuiz({ ...editedQuiz, theme: t.id as QuizThemeId })}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium transition-all ${
+                  active
+                    ? "border-neutral-900 bg-neutral-900 text-white shadow-sm"
+                    : "border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300"
+                }`}
+              >
+                <span
+                  className="h-3.5 w-3.5 rounded-full"
+                  style={{ background: `linear-gradient(135deg, ${t.swatch}, ${t.to})` }}
+                />
+                {t.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Section tabs */}
