@@ -543,6 +543,11 @@
   50% { transform: translateY(-14px) rotate(8deg); opacity: 1; }
 }
 
+@keyframes fade-up {
+  0% { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .orb-drift,
   .float-y,

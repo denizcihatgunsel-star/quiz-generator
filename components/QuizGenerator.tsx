@@ -83,7 +83,7 @@ interface UsageInfo {
   planId: PlanId;
 }
 
-export default function QuizGenerator() {
+export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boolean }) {
   const { t } = useTranslation();
   const { data: session, status: sessionStatus } = useSession();
   const [lesson, setLesson] = useState("");
@@ -430,9 +430,9 @@ export default function QuizGenerator() {
   return (
     <div className="min-h-screen bg-background">
       {(isLoggedIn || quiz) && <AmbientBackground />}
-      {!isLoggedIn && !quiz && <SoundToggle />}
+      {!isLoggedIn && !quiz && !hideChrome && <SoundToggle />}
       {/* ========== NAVIGATION ========== */}
-      {sessionStatus === "loading" ? null : isLoggedIn || quiz ? (
+      {hideChrome ? null : sessionStatus === "loading" ? null : isLoggedIn || quiz ? (
       <motion.nav
         initial={{ y: -16, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -519,9 +519,9 @@ export default function QuizGenerator() {
             {sessionStatus === "loading" ? null : (
             <section
               ref={heroRef}
-              className={`relative overflow-hidden pb-32 ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#FDE8EC] pt-40 sm:pt-48"}`}
+              className={`relative overflow-hidden ${hideChrome ? "pt-6 pb-16" : "pb-32"} ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#FDE8EC] pt-40 sm:pt-48"}`}
             >
-              {!isLoggedIn && (
+              {!isLoggedIn && !hideChrome && (
                 <div className="pointer-events-none absolute inset-0 overflow-hidden">
                   <WaterCanvas className="pointer-events-none absolute inset-0 h-full w-full" />
                 </div>
@@ -553,7 +553,7 @@ export default function QuizGenerator() {
                     {t("hero.subtitle")}
                   </motion.p>
                 </motion.div>
-                ) : (
+                ) : hideChrome ? null : (
                 <div className="mx-auto max-w-5xl text-center">
                   <p className="text-[11px] uppercase tracking-[0.4em] text-[#A87680]">
                     A quiz generator
@@ -941,6 +941,7 @@ export default function QuizGenerator() {
       </main>
 
       {/* ========== FOOTER ========== */}
+      {!hideChrome && (
       <footer className="border-t border-[#F3D5DC]">
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
@@ -960,6 +961,7 @@ export default function QuizGenerator() {
           </div>
         </div>
       </footer>
+      )}
     </div>
   );
 }
