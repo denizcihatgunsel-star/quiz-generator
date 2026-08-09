@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import SiteHeader from "@/components/SiteHeader";
 
 interface ReviewCard {
   id: string;
@@ -13,6 +14,12 @@ interface ReviewCard {
   repetition: number;
   efactor: number;
 }
+
+const ARROW = (
+  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+  </svg>
+);
 
 export default function StudyPage() {
   const { data: session, status: sessionStatus } = useSession();
@@ -72,10 +79,14 @@ export default function StudyPage() {
 
   if (sessionStatus === "loading" || loading) {
     return (
-      <div className="min-h-screen bg-[#f5f5f0] flex items-center justify-center">
-        <div className="flex gap-1">
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="flex gap-1.5">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="w-2 h-2 rounded-full bg-violet-500 animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />
+            <div
+              key={i}
+              className="h-2 w-2 animate-bounce rounded-full bg-[#B0607A]"
+              style={{ animationDelay: `${i * 150}ms` }}
+            />
           ))}
         </div>
       </div>
@@ -84,86 +95,96 @@ export default function StudyPage() {
 
   const card = cards[currentIndex];
 
-  return (
-    <div className="min-h-screen bg-[#f5f5f0]">
-      <header className="border-b border-neutral-200 bg-[#f5f5f0]/80 backdrop-blur-xl sticky top-0 z-10">
-        <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <img src="/logo.png" alt="Examina" className="w-8 h-8 rounded-xl object-cover" />
-            <span className="font-semibold text-neutral-900 text-lg">Examina</span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/dashboard" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
-              Dashboard
-            </Link>
-          </div>
-        </div>
-      </header>
+  const statCard =
+    "rounded-2xl border border-[#F3D5DC] bg-white/70 p-5 text-center shadow-[0_16px_50px_-28px_rgba(176,96,122,0.45)] backdrop-blur-xl";
 
-      <main className="max-w-3xl mx-auto px-4 py-10">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-neutral-900 tracking-tight">Study Mode</h1>
-          <p className="text-neutral-500 mt-1">Spaced repetition — review flashcards at the optimal time.</p>
+  const statLabel =
+    "mb-1 text-[11px] uppercase tracking-[0.18em] text-[#9A7280]";
+
+  return (
+    <div className="min-h-screen bg-background">
+      <SiteHeader />
+
+      <main className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
+        <div className="mb-10">
+          <p className="mb-3 font-serif text-sm italic text-[#B0607A]">Spaced repetition</p>
+          <h1 className="text-4xl font-medium tracking-tight text-[#3B2027] sm:text-5xl">
+            Study <span className="font-serif italic text-[#B0607A]">mode</span>
+          </h1>
+          <p className="mt-3 max-w-md text-sm leading-relaxed text-[#9A7280]">
+            Review flashcards at the optimal time.
+          </p>
         </div>
 
         {/* Stats bar */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="p-4 rounded-2xl bg-white border border-neutral-200 shadow-sm text-center">
-            <p className="text-xs text-neutral-400 uppercase tracking-widest mb-1">Due Today</p>
-            <p className="text-2xl font-bold text-neutral-900">{dueCount}</p>
+        <div className="mb-8 grid grid-cols-3 gap-4">
+          <div className={statCard}>
+            <p className={statLabel}>Due Today</p>
+            <p className="font-serif text-4xl text-[#3B2027]">{dueCount}</p>
           </div>
-          <div className="p-4 rounded-2xl bg-white border border-neutral-200 shadow-sm text-center">
-            <p className="text-xs text-neutral-400 uppercase tracking-widest mb-1">Reviewed</p>
-            <p className="text-2xl font-bold text-violet-600">{reviewed}</p>
+          <div className={`${statCard} bg-gradient-to-br from-[#FDE8EC] to-[#FBF1EE]`}>
+            <p className={`${statLabel} text-[#9A4F68]`}>Reviewed</p>
+            <p className="font-serif text-4xl text-[#B0607A]">{reviewed}</p>
           </div>
-          <div className="p-4 rounded-2xl bg-white border border-neutral-200 shadow-sm text-center">
-            <p className="text-xs text-neutral-400 uppercase tracking-widest mb-1">Total Cards</p>
-            <p className="text-2xl font-bold text-neutral-900">{totalCards}</p>
+          <div className={statCard}>
+            <p className={statLabel}>Total Cards</p>
+            <p className="font-serif text-4xl text-[#3B2027]">{totalCards}</p>
           </div>
         </div>
 
         {totalCards === 0 ? (
-          <div className="text-center py-16 rounded-2xl bg-white border border-neutral-200 shadow-sm">
-            <p className="text-neutral-500 mb-4">No flashcards added to study mode yet.</p>
-            <p className="text-sm text-neutral-400 mb-6">Generate a quiz first, then click &quot;Add to Study Mode&quot; on the flashcards tab.</p>
+          <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 px-6 py-20 text-center backdrop-blur-xl">
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#FDE8EC] to-[#FBF1EE]">
+              <svg className="h-7 w-7 text-[#B0607A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <p className="mb-2 font-serif text-2xl italic text-[#3B2027]">No flashcards yet</p>
+            <p className="mb-8 text-sm text-[#9A7280]">
+              Generate a quiz first, then click &quot;Add to Study Mode&quot; on the flashcards tab.
+            </p>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-medium shadow-lg shadow-violet-500/20"
+              className="inline-flex items-center gap-2 rounded-full bg-[#3B2027] px-6 py-3 text-sm font-medium text-[#F6E3E8] shadow-[0_12px_30px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] hover:shadow-[0_16px_38px_-12px_rgba(59,32,39,0.65)] active:scale-[0.98]"
             >
-              Generate a quiz
+              Generate a quiz {ARROW}
             </Link>
           </div>
         ) : cards.length === 0 ? (
-          <div className="text-center py-16 rounded-2xl bg-white border border-neutral-200 shadow-sm">
-            <div className="text-5xl mb-4">&#127881;</div>
-            <h2 className="text-xl font-bold text-neutral-900 mb-2">All caught up!</h2>
-            <p className="text-neutral-500 mb-2">You&apos;ve reviewed all due cards. Come back later for more.</p>
-            <p className="text-sm text-neutral-400">Reviewed {reviewed} cards this session.</p>
+          <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 px-6 py-20 text-center backdrop-blur-xl">
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#FDE8EC] to-[#FBF1EE]">
+              <svg className="h-7 w-7 text-[#B0607A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h2 className="mb-2 font-serif text-2xl italic text-[#3B2027]">All caught up!</h2>
+            <p className="mb-2 text-sm text-[#9A7280]">You&apos;ve reviewed all due cards. Come back later for more.</p>
+            <p className="text-sm text-[#B4939F]">Reviewed {reviewed} cards this session.</p>
           </div>
         ) : card ? (
           <>
             {/* Progress bar */}
-            <div className="w-full h-1.5 bg-neutral-200 rounded-full mb-6">
+            <div className="mb-6 h-1.5 w-full overflow-hidden rounded-full bg-[#F6E4EA]">
               <div
-                className="h-full bg-violet-500 rounded-full transition-all duration-300"
+                className="h-full rounded-full bg-gradient-to-r from-[#B0607A] to-[#E9A8B8] transition-all duration-300"
                 style={{ width: `${((currentIndex + 1) / cards.length) * 100}%` }}
               />
             </div>
 
             {/* Card */}
             <div
-              className="flashcard-scene cursor-pointer h-64 select-none mb-6"
+              className="flashcard-scene mb-6 h-64 cursor-pointer select-none"
               onClick={() => setFlipped((f) => !f)}
             >
               <div className={`flashcard-card ${flipped ? "flipped" : ""}`}>
-                <div className="flashcard-face flashcard-front flex flex-col items-center justify-center rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
-                  <p className="text-xs font-semibold text-neutral-400 uppercase tracking-widest mb-4">Question</p>
-                  <p className="text-lg font-medium text-neutral-900 text-center leading-relaxed">{card.front}</p>
-                  <p className="text-xs text-neutral-400 mt-5">Click to reveal</p>
+                <div className="flashcard-face flashcard-front flex flex-col items-center justify-center rounded-2xl border border-[#F3D5DC] bg-white/80 p-8 shadow-[0_20px_60px_-30px_rgba(176,96,122,0.5)] backdrop-blur-xl">
+                  <p className="mb-4 font-serif text-xs italic uppercase tracking-[0.2em] text-[#B0607A]">Question</p>
+                  <p className="text-center text-lg font-medium leading-relaxed text-[#3B2027]">{card.front}</p>
+                  <p className="mt-5 text-xs text-[#B4939F]">Click to reveal</p>
                 </div>
-                <div className="flashcard-face flashcard-back flex flex-col items-center justify-center rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-purple-50 p-8 shadow-sm">
-                  <p className="text-xs font-semibold text-violet-400 uppercase tracking-widest mb-4">Answer</p>
-                  <p className="text-base text-violet-900 text-center leading-relaxed">{card.back}</p>
+                <div className="flashcard-face flashcard-back flex flex-col items-center justify-center rounded-2xl border border-[#E9B8C4] bg-gradient-to-br from-[#FDE8EC] to-[#FBF1EE] p-8 shadow-[0_20px_60px_-30px_rgba(176,96,122,0.55)]">
+                  <p className="mb-4 font-serif text-xs italic uppercase tracking-[0.2em] text-[#9A4F68]">Answer</p>
+                  <p className="text-center text-base leading-relaxed text-[#6E3345]">{card.back}</p>
                 </div>
               </div>
             </div>
@@ -171,33 +192,33 @@ export default function StudyPage() {
             {/* Grade buttons — only show when flipped */}
             {flipped && (
               <div className="space-y-3">
-                <p className="text-sm text-neutral-500 text-center">How well did you know this?</p>
+                <p className="text-center text-sm text-[#9A7280]">How well did you know this?</p>
                 <div className="grid grid-cols-4 gap-2">
                   <button
                     onClick={() => handleGrade(1)}
                     disabled={submitting}
-                    className="py-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm font-medium hover:bg-red-100 transition-colors disabled:opacity-50"
+                    className="rounded-full border border-[#F1C8C8] bg-[#FDF1F1] py-3 text-sm font-medium text-[#C25B5B] transition-colors hover:bg-[#F9E2E2] disabled:opacity-50"
                   >
                     Again
                   </button>
                   <button
                     onClick={() => handleGrade(2)}
                     disabled={submitting}
-                    className="py-3 rounded-xl bg-orange-50 border border-orange-200 text-orange-600 text-sm font-medium hover:bg-orange-100 transition-colors disabled:opacity-50"
+                    className="rounded-full border border-[#F5DEC8] bg-[#FDF4EA] py-3 text-sm font-medium text-[#C07B3C] transition-colors hover:bg-[#F9E8D3] disabled:opacity-50"
                   >
                     Hard
                   </button>
                   <button
                     onClick={() => handleGrade(4)}
                     disabled={submitting}
-                    className="py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-600 text-sm font-medium hover:bg-emerald-100 transition-colors disabled:opacity-50"
+                    className="rounded-full border border-[#D4E8DC] bg-[#F0F8F3] py-3 text-sm font-medium text-[#3D8B5F] transition-colors hover:bg-[#DFEFE5] disabled:opacity-50"
                   >
                     Good
                   </button>
                   <button
                     onClick={() => handleGrade(5)}
                     disabled={submitting}
-                    className="py-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-600 text-sm font-medium hover:bg-blue-100 transition-colors disabled:opacity-50"
+                    className="rounded-full border border-[#D5E3F2] bg-[#F0F6FC] py-3 text-sm font-medium text-[#4A7FC0] transition-colors hover:bg-[#E1EDF9] disabled:opacity-50"
                   >
                     Easy
                   </button>
