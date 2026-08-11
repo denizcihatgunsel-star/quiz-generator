@@ -558,7 +558,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                   <p className="text-[11px] uppercase tracking-[0.4em] text-[#A87680]">
                     A quiz generator
                   </p>
-                  <h1 className="mt-8 font-serif text-7xl font-medium tracking-tight leading-[0.95] sm:text-8xl lg:text-9xl">
+                  <h1 className="mt-8 font-serif text-7xl font-medium tracking-tight leading-[0.95] text-[#3B2027] sm:text-8xl lg:text-9xl">
                     <InteractiveWordmark />
                   </h1>
                   <motion.p
