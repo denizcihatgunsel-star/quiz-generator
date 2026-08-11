@@ -6,7 +6,7 @@ import { feature } from "topojson-client";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const W = 1200;
 const H = 600;
-const STEP = 11;
+const STEP = 15;
 
 const topo = JSON.parse(readFileSync(join(ROOT, "scripts/data/countries-110m.json"), "utf8"));
 const collection = feature(topo, topo.objects.countries);
@@ -61,7 +61,7 @@ for (const f of collection.features) {
     }
   }
 
-  if (dots.length >= 2) {
+  if (dots.length >= 1) {
     countries.push({ name: props.name, dots });
   }
 }

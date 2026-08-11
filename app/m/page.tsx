@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import DotMap from "@/components/DotMap";
 
 const ARROW = (
   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -197,6 +198,17 @@ export default function MobileHome() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* World — scroll to explore */}
+      <section className="mt-10">
+        <div className="flex items-baseline justify-between px-4">
+          <h2 className="font-serif text-xl italic text-[#3B2027]">World</h2>
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[#C98A98]">
+            Scroll to explore
+          </span>
+        </div>
+        <DotMap variant="mobile" className="mx-auto mt-4 w-full" />
       </section>
     </div>
   );

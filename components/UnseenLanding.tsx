@@ -161,7 +161,7 @@ export default function UnseenLanding() {
             </span>
           </div>
         </div>
-        <DotMap className="mx-auto mt-14 w-full max-w-3xl" />
+        <DotMap className="mx-auto mt-14 w-full max-w-4xl" />
       </section>
 
       {/* Start studying */}
