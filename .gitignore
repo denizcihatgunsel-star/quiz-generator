@@ -43,6 +43,9 @@ next-env.d.ts
 /app/generated/prisma
 dev.db
 
+# raw world geometry source (re-downloadable via build script)
+/scripts/data
+
 # Android signing (NEVER commit — back these up somewhere safe)
 android/**/*.keystore
 android/**/examina-keystore-password.txt

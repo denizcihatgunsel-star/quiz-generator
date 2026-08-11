@@ -151,8 +151,8 @@ export default function UnseenLanding() {
         </div>
       </Reveal>
 
-      {/* World — dot map */}
-      <Reveal className="border-t border-[#F3D5DC] py-24 sm:py-32">
+      {/* World — scroll to explore */}
+      <section className="border-t border-[#F3D5DC] pt-24 sm:pt-32">
         <div className="mx-auto max-w-5xl px-6">
           <div className="flex items-baseline justify-between">
             <Kicker>World</Kicker>
@@ -160,9 +160,9 @@ export default function UnseenLanding() {
               Scroll to explore
             </span>
           </div>
-          <DotMap className="mx-auto mt-16 w-full max-w-3xl" />
         </div>
-      </Reveal>
+        <DotMap className="mx-auto mt-14 w-full max-w-3xl" />
+      </section>
 
       {/* Start studying */}
       <Reveal className="border-t border-[#F3D5DC] py-28 sm:py-40">
