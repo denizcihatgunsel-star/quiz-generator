@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { getPlan, currentMonth, isUnlimited } from "@/lib/subscription";
+import { quotaLimit } from "@/lib/quota";
 import OpenAI from "openai";
 
 export const maxDuration = 60;
@@ -74,17 +75,20 @@ export async function POST(req: NextRequest) {
   // --- Monthly quota check (counts against the quiz generation quota) ---
   const month = currentMonth();
   if (!isUnlimited(plan)) {
-    const usage = await db.usageRecord.findUnique({
-      where: { userId_month: { userId, month } },
-    });
+    const [usage, limit] = await Promise.all([
+      db.usageRecord.findUnique({
+        where: { userId_month: { userId, month } },
+      }),
+      quotaLimit(plan, userId),
+    ]);
     const used = usage?.count ?? 0;
-    if (used >= plan.quizzesPerMonth) {
+    if (used >= limit) {
       return NextResponse.json(
         {
-          error: `You've used all ${plan.quizzesPerMonth} quizzes for this month on the ${plan.name} plan.`,
+          error: `You've used all ${limit} quizzes for this month on the ${plan.name} plan.`,
           code: "LIMIT_REACHED",
           used,
-          limit: plan.quizzesPerMonth,
+          limit,
           plan: plan.id,
         },
         { status: 429 }

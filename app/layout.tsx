@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Instrument_Serif, Space_Grotesk } from "next/font/go
 import { Analytics } from "@vercel/analytics/next";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import ReferralAttribution from "@/components/ReferralAttribution";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -91,7 +92,10 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
-          <SessionProviderWrapper>{children}</SessionProviderWrapper>
+          <SessionProviderWrapper>
+            {children}
+            <ReferralAttribution />
+          </SessionProviderWrapper>
         </ThemeProvider>
         <Analytics />
       </body>

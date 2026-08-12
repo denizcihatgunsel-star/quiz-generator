@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { storePendingRef } from "@/components/ReferralAttribution";
 
 function RegisterForm() {
   const router = useRouter();
@@ -19,6 +20,7 @@ function RegisterForm() {
 
   const handleGoogle = () => {
     localStorage.setItem("examina_pending_role", role);
+    storePendingRef(refCode);
     const callbackUrl = role === "teacher" ? "/api/auth/set-role?role=teacher" : "/";
     signIn("google", { callbackUrl });
   };

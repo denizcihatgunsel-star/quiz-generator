@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import ReferralAttribution from "@/components/ReferralAttribution";
 
 const HOME = (
   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -97,6 +98,7 @@ export default function MobileLayout({ children }: { children: React.ReactNode }
           })}
         </div>
       </nav>
+      <ReferralAttribution />
     </div>
   );
 }

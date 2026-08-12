@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { getPlan, currentMonth, isUnlimited } from "@/lib/subscription";
+import { quotaLimit } from "@/lib/quota";
 import { awardXp, XP_REWARDS } from "@/lib/xp";
 
 export const maxDuration = 60;
@@ -105,18 +106,21 @@ export async function POST(req: NextRequest) {
     const month = currentMonth();
 
     if (!isUnlimited(plan)) {
-      const usage = await db.usageRecord.findUnique({
-        where: { userId_month: { userId, month } },
-      });
+      const [usage, limit] = await Promise.all([
+        db.usageRecord.findUnique({
+          where: { userId_month: { userId, month } },
+        }),
+        quotaLimit(plan, userId),
+      ]);
       const used = usage?.count ?? 0;
 
-      if (used >= plan.quizzesPerMonth) {
+      if (used >= limit) {
         return NextResponse.json(
           {
-            error: `You've used all ${plan.quizzesPerMonth} quizzes for this month on the ${plan.name} plan. Upgrade to generate more.`,
+            error: `You've used all ${limit} quizzes for this month on the ${plan.name} plan. Upgrade to generate more.`,
             code: "LIMIT_REACHED",
             used,
-            limit: plan.quizzesPerMonth,
+            limit,
             plan: plan.id,
           },
           { status: 429 }

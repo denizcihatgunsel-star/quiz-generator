@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { getPlan, currentMonth } from "@/lib/subscription";
+import { quotaLimit } from "@/lib/quota";
 
 export async function GET() {
   const session = await auth();
@@ -19,14 +20,14 @@ export async function GET() {
 
   const plan = getPlan(subscription?.plan ?? "free");
   const used = usageRecord?.count ?? 0;
-  const limit = plan.quizzesPerMonth === Infinity ? -1 : plan.quizzesPerMonth;
+  const limit = await quotaLimit(plan, userId);
 
   return NextResponse.json({
     planId: plan.id,
     planName: plan.name,
     used,
     limit,
-    unlimited: plan.quizzesPerMonth === Infinity,
-    remaining: plan.quizzesPerMonth === Infinity ? -1 : Math.max(0, plan.quizzesPerMonth - used),
+    unlimited: limit === -1,
+    remaining: limit === -1 ? -1 : Math.max(0, limit - used),
   });
 }
