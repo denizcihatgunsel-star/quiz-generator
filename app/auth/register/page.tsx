@@ -5,7 +5,6 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { Wordmark } from "@/components/ui";
 
 function RegisterForm() {
   const router = useRouter();
@@ -73,48 +72,65 @@ function RegisterForm() {
     router.refresh();
   };
 
+  const inputClass =
+    "w-full rounded-xl border border-[#F3D5DC] bg-white/80 px-4 py-3 text-sm text-[#3B2027] placeholder:text-[#B4939F] shadow-[0_8px_24px_-20px_rgba(176,96,122,0.5)] transition-all focus:border-[#B0607A] focus:outline-none focus:ring-2 focus:ring-[#B0607A]/30";
+
+  const roleOptions: { id: "student" | "teacher"; title: string; caption: string }[] = [
+    { id: "student", title: "Student", caption: "Practice on your own" },
+    { id: "teacher", title: "Teacher", caption: "Run a classroom" },
+  ];
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="w-full max-w-sm">
-        <div className="mb-8 flex justify-center">
-          <Wordmark />
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#F8E9ED] px-4 py-12">
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="orb-drift absolute -left-24 top-8 h-72 w-72 rounded-full bg-[#E9A8B8]/40 blur-3xl" />
+        <div className="orb-drift absolute -right-28 bottom-12 h-80 w-80 rounded-full bg-[#C98A98]/30 blur-3xl" style={{ animationDelay: "-6s" }} />
+        <span className="twinkle absolute right-1/4 top-16 h-2 w-2 rounded-full bg-[#B0607A]" />
+        <span className="twinkle absolute left-1/4 bottom-24 h-1.5 w-1.5 rounded-full bg-[#E9A8B8]" style={{ animationDelay: "-1.4s" }} />
+      </div>
+
+      <div className="relative w-full max-w-sm">
+        <div className="mb-8 text-center">
+          <span className="font-serif text-4xl tracking-tight text-[#3B2027]">
+            Examina<span className="text-[#B0607A]">.</span>
+          </span>
+          <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.4em] text-[#A87680]">
+            A quiz generator
+          </p>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-8 shadow-sm">
-          <h1 className="text-xl font-semibold tracking-tight text-foreground">Create your account</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Start with 5 free quizzes per month</p>
+        <div className="rounded-2xl border border-[#F3D5DC] bg-white/75 p-8 shadow-[0_24px_70px_-40px_rgba(176,96,122,0.6)] backdrop-blur-xl">
+          <p className="font-serif text-sm italic text-[#B0607A]">Begin free</p>
+          <h1 className="mt-1 font-serif text-3xl tracking-tight text-[#3B2027]">
+            Create your account
+          </h1>
 
-          <div className="mb-6 mt-6">
-            <label className="mb-2 block text-sm font-medium text-foreground">I am a...</label>
+          <div className="mt-6">
+            <span className="mb-2 block text-sm font-medium text-[#3B2027]">I am a&hellip;</span>
             <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => setRole("student")}
-                className={`rounded-lg border py-3 px-4 text-sm font-medium transition-all ${
-                  role === "student"
-                    ? "border-accent bg-accent-soft text-accent"
-                    : "border-border bg-transparent text-muted-foreground hover:bg-muted"
-                }`}
-              >
-                🎓 Student
-              </button>
-              <button
-                type="button"
-                onClick={() => setRole("teacher")}
-                className={`rounded-lg border py-3 px-4 text-sm font-medium transition-all ${
-                  role === "teacher"
-                    ? "border-accent bg-accent-soft text-accent"
-                    : "border-border bg-transparent text-muted-foreground hover:bg-muted"
-                }`}
-              >
-                📚 Teacher
-              </button>
+              {roleOptions.map((opt) => (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => setRole(opt.id)}
+                  className={`rounded-xl border px-3 py-3 text-left transition-all ${
+                    role === opt.id
+                      ? "border-[#3B2027] bg-[#3B2027] text-[#F6E3E8] shadow-[0_10px_24px_-12px_rgba(59,32,39,0.6)]"
+                      : "border-[#F3D5DC] bg-white/70 text-[#3B2027] hover:border-[#E9B8C4]"
+                  }`}
+                >
+                  <span className="block font-serif text-base italic">{opt.title}</span>
+                  <span className={`mt-0.5 block text-[11px] ${role === opt.id ? "text-[#E7BEC9]" : "text-[#9A7280]"}`}>
+                    {opt.caption}
+                  </span>
+                </button>
+              ))}
             </div>
           </div>
 
           <button
             onClick={handleGoogle}
-            className="flex w-full items-center justify-center gap-3 rounded-lg border border-border bg-transparent py-2.5 px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+            className="mt-5 flex w-full items-center justify-center gap-3 rounded-full border border-[#F3D5DC] bg-white py-3 text-sm font-medium text-[#3B2027] transition-colors hover:bg-[#F6EBEE]"
           >
             <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
@@ -126,15 +142,15 @@ function RegisterForm() {
           </button>
 
           <div className="my-6 flex items-center gap-3">
-            <div className="h-px flex-1 bg-border" />
-            <span className="text-xs text-muted-foreground">or</span>
-            <div className="h-px flex-1 bg-border" />
+            <div className="h-px flex-1 bg-[#F3D5DC]" />
+            <span className="font-serif text-xs italic text-[#9A7280]">or</span>
+            <div className="h-px flex-1 bg-[#F3D5DC]" />
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-foreground">
-                Name <span className="text-muted-foreground">(optional)</span>
+              <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-[#3B2027]">
+                Name <span className="text-[#B4939F]">(optional)</span>
               </label>
               <input
                 id="name"
@@ -143,12 +159,12 @@ function RegisterForm() {
                 onChange={(e) => setName(e.target.value)}
                 autoComplete="name"
                 placeholder="Your name"
-                className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus-visible:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className={inputClass}
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-foreground">
+              <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-[#3B2027]">
                 Email
               </label>
               <input
@@ -159,12 +175,12 @@ function RegisterForm() {
                 required
                 autoComplete="email"
                 placeholder="you@example.com"
-                className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus-visible:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className={inputClass}
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-foreground">
+              <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-[#3B2027]">
                 Password
               </label>
               <input
@@ -176,12 +192,12 @@ function RegisterForm() {
                 autoComplete="new-password"
                 placeholder="Min. 8 characters"
                 minLength={8}
-                className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus-visible:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className={inputClass}
               />
             </div>
 
             {error && (
-              <p className="rounded-lg border border-border bg-danger-soft px-3 py-2 text-sm text-danger">
+              <p className="rounded-xl border border-[#F1C8C8] bg-[#FDF1F1] px-3.5 py-2.5 text-sm text-[#C25B5B]">
                 {error}
               </p>
             )}
@@ -189,11 +205,11 @@ function RegisterForm() {
             <button
               type="submit"
               disabled={loading}
-              className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-foreground text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-[#3B2027] py-3.5 text-sm font-medium text-[#F6E3E8] shadow-[0_12px_30px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98] disabled:opacity-60"
             >
               {loading ? (
                 <>
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-background/30 border-t-background" />
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#F6E3E8]/30 border-t-[#F6E3E8]" />
                   Creating account...
                 </>
               ) : (
@@ -202,14 +218,14 @@ function RegisterForm() {
             </button>
           </form>
 
-          <p className="mt-4 text-center text-xs text-muted-foreground">
+          <p className="mt-4 text-center text-xs text-[#9A7280]">
             By signing up you agree to our Terms of Service.
           </p>
         </div>
 
-        <p className="mt-6 text-center text-sm text-muted-foreground">
+        <p className="mt-6 text-center text-sm text-[#9A7280]">
           Already have an account?{" "}
-          <Link href="/auth/login" className="font-medium text-accent hover:underline">
+          <Link href="/auth/login" className="font-medium text-[#B0607A] hover:underline">
             Sign in
           </Link>
         </p>
