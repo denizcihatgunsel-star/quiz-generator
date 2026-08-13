@@ -1,8 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /api/
-Disallow: /auth/
-Disallow: /dashboard/
-Disallow: /_next/
-
-Sitemap: https://www.examina.ink/sitemap.xml
