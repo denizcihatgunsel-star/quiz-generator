@@ -52,7 +52,7 @@ export default function MobileLayout({ children }: { children: React.ReactNode }
       <header className="sticky top-0 z-40 border-b border-[#F3D5DC] bg-[#FBF1EE]/85 backdrop-blur-xl">
         <div className="flex items-center justify-between px-5 py-3.5">
           <Link href="/m" className="flex items-center gap-2.5">
-            <img src="/logo.png" alt="" className="h-9 w-9 rounded-xl object-cover shadow-[0_6px_18px_-8px_rgba(176,96,122,0.8)]" />
+            <img src="/logo.png" alt="Examina" className="h-9 w-9 rounded-xl object-cover shadow-[0_6px_18px_-8px_rgba(176,96,122,0.8)]" />
             <span className="font-serif text-2xl italic tracking-tight text-[#3B2027]">Examina</span>
           </Link>
           {session?.user ? (

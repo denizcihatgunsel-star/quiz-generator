@@ -1,5 +1,6 @@
 import { type HTMLAttributes } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export function Container({
   className = "",
@@ -24,7 +25,7 @@ export function Wordmark({
 }) {
   return (
     <Link href={href} className={`flex items-center gap-2.5 ${className}`}>
-      <img src="/logo.png" alt="" className="h-7 w-7 rounded-lg object-cover" />
+      <Image src="/logo.png" alt="Examina" width={28} height={28} className="h-7 w-7 rounded-lg object-cover" />
       <span className="text-[15px] font-semibold tracking-tight text-foreground">Examina</span>
     </Link>
   );

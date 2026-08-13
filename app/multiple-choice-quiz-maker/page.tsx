@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import LandingPageLayout from "@/components/LandingPageLayout";
+import ToolCrossLinks from "@/components/ToolCrossLinks";
 
 export const metadata: Metadata = {
   title: "AI Multiple Choice Quiz Maker — Generate MCQs Instantly | Examina",
@@ -155,6 +156,13 @@ export default function MultipleChoiceQuizMakerPage() {
           </div>
         </div>
       </section>
+      <ToolCrossLinks
+        faqs={[
+          { q: "How does the multiple choice quiz maker work?", a: "Paste or upload your study material and the AI generates 5-6 multiple choice questions with explanations, difficulty tags, and Bloom's Taxonomy levels." },
+          { q: "Is the MCQ generator free?", a: "Yes — free accounts get 5 generations per month. Paid plans start at $2/month." },
+          { q: "Can I export my multiple choice quiz?", a: "Yes — download the quiz as a PDF or share it with a unique link on Plus plans and above." },
+        ]}
+      />
     </LandingPageLayout>
   );
 }

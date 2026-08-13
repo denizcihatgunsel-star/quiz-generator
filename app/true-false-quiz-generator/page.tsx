@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import LandingPageLayout from "@/components/LandingPageLayout";
+import ToolCrossLinks from "@/components/ToolCrossLinks";
 
 export const metadata: Metadata = {
   title: "True/False Quiz Generator AI — Create T/F Questions | Examina",
@@ -151,6 +152,13 @@ export default function TrueFalseQuizGeneratorPage() {
           </div>
         </div>
       </section>
+      <ToolCrossLinks
+        faqs={[
+          { q: "How does the true/false quiz generator work?", a: "Paste your study material and the AI creates declarative statements that are clearly true or false, with explanations for every answer." },
+          { q: "Is the true/false generator free?", a: "Yes — free accounts get 5 generations per month. Paid plans start at $2/month." },
+          { q: "Why are true/false questions useful?", a: "They're the fastest way to scan a topic for gaps — ideal for classroom warm-ups, reading checks, and pre-exam review." },
+        ]}
+      />
     </LandingPageLayout>
   );
 }

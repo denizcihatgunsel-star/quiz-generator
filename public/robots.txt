@@ -3,6 +3,12 @@ Allow: /
 Disallow: /api/
 Disallow: /auth/
 Disallow: /dashboard/
+Disallow: /m/
+Disallow: /admin/
+Disallow: /settings/
+Disallow: /analytics/
+Disallow: /classroom/
+Disallow: /referral/
 Disallow: /_next/
 
 Sitemap: https://www.examina.ink/sitemap.xml

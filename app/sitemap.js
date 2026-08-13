@@ -1,15 +1,35 @@
+import { POSTS } from "@/lib/blog/posts";
+
 export default function sitemap() {
-  return [
-    { url: 'https://www.examina.ink', lastModified: new Date() },
-    { url: 'https://www.examina.ink/pricing', lastModified: new Date() },
-    { url: 'https://www.examina.ink/flashcard-generator', lastModified: new Date() },
-    { url: 'https://www.examina.ink/multiple-choice-quiz-maker', lastModified: new Date() },
-    { url: 'https://www.examina.ink/true-false-quiz-generator', lastModified: new Date() },
-    { url: 'https://www.examina.ink/fill-in-the-blank-generator', lastModified: new Date() },
-    { url: 'https://www.examina.ink/for-teachers', lastModified: new Date() },
-    { url: 'https://www.examina.ink/for-students', lastModified: new Date() },
-    { url: 'https://www.examina.ink/about', lastModified: new Date() },
-    { url: 'https://www.examina.ink/explore', lastModified: new Date() },
-    { url: 'https://www.examina.ink/blog', lastModified: new Date() },
-  ]
+  const posts = POSTS.map((post) => ({
+    url: `https://www.examina.ink/blog/${post.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  const languages = ["es", "de", "fr", "pt", "tr"].map((code) => ({
+    url: `https://www.examina.ink/${code}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  const pages = [
+    { url: "https://www.examina.ink", changeFrequency: "weekly", priority: 1 },
+    { url: "https://www.examina.ink/pricing", changeFrequency: "monthly", priority: 0.9 },
+    { url: "https://www.examina.ink/flashcard-generator", changeFrequency: "monthly", priority: 0.9 },
+    { url: "https://www.examina.ink/multiple-choice-quiz-maker", changeFrequency: "monthly", priority: 0.9 },
+    { url: "https://www.examina.ink/true-false-quiz-generator", changeFrequency: "monthly", priority: 0.9 },
+    { url: "https://www.examina.ink/fill-in-the-blank-generator", changeFrequency: "monthly", priority: 0.9 },
+    { url: "https://www.examina.ink/for-teachers", changeFrequency: "monthly", priority: 0.8 },
+    { url: "https://www.examina.ink/for-students", changeFrequency: "monthly", priority: 0.8 },
+    { url: "https://www.examina.ink/daily-challenge", changeFrequency: "daily", priority: 0.7 },
+    { url: "https://www.examina.ink/classroom/join", changeFrequency: "monthly", priority: 0.6 },
+    { url: "https://www.examina.ink/explore", changeFrequency: "daily", priority: 0.7 },
+    { url: "https://www.examina.ink/about", changeFrequency: "yearly", priority: 0.5 },
+    { url: "https://www.examina.ink/blog", changeFrequency: "weekly", priority: 0.8 },
+  ].map((p) => ({ ...p, lastModified: new Date() }));
+
+  return [...pages, ...posts, ...languages];
 }

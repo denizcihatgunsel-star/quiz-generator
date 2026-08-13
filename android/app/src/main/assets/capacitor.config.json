@@ -1,0 +1,20 @@
+{
+	"appId": "com.examina.ink",
+	"appName": "Examina",
+	"webDir": "public",
+	"server": {
+		"url": "https://www.examina.ink",
+		"cleartext": false
+	},
+	"android": {
+		"allowMixedContent": false
+	},
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 2000,
+			"backgroundColor": "#FBF1EE",
+			"androidScaleType": "CENTER_CROP",
+			"showSpinner": false
+		}
+	}
+}

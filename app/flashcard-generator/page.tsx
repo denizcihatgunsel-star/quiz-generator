@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import LandingPageLayout from "@/components/LandingPageLayout";
+import ToolCrossLinks from "@/components/ToolCrossLinks";
 
 export const metadata: Metadata = {
   title: "AI Flashcard Generator — Create Flashcards from Notes | Examina",
@@ -156,6 +157,13 @@ export default function FlashcardGeneratorPage() {
           </div>
         </div>
       </section>
+      <ToolCrossLinks
+        faqs={[
+          { q: "Is the flashcard generator free?", a: "Yes — free accounts get 5 generations per month. Paid plans start at $2/month and include up to unlimited generations." },
+          { q: "Can I make flashcards from a PDF?", a: "Yes. Upload PDF, TXT, or Markdown files, or paste text directly." },
+          { q: "Do the flashcards work on mobile?", a: "Yes — cards flip with a 3D animation and work in all modern mobile browsers." },
+        ]}
+      />
     </LandingPageLayout>
   );
 }

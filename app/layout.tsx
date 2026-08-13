@@ -33,6 +33,14 @@ export const metadata: Metadata = {
     "Examina is the AI quiz generator that turns any text into multiple choice, flashcards, fill-in-the-blank & true/false questions in seconds. Free to try.",
   alternates: {
     canonical: "https://www.examina.ink/",
+    languages: {
+      es: "https://www.examina.ink/es",
+      de: "https://www.examina.ink/de",
+      fr: "https://www.examina.ink/fr",
+      pt: "https://www.examina.ink/pt",
+      tr: "https://www.examina.ink/tr",
+      "x-default": "https://www.examina.ink/",
+    },
   },
   openGraph: {
     type: "website",
