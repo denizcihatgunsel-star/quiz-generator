@@ -1,10 +1,12 @@
 import Link from "next/link";
 
 const TOOLS = [
+  { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
   { href: "/multiple-choice-quiz-maker", label: "Multiple Choice Maker" },
   { href: "/flashcard-generator", label: "Flashcard Generator" },
   { href: "/fill-in-the-blank-generator", label: "Fill in the Blank" },
   { href: "/true-false-quiz-generator", label: "True & False" },
+  { href: "/quiz-generator-from-pdf", label: "PDF to Quiz" },
 ];
 
 export default function ToolCrossLinks({ faqs }: { faqs: { q: string; a: string }[] }) {
