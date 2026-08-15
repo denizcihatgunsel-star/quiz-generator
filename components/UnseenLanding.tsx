@@ -1,7 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { motion, useInView, animate } from "framer-motion";
 import Link from "next/link";
 import DotMap from "./DotMap";
 
@@ -25,6 +25,30 @@ function Reveal({ id, children, className }: { id?: string; children: ReactNode;
 function Kicker({ children }: { children: ReactNode }) {
   return (
     <p className="text-[11px] uppercase tracking-[0.4em] text-[#A87680]">{children}</p>
+  );
+}
+
+function CountUp({ value, className }: { value: string; className?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const n = parseInt(value, 10);
+  const isNumeric = !Number.isNaN(n) && String(n) === value;
+  const [display, setDisplay] = useState("0");
+
+  useEffect(() => {
+    if (!inView || !isNumeric) return;
+    const controls = animate(0, n, {
+      duration: 1.4,
+      ease: EASE_OUT,
+      onUpdate: (v) => setDisplay(Math.round(v).toString()),
+    });
+    return () => controls.stop();
+  }, [inView, isNumeric, n]);
+
+  return (
+    <span ref={ref} className={className}>
+      {isNumeric ? display : value}
+    </span>
   );
 }
 
@@ -86,7 +110,7 @@ function Marquee() {
   );
 
   return (
-    <div className="overflow-hidden border-y border-[#F3D5DC] py-5">
+    <div className="overflow-hidden marquee-pause border-y border-[#F3D5DC] py-5">
       <div className="marquee-track">
         {row(false)}
         {row(true)}
@@ -111,22 +135,35 @@ export default function UnseenLanding() {
           </div>
 
           <div>
-            {SELECTED.map((item) => (
-              <Link
+            {SELECTED.map((item, i) => (
+              <motion.div
                 key={item.n}
-                href={item.href}
-                className="group grid grid-cols-[auto_1fr] items-baseline gap-6 border-b border-[#F3D5DC] py-10 transition-colors duration-300 sm:grid-cols-[3rem_1fr_1fr] sm:gap-10"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.55, ease: EASE_OUT, delay: i * 0.07 }}
               >
-                <span className="font-mono text-xs text-[#D8A5B2] transition-colors duration-300 group-hover:text-[#8C5563]">
-                  {item.n}
-                </span>
-                <span className="font-serif text-3xl tracking-tight text-[#4A3038] transition-all duration-300 group-hover:italic sm:text-5xl">
-                  {item.title}
-                </span>
-                <span className="col-span-2 text-sm leading-relaxed text-[#9A7280] sm:col-span-1">
-                  {item.desc}
-                </span>
-              </Link>
+                <Link
+                  href={item.href}
+                  className="group grid grid-cols-[auto_1fr] items-baseline gap-6 border-b border-[#F3D5DC] py-10 transition-colors duration-300 sm:grid-cols-[3rem_1fr_1fr] sm:gap-10"
+                >
+                  <span className="font-mono text-xs text-[#D8A5B2] transition-colors duration-300 group-hover:text-[#8C5563]">
+                    {item.n}
+                  </span>
+                  <span className="font-serif text-3xl tracking-tight text-[#4A3038] transition-all duration-300 group-hover:italic sm:text-5xl">
+                    {item.title}
+                    <span
+                      aria-hidden
+                      className="ml-3 inline-block text-[#B0607A] opacity-0 transition-all duration-300 group-hover:translate-x-1.5 group-hover:opacity-100"
+                    >
+                      →
+                    </span>
+                  </span>
+                  <span className="col-span-2 text-sm leading-relaxed text-[#9A7280] sm:col-span-1">
+                    {item.desc}
+                  </span>
+                </Link>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -137,15 +174,22 @@ export default function UnseenLanding() {
         <div className="mx-auto max-w-5xl px-6">
           <Kicker>By the numbers</Kicker>
           <div className="mt-14 grid grid-cols-2 gap-12 sm:grid-cols-4">
-            {STATS.map((stat) => (
-              <div key={stat.label}>
-                <p className="font-serif text-5xl tracking-tight text-[#B0607A] sm:text-6xl">
-                  {stat.number}
-                </p>
+            {STATS.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, ease: EASE_OUT, delay: i * 0.08 }}
+              >
+                <CountUp
+                  value={stat.number}
+                  className="font-serif text-5xl tracking-tight text-[#B0607A] sm:text-6xl"
+                />
                 <p className="mt-3 text-xs uppercase tracking-[0.25em] text-[#9A7280]">
                   {stat.label}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -160,6 +204,9 @@ export default function UnseenLanding() {
               Scroll to explore
             </span>
           </div>
+          <div aria-hidden className="mt-6 flex justify-center">
+            <span className="bounce-soft text-lg text-[#C98A98]">↓</span>
+          </div>
         </div>
         <DotMap className="mx-auto mt-14 w-full max-w-4xl" />
       </section>
@@ -169,7 +216,18 @@ export default function UnseenLanding() {
         <div className="mx-auto max-w-5xl px-6 text-center">
           <Kicker>Start studying</Kicker>
           <h2 className="mx-auto mt-8 max-w-3xl font-serif text-4xl leading-[1.1] tracking-tight text-[#4A3038] sm:text-6xl lg:text-7xl">
-            Put your notes to work.
+            {"Put your notes to work.".split(" ").map((word, i) => (
+              <motion.span
+                key={i}
+                className="inline-block"
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.5, ease: EASE_OUT, delay: i * 0.06 }}
+              >
+                {word}&nbsp;
+              </motion.span>
+            ))}
           </h2>
           <p className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-[#9A7280]">
             Paste a lesson, upload a PDF, or ask the assistant. Your quiz is ready in

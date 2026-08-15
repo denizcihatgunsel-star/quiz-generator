@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { TrueFalseQuestion } from "@/types/quiz";
+
+const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
 
 interface Props {
   questions: TrueFalseQuestion[];
@@ -11,20 +14,20 @@ interface Props {
 export default function TrueFalseView({ questions, onComplete }: Props) {
   const [answers, setAnswers] = useState<Record<string, boolean | null>>({});
   const [revealed, setRevealed] = useState<Record<string, boolean>>({});
-  const [completed, setCompleted] = useState(false);
+  const completedRef = useRef(false);
 
   const answeredCount = Object.keys(revealed).length;
   const allAnswered = answeredCount === questions.length;
 
   useEffect(() => {
-    if (allAnswered && !completed) {
-      setCompleted(true);
+    if (allAnswered && !completedRef.current) {
+      completedRef.current = true;
       const correct = questions.filter(
         (q) => answers[q.id] === q.correct
       ).length;
       onComplete?.(correct, questions.length);
     }
-  }, [allAnswered, completed, questions, answers, onComplete]);
+  }, [allAnswered, questions, answers, onComplete]);
 
   const pick = (qId: string, value: boolean) => {
     if (revealed[qId]) return;
@@ -37,14 +40,22 @@ export default function TrueFalseView({ questions, onComplete }: Props) {
       {/* Progress bar */}
       <div className="flex items-center gap-3 mb-2">
         <div className="flex-1 h-1.5 bg-zinc-100 dark:bg-zinc-700 rounded-full overflow-hidden">
-          <div
-            className="h-full rounded-full bg-violet-500 transition-all duration-500"
-            style={{ width: `${(answeredCount / questions.length) * 100}%` }}
+          <motion.div
+            className="h-full rounded-full bg-violet-500"
+            initial={{ width: 0 }}
+            animate={{ width: `${(answeredCount / questions.length) * 100}%` }}
+            transition={{ duration: 0.6, ease: EASE_OUT }}
           />
         </div>
-        <span className="text-xs text-zinc-500 dark:text-zinc-400 shrink-0">
+        <motion.span
+          key={answeredCount}
+          initial={{ scale: 0.6 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 400, damping: 18 }}
+          className="text-xs text-zinc-500 dark:text-zinc-400 shrink-0"
+        >
           {answeredCount}/{questions.length}
-        </span>
+        </motion.span>
       </div>
 
       {questions.map((q, qi) => {
@@ -53,9 +64,12 @@ export default function TrueFalseView({ questions, onComplete }: Props) {
         const isCorrect = chosen === q.correct;
 
         return (
-          <div
+          <motion.div
             key={q.id}
-            className={`rounded-2xl border p-5 transition-all ${
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: EASE_OUT, delay: Math.min(qi * 0.07, 0.5) }}
+            className={`rounded-2xl border p-5 transition-colors duration-300 ${
               isRevealed
                 ? isCorrect
                   ? "border-emerald-200 dark:border-emerald-800 bg-emerald-50/50 dark:bg-emerald-950/30"
@@ -101,36 +115,65 @@ export default function TrueFalseView({ questions, onComplete }: Props) {
                 }
 
                 return (
-                  <button
+                  <motion.button
                     key={label}
                     onClick={() => pick(q.id, value)}
                     disabled={isRevealed}
-                    className={`flex-1 text-center px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${style}`}
+                    whileHover={!isRevealed ? { scale: 1.03 } : undefined}
+                    whileTap={!isRevealed ? { scale: 0.96 } : undefined}
+                    animate={
+                      isRevealed && isAnswer
+                        ? { scale: [1, 1.06, 1], transition: { duration: 0.45, ease: "easeOut" } }
+                        : isRevealed && isChosen && !isAnswer
+                          ? { x: [0, -8, 8, -5, 5, 0], transition: { duration: 0.4 } }
+                          : undefined
+                    }
+                    className={`flex-1 text-center px-4 py-2.5 rounded-xl border text-sm font-medium transition-colors duration-300 ${style}`}
                   >
                     {label}
-                  </button>
+                  </motion.button>
                 );
               })}
             </div>
 
             {isRevealed && (
-              <div className="mt-3 flex items-start gap-2 text-xs leading-relaxed">
-                <span className={isCorrect ? "text-emerald-500" : "text-red-500"}>
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, ease: EASE_OUT, delay: 0.1 }}
+                className="mt-3 flex items-start gap-2 text-xs leading-relaxed"
+              >
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                  className={isCorrect ? "text-emerald-500" : "text-red-500"}
+                >
                   {isCorrect ? "\u2713" : "\u2717"}
-                </span>
+                </motion.span>
                 <p className="text-zinc-600 dark:text-zinc-400">{q.explanation}</p>
-              </div>
+              </motion.div>
             )}
-          </div>
+          </motion.div>
         );
       })}
 
       {/* Final score */}
       {allAnswered && (
-        <div className="mt-6 p-5 rounded-2xl border border-violet-200 dark:border-violet-800 bg-violet-50 dark:bg-violet-950/50 text-center">
-          <p className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92, y: 12 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          className="mt-6 p-5 rounded-2xl border border-violet-200 dark:border-violet-800 bg-violet-50 dark:bg-violet-950/50 text-center"
+        >
+          <motion.p
+            initial={{ scale: 0.6 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 500, damping: 15, delay: 0.15 }}
+            className="text-lg font-bold text-zinc-900 dark:text-zinc-100"
+          >
             {questions.filter((q) => answers[q.id] === q.correct).length} / {questions.length} correct
-          </p>
+          </motion.p>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
             {Math.round(
               (questions.filter((q) => answers[q.id] === q.correct).length /
@@ -138,7 +181,7 @@ export default function TrueFalseView({ questions, onComplete }: Props) {
                 100
             )}% accuracy
           </p>
-        </div>
+        </motion.div>
       )}
     </div>
   );

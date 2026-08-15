@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Flashcard } from "@/types/quiz";
+
+const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
 
 interface FlashcardViewProps {
   flashcards: Flashcard[];
@@ -97,8 +100,15 @@ export default function FlashcardView({ flashcards, quizId }: FlashcardViewProps
           </button>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {flashcards.map((card) => (
-            <FlashcardItem key={card.id} card={card} />
+          {flashcards.map((card, i) => (
+            <motion.div
+              key={card.id}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: EASE_OUT, delay: Math.min(i * 0.05, 0.4) }}
+            >
+              <FlashcardItem card={card} />
+            </motion.div>
           ))}
         </div>
       </div>
@@ -122,20 +132,26 @@ export default function FlashcardView({ flashcards, quizId }: FlashcardViewProps
       </div>
 
       {/* Single card */}
-      <div
-        className="flashcard-scene cursor-pointer h-52 select-none mb-4"
-        onClick={() => setFlipped((f) => !f)}
-        role="button"
-        aria-label={`Flashcard: ${card.front}. Click to flip.`}
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            setFlipped((f) => !f);
-          }
-        }}
-      >
-        <div className={`flashcard-card ${flipped ? "flipped" : ""}`}>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={current}
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -40 }}
+          transition={{ duration: 0.3, ease: EASE_OUT }}
+          className="flashcard-scene cursor-pointer h-52 select-none mb-4"
+          onClick={() => setFlipped((f) => !f)}
+          role="button"
+          aria-label={`Flashcard: ${card.front}. Click to flip.`}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setFlipped((f) => !f);
+            }
+          }}
+        >
+          <div className={`flashcard-card ${flipped ? "flipped" : ""}`}>
           {/* Front */}
           <div className="flashcard-face flashcard-front flex flex-col items-center justify-center rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-8 shadow-sm hover:shadow-md transition-shadow">
             <p className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-4">
@@ -159,7 +175,8 @@ export default function FlashcardView({ flashcards, quizId }: FlashcardViewProps
             </p>
           </div>
         </div>
-      </div>
+      </motion.div>
+      </AnimatePresence>
 
       {/* Navigation */}
       <div className="flex items-center gap-3">
@@ -205,12 +222,15 @@ export default function FlashcardView({ flashcards, quizId }: FlashcardViewProps
       {/* Dot progress */}
       <div className="flex justify-center gap-1.5 mt-4">
         {flashcards.map((_, i) => (
-          <button
+          <motion.button
             key={i}
             onClick={() => goTo(i)}
-            className={`w-2 h-2 rounded-full transition-all ${
+            whileTap={{ scale: 0.6 }}
+            animate={{ width: i === current ? 16 : 8 }}
+            transition={{ type: "spring", stiffness: 400, damping: 22 }}
+            className={`h-2 rounded-full transition-colors duration-200 ${
               i === current
-                ? "bg-violet-500 w-4"
+                ? "bg-violet-500"
                 : "bg-zinc-300 dark:bg-zinc-600 hover:bg-zinc-400"
             }`}
             aria-label={`Go to card ${i + 1}`}

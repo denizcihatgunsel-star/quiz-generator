@@ -604,3 +604,91 @@
     animation: none !important;
   }
 }
+
+/* ----------------------------------------------------------------------------
+   Micro-interaction utilities — answer feedback, hover lifts, scroll hints
+--------------------------------------------------------------------------- */
+@keyframes shake-x {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+.animate-shake {
+  animation: shake-x 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes pop-in {
+  0% { transform: scale(0.85); opacity: 0; }
+  55% { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-pop {
+  animation: pop-in 0.4s cubic-bezier(0.2, 0.65, 0.3, 1) both;
+}
+
+/* Marquee pauses while the pointer is over it */
+.marquee-pause:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Soft bounce for scroll hints and chevrons */
+.bounce-soft {
+  animation: bounce-soft 1.8s ease-in-out infinite;
+}
+@keyframes bounce-soft {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(6px); opacity: 1; }
+}
+
+/* Card hover lift + rose shadow */
+.hover-lift {
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.65, 0.3, 1),
+    box-shadow 0.3s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 48px -24px rgba(176, 96, 122, 0.55);
+}
+
+/* Arrow nudges forward when its group is hovered */
+.arrow-nudge {
+  transition: transform 0.3s cubic-bezier(0.2, 0.65, 0.3, 1);
+}
+.group:hover .arrow-nudge {
+  transform: translateX(5px);
+}
+
+/* Generic fade-up entrance for static content */
+.animate-fade-up {
+  animation: fade-up 0.6s cubic-bezier(0.2, 0.65, 0.3, 1) both;
+}
+
+@keyframes ticker-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+.animate-blink {
+  animation: ticker-blink 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-shake,
+  .animate-pop,
+  .bounce-soft,
+  .hover-lift,
+  .arrow-nudge,
+  .animate-fade-up,
+  .animate-blink {
+    animation: none !important;
+  }
+  .hover-lift,
+  .arrow-nudge {
+    transition: none;
+  }
+  .marquee-pause:hover .marquee-track {
+    animation-play-state: running;
+  }
+}
