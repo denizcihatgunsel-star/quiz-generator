@@ -10,6 +10,7 @@ import FlashcardView from "@/components/FlashcardView";
 import FillInTheBlankView from "@/components/FillInTheBlankView";
 import TrueFalseView from "@/components/TrueFalseView";
 import QuizRunner from "@/components/QuizRunner";
+import VideoExplanationLink from "@/components/VideoExplanationLink";
 
 const TABS = [
   { id: "mcq", label: "Multiple Choice", icon: "\ud83e\udde0" },
@@ -220,6 +221,7 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
                 >
                   {attempts && attempts.length > 0 ? "Retake quiz" : "Take quiz"}
                 </button>
+                <VideoExplanationLink topic={quiz.topic} />
                 {bestAttempt !== null && (
                   <span className={`text-sm ${theme.muted}`}>
                     Best: <span className={`font-medium ${theme.accent}`}>{bestAttempt}%</span>

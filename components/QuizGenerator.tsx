@@ -21,6 +21,7 @@ import SoundToggle from "./SoundToggle";
 import ChatBot from "./ChatBot";
 import ImageOCR from "./ImageOCR";
 import QuizEditor from "./QuizEditor";
+import VideoExplanationLink from "./VideoExplanationLink";
 import { useTranslation } from "@/lib/i18n";
 
 const EXAMPLE_LESSON = `The water cycle, also known as the hydrological cycle, describes the continuous movement of water on, above, and below Earth's surface. The main stages are:
@@ -831,6 +832,9 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                   {quiz.fillInTheBlank?.length > 0 && ` · ${quiz.fillInTheBlank.length} fill-in-blank`}
                   {quiz.trueFalse?.length > 0 && ` · ${quiz.trueFalse.length} true/false`}
                 </p>
+                <div className="mt-5">
+                  <VideoExplanationLink topic={quiz.topic} />
+                </div>
               </div>
 
               {score && (
