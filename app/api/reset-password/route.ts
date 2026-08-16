@@ -28,14 +28,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await db.passwordResetToken.delete({ where: { token } });
-
     if (reset.expiresAt < new Date()) {
+      await db.passwordResetToken.delete({ where: { token } });
       return NextResponse.json(
         { error: "This reset link has expired. Please request a new one." },
         { status: 400 }
       );
     }
+
+    await db.passwordResetToken.delete({ where: { token } });
 
     const user = await db.user.findUnique({ where: { email: reset.email } });
     if (!user) {

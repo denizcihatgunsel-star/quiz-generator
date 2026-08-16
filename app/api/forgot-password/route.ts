@@ -3,7 +3,11 @@ import crypto from "crypto";
 import { db } from "@/lib/db";
 
 function getBaseUrl() {
-  return process.env.NEXTAUTH_URL ?? "http://localhost:3000";
+  const base =
+    process.env.NEXTAUTH_URL ??
+    process.env.NEXT_PUBLIC_APP_URL ??
+    "https://www.examina.ink";
+  return base.replace(/\/+$/, "");
 }
 
 function resetHtml(resetUrl: string) {
@@ -92,13 +96,16 @@ export async function POST(req: NextRequest) {
       const sent = await sendResetEmail(email, resetUrl);
 
       if (!sent) {
-        console.log("Forgot password link:", resetUrl);
         if (process.env.NODE_ENV !== "production") {
+          console.log("Forgot password link:", resetUrl);
           return NextResponse.json({
             ok: true,
             devResetLink: resetUrl,
           });
         }
+        throw new Error(
+          "Password reset emails are unavailable: no mailer configured. Set SMTP_USER/SMTP_PASS or RESEND_API_KEY."
+        );
       }
     }
 
