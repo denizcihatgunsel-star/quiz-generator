@@ -22,6 +22,7 @@ import ChatBot from "./ChatBot";
 import ImageOCR from "./ImageOCR";
 import QuizEditor from "./QuizEditor";
 import VideoExplanationLink from "./VideoExplanationLink";
+import MagneticText from "./MagneticText";
 import { useTranslation } from "@/lib/i18n";
 
 const EXAMPLE_LESSON = `The water cycle, also known as the hydrological cycle, describes the continuous movement of water on, above, and below Earth's surface. The main stages are:
@@ -553,34 +554,18 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     variants={heroContainer}
                     className="text-4xl sm:text-6xl lg:text-7xl font-medium text-foreground tracking-tight leading-[1.08] mb-8"
                   >
-                    {t("hero.title1")
-                      .split(" ")
-                      .map((w, i) => (
-                        <motion.span
-                          key={`w1-${i}`}
-                          variants={heroWord}
-                          className="inline-block mr-[0.24em]"
-                        >
-                          {w}
-                        </motion.span>
-                      ))}
+<MagneticText text={t("hero.title1")} wordVariants={heroWord} />
                     <br />
                     <span
-                      className="relative inline-block cursor-pointer mt-2"
+                      className="relative inline-block mt-2 cursor-pointer"
                       onMouseEnter={() => setHeroHover(true)}
                       onMouseLeave={() => setHeroHover(false)}
                     >
-                      {t("hero.title2")
-                        .split(" ")
-                        .map((w, i) => (
-                          <motion.span
-                            key={`w2-${i}`}
-                            variants={heroWord}
-                            className="inline-block font-serif italic text-accent mr-[0.24em]"
-                          >
-                            {w}
-                          </motion.span>
-                        ))}
+                      <MagneticText
+                        text={t("hero.title2")}
+                        wordVariants={heroWord}
+                        wordClass="font-serif italic text-accent"
+                      />
                       <motion.span
                         variants={heroWord}
                         className="animate-blink inline-block w-[0.08em] text-accent"
