@@ -412,6 +412,8 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
   const limitCount = usage?.limit ?? plan.quizzesPerMonth;
   const atLimit = !isUnlimited && usedCount >= limitCount;
 
+  const [heroHover, setHeroHover] = useState(false);
+
   const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
   const heroContainer: Variants = {
     hidden: {},
@@ -425,6 +427,15 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
       opacity: 1,
       y: 0,
       transition: { duration: 0.5, ease: EASE_OUT },
+    },
+  };
+  const heroWord: Variants = {
+    hidden: { opacity: 0, y: 20, filter: "blur(8px)" },
+    show: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: { duration: 0.45, ease: EASE_OUT },
     },
   };
 
@@ -539,12 +550,62 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                   animate="show"
                 >
                   <motion.h1
-                    variants={heroItem}
+                    variants={heroContainer}
                     className="text-4xl sm:text-6xl lg:text-7xl font-medium text-foreground tracking-tight leading-[1.08] mb-8"
                   >
-                    {t("hero.title1")}
+                    {t("hero.title1")
+                      .split(" ")
+                      .map((w, i) => (
+                        <motion.span
+                          key={`w1-${i}`}
+                          variants={heroWord}
+                          className="inline-block mr-[0.24em]"
+                        >
+                          {w}
+                        </motion.span>
+                      ))}
                     <br />
-                    <span className="font-serif italic text-accent">{t("hero.title2")}</span>
+                    <span
+                      className="relative inline-block cursor-pointer mt-2"
+                      onMouseEnter={() => setHeroHover(true)}
+                      onMouseLeave={() => setHeroHover(false)}
+                    >
+                      {t("hero.title2")
+                        .split(" ")
+                        .map((w, i) => (
+                          <motion.span
+                            key={`w2-${i}`}
+                            variants={heroWord}
+                            className="inline-block font-serif italic text-accent mr-[0.24em]"
+                          >
+                            {w}
+                          </motion.span>
+                        ))}
+                      <motion.span
+                        variants={heroWord}
+                        className="animate-blink inline-block w-[0.08em] text-accent"
+                        aria-hidden="true"
+                      >
+                        |
+                      </motion.span>
+                      <svg
+                        className="pointer-events-none absolute -bottom-2 left-0 h-3 w-full"
+                        viewBox="0 0 200 12"
+                        preserveAspectRatio="none"
+                        aria-hidden="true"
+                      >
+                        <motion.path
+                          d="M3 9 C 30 2, 60 11, 90 6 S 150 8, 197 5"
+                          fill="none"
+                          stroke="#B0607A"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          initial={false}
+                          animate={{ pathLength: heroHover ? 1 : 0.2, opacity: heroHover ? 1 : 0.35 }}
+                          transition={{ duration: 0.4, ease: "easeOut" }}
+                        />
+                      </svg>
+                    </span>
                   </motion.h1>
 
                   <motion.p
