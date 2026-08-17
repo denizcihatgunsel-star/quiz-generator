@@ -207,7 +207,7 @@ export default function ChatBot({ onQuizGenerated }: ChatBotProps) {
               {msg.quiz && (
                 <button
                   onClick={() => onQuizGenerated(msg.quiz!)}
-                  className="mt-2 w-full py-2 rounded-lg bg-white/20 hover:bg-white/30 text-sm font-medium transition-colors text-white border border-white/20"
+                  className="mt-2 w-full py-2 rounded-lg bg-[#3B2027] hover:bg-[#52303B] text-sm font-medium transition-colors text-[#F6E3E8] shadow-[0_8px_20px_-10px_rgba(59,32,39,0.6)] active:scale-[0.98]"
                 >
                   Start Quiz →
                 </button>
