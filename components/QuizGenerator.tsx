@@ -24,6 +24,7 @@ import QuizEditor from "./QuizEditor";
 import VideoExplanationLink from "./VideoExplanationLink";
 import MagneticText from "./MagneticText";
 import HomeSections from "./HomeSections";
+import QuizStory from "./QuizStory";
 import { useTranslation } from "@/lib/i18n";
 
 const EXAMPLE_LESSON = `The water cycle, also known as the hydrological cycle, describes the continuous movement of water on, above, and below Earth's surface. The main stages are:
@@ -415,6 +416,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
   const atLimit = !isUnlimited && usedCount >= limitCount;
 
   const [heroHover, setHeroHover] = useState(false);
+  const [storyOpen, setStoryOpen] = useState(false);
 
   const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
   const heroContainer: Variants = {
@@ -925,6 +927,9 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                 <button onClick={downloadPDF} className="text-sm text-[#9A7280] hover:text-[#3B2027] transition-colors">
                   {t("quiz.downloadPdf")}
                 </button>
+                <button onClick={() => setStoryOpen(true)} className="text-sm text-[#B0607A] hover:opacity-80 transition-colors">
+                  Story teaser
+                </button>
                 {savedQuizId && isLoggedIn && (
                   <button onClick={() => setEditing(true)} className="text-sm text-[#B0607A] hover:opacity-80 transition-colors">
                     Edit Quiz
@@ -1016,6 +1021,10 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
         </div>
       </footer>
       )}
+
+      <AnimatePresence>
+        {storyOpen && quiz && <QuizStory quiz={quiz} onClose={() => setStoryOpen(false)} />}
+      </AnimatePresence>
     </div>
   );
 }
