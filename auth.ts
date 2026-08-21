@@ -2,7 +2,6 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { db } from "@/lib/db";
-import bcrypt from "bcryptjs";
 import { getVipPlan } from "@/lib/vip";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -25,6 +24,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const user = await db.user.findUnique({ where: { email } });
         if (!user) return null;
+
+        // Gate until verified
+        if (!user.emailVerified) return null;
 
         const valid = await bcrypt.compare(password, user.password);
         if (!valid) return null;
@@ -49,6 +51,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               email: token.email,
               password: "",
               role: "student",
+              emailVerified: new Date(),
               subscription: {
                 create: { plan: getVipPlan(token.email), status: "active" },
               },
@@ -60,7 +63,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         } catch (err) {
           console.error("Google provisioning error:", err);
         }
-        return token;
       }
       if (!token.id && token.sub) {
         const dbUser = await db.user.findUnique({
