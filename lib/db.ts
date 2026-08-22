@@ -24,3 +24,47 @@ const globalForPrisma = globalThis as unknown as {
 export const db = globalForPrisma.prisma ?? makeClient();
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+
+// Self-migration: make sure the email-verification columns exist.
+// Runs at most once per server instance; safe to call concurrently
+// (duplicate ALTER TABLE errors are swallowed).
+const globalForMigration = globalThis as unknown as {
+  verificationColumnsReady: Promise<void> | undefined;
+};
+
+export function ensureVerificationColumns(): Promise<void> {
+  if (!globalForMigration.verificationColumnsReady) {
+    globalForMigration.verificationColumnsReady = (async () => {
+      const alters: [string, string][] = [
+        ["emailVerified", `ALTER TABLE "User" ADD COLUMN "emailVerified" DATETIME`],
+        ["verificationCode", `ALTER TABLE "User" ADD COLUMN "verificationCode" TEXT`],
+        ["verificationExpires", `ALTER TABLE "User" ADD COLUMN "verificationExpires" DATETIME`],
+      ];
+      for (const [column, stmt] of alters) {
+        try {
+          await db.$executeRawUnsafe(`SELECT "${column}" FROM "User" LIMIT 1`);
+        } catch {
+          try {
+            await db.$executeRawUnsafe(stmt);
+          } catch {
+            // column already added by another instance — ignore
+          }
+        }
+      }
+      // One-time backfill: accounts that existed before verification was
+      // introduced stay usable. New signups always carry a code, so they
+      // are excluded and must verify normally.
+      try {
+        await db.$executeRawUnsafe(
+          `UPDATE "User" SET "emailVerified" = CURRENT_TIMESTAMP WHERE "emailVerified" IS NULL AND "verificationCode" IS NULL`
+        );
+      } catch {
+        // non-fatal
+      }
+    })().catch((err) => {
+      console.error("Verification column check failed:", err);
+      globalForMigration.verificationColumnsReady = undefined;
+    });
+  }
+  return globalForMigration.verificationColumnsReady;
+}

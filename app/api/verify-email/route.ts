@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { db, ensureVerificationColumns } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   try {
+    await ensureVerificationColumns();
     const { email, code } = await req.json();
     if (!email || !code) {
       return NextResponse.json({ error: "Email and code are required." }, { status: 400 });

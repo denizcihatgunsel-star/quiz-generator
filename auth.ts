@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import { db } from "@/lib/db";
+import { db, ensureVerificationColumns } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { getVipPlan } from "@/lib/vip";
 
@@ -18,6 +18,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
+        await ensureVerificationColumns();
         const email = credentials?.email as string | undefined;
         const password = credentials?.password as string | undefined;
 
@@ -44,6 +45,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, account, user }) {
       if (account?.provider === "google" && token.email) {
         try {
+          await ensureVerificationColumns();
           const dbUser = await db.user.upsert({
             where: { email: token.email },
             update: {},

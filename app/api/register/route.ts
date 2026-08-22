@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { db } from "@/lib/db";
+import { db, ensureVerificationColumns } from "@/lib/db";
 import { getVipPlan } from "@/lib/vip";
 import { sendEmail, verificationCodeHtml } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
+    await ensureVerificationColumns();
     const { name, email, password, role } = await req.json();
 
     if (!email || !password) {
