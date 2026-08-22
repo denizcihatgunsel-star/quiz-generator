@@ -44,34 +44,18 @@ function RegisterForm() {
       return;
     }
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-
-    setLoading(false);
-
-    if (result?.error) {
-      setError("Account created — please sign in.");
-      router.push("/auth/login");
-      return;
-    }
-
+    // Email verification required before signing in.
+    // Stash any referral code so it is attributed after first login.
     if (refCode) {
       try {
-        await fetch("/api/referral", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ referralCode: refCode }),
-        });
+        storePendingRef(refCode);
       } catch {
-        // silently ignore referral errors
+        // ignore storage errors
       }
     }
 
-    router.push("/");
-    router.refresh();
+    setLoading(false);
+    router.push(`/auth/verify-email?email=${encodeURIComponent(email)}`);
   };
 
   const inputClass =

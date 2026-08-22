@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { db } from "@/lib/db";
+import bcrypt from "bcryptjs";
 import { getVipPlan } from "@/lib/vip";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({

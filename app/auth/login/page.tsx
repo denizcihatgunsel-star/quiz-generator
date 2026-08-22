@@ -128,6 +128,13 @@ function LoginForm() {
             {error && (
               <p className="rounded-xl border border-[#F1C8C8] bg-[#FDF1F1] px-3.5 py-2.5 text-sm text-[#C25B5B]">
                 {error}
+                <span className="mt-1 block text-xs text-[#9A7280]">
+                  Just signed up?{" "}
+                  <Link href="/auth/verify-email" className="font-medium text-[#B0607A] hover:underline">
+                    Verify your email
+                  </Link>{" "}
+                  to activate your account.
+                </span>
               </p>
             )}
 

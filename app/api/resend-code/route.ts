@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { sendEmail, verificationCodeHtml } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,37 +14,30 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "User not found." }, { status: 404 });
     }
 
-    // If already verified, no need to resend
     if (user.emailVerified) {
       return NextResponse.json({ message: "Account already verified." }, { status: 200 });
     }
 
-    // Allow resend if no code exists, or if the old code has expired (more than 30 min ago)
-    const isExpired = user.verificationExpires && new Date() > user.verificationExpires;
-    const hasCode = user.verificationCode && !isExpired;
+    // Always issue a fresh code so the emailed code always matches the stored one
+    const verificationCode = String(Math.floor(100000 + Math.random() * 900000));
+    await db.user.update({
+      where: { email },
+      data: {
+        verificationCode,
+        verificationExpires: new Date(Date.now() + 30 * 60 * 1000),
+      },
+    });
 
-    if (!hasCode) {
-      // Generate new code
-      const newCode = String(Math.floor(100000 + Math.random() * 900000));
-      const newExpires = new Date(Date.now() + 30 * 60 * 1000);
-      await db.user.update({
-        where: { email },
-        data: {
-          verificationCode: newCode,
-          verificationExpires: newExpires,
-        },
-      });
-    }
-
-    // Send new verification email (best-effort)
-    const { sendVerificationEmail } = await import("@/lib/mailer");
-    const sent = await sendVerificationEmail(
+    const mail = await sendEmail(
       email,
-      "Your new Examina verification code",
-      `Your new verification code is ${hasCode ? "the previous code" : String(Math.floor(100000 + Math.random() * 900000))}. It expires in 30 minutes.`
+      "Your Examina verification code",
+      verificationCodeHtml(verificationCode)
     );
 
-    return NextResponse.json({ sent, message: hasCode ? "Code refreshed." : "New code sent." });
+    return NextResponse.json(
+      { sent: mail.sent, message: mail.sent ? "New code sent." : "Could not send email right now." },
+      { status: mail.sent ? 200 : 503 }
+    );
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error("Resend code error:", message);

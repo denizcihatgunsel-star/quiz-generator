@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { getVipPlan } from "@/lib/vip";
+import { sendEmail, verificationCodeHtml } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
@@ -30,6 +31,7 @@ export async function POST(req: NextRequest) {
     }
 
     const hashed = await bcrypt.hash(password, 12);
+    const verificationCode = String(Math.floor(100000 + Math.random() * 900000));
 
     const user = await db.user.create({
       data: {
@@ -37,13 +39,24 @@ export async function POST(req: NextRequest) {
         password: hashed,
         name: name?.trim() || null,
         role: role === "teacher" ? "teacher" : "student",
+        verificationCode,
+        verificationExpires: new Date(Date.now() + 30 * 60 * 1000),
         subscription: {
           create: { plan: getVipPlan(email), status: "active" },
         },
       },
     });
 
-    return NextResponse.json({ id: user.id, email: user.email }, { status: 201 });
+    const mail = await sendEmail(
+      email,
+      "Your Examina verification code",
+      verificationCodeHtml(verificationCode)
+    );
+
+    return NextResponse.json(
+      { id: user.id, email: user.email, verificationSent: mail.sent },
+      { status: 201 }
+    );
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error("Register error:", message, err);
