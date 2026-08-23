@@ -91,6 +91,10 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
   const { t } = useTranslation();
   const { data: session, status: sessionStatus } = useSession();
   const [lesson, setLesson] = useState("");
+  const [linkMode, setLinkMode] = useState(false);
+  const [linkUrl, setLinkUrl] = useState("");
+  const [fetchingLink, setFetchingLink] = useState(false);
+  const [linkError, setLinkError] = useState<string | null>(null);
   const [status, setStatus] = useState<GenerateStatus>("idle");
   const [quiz, setQuiz] = useState<QuizData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -196,8 +200,41 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const handleGenerate = async () => {
-    if (!isReady || status === "loading") return;
+  const handleUrlFetch = async () => {
+    const url = linkUrl.trim();
+    setLinkError(null);
+    if (!/^https?:\/\/.+\..+/i.test(url)) {
+      setLinkError("Enter a full URL starting with https://");
+      return;
+    }
+    setFetchingLink(true);
+    try {
+      const res = await fetch("/api/extract-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setLinkError(data.error ?? "Couldn't read that page.");
+      } else {
+        setLesson(data.text);
+        setLinkMode(false);
+        setLinkUrl("");
+        handleGenerate(data.text);
+        return;
+      }
+    } catch {
+      setLinkError("Couldn't read that page.");
+    }
+    setFetchingLink(false);
+  };
+
+  const handleGenerate = async (lessonOverride?: string) => {
+    if (status === "loading") return;
+    const sourceText = lessonOverride ?? lesson;
+    const sourceCount = sourceText.trim().length;
+    if (sourceCount < 50 || sourceCount > 15000) return;
 
     setStatus("loading");
     setError(null);
@@ -211,7 +248,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lesson, language }),
+        body: JSON.stringify({ lesson: sourceText, language }),
       });
 
       // Non-streaming error responses (auth, validation, limit)
@@ -766,6 +803,38 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                         <ImageOCR onTextExtracted={(text) => setLesson((prev) => prev ? prev + "\n\n" + text : text)} />
                       </div>
 
+                      {/* URL to quiz */}
+                      <div className="px-5 py-2 border-t border-[#F6E4EA]">
+                        <button
+                          onClick={() => setLinkMode((v) => !v)}
+                          className="text-xs text-[#B0607A] transition-colors hover:text-[#3B2027]"
+                        >
+                          {linkMode ? "Hide link input" : "Or paste a link — article, Wikipedia, blog post"}
+                        </button>
+                        {linkMode && (
+                          <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+                            <input
+                              type="url"
+                              value={linkUrl}
+                              onChange={(e) => setLinkUrl(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") handleUrlFetch();
+                              }}
+                              placeholder="https://en.wikipedia.org/wiki/Photosynthesis"
+                              className="flex-1 rounded-xl border border-[#F3D5DC] bg-white/80 px-4 py-2.5 text-sm text-[#3B2027] placeholder:text-[#B4939F] focus:border-[#B0607A] focus:outline-none focus:ring-2 focus:ring-[#B0607A]/30"
+                            />
+                            <button
+                              onClick={handleUrlFetch}
+                              disabled={fetchingLink}
+                              className="rounded-xl bg-[#3B2027] px-5 py-2.5 text-sm font-medium text-[#F6E3E8] transition-all hover:bg-[#52303B] active:scale-[0.98] disabled:opacity-60"
+                            >
+                              {fetchingLink ? "Reading page…" : "Fetch & generate"}
+                            </button>
+                          </div>
+                        )}
+                        {linkError && <p className="mt-1.5 text-xs text-red-500">{linkError}</p>}
+                      </div>
+
                       <div className="flex items-center justify-between px-5 py-3 border-t border-[#F6E4EA]">
                         <div className="flex items-center gap-4">
                           <p id="char-count" className={`text-xs ${charCount < 50 ? "text-[#E9B8C4]" : charCount > 14000 ? "text-amber-500" : "text-[#9A7280]"}`}>
@@ -785,7 +854,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                         </div>
 
                         <motion.button
-                          onClick={handleGenerate}
+                          onClick={() => handleGenerate()}
                           disabled={!isReady || status === "loading" || atLimit}
                           whileHover={!isReady || status === "loading" || atLimit ? undefined : { scale: 1.02 }}
                           whileTap={!isReady || status === "loading" || atLimit ? undefined : { scale: 0.98 }}
@@ -984,7 +1053,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.25, ease: EASE_OUT }}
                   >
-                    {activeTab === "mcq" && <MultipleChoiceView questions={quiz.multipleChoice} onComplete={handleScoreUpdate} />}
+                    {activeTab === "mcq" && <MultipleChoiceView questions={quiz.multipleChoice} onComplete={handleScoreUpdate} topic={quiz.topic} flashcards={quiz.flashcards} />}
                     {activeTab === "flashcards" && <FlashcardView flashcards={quiz.flashcards} quizId={savedQuizId} />}
                     {activeTab === "fillblank" && quiz.fillInTheBlank?.length > 0 && <FillInTheBlankView questions={quiz.fillInTheBlank} onComplete={handleScoreUpdate} />}
                     {activeTab === "truefalse" && quiz.trueFalse?.length > 0 && <TrueFalseView questions={quiz.trueFalse} onComplete={handleScoreUpdate} />}
