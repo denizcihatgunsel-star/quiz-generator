@@ -1092,7 +1092,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
       )}
 
       <AnimatePresence>
-        {storyOpen && quiz && <QuizStory quiz={quiz} onClose={() => setStoryOpen(false)} />}
+        {storyOpen && quiz && <QuizStory quiz={quiz} languageCode={language} onClose={() => setStoryOpen(false)} />}
       </AnimatePresence>
     </div>
   );
