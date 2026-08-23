@@ -54,7 +54,7 @@ export interface NarrationCue {
 export function storyNarration(quiz: QuizData): NarrationCue[] {
   const tl = storyTimeline(quiz);
   const cues: NarrationCue[] = [
-    { t: 1.0, text: `Test yourself. ${quiz.topic}.` },
+    { t: 1.0, text: `Let's test what you know about ${quiz.topic}. Listen carefully.` },
   ];
   tl.segments.forEach((seg, i) => {
     const q = quiz.multipleChoice[i];
@@ -64,13 +64,13 @@ export function storyNarration(quiz: QuizData): NarrationCue[] {
     if (correct) {
       cues.push({
         t: seg.start + seg.dur - 1.7,
-        text: `The answer is: ${correct}`,
+        text: `Think about it... The answer is: ${correct}.`,
       });
     }
   });
   cues.push({
     t: tl.outroStart + 0.6,
-    text: `Make your own quiz at Examina dot ink.`,
+    text: `How did you do? Make your own quiz at Examina dot ink.`,
   });
   return cues;
 }
