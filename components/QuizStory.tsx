@@ -44,6 +44,27 @@ export default function QuizStory({
   const progress = Math.round((Math.min(elapsed, tl.duration) / tl.duration) * 100);
 
   const cleanupRef = useRef<() => void>(() => {});
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+
+  // Draw a static preview frame so the ready screen shows what's coming
+  useEffect(() => {
+    if (phase !== "ready") return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx2d = canvas.getContext("2d");
+    if (!ctx2d) return;
+    try {
+      void document.fonts.ready.then(() => {
+        if (canvasRef.current) {
+          const c = canvasRef.current.getContext("2d");
+          if (c) drawStoryFrame(c, STORY_W, STORY_H, 0.01, quiz);
+        }
+      });
+    } catch {
+      /* ignore */
+    }
+  }, [phase, quiz]);
 
   useEffect(
     () => () => {
@@ -59,6 +80,18 @@ export default function QuizStory({
 
     const cleanup = () => {
       cancelAnimationFrame(rafId);
+      try {
+        if (recorderRef.current && recorderRef.current.state !== "inactive") {
+          recorderRef.current.stop();
+        }
+      } catch {
+        /* ignore */
+      }
+      try {
+        streamRef.current?.getTracks().forEach((t) => t.stop());
+      } catch {
+        /* ignore */
+      }
       try {
         audioSource?.stop();
       } catch {
@@ -136,6 +169,7 @@ export default function QuizStory({
       }
 
       const videoStream = canvas.captureStream(30);
+      streamRef.current = videoStream;
       const mix = new MediaStream([...videoStream.getVideoTracks(), ...audioTracks]);
 
       const chunks: Blob[] = [];
@@ -143,6 +177,7 @@ export default function QuizStory({
         mimeType: chosen.mime,
         videoBitsPerSecond: 10_000_000,
       });
+      recorderRef.current = recorder;
       recorder.ondataavailable = (e) => {
         if (e.data.size) chunks.push(e.data);
       };
@@ -246,36 +281,24 @@ export default function QuizStory({
               onClick={startRecording}
               className="rounded-full bg-[#3B2027] px-8 py-3 text-sm font-medium text-[#F6E3E8] shadow-[0_12px_30px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98]"
             >
-              Record {totalSeconds}s story
+              Listen to story
             </button>
           </div>
         )}
 
-        {phase !== "ready" && (
+        {phase !== "done" && (
           <div className="relative">
-            {phase === "preparing" ? (
-              <div className="flex h-[427px] w-[240px] flex-col items-center justify-center gap-3 rounded-2xl bg-gradient-to-b from-[#FDE8EC] to-[#F8E9ED] shadow-[0_20px_60px_-20px_rgba(59,32,39,0.5)] sm:h-[498px] sm:w-[280px]">
+            <canvas
+              ref={canvasRef}
+              width={STORY_W}
+              height={STORY_H}
+              className="w-[240px] rounded-2xl shadow-[0_20px_60px_-20px_rgba(59,32,39,0.5)] sm:w-[280px]"
+            />
+            {phase === "preparing" && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-2xl bg-gradient-to-b from-[#FDE8EC]/95 to-[#F8E9ED]/95 backdrop-blur-sm">
                 <span className="h-8 w-8 animate-spin rounded-full border-2 border-[#B0607A]/30 border-t-[#B0607A]" />
                 <p className="text-xs font-medium text-[#8C5A68]">Generating voiceover…</p>
               </div>
-            ) : phase !== "done" ? (
-              <canvas
-                ref={canvasRef}
-                width={STORY_W}
-                height={STORY_H}
-                className="w-[240px] rounded-2xl shadow-[0_20px_60px_-20px_rgba(59,32,39,0.5)] sm:w-[280px]"
-              />
-            ) : (
-              videoUrl && (
-                <video
-                  src={videoUrl}
-                  autoPlay
-                  loop
-                  playsInline
-                  controls
-                  className="w-[240px] rounded-2xl shadow-[0_20px_60px_-20px_rgba(59,32,39,0.5)] sm:w-[280px]"
-                />
-              )
             )}
             {phase === "recording" && (
               <div className="absolute bottom-3 left-1/2 -translate-x-1/2">
@@ -285,6 +308,17 @@ export default function QuizStory({
               </div>
             )}
           </div>
+        )}
+
+        {phase === "done" && videoUrl && (
+          <video
+            src={videoUrl}
+            autoPlay
+            loop
+            playsInline
+            controls
+            className="w-[240px] rounded-2xl shadow-[0_20px_60px_-20px_rgba(59,32,39,0.5)] sm:w-[280px]"
+          />
         )}
 
         {phase === "error" && (
