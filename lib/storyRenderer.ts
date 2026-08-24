@@ -51,28 +51,101 @@ export interface NarrationCue {
   text: string;
 }
 
+const pickDifferent = <T,>(arr: T[], lastIndex: number): [T, number] => {
+  let idx = Math.floor(Math.random() * arr.length);
+  if (arr.length > 1 && idx === lastIndex) idx = (idx + 1) % arr.length;
+  return [arr[idx], idx];
+};
+
 export function storyNarration(quiz: QuizData): NarrationCue[] {
   const tl = storyTimeline(quiz);
-  const cues: NarrationCue[] = [
-    { t: 1.0, text: `Let's test what you know about ${quiz.topic}. Listen carefully.` },
+  const topic = quiz.topic || "this topic";
+  const cues: NarrationCue[] = [];
+
+  const intros = [
+    `Let's test what you know about ${topic}. Listen carefully.`,
+    `Can you ace this quiz on ${topic}? Let's find out.`,
+    `How well do you actually know ${topic}?`,
+    `Time to challenge yourself: ${topic}.`,
+    `${topic}. Do you really know it? Prove it.`,
   ];
+  cues.push({ t: 1.0, text: pick(intros) });
+
+  const leads = [
+    "",
+    "First question.",
+    "Question {n}.",
+    "Next one.",
+    "Here we go.",
+    "Try this.",
+    "Okay, next.",
+    "Quick one.",
+    "Alright,",
+    "Ready?",
+  ];
+  const thinks = [
+    "",
+    "",
+    "Think about it...",
+    "Take a moment.",
+    "Any ideas?",
+    "What do you say?",
+    "Got it yet?",
+    "Hmm... do you know?",
+  ];
+  const answers = [
+    (opt: string) => `The answer is: ${opt}.`,
+    (opt: string) => `It's ${opt}.`,
+    (opt: string) => `Correct answer: ${opt}.`,
+    (opt: string) => `That would be ${opt}.`,
+    (opt: string) => `The right choice is ${opt}.`,
+    (opt: string) => `Yes — ${opt}.`,
+  ];
+
+  const n = tl.segments.length;
+  let lastLead = -1;
+  let lastThink = -1;
+  let lastAnswer = -1;
+
   tl.segments.forEach((seg, i) => {
     const q = quiz.multipleChoice[i];
     if (!q) return;
-    cues.push({ t: seg.start + 0.4, text: q.question });
+
+    let lead: string;
+    if (i === n - 1 && n > 2) {
+      lead = pick(["Last one.", "Final question.", "Okay, last one."]);
+    } else {
+      const templates = i === 0 ? ["", "First question.", "Question {n}.", "Here we go."] : leads;
+      [lead, lastLead] = pickDifferent(templates, lastLead);
+    }
+    lead = lead.replace("{n}", String(i + 1));
+    cues.push({ t: seg.start + 0.4, text: `${lead ? lead + " " : ""}${q.question}` });
+
     const correct = q.options[q.correctIndex];
     if (correct) {
+      const [think, ti] = pickDifferent(thinks, lastThink);
+      lastThink = ti;
+      const [answerFn, ai] = pickDifferent(answers, lastAnswer);
+      lastAnswer = ai;
       cues.push({
         t: seg.start + seg.dur - 1.7,
-        text: `Think about it... The answer is: ${correct}.`,
+        text: `${think ? think + " " : ""}${answerFn(correct)}`,
       });
     }
   });
-  cues.push({
-    t: tl.outroStart + 0.6,
-    text: `How did you do? Make your own quiz at Examina dot ink.`,
-  });
+
+  const outros = [
+    "How did you do? Make your own quiz at Examina dot ink.",
+    "Want more? Build your own quiz at Examina dot ink.",
+    "Test yourself anytime at Examina dot ink.",
+    "Liked this? There's plenty more at Examina dot ink.",
+  ];
+  cues.push({ t: tl.outroStart + 0.6, text: pick(outros) });
   return cues;
+}
+
+function pick<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
