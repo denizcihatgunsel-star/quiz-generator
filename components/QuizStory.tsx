@@ -164,8 +164,7 @@ export default function QuizStory({
               const dest = audioCtx.createMediaStreamDestination();
               audioSource = audioCtx.createBufferSource();
               audioSource.buffer = master;
-              audioSource.connect(dest);
-              audioSource.connect(audioCtx.destination); // hear it live while rendering
+              audioSource.connect(dest); // captured into the recording, but NOT played out loud
               audioTracks = dest.stream.getAudioTracks();
             } else {
               setVoiceNote("Voice service was busy — recorded without narration.");
