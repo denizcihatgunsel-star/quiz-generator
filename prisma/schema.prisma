@@ -24,6 +24,7 @@ model User {
   usages           UsageRecord[]
   quizzes          SavedQuiz[]
   flashcardReviews FlashcardReview[]
+  questionReviews  QuestionReview[]
   streak           UserStreak?
   xpEvents         XpEvent[]
   achievements     UserAchievement[]
@@ -115,6 +116,23 @@ model FlashcardReview {
   createdAt    DateTime @default(now())
 
   @@unique([userId, quizId, cardIndex])
+}
+
+// Missed multiple-choice questions scheduled back into Smart Review (Leitner boxes)
+model QuestionReview {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quizId    String   @default("")
+  refId     String
+  topic     String   @default("")
+  payload   String   // JSON: { question, options, correctIndex, explanation }
+  box       Int      @default(1)
+  dueDate   DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, refId])
 }
 
 // Gamification: streaks and XP

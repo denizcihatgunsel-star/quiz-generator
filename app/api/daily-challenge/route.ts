@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { db } from "@/lib/db";
+import { db, ensureVerificationColumns } from "@/lib/db";
 import { awardXp, XP_REWARDS } from "@/lib/xp";
 import { unlockAchievement } from "@/lib/achievements";
 
@@ -56,6 +56,27 @@ export async function GET() {
     .filter((a) => a.createdAt.toISOString().slice(0, 10) === today())
     .reduce((best, a) => Math.max(best, Math.round((a.score / a.total) * 100)), 0);
 
+  // Smart Review: missed questions due today
+  let review: { items: Record<string, unknown>[]; dueCount: number } = { items: [], dueCount: 0 };
+  try {
+    await ensureVerificationColumns();
+    const now = new Date();
+    const [dueItems, dueCount] = await Promise.all([
+      db.questionReview.findMany({
+        where: { userId: session.user.id, dueDate: { lte: now } },
+        orderBy: { dueDate: "asc" },
+        take: 3,
+      }),
+      db.questionReview.count({ where: { userId: session.user.id, dueDate: { lte: now } } }),
+    ]);
+    review = {
+      items: dueItems.map((item) => ({ id: item.id, topic: item.topic, ...JSON.parse(item.payload) })),
+      dueCount,
+    };
+  } catch {
+    // Smart Review is optional — never break the challenge
+  }
+
   return NextResponse.json({
     quiz: {
       id: picked.id,
@@ -64,6 +85,7 @@ export async function GET() {
       author: picked.user.name || "Anonymous",
       questions: pickedData.multipleChoice ?? [],
     },
+    review,
     completedToday,
     todayBest,
     dayIndex: dayIndex(new Date()),

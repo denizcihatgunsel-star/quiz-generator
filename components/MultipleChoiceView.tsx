@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 import { MultipleChoiceQuestion, Flashcard } from "@/types/quiz";
 import VideoExplanationLink from "./VideoExplanationLink";
 
@@ -49,6 +50,7 @@ interface Props {
   onComplete?: (correct: number, total: number) => void;
   topic?: string;
   flashcards?: Flashcard[];
+  quizId?: string;
 }
 
 export default function MultipleChoiceView({
@@ -56,7 +58,9 @@ export default function MultipleChoiceView({
   onComplete,
   topic,
   flashcards,
+  quizId,
 }: Props) {
+  const { data: session } = useSession();
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [revealed, setRevealed] = useState<Record<string, boolean>>({});
   const [visibleCount, setVisibleCount] = useState(3);
@@ -110,8 +114,34 @@ export default function MultipleChoiceView({
         (q) => answers[q.id] === q.correctIndex
       ).length;
       onComplete?.(correct, questions.length);
+
+      // Smart Review: schedule missed questions back into the Daily Challenge
+      if (session?.user && topic) {
+        const missed = questions.filter((q) => answers[q.id] !== q.correctIndex);
+        if (missed.length > 0) {
+          fetch("/api/review", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              quizId: quizId ?? "",
+              topic,
+              items: missed.map((q) => ({
+                refId: `${quizId || "adhoc"}:${q.id}`,
+                question: {
+                  question: q.question,
+                  options: q.options,
+                  correctIndex: q.correctIndex,
+                  explanation: q.explanation ?? "",
+                },
+              })),
+            }),
+          }).catch(() => {
+            /* fire-and-forget */
+          });
+        }
+      }
     }
-  }, [allAnswered, questions, answers, onComplete]);
+  }, [allAnswered, questions, answers, onComplete, session, topic, quizId]);
 
   const pick = (qId: string, optIndex: number) => {
     if (revealed[qId]) return;

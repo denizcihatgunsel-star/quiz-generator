@@ -7,6 +7,7 @@ import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSp
 import { QuizData, GenerateStatus } from "@/types/quiz";
 import { PLANS, type PlanId } from "@/lib/subscription";
 import MultipleChoiceView from "./MultipleChoiceView";
+import ExamView from "./ExamView";
 import FlashcardView from "./FlashcardView";
 import FillInTheBlankView from "./FillInTheBlankView";
 import TrueFalseView from "./TrueFalseView";
@@ -97,6 +98,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
   const [linkError, setLinkError] = useState<string | null>(null);
   const [status, setStatus] = useState<GenerateStatus>("idle");
   const [quiz, setQuiz] = useState<QuizData | null>(null);
+  const [examMode, setExamMode] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [limitReached, setLimitReached] = useState(false);
   const [activeTab, setActiveTab] = useState<TabId>("mcq");
@@ -240,6 +242,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
     setError(null);
     setLimitReached(false);
     setQuiz(null);
+    setExamMode(false);
     setSavedShareId(null);
     setSavedQuizId(null);
     setScore(null);
@@ -1044,21 +1047,42 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                   onCancel={() => setEditing(false)}
                 />
               ) : (
+                <>
+                  {activeTab === "mcq" && !examMode && (
+                    <div className="mb-5 flex justify-end">
+                      <button
+                        onClick={() => setExamMode(true)}
+                        className="flex items-center gap-2 rounded-full border border-[#F3D5DC] bg-white/70 px-4 py-1.5 text-xs font-medium text-[#8C5A68] transition-all hover:border-[#B0607A] hover:text-[#3B2027]"
+                        title="Timed exam — no feedback until you submit"
+                      >
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#B0607A]" />
+                        Exam mode
+                      </button>
+                    </div>
+                  )}
                 <AnimatePresence mode="wait">
                   <motion.div
-                    key={activeTab}
+                    key={examMode && activeTab === "mcq" ? "exam" : activeTab}
                     role="tabpanel"
                     initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.25, ease: EASE_OUT }}
                   >
-                    {activeTab === "mcq" && <MultipleChoiceView questions={quiz.multipleChoice} onComplete={handleScoreUpdate} topic={quiz.topic} flashcards={quiz.flashcards} />}
+                    {activeTab === "mcq" && examMode && (
+                      <ExamView
+                        questions={quiz.multipleChoice}
+                        onComplete={handleScoreUpdate}
+                        onExit={() => setExamMode(false)}
+                      />
+                    )}
+                    {activeTab === "mcq" && !examMode && <MultipleChoiceView questions={quiz.multipleChoice} onComplete={handleScoreUpdate} topic={quiz.topic} flashcards={quiz.flashcards} quizId={savedQuizId ?? ""} />}
                     {activeTab === "flashcards" && <FlashcardView flashcards={quiz.flashcards} quizId={savedQuizId} />}
                     {activeTab === "fillblank" && quiz.fillInTheBlank?.length > 0 && <FillInTheBlankView questions={quiz.fillInTheBlank} onComplete={handleScoreUpdate} />}
                     {activeTab === "truefalse" && quiz.trueFalse?.length > 0 && <TrueFalseView questions={quiz.trueFalse} onComplete={handleScoreUpdate} />}
                   </motion.div>
                 </AnimatePresence>
+                </>
               )}
             </div>
           </div>

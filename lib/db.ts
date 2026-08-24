@@ -61,6 +61,33 @@ export function ensureVerificationColumns(): Promise<void> {
       } catch {
         // non-fatal
       }
+
+      // Smart Review table (Leitner boxes for missed questions)
+      try {
+        await db.$executeRawUnsafe(`SELECT "id" FROM "QuestionReview" LIMIT 1`);
+      } catch {
+        try {
+          await db.$executeRawUnsafe(
+            `CREATE TABLE IF NOT EXISTS "QuestionReview" (
+              "id" TEXT PRIMARY KEY NOT NULL,
+              "userId" TEXT NOT NULL,
+              "quizId" TEXT NOT NULL DEFAULT '',
+              "refId" TEXT NOT NULL,
+              "topic" TEXT NOT NULL DEFAULT '',
+              "payload" TEXT NOT NULL,
+              "box" INTEGER NOT NULL DEFAULT 1,
+              "dueDate" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              "updatedAt" DATETIME NOT NULL
+            )`
+          );
+          await db.$executeRawUnsafe(
+            `CREATE UNIQUE INDEX IF NOT EXISTS "QuestionReview_userId_refId_key" ON "QuestionReview"("userId", "refId")`
+          );
+        } catch {
+          // created by another instance — ignore
+        }
+      }
     })().catch((err) => {
       console.error("Verification column check failed:", err);
       globalForMigration.verificationColumnsReady = undefined;

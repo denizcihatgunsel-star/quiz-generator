@@ -17,6 +17,72 @@ interface ChallengeQuiz {
   questions: MultipleChoiceQuestion[];
 }
 
+interface ReviewItem {
+  id: string;
+  topic: string;
+  question: string;
+  options: string[];
+  correctIndex: number;
+  explanation?: string;
+}
+
+function ReviewCard({ item, onDone }: { item: ReviewItem; onDone: (id: string) => void }) {
+  const [chosen, setChosen] = useState<number | null>(null);
+  const [revealed, setRevealed] = useState(false);
+
+  const pick = async (idx: number) => {
+    if (revealed) return;
+    setChosen(idx);
+    setRevealed(true);
+    try {
+      await fetch("/api/review", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: item.id, correct: idx === item.correctIndex }),
+      });
+    } catch {
+      /* ignore */
+    }
+    setTimeout(() => onDone(item.id), 1600);
+  };
+
+  return (
+    <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-5 backdrop-blur-xl">
+      <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#B0607A]">
+        {item.topic || "Review"}
+      </p>
+      <p className="mb-3 text-sm font-medium text-[#3B2027]">{item.question}</p>
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        {item.options.map((opt, oi) => {
+          const isAnswer = oi === item.correctIndex;
+          const isChosen = chosen === oi;
+          let style =
+            "border-[#F3D5DC] bg-white/80 text-[#5D4450] hover:border-[#E9B8C4] cursor-pointer";
+          if (revealed) {
+            if (isAnswer) style = "border-emerald-300 bg-emerald-50 text-emerald-700";
+            else if (isChosen) style = "border-red-300 bg-red-50 text-red-600 line-through";
+            else style = "border-zinc-100 text-zinc-400 cursor-default";
+          }
+          return (
+            <button
+              key={oi}
+              onClick={() => pick(oi)}
+              disabled={revealed}
+              className={`rounded-xl border px-3 py-2 text-left text-sm transition-colors ${style}`}
+            >
+              <span className="mr-2 font-semibold opacity-50">{String.fromCharCode(65 + oi)}.</span>
+              {opt}
+            </button>
+          );
+        })}
+      </div>
+      {revealed && item.explanation && (
+        <p className="mt-3 text-xs leading-relaxed text-[#9A7280]">{item.explanation}</p>
+      )}
+    </div>
+  );
+}
+
 export default function DailyChallengePage() {
   const { status } = useSession();
   const router = useRouter();
@@ -33,6 +99,8 @@ export default function DailyChallengePage() {
   } | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [reviews, setReviews] = useState<ReviewItem[]>([]);
+  const [reviewCount, setReviewCount] = useState(0);
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/auth/login");
@@ -50,6 +118,10 @@ export default function DailyChallengePage() {
           setCompletedToday(d.completedToday);
           setTodayBest(d.todayBest ?? 0);
           setReward(d.reward ?? 25);
+          if (d.review?.items) {
+            setReviews(d.review.items);
+            setReviewCount(d.review.dueCount ?? d.review.items.length);
+          }
         }
       })
       .catch(() => setError("Failed to load the daily challenge."))
@@ -94,6 +166,32 @@ export default function DailyChallengePage() {
             A fresh community quiz each day. Finish it to earn XP and keep your streak alive.
           </p>
         </div>
+
+        {!loading && !error && reviews.length > 0 && (
+          <section className="mb-10">
+            <div className="mb-1 flex items-center justify-between">
+              <p className="font-serif text-lg italic text-[#3B2027]">Smart review</p>
+              <span className="rounded-full bg-[#F6E4EA] px-3 py-1 text-xs font-medium text-[#9A4F68]">
+                {reviewCount} due
+              </span>
+            </div>
+            <p className="mb-4 text-xs text-[#9A7280]">
+              Questions you missed — they keep coming back until you nail them.
+            </p>
+            <div className="space-y-3">
+              {reviews.map((item) => (
+                <ReviewCard
+                  key={item.id}
+                  item={item}
+                  onDone={(id) => {
+                    setReviews((prev) => prev.filter((r) => r.id !== id));
+                    setReviewCount((c) => Math.max(0, c - 1));
+                  }}
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
         {loading && (
           <div className="flex justify-center py-24">
