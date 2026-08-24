@@ -125,7 +125,17 @@ export default function QuizStory({
           const res = await fetch("/api/story-narration", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ lines: cues.map((c) => c.text), language: languageCode }),
+            body: JSON.stringify({
+              quiz: {
+                topic: quiz.topic,
+                multipleChoice: quiz.multipleChoice.slice(0, 8).map((q) => ({
+                  question: q.question,
+                  options: q.options,
+                  correctIndex: q.correctIndex,
+                })),
+              },
+              language: languageCode,
+            }),
           });
           if (res.ok) {
             const data = await res.json();
