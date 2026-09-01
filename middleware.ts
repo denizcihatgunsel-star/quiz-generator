@@ -30,9 +30,9 @@ export function middleware(request: NextRequest) {
   const isMobile = isMobileDevice(request);
   const search = request.nextUrl.search;
 
-  if (pathname.startsWith("/m")) {
+  if (pathname === "/m" || pathname.startsWith("/m/")) {
     if (!isMobile) {
-      let target = pathname === "/m" || pathname === "/m/create" ? "/" : pathname.replace(/^\/m/, "") || "/";
+      let target = pathname === "/m" || pathname === "/m/create" ? "/" : pathname.replace(/^\/m(?=\/|$)/, "") || "/";
       const url = new URL(target, request.url);
       url.search = search;
       return NextResponse.redirect(url);
