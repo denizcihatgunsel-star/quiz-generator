@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { assertCanAssignQuiz, DraftReviewError } from "@/lib/draftReview";
 
 // POST: Create a new classroom session from a saved quiz
 export async function POST(req: NextRequest) {
@@ -17,6 +18,16 @@ export async function POST(req: NextRequest) {
   const quiz = await db.savedQuiz.findUnique({ where: { id: quizId } });
   if (!quiz || quiz.userId !== session.user.id) {
     return NextResponse.json({ error: "Quiz not found" }, { status: 404 });
+  }
+
+  // Hard rule: never auto-assign unreviewed (draft/rejected) AI sets
+  try {
+    assertCanAssignQuiz({ reviewStatus: (quiz as { reviewStatus?: string }).reviewStatus, id: quiz.id });
+  } catch (err) {
+    if (err instanceof DraftReviewError) {
+      return NextResponse.json({ error: err.message, code: err.code }, { status: err.status });
+    }
+    throw err;
   }
 
   // Parse quiz and extract MCQ + T/F questions (they work best for live mode)

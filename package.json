@@ -7,7 +7,8 @@
     "build": "prisma generate && next build",
     "postinstall": "prisma generate",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "smoke:draft-review": "node scripts/smoke-draft-review.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
