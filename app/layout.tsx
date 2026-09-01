@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Geist, Geist_Mono, Instrument_Serif, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
@@ -68,14 +69,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const lang = (await headers()).get("x-html-lang") || "en";
   return (
     <html
-      lang="en"
+      lang={lang}
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${spaceGrotesk.variable} h-full antialiased`}
       suppressHydrationWarning
     >

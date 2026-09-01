@@ -3,6 +3,8 @@ import { NextResponse, type NextRequest } from "next/server";
 const MOBILE_UA =
   /android|iphone|ipad|ipod|mobile|opera mini|iemobile|blackberry|webos|kindle|silk/i;
 
+const HTML_LOCALES = new Set(["es", "de", "fr", "pt", "tr"]);
+
 function isMobileDevice(request: NextRequest): boolean {
   const hint = request.headers.get("sec-ch-ua-mobile");
   if (hint === "?1") return true;
@@ -25,7 +27,28 @@ const MOBILE_MAP: Record<string, string> = {
   "/classroom/join": "/m/classroom/join",
 };
 
+function htmlLangFromPath(pathname: string): string {
+  const first = pathname.split("/").filter(Boolean)[0];
+  return first && HTML_LOCALES.has(first) ? first : "en";
+}
+
+function nextWithHtmlLang(request: NextRequest) {
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-html-lang", htmlLangFromPath(request.nextUrl.pathname));
+  return NextResponse.next({
+    request: { headers: requestHeaders },
+  });
+}
+
 export function middleware(request: NextRequest) {
+  const host = (request.headers.get("host") ?? "").split(":")[0];
+  if (host === "examina.ink") {
+    const dest = new URL(
+      `https://www.examina.ink${request.nextUrl.pathname}${request.nextUrl.search}`,
+    );
+    return NextResponse.redirect(dest, 308);
+  }
+
   const { pathname } = request.nextUrl;
   const isMobile = isMobileDevice(request);
   const search = request.nextUrl.search;
@@ -37,7 +60,7 @@ export function middleware(request: NextRequest) {
       url.search = search;
       return NextResponse.redirect(url);
     }
-    return NextResponse.next();
+    return nextWithHtmlLang(request);
   }
 
   if (isMobile) {
@@ -54,7 +77,7 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  return nextWithHtmlLang(request);
 }
 
 export const config = {

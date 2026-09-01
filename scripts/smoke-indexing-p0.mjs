@@ -47,4 +47,25 @@ for (const rel of ["app/pricing/page.tsx", "app/m/pricing/page.tsx"]) {
   ok(`${rel} imports PLANS`, /\bimport\s*\{[^}]*\bPLANS\b/.test(src));
 }
 
+
+const layout = readFileSync(join(root, "app/layout.tsx"), "utf8");
+ok("layout.tsx imports headers from next/headers", /from\s+["']next\/headers["']/.test(layout));
+ok("layout.tsx uses headers()", /\bheaders\s*\(/.test(layout));
+ok("layout.tsx reads x-html-lang", layout.includes("x-html-lang"));
+ok(
+  "layout.tsx does not hardcode only lang=\"en\"",
+  !/\blang\s*=\s*["']en["']/.test(layout) || layout.includes("x-html-lang"),
+);
+
+const vercel = readFileSync(join(root, "vercel.json"), "utf8");
+ok("vercel.json mentions examina.ink host", vercel.includes("examina.ink"));
+ok(
+  "vercel.json has 308 or permanent true",
+  /"statusCode"\s*:\s*308/.test(vercel) || /"permanent"\s*:\s*true/.test(vercel),
+);
+
+const middleware = readFileSync(join(root, "middleware.ts"), "utf8");
+ok("middleware mentions 308", middleware.includes("308"));
+ok("middleware mentions x-html-lang", middleware.includes("x-html-lang"));
+
 console.log(`smoke-indexing-p0: ${passed} passed`);
