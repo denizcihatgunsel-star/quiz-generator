@@ -9,12 +9,16 @@ export interface MultipleChoiceQuestion {
   explanation: string;
   difficulty: Difficulty;
   bloomLevel: BloomLevel;
+  bloomRationale?: string;
+  distractorStrength?: number;
 }
 
 export interface Flashcard {
   id: string;
   front: string;
   back: string;
+  bloomLevel?: BloomLevel;
+  bloomRationale?: string;
 }
 
 export interface FillInTheBlankQuestion {
@@ -24,6 +28,7 @@ export interface FillInTheBlankQuestion {
   explanation: string;
   difficulty: Difficulty;
   bloomLevel: BloomLevel;
+  bloomRationale?: string;
 }
 
 export interface TrueFalseQuestion {
@@ -33,6 +38,7 @@ export interface TrueFalseQuestion {
   explanation: string;
   difficulty: Difficulty;
   bloomLevel: BloomLevel;
+  bloomRationale?: string;
 }
 
 export interface QuizData {
@@ -42,6 +48,8 @@ export interface QuizData {
   trueFalse: TrueFalseQuestion[];
   topic: string;
   theme?: string; // quiz theme id, default "rose"
+  ocrUsed?: boolean;
+  sourceConfidence?: number;
 }
 
 export type GenerateStatus = "idle" | "loading" | "success" | "error";

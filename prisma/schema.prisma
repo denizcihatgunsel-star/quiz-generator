@@ -25,6 +25,7 @@ model User {
   quizzes          SavedQuiz[]
   flashcardReviews FlashcardReview[]
   questionReviews  QuestionReview[]
+  draftQuizSets    DraftQuizSet[]
   streak           UserStreak?
   xpEvents         XpEvent[]
   achievements     UserAchievement[]
@@ -49,6 +50,8 @@ model SavedQuiz {
   total     Int?
   shareId   String?  @unique
   isPublic  Boolean  @default(false) // published to public library
+  reviewStatus String  @default("approved") // draft | approved | rejected — AI sets start as draft
+  draftSetId   String? @unique
   createdAt DateTime @default(now())
   attempts  QuizAttempt[]
 }
@@ -219,4 +222,45 @@ model PasswordResetToken {
   email     String
   expiresAt DateTime
   createdAt DateTime @default(now())
+}
+
+
+// AI draft-review / anti-hallucination tray (unreviewed sets must not auto-assign)
+model DraftQuizSet {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic            String
+  sourceType       String   @default("text") // pdf | text | ocr | url | other
+  ocrUsed          Boolean  @default(false)
+  sourceConfidence Float?
+  reviewStatus     String   @default("draft") // draft | approved | rejected
+  reviewerNotes    String?
+  rejectionReason  String?
+  quizData         String   // JSON snapshot of QuizData
+  savedQuizId      String?  @unique
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  items            GeneratedItem[]
+}
+
+model GeneratedItem {
+  id                 String   @id @default(cuid())
+  draftSetId         String
+  draftSet           DraftQuizSet @relation(fields: [draftSetId], references: [id], onDelete: Cascade)
+  itemType           String   // mcq | flashcard | fitb | true_false
+  payload            String   // JSON of the item
+  bloomLevel         String
+  bloomRationale     String?
+  ocrUsed            Boolean  @default(false)
+  sourceConfidence   Float?
+  distractorStrength Float?
+  reviewStatus       String   @default("draft") // draft | approved | rejected
+  reviewerNotes      String?
+  rejectionReason    String?
+  sortOrder          Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([draftSetId, reviewStatus])
 }
