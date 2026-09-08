@@ -37,7 +37,7 @@ export const ctaIdlePulseAnimate = {
     "0 0 0 7px rgba(59, 32, 39, 0.16)",
     "0 0 0 0 rgba(59, 32, 39, 0)",
   ],
-} as const;
+};
 
 /** Soft light glow for blush chips sitting on dark CTA buttons. */
 export const ctaIdlePulseAnimateOnDark = {
@@ -47,11 +47,12 @@ export const ctaIdlePulseAnimateOnDark = {
     "0 0 12px 3px rgba(246, 227, 232, 0.55)",
     "0 0 0 0 rgba(246, 227, 232, 0)",
   ],
-} as const;
+};
 
 /**
  * Soft rose glow for dark chips on light blush UI (e.g. nav Create Quiz).
  * Dark plum shadow disappears on light pills — use #B0607A instead.
+ * Mutable (no `as const`) so Framer TargetAndTransition accepts boxShadow.
  */
 export const ctaIdlePulseAnimateOnLight = {
   scale: [1, 1.1, 1],
@@ -60,7 +61,7 @@ export const ctaIdlePulseAnimateOnLight = {
     "0 0 12px 3px rgba(176, 96, 122, 0.45)",
     "0 0 0 0 rgba(176, 96, 122, 0)",
   ],
-} as const;
+};
 
 /** ~0.75s pulse + ~2.25s pause ≈ 3s loop. */
 export const ctaIdlePulseTransition = {
