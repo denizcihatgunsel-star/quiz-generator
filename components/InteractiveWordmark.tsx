@@ -1,14 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { EASE_OUT } from "@/lib/motion";
 
 const WORD = "Examina";
-const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
 
-const reduced =
-  typeof window !== "undefined" &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const hoverCapable =
   typeof window !== "undefined" &&
   window.matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -23,6 +20,7 @@ interface State {
 const ZERO = { x: 0, y: 0, r: 0, s: 1 };
 
 export default function InteractiveWordmark({ className }: { className?: string }) {
+  const reduce = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const targets = useRef<State[]>(WORD.split("").map(() => ({ ...ZERO })));
@@ -62,7 +60,7 @@ export default function InteractiveWordmark({ className }: { className?: string 
       targets.current = WORD.split("").map(() => ({ ...ZERO }));
     };
 
-    if (hoverCapable && !reduced) {
+    if (hoverCapable && !reduce) {
       el.addEventListener("pointermove", onMove);
       el.addEventListener("pointerleave", onLeave);
     }
@@ -96,7 +94,7 @@ export default function InteractiveWordmark({ className }: { className?: string 
       el.removeEventListener("pointerleave", onLeave);
       cancelAnimationFrame(raf.current);
     };
-  }, []);
+  }, [reduce]);
 
   return (
     <motion.div ref={containerRef} className={`group relative ${className ?? ""}`}>
@@ -115,11 +113,15 @@ export default function InteractiveWordmark({ className }: { className?: string 
               letterRefs.current[i] = el;
             }}
             className="inline-block will-change-transform"
-            initial={{ y: "1.1em", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.12 + i * 0.06 }}
+            initial={reduce ? false : { y: 20, opacity: 0, filter: "blur(4px)" }}
+            animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+            transition={
+              reduce
+                ? { duration: 0 }
+                : { duration: 0.55, ease: EASE_OUT, delay: 0.08 + i * 0.04 }
+            }
             onAnimationComplete={() => {
-              if (i === WORD.length - 1 && !active.current && !reduced) {
+              if (i === WORD.length - 1 && !active.current && !reduce) {
                 active.current = true;
                 raf.current = requestAnimationFrame(tickRef.current);
               }
