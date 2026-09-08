@@ -49,6 +49,19 @@ export const ctaIdlePulseAnimateOnDark = {
   ],
 } as const;
 
+/**
+ * Soft rose glow for dark chips on light blush UI (e.g. nav Create Quiz).
+ * Dark plum shadow disappears on light pills — use #B0607A instead.
+ */
+export const ctaIdlePulseAnimateOnLight = {
+  scale: [1, 1.1, 1],
+  boxShadow: [
+    "0 0 0 0 rgba(176, 96, 122, 0)",
+    "0 0 12px 3px rgba(176, 96, 122, 0.45)",
+    "0 0 0 0 rgba(176, 96, 122, 0)",
+  ],
+} as const;
+
 /** ~0.75s pulse + ~2.25s pause ≈ 3s loop. */
 export const ctaIdlePulseTransition = {
   duration: 0.75,

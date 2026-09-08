@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
-import { ctaIdlePulseAnimate, ctaIdlePulseTransition } from "@/lib/motion";
+import { ctaIdlePulseAnimateOnLight, ctaIdlePulseTransition } from "@/lib/motion";
 
 const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
 
@@ -49,7 +49,7 @@ export default function EditorialNav() {
             <span className="text-sm font-medium text-[#3B2027]">Create Quiz</span>
             <motion.span
               className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3B2027] text-white"
-              animate={reduce ? undefined : ctaIdlePulseAnimate}
+              animate={reduce ? undefined : ctaIdlePulseAnimateOnLight}
               transition={reduce ? undefined : ctaIdlePulseTransition}
             >
               <span className="inline-flex transition-transform duration-200 group-hover:translate-x-0.5">
