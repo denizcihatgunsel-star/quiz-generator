@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback, type MouseEvent } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring, type Variants } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring, useReducedMotion, type Variants } from "framer-motion";
 import { QuizData, GenerateStatus } from "@/types/quiz";
 import { PLANS, type PlanId } from "@/lib/subscription";
 import MultipleChoiceView from "./MultipleChoiceView";
@@ -24,6 +24,7 @@ import ImageOCR from "./ImageOCR";
 import QuizEditor from "./QuizEditor";
 import VideoExplanationLink from "./VideoExplanationLink";
 import MagneticText from "./MagneticText";
+import { ctaIdlePulseAnimateOnDark, ctaIdlePulseTransition } from "@/lib/motion";
 import HomeSections from "./HomeSections";
 import QuizStory from "./QuizStory";
 import { useTranslation } from "@/lib/i18n";
@@ -457,29 +458,34 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
 
   const [heroHover, setHeroHover] = useState(false);
   const [storyOpen, setStoryOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
   const heroContainer: Variants = {
     hidden: {},
     show: {
-      transition: { staggerChildren: 0.08, delayChildren: 0.05 },
+      transition: reduceMotion
+        ? { duration: 0 }
+        : { staggerChildren: 0.08, delayChildren: 0.05 },
     },
   };
   const heroItem: Variants = {
-    hidden: { opacity: 0, y: 16 },
+    hidden: reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
     show: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: EASE_OUT },
+      transition: reduceMotion ? { duration: 0 } : { duration: 0.5, ease: EASE_OUT },
     },
   };
   const heroWord: Variants = {
-    hidden: { opacity: 0, y: 20, filter: "blur(8px)" },
+    hidden: reduceMotion
+      ? { opacity: 1, y: 0, filter: "blur(0px)" }
+      : { opacity: 0, y: 20, filter: "blur(4px)" },
     show: {
       opacity: 1,
       y: 0,
       filter: "blur(0px)",
-      transition: { duration: 0.45, ease: EASE_OUT },
+      transition: reduceMotion ? { duration: 0 } : { duration: 0.45, ease: EASE_OUT },
     },
   };
 
@@ -670,11 +676,18 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                       className="group flex items-center gap-3 rounded-full bg-[#3B2027] py-3 pl-6 pr-2 text-sm font-medium text-[#F6E3E8] transition-colors duration-200 hover:bg-[#52303B]"
                     >
                       <span>Start generating</span>
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027] transition-transform duration-200 group-hover:translate-x-0.5">
-                        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
-                        </svg>
-                      </span>
+                      <motion.span
+                        className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027]"
+                        animate={reduceMotion ? undefined : ctaIdlePulseAnimateOnDark}
+                        transition={reduceMotion ? undefined : ctaIdlePulseTransition}
+                      >
+                        {/* Inner span owns CSS translate so it cannot override Framer scale pulse */}
+                        <span className="inline-flex transition-transform duration-200 group-hover:translate-x-[3px]">
+                          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
+                          </svg>
+                        </span>
+                      </motion.span>
                     </a>
                     <a
                       href="#selected"
@@ -760,7 +773,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                       onMouseLeave={onTiltLeave}
                       className="relative will-change-transform"
                     >
-                    <div className="animate-border rounded-3xl">
+                    <div className={`animate-border rounded-3xl ${status === "loading" ? "gen-pending-sheen" : ""}`}>
                     <div className="rounded-3xl border border-[#F3D5DC] bg-white/70 backdrop-blur-xl card-breathe overflow-hidden transition-all duration-300 hover:border-[#E9B8C4] focus-within:border-[#E9B8C4]">
                       <div
                         aria-hidden
@@ -861,7 +874,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                           disabled={!isReady || status === "loading" || atLimit}
                           whileHover={!isReady || status === "loading" || atLimit ? undefined : { scale: 1.02 }}
                           whileTap={!isReady || status === "loading" || atLimit ? undefined : { scale: 0.98 }}
-                          className={`btn-sheen px-5 py-2 bg-[linear-gradient(120deg,#3B2027,#6A3A4C,#3B2027)] gradient-shift text-[#F6E3E8] text-sm font-medium disabled:opacity-60 transition-opacity duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready-rose" : ""}`}
+                          className={`btn-sheen px-5 py-2 bg-[linear-gradient(120deg,#3B2027,#6A3A4C,#3B2027)] gradient-shift text-[#F6E3E8] text-sm font-medium disabled:opacity-60 transition-opacity duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready-rose" : ""} ${status === "loading" ? "btn-sheen-active" : ""}`}
                           aria-busy={status === "loading"}
                         >
                           {status === "loading" ? t("input.generating") : t("input.generate")}
@@ -888,15 +901,16 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                             <span
                               key={i}
                               className="h-1.5 w-1.5 rounded-full bg-[#B0607A] animate-bounce"
-                              style={{ animationDelay: `${i * 0.15}s` }}
+                              style={{ animationDelay: reduceMotion ? undefined : `${i * 0.15}s` }}
                             />
                           ))}
                           <span className="spin-slow ml-1.5 inline-block text-xs text-[#B0607A]">✦</span>
                         </div>
                         <p className="text-xs">{t("input.reading")}</p>
                       </div>
-                      <div className="mt-2 h-0.5 overflow-hidden rounded-full bg-[#F6E4EA]">
-                        <div className="shimmer-slide h-full w-1/3 rounded-full bg-gradient-to-r from-[#E9A8B8] to-[#B0607A]" />
+                      {/* Indeterminate progress under generator card */}
+                      <div className="gen-pending-bar mt-3 h-1 overflow-hidden rounded-full bg-[#F6E4EA]" aria-hidden>
+                        <div className="shimmer-slide gen-pending-gradient h-full w-1/3 rounded-full" />
                       </div>
                       </>
                     )}
@@ -1064,10 +1078,10 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                   <motion.div
                     key={examMode && activeTab === "mcq" ? "exam" : activeTab}
                     role="tabpanel"
-                    initial={{ opacity: 0, y: 14 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.25, ease: EASE_OUT }}
+                    initial={reduceMotion ? false : { opacity: 0, x: 12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -12 }}
+                    transition={reduceMotion ? { duration: 0 } : { duration: 0.28, ease: EASE_OUT }}
                   >
                     {activeTab === "mcq" && examMode && (
                       <ExamView

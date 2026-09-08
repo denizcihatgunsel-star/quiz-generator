@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-
-const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { SECTION_VIEWPORT, sectionReveal, sectionStagger, childReveal } from "@/lib/motion";
 
 const FEATURES = [
   {
@@ -49,15 +48,16 @@ const STATS = [
 
 export default function HomeSections() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const reduce = useReducedMotion();
 
   return (
     <div className="border-t border-[#F3D5DC]">
       {/* What you get */}
       <motion.section
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.6, ease: EASE_OUT }}
+        initial={reduce ? false : "hidden"}
+        whileInView="show"
+        viewport={SECTION_VIEWPORT}
+        variants={sectionReveal}
         className="py-20 sm:py-28"
       >
         <div className="mx-auto max-w-6xl px-6">
@@ -67,15 +67,18 @@ export default function HomeSections() {
             <br />
             <span className="font-serif italic text-[#B0607A]">One click.</span>
           </h2>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {FEATURES.map((f, i) => (
+          <motion.div
+            className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
+            variants={sectionStagger}
+            initial={reduce ? false : "hidden"}
+            whileInView="show"
+            viewport={SECTION_VIEWPORT}
+          >
+            {FEATURES.map((f) => (
               <motion.div
                 key={f.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.5, ease: EASE_OUT, delay: i * 0.08 }}
-                whileHover={{ y: -6 }}
+                variants={reduce ? undefined : childReveal}
+                whileHover={reduce ? undefined : { y: -6 }}
                 className="group relative overflow-hidden rounded-2xl border border-[#F3D5DC] bg-white/70 p-6 backdrop-blur-xl"
               >
                 <div
@@ -94,42 +97,45 @@ export default function HomeSections() {
                 <p className="text-sm leading-relaxed text-[#9A7280]">{f.desc}</p>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </motion.section>
 
       {/* Numbers */}
       <motion.section
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.6, ease: EASE_OUT }}
+        initial={reduce ? false : "hidden"}
+        whileInView="show"
+        viewport={SECTION_VIEWPORT}
+        variants={sectionReveal}
         className="border-y border-[#F3D5DC] bg-[#FDF4F5]/60 py-16"
       >
-        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-10 px-6 sm:grid-cols-4">
-          {STATS.map((s, i) => (
+        <motion.div
+          className="mx-auto grid max-w-6xl grid-cols-2 gap-10 px-6 sm:grid-cols-4"
+          variants={sectionStagger}
+          initial={reduce ? false : "hidden"}
+          whileInView="show"
+          viewport={SECTION_VIEWPORT}
+        >
+          {STATS.map((s) => (
             <motion.div
               key={s.label}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5, ease: EASE_OUT, delay: i * 0.08 }}
+              variants={reduce ? undefined : childReveal}
               className="text-center"
             >
               <p className="font-serif text-4xl text-[#3B2027] sm:text-5xl">{s.number}</p>
               <p className="mt-2 text-sm text-[#9A7280]">{s.label}</p>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </motion.section>
 
       {/* FAQ */}
       <motion.section
         id="faq"
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.6, ease: EASE_OUT }}
+        initial={reduce ? false : "hidden"}
+        whileInView="show"
+        viewport={SECTION_VIEWPORT}
+        variants={sectionReveal}
         className="py-20 sm:py-28"
       >
         <div className="mx-auto max-w-3xl px-6">
@@ -143,32 +149,40 @@ export default function HomeSections() {
               return (
                 <div
                   key={item.q}
-                  className={`overflow-hidden rounded-2xl border transition-colors duration-300 ${
+                  className={`overflow-hidden rounded-2xl border transition-[border-color,background-color] duration-300 ${
                     open ? "border-[#E9B8C4] bg-white/80" : "border-[#F3D5DC] bg-white/60"
                   }`}
                 >
                   <button
                     onClick={() => setOpenFaq(open ? null : i)}
                     className="flex w-full items-center justify-between gap-4 px-6 py-4 text-left"
+                    aria-expanded={open}
                   >
                     <span className="text-sm font-medium text-[#3B2027] sm:text-base">{item.q}</span>
                     <motion.span
-                      animate={{ rotate: open ? 180 : 0 }}
-                      transition={{ duration: 0.35, ease: EASE_OUT }}
-                      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#FDE8EC] text-[#B0607A]"
+                      animate={{ rotate: open ? 90 : 0 }}
+                      transition={
+                        reduce
+                          ? { duration: 0 }
+                          : { type: "spring", stiffness: 380, damping: 28 }
+                      }
+                      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#FDE8EC] text-base leading-none text-[#B0607A]"
+                      aria-hidden="true"
                     >
-                      <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M6 9l6 6 6-6" />
-                      </svg>
+                      +
                     </motion.span>
                   </button>
                   <AnimatePresence initial={false}>
                     {open && (
                       <motion.div
-                        initial={{ height: 0, opacity: 0 }}
+                        initial={reduce ? false : { height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.35, ease: EASE_OUT }}
+                        exit={reduce ? { height: 0, opacity: 0 } : { height: 0, opacity: 0 }}
+                        transition={
+                          reduce
+                            ? { duration: 0 }
+                            : { type: "spring", stiffness: 320, damping: 32, mass: 0.8 }
+                        }
                       >
                         <p className="px-6 pb-5 text-sm leading-relaxed text-[#9A7280]">{item.a}</p>
                       </motion.div>
