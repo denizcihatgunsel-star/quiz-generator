@@ -1,11 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
+import { ctaIdlePulseAnimate, ctaIdlePulseTransition } from "@/lib/motion";
 
 const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
 
 export default function EditorialNav() {
+  const reduce = useReducedMotion();
   return (
     <motion.nav
       initial={{ y: -16, opacity: 0 }}
@@ -45,11 +47,17 @@ export default function EditorialNav() {
             className="group flex items-center gap-2.5 rounded-full bg-[#F6EBEE] py-1 pl-4 pr-1 transition-colors duration-200 hover:bg-[#EBD8DE]"
           >
             <span className="text-sm font-medium text-[#3B2027]">Create Quiz</span>
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3B2027] text-white transition-transform duration-200 group-hover:translate-x-0.5">
-              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
-              </svg>
-            </span>
+            <motion.span
+              className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3B2027] text-white"
+              animate={reduce ? undefined : ctaIdlePulseAnimate}
+              transition={reduce ? undefined : ctaIdlePulseTransition}
+            >
+              <span className="inline-flex transition-transform duration-200 group-hover:translate-x-0.5">
+                <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
+                </svg>
+              </span>
+            </motion.span>
           </Link>
         </div>
       </div>

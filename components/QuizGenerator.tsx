@@ -24,6 +24,7 @@ import ImageOCR from "./ImageOCR";
 import QuizEditor from "./QuizEditor";
 import VideoExplanationLink from "./VideoExplanationLink";
 import MagneticText from "./MagneticText";
+import { ctaIdlePulseAnimateOnDark, ctaIdlePulseTransition } from "@/lib/motion";
 import HomeSections from "./HomeSections";
 import QuizStory from "./QuizStory";
 import { useTranslation } from "@/lib/i18n";
@@ -676,17 +677,16 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     >
                       <span>Start generating</span>
                       <motion.span
-                        className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027] transition-transform duration-200 group-hover:translate-x-[3px]"
-                        animate={reduceMotion ? undefined : { scale: [1, 1.06, 1] }}
-                        transition={
-                          reduceMotion
-                            ? undefined
-                            : { duration: 0.7, ease: "easeInOut", repeat: Infinity, repeatDelay: 2.3 }
-                        }
+                        className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027]"
+                        animate={reduceMotion ? undefined : ctaIdlePulseAnimateOnDark}
+                        transition={reduceMotion ? undefined : ctaIdlePulseTransition}
                       >
-                        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
-                        </svg>
+                        {/* Inner span owns CSS translate so it cannot override Framer scale pulse */}
+                        <span className="inline-flex transition-transform duration-200 group-hover:translate-x-[3px]">
+                          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
+                          </svg>
+                        </span>
                       </motion.span>
                     </a>
                     <a

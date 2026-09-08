@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useInView, animate, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import DotMap from "./DotMap";
-import { EASE_OUT, SECTION_VIEWPORT, sectionReveal, sectionStagger, childReveal } from "@/lib/motion";
+import { EASE_OUT, SECTION_VIEWPORT, sectionReveal, sectionStagger, childReveal, ctaIdlePulseAnimateOnDark, ctaIdlePulseTransition } from "@/lib/motion";
 
 function Reveal({ id, children, className }: { id?: string; children: ReactNode; className?: string }) {
   const reduce = useReducedMotion();
@@ -128,17 +128,16 @@ function CtaArrowChip() {
   const reduce = useReducedMotion();
   return (
     <motion.span
-      className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027] transition-transform duration-200 group-hover:translate-x-0.5"
-      animate={reduce ? undefined : { scale: [1, 1.06, 1] }}
-      transition={
-        reduce
-          ? undefined
-          : { duration: 0.7, ease: "easeInOut", repeat: Infinity, repeatDelay: 2.3 }
-      }
+      className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027]"
+      animate={reduce ? undefined : ctaIdlePulseAnimateOnDark}
+      transition={reduce ? undefined : ctaIdlePulseTransition}
     >
-      <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
-      </svg>
+      {/* Inner span owns CSS translate so it cannot override Framer scale pulse */}
+      <span className="inline-flex transition-transform duration-200 group-hover:translate-x-0.5">
+        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
+        </svg>
+      </span>
     </motion.span>
   );
 }
