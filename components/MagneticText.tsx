@@ -1,11 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, type Variants } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 
-const reduced =
-  typeof window !== "undefined" &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const hoverCapable =
   typeof window !== "undefined" &&
   window.matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -28,6 +25,7 @@ export default function MagneticText({
   wordClass?: string;
   wordVariants?: Variants;
 }) {
+  const reduce = useReducedMotion();
   const words = text.split(" ");
   const containerRef = useRef<HTMLSpanElement>(null);
   const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
@@ -68,7 +66,7 @@ export default function MagneticText({
       targets.current = words.map(() => ({ ...ZERO }));
     };
 
-    if (hoverCapable && !reduced) {
+    if (hoverCapable && !reduce) {
       el.addEventListener("pointermove", onMove);
       el.addEventListener("pointerleave", onLeave);
     }
@@ -97,7 +95,7 @@ export default function MagneticText({
       if (active.current) raf.current = requestAnimationFrame(tickRef.current);
     };
 
-    if (hoverCapable && !reduced) {
+    if (hoverCapable && !reduce) {
       active.current = true;
       raf.current = requestAnimationFrame(tickRef.current);
     }
@@ -107,14 +105,14 @@ export default function MagneticText({
       el.removeEventListener("pointerleave", onLeave);
       cancelAnimationFrame(raf.current);
     };
-  }, []);
+  }, [reduce, text]);
 
   return (
     <span ref={containerRef} className="inline">
       {words.map((w, i) => (
         <motion.span
           key={`${w}-${i}`}
-          variants={wordVariants}
+          variants={reduce ? undefined : wordVariants}
           className={`mr-[0.24em] inline-block will-change-transform ${wordClass}`}
         >
           <span
