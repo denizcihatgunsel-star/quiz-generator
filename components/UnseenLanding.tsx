@@ -1,21 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { motion, useInView, animate } from "framer-motion";
+import { motion, useInView, animate, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import DotMap from "./DotMap";
-
-const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
+import { EASE_OUT, SECTION_VIEWPORT, sectionReveal, sectionStagger, childReveal } from "@/lib/motion";
 
 function Reveal({ id, children, className }: { id?: string; children: ReactNode; className?: string }) {
+  const reduce = useReducedMotion();
   return (
     <motion.section
       id={id}
       className={className}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.7, ease: EASE_OUT }}
+      initial={reduce ? false : "hidden"}
+      whileInView="show"
+      viewport={SECTION_VIEWPORT}
+      variants={sectionReveal}
     >
       {children}
     </motion.section>
@@ -31,19 +31,24 @@ function Kicker({ children }: { children: ReactNode }) {
 function CountUp({ value, className }: { value: string; className?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
+  const reduce = useReducedMotion();
   const n = parseInt(value, 10);
   const isNumeric = !Number.isNaN(n) && String(n) === value;
-  const [display, setDisplay] = useState("0");
+  const [display, setDisplay] = useState(isNumeric ? "0" : value);
 
   useEffect(() => {
     if (!inView || !isNumeric) return;
+    if (reduce) {
+      setDisplay(String(n));
+      return;
+    }
     const controls = animate(0, n, {
       duration: 1.4,
       ease: EASE_OUT,
       onUpdate: (v) => setDisplay(Math.round(v).toString()),
     });
     return () => controls.stop();
-  }, [inView, isNumeric, n]);
+  }, [inView, isNumeric, n, reduce]);
 
   return (
     <span ref={ref} className={className}>
@@ -119,7 +124,28 @@ function Marquee() {
   );
 }
 
+function CtaArrowChip() {
+  const reduce = useReducedMotion();
+  return (
+    <motion.span
+      className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027] transition-transform duration-200 group-hover:translate-x-0.5"
+      animate={reduce ? undefined : { scale: [1, 1.06, 1] }}
+      transition={
+        reduce
+          ? undefined
+          : { duration: 0.7, ease: "easeInOut", repeat: Infinity, repeatDelay: 2.3 }
+      }
+    >
+      <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
+      </svg>
+    </motion.span>
+  );
+}
+
 export default function UnseenLanding() {
+  const reduce = useReducedMotion();
+
   return (
     <div className="bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#F8E9ED]">
       <Marquee />
@@ -134,15 +160,14 @@ export default function UnseenLanding() {
             </span>
           </div>
 
-          <div>
-            {SELECTED.map((item, i) => (
-              <motion.div
-                key={item.n}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.55, ease: EASE_OUT, delay: i * 0.07 }}
-              >
+          <motion.div
+            variants={sectionStagger}
+            initial={reduce ? false : "hidden"}
+            whileInView="show"
+            viewport={SECTION_VIEWPORT}
+          >
+            {SELECTED.map((item) => (
+              <motion.div key={item.n} variants={reduce ? undefined : childReveal}>
                 <Link
                   href={item.href}
                   className="group grid grid-cols-[auto_1fr] items-baseline gap-6 border-b border-[#F3D5DC] py-10 transition-colors duration-300 sm:grid-cols-[3rem_1fr_1fr] sm:gap-10"
@@ -165,7 +190,7 @@ export default function UnseenLanding() {
                 </Link>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </Reveal>
 
@@ -173,15 +198,15 @@ export default function UnseenLanding() {
       <Reveal className="border-t border-[#F3D5DC] py-24 sm:py-32">
         <div className="mx-auto max-w-5xl px-6">
           <Kicker>By the numbers</Kicker>
-          <div className="mt-14 grid grid-cols-2 gap-12 sm:grid-cols-4">
-            {STATS.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.5, ease: EASE_OUT, delay: i * 0.08 }}
-              >
+          <motion.div
+            className="mt-14 grid grid-cols-2 gap-12 sm:grid-cols-4"
+            variants={sectionStagger}
+            initial={reduce ? false : "hidden"}
+            whileInView="show"
+            viewport={SECTION_VIEWPORT}
+          >
+            {STATS.map((stat) => (
+              <motion.div key={stat.label} variants={reduce ? undefined : childReveal}>
                 <CountUp
                   value={stat.number}
                   className="font-serif text-5xl tracking-tight text-[#B0607A] sm:text-6xl"
@@ -191,11 +216,11 @@ export default function UnseenLanding() {
                 </p>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </Reveal>
 
-      {/* World — scroll to explore */}
+      {/* World — scroll to explore (DotMap untouched — no lengthen) */}
       <section className="border-t border-[#F3D5DC] pt-24 sm:pt-32">
         <div className="mx-auto max-w-5xl px-6">
           <div className="flex items-baseline justify-between">
@@ -213,37 +238,44 @@ export default function UnseenLanding() {
 
       {/* Start studying */}
       <Reveal className="border-t border-[#F3D5DC] py-28 sm:py-40">
-        <div className="mx-auto max-w-5xl px-6 text-center">
-          <Kicker>Start studying</Kicker>
+        <motion.div
+          className="mx-auto max-w-5xl px-6 text-center"
+          variants={sectionStagger}
+          initial={reduce ? false : "hidden"}
+          whileInView="show"
+          viewport={SECTION_VIEWPORT}
+        >
+          <motion.div variants={reduce ? undefined : childReveal}>
+            <Kicker>Start studying</Kicker>
+          </motion.div>
           <h2 className="mx-auto mt-8 max-w-3xl font-serif text-4xl leading-[1.1] tracking-tight text-[#4A3038] sm:text-6xl lg:text-7xl">
             {"Put your notes to work.".split(" ").map((word, i) => (
               <motion.span
                 key={i}
                 className="inline-block"
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.5, ease: EASE_OUT, delay: i * 0.06 }}
+                variants={reduce ? undefined : childReveal}
               >
                 {word}&nbsp;
               </motion.span>
             ))}
           </h2>
-          <p className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-[#9A7280]">
+          <motion.p
+            variants={reduce ? undefined : childReveal}
+            className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-[#9A7280]"
+          >
             Paste a lesson, upload a PDF, or ask the assistant. Your quiz is ready in
             under thirty seconds.
-          </p>
-          <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          </motion.p>
+          <motion.div
+            variants={reduce ? undefined : childReveal}
+            className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row"
+          >
             <Link
               href="/auth/register"
               className="group flex items-center gap-3 rounded-full bg-[#3B2027] py-3 pl-6 pr-2 text-sm font-medium text-[#F6E3E8] transition-colors duration-200 hover:bg-[#52303B]"
             >
               <span>Sign up free</span>
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027] transition-transform duration-200 group-hover:translate-x-0.5">
-                <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
-                </svg>
-              </span>
+              <CtaArrowChip />
             </Link>
             <a
               href="#generate"
@@ -251,8 +283,8 @@ export default function UnseenLanding() {
             >
               or try the demo
             </a>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </Reveal>
 
       {/* Footer */}
