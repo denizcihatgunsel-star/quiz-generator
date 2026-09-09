@@ -66,6 +66,13 @@ export const metadata: Metadata = {
       "Examina turns any lesson into multiple choice, flashcards, fill-in-the-blank, and true/false questions in seconds.",
     images: ["https://www.examina.ink/og-image.png"],
   },
+  icons: {
+    icon: [
+      { url: "/logo.png?v=2", type: "image/png" },
+      { url: "/favicon.ico?v=2" },
+    ],
+    apple: [{ url: "/apple-icon.png?v=2" }],
+  },
 };
 
 export default function RootLayout({
@@ -80,7 +87,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <link rel="icon" href="/logo.png" />
+        <link rel="icon" href="/logo.png?v=2" />
         <script
           dangerouslySetInnerHTML={{
             __html: `

@@ -498,7 +498,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-2.5">
-              <img src="/logo.png" alt="Examina" className="w-7 h-7 rounded-lg object-cover" />
+              <img src="/logo.png" alt="Examina" className="w-7 h-7 rounded-lg object-contain" />
               <span className="font-medium text-foreground tracking-tight">Examina</span>
             </Link>
             <div className="hidden sm:flex items-center gap-6">
@@ -1098,7 +1098,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div className="flex items-center gap-2.5">
-              <img src="/logo.png" alt="Examina" className="w-6 h-6 rounded-lg object-cover" />
+              <img src="/logo.png" alt="Examina" className="w-6 h-6 rounded-lg object-contain" />
               <span className="text-sm text-[#9A7280]">Examina</span>
             </div>
             <div className="flex flex-wrap gap-6 text-sm text-[#9A7280]">
