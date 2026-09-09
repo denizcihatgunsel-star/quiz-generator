@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import LocalizedLanding, { type LocaleData } from "@/components/LocalizedLanding";
 
-const LANGS = { es: "https://www.examina.ink/es", de: "https://www.examina.ink/de", fr: "https://www.examina.ink/fr", pt: "https://www.examina.ink/pt", tr: "https://www.examina.ink/tr" };
+const LANGS = { en: "https://www.examina.ink/", es: "https://www.examina.ink/es", de: "https://www.examina.ink/de", fr: "https://www.examina.ink/fr", pt: "https://www.examina.ink/pt", tr: "https://www.examina.ink/tr" };
 
 export const metadata: Metadata = {
   title: "Generador de Exámenes con IA — Convierte tus Apuntes en Quizzes | Examina",
@@ -11,7 +11,23 @@ export const metadata: Metadata = {
     canonical: "https://www.examina.ink/es",
     languages: { ...LANGS, "x-default": "https://www.examina.ink/" },
   },
+  openGraph: {
+    type: "website",
+    siteName: "Examina",
+    title: "Generador de Exámenes con IA — Convierte tus Apuntes en Quizzes | Examina",
+    description: "Convierte tus apuntes en exámenes de opción múltiple, flashcards, completar frases y verdadero/falso en menos de 30 segundos. 29 idiomas y gratis para empezar.",
+    url: "https://www.examina.ink/es",
+    locale: "es_ES",
+    images: [{ url: "https://www.examina.ink/og-image.png", width: 1200, height: 630, alt: "Examina AI Quiz Generator" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Generador de Exámenes con IA — Convierte tus Apuntes en Quizzes | Examina",
+    description: "Convierte tus apuntes en exámenes de opción múltiple, flashcards, completar frases y verdadero/falso en menos de 30 segundos. 29 idiomas y gratis para empezar.",
+    images: ["https://www.examina.ink/og-image.png"],
+  },
 };
+
 
 const DATA: LocaleData = {
   code: "es",

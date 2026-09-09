@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Free Quiz Generator — 5 Quizzes a Month | Examina",
-  description:
-    "Make quizzes online for free with AI. No credit card. Generate up to 5 quizzes a month, or unlock more from $2/month.",
-  alternates: { canonical: "https://www.examina.ink/free-quiz-generator" },
-};
+  description: "Make quizzes online for free with AI. No credit card. Generate up to 5 quizzes a month, or unlock more from $2/month.",
+  path: "/free-quiz-generator",
+});
 
 export default function FreeQuizPage() {
   return (

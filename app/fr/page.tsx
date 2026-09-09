@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import LocalizedLanding, { type LocaleData } from "@/components/LocalizedLanding";
 
-const LANGS = { es: "https://www.examina.ink/es", de: "https://www.examina.ink/de", fr: "https://www.examina.ink/fr", pt: "https://www.examina.ink/pt", tr: "https://www.examina.ink/tr" };
+const LANGS = { en: "https://www.examina.ink/", es: "https://www.examina.ink/es", de: "https://www.examina.ink/de", fr: "https://www.examina.ink/fr", pt: "https://www.examina.ink/pt", tr: "https://www.examina.ink/tr" };
 
 export const metadata: Metadata = {
   title: "Générateur de Quiz IA — Transformez vos Notes en Tests | Examina",
@@ -11,7 +11,23 @@ export const metadata: Metadata = {
     canonical: "https://www.examina.ink/fr",
     languages: { ...LANGS, "x-default": "https://www.examina.ink/" },
   },
+  openGraph: {
+    type: "website",
+    siteName: "Examina",
+    title: "Générateur de Quiz IA — Transformez vos Notes en Tests | Examina",
+    description: "Transformez vos notes en QCM, flashcards, textes à trous et vrai/faux en moins de 30 secondes. 29 langues, gratuit pour commencer.",
+    url: "https://www.examina.ink/fr",
+    locale: "fr_FR",
+    images: [{ url: "https://www.examina.ink/og-image.png", width: 1200, height: 630, alt: "Examina AI Quiz Generator" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Générateur de Quiz IA — Transformez vos Notes en Tests | Examina",
+    description: "Transformez vos notes en QCM, flashcards, textes à trous et vrai/faux en moins de 30 secondes. 29 langues, gratuit pour commencer.",
+    images: ["https://www.examina.ink/og-image.png"],
+  },
 };
+
 
 const DATA: LocaleData = {
   code: "fr",

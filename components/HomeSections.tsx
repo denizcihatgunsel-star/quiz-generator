@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
 
@@ -33,11 +33,11 @@ const FEATURES = [
 ];
 
 const FAQ_ITEMS = [
-  { q: "What file types can I upload?", a: "PDF, TXT, and Markdown files. Or just paste text directly." },
-  { q: "How many quizzes can I generate?", a: "Free accounts get 5 per month. Paid plans go up to unlimited." },
+  { q: "What file types can I upload?", a: "PDF, TXT, and Markdown files. Or just paste text directly into the editor." },
+  { q: "How many quizzes can I generate?", a: "Free accounts get 5 quizzes per month. Paid plans go up to unlimited quiz generation." },
   { q: "What makes the questions good?", a: "Questions are mapped to Bloom's Taxonomy — testing recall, understanding, application, and analysis. Not just surface-level memorization." },
-  { q: "Can I share quizzes?", a: "Every quiz gets a unique link. You can also export to PDF." },
-  { q: "Is my content stored?", a: "Content is sent to the AI for generation only. Generated quizzes are saved to your account." },
+  { q: "Can I share quizzes?", a: "Every quiz gets a unique shareable link. You can also export your quizzes to PDF." },
+  { q: "Is my content stored?", a: "Content is sent to the AI for generation only. Generated quizzes are saved to your account, but your original content is not stored on our servers." },
 ];
 
 const STATS = [
@@ -162,18 +162,13 @@ export default function HomeSections() {
                       </svg>
                     </motion.span>
                   </button>
-                  <AnimatePresence initial={false}>
-                    {open && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.35, ease: EASE_OUT }}
-                      >
-                        <p className="px-6 pb-5 text-sm leading-relaxed text-[#9A7280]">{item.a}</p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <div
+                    className={`overflow-hidden transition-all duration-350 ease-out ${
+                      open ? "max-h-48 opacity-100" : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    <p className="px-6 pb-5 text-sm leading-relaxed text-[#9A7280]">{item.a}</p>
+                  </div>
                 </div>
               );
             })}

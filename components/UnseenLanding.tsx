@@ -262,15 +262,24 @@ export default function UnseenLanding() {
             <p className="font-serif text-2xl">Examina.</p>
             <p className="mt-2 text-xs text-[#E7BEC9]/70">©2026 Examina — World</p>
           </div>
-          <div className="flex flex-wrap items-center gap-8">
+          <div className="flex flex-wrap items-center gap-6">
             <Link href="/pricing" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
               Pricing
             </Link>
-            <Link href="/explore" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
-              Explore
+            <Link href="/blog" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
+              Blog
             </Link>
-            <Link href="/auth/login" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
-              Sign in
+            <Link href="/multiple-choice-quiz-maker" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
+              MCQ
+            </Link>
+            <Link href="/privacy" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
+              Privacy
+            </Link>
+            <Link href="/terms" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
+              Terms
+            </Link>
+            <Link href="/auth/register" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
+              Get started
             </Link>
           </div>
         </div>

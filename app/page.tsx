@@ -1,51 +1,37 @@
 import QuizGenerator from "@/components/QuizGenerator";
 import { StructuredData } from "@/components/StructuredData";
 
+const FAQ_ITEMS = [
+  {
+    q: "What file types can I upload?",
+    a: "PDF, TXT, and Markdown files. Or just paste text directly into the editor.",
+  },
+  {
+    q: "How many quizzes can I generate?",
+    a: "Free accounts get 5 quizzes per month. Paid plans go up to unlimited quiz generation.",
+  },
+  {
+    q: "What makes the questions good?",
+    a: "Questions are mapped to Bloom's Taxonomy — testing recall, understanding, application, and analysis. Not just surface-level memorization.",
+  },
+  {
+    q: "Can I share quizzes?",
+    a: "Every quiz gets a unique shareable link. You can also export your quizzes to PDF.",
+  },
+  {
+    q: "Is my content stored?",
+    a: "Content is sent to the AI for generation only. Generated quizzes are saved to your account, but your original content is not stored on our servers.",
+  },
+];
+
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "What file types can I upload?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "PDF, TXT, and Markdown files. Or just paste text directly into the editor.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How many quizzes can I generate?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Free accounts get 5 quizzes per month. Paid plans go up to unlimited quiz generation.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What makes the questions good?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Questions are mapped to Bloom's Taxonomy — testing recall, understanding, application, and analysis. Not just surface-level memorization.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Can I share quizzes?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Every quiz gets a unique shareable link. You can also export your quizzes to PDF.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Is my content stored?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Content is sent to the AI for generation only. Generated quizzes are saved to your account, but your original content is not stored on our servers.",
-      },
-    },
-  ],
+  mainEntity: FAQ_ITEMS.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
 };
 
 const softwareAppSchema = {
@@ -95,6 +81,15 @@ export default function Home() {
       <StructuredData data={faqSchema} />
       <StructuredData data={softwareAppSchema} />
       <StructuredData data={organizationSchema} />
+      {/* Server-rendered FAQ answers matching FAQPage JSON-LD (always in HTML) */}
+      <section className="sr-only" aria-label="Frequently asked questions">
+        {FAQ_ITEMS.map((item) => (
+          <div key={item.q}>
+            <h2>{item.q}</h2>
+            <p>{item.a}</p>
+          </div>
+        ))}
+      </section>
       <QuizGenerator />
     </>
   );

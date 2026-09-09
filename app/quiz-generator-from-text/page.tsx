@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Quiz Generator from Text — Paste & Generate | Examina",
-  description:
-    "Paste any notes and generate multiple choice, flashcards & true/false questions instantly. Works in 29 languages. Free to try.",
-  alternates: { canonical: "https://www.examina.ink/quiz-generator-from-text" },
-};
+  description: "Paste any notes and generate multiple choice, flashcards & true/false questions instantly. Works in 29 languages. Free to try.",
+  path: "/quiz-generator-from-text",
+});
 
 export default function TextQuizPage() {
   return (

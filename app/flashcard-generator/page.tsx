@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
 import ToolCrossLinks from "@/components/ToolCrossLinks";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "AI Flashcard Generator — Create Flashcards from Notes | Examina",
-  description:
-    "Generate flashcards from any text instantly with AI. Paste your notes, get interactive study cards with 3D flip. Free AI flashcard generator.",
-  alternates: { canonical: "https://www.examina.ink/flashcard-generator" },
-};
+  description: "Generate flashcards from any text instantly with AI. Paste your notes, get interactive study cards with 3D flip. Free AI flashcard generator.",
+  path: "/flashcard-generator",
+});
 
 export default function FlashcardGeneratorPage() {
   return (
@@ -19,7 +19,7 @@ export default function FlashcardGeneratorPage() {
             AI Flashcard Generator
           </p>
           <h1 className="text-4xl sm:text-5xl font-medium text-neutral-900 leading-tight mb-6">
-            Create Study Cards
+            Create Study Cards{" "}
             <br />
             from Any Text
           </h1>

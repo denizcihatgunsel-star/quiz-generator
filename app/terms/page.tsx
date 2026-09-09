@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Terms of Service | Examina",
-  description:
-    "The terms for using Examina: acceptable use of the quiz generator, accounts, plans, and content ownership.",
-  alternates: { canonical: "https://www.examina.ink/terms" },
-};
+  description: "The terms for using Examina: acceptable use of the quiz generator, accounts, plans, and content ownership.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

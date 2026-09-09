@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Create a Quiz Online — AI, Free & Shareable | Examina",
-  description:
-    "Create a quiz online in minutes. Generate questions from notes with AI, share a link, or export to PDF. Free to start.",
-  alternates: { canonical: "https://www.examina.ink/create-a-quiz" },
-};
+  description: "Create a quiz online in minutes. Generate questions from notes with AI, share a link, or export to PDF. Free to start.",
+  path: "/create-a-quiz",
+});
 
 export default function CreateQuizPage() {
   return (

@@ -3,7 +3,10 @@ export interface BlogPost {
   title: string;
   description: string;
   tag: string;
+  /** Display date (human) */
   date: string;
+  /** ISO-8601 date for Article schema / sitemap lastmod */
+  dateIso: string;
   readTime: string;
   sections: { h: string; p?: string[]; list?: string[] }[];
   faq: { q: string; a: string }[];
@@ -17,6 +20,7 @@ export const POSTS: BlogPost[] = [
       "Why self-testing beats re-reading, and a step-by-step walkthrough of turning any notes into a practice quiz with AI.",
     tag: "Study Tips",
     date: "Jan 2026",
+    dateIso: "2026-01-15",
     readTime: "4 min",
     sections: [
       {
@@ -70,6 +74,7 @@ export const POSTS: BlogPost[] = [
       "The research behind active recall, why it outperforms highlighting and re-reading, and how to build it into your routine.",
     tag: "Science of Learning",
     date: "Jan 2026",
+    dateIso: "2026-01-22",
     readTime: "5 min",
     sections: [
       {
@@ -124,6 +129,7 @@ export const POSTS: BlogPost[] = [
       "The 6 cognitive levels applied to quiz questions, with examples at each level and tips for balanced assessments.",
     tag: "For Educators",
     date: "Feb 2026",
+    dateIso: "2026-02-05",
     readTime: "6 min",
     sections: [
       {
@@ -180,6 +186,7 @@ export const POSTS: BlogPost[] = [
       "AI-generated flashcards vs. manual creation, best practices for flashcard-based studying, and tools compared.",
     tag: "Study Tips",
     date: "Feb 2026",
+    dateIso: "2026-02-12",
     readTime: "5 min",
     sections: [
       {
@@ -232,6 +239,7 @@ export const POSTS: BlogPost[] = [
       "Where teachers lose time on assessment creation, and how AI quiz generators can streamline the workflow.",
     tag: "For Educators",
     date: "Feb 2026",
+    dateIso: "2026-02-19",
     readTime: "5 min",
     sections: [
       {
@@ -284,6 +292,7 @@ export const POSTS: BlogPost[] = [
       "A complete guide to AI study tools — quiz generators, flashcard makers, summarizers — and how to use them effectively.",
     tag: "Study Tips",
     date: "Mar 2026",
+    dateIso: "2026-03-05",
     readTime: "6 min",
     sections: [
       {

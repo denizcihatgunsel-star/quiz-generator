@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
 import ToolCrossLinks from "@/components/ToolCrossLinks";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "AI Multiple Choice Quiz Maker — Generate MCQs Instantly | Examina",
-  description:
-    "Create multiple choice quizzes from any text with AI. Get 5-6 MCQs with explanations, difficulty tags & Bloom's Taxonomy levels. Free to try.",
-  alternates: { canonical: "https://www.examina.ink/multiple-choice-quiz-maker" },
-};
+  description: "Create multiple choice quizzes from any text with AI. Get 5-6 MCQs with explanations, difficulty tags & Bloom's Taxonomy levels. Free to try.",
+  path: "/multiple-choice-quiz-maker",
+});
 
 export default function MultipleChoiceQuizMakerPage() {
   return (
@@ -19,7 +19,7 @@ export default function MultipleChoiceQuizMakerPage() {
             AI Multiple Choice Quiz Maker
           </p>
           <h1 className="text-4xl sm:text-5xl font-medium text-neutral-900 leading-tight mb-6">
-            Generate MCQs
+            Generate MCQs{" "}
             <br />
             from Any Text
           </h1>

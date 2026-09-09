@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Contact Examina | Support & Feedback",
-  description:
-    "Get in touch with the Examina team. Reach us at support@examina.ink for help with accounts, billing, or feedback.",
-  alternates: { canonical: "https://www.examina.ink/contact" },
-};
+  description: "Get in touch with the Examina team. Reach us at support@examina.ink for help with accounts, billing, or feedback.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
 import ToolCrossLinks from "@/components/ToolCrossLinks";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "True/False Quiz Generator AI — Create T/F Questions | Examina",
-  description:
-    "Generate true/false quiz questions from any text with AI. Each question includes detailed explanations. Free AI true/false quiz generator.",
-  alternates: { canonical: "https://www.examina.ink/true-false-quiz-generator" },
-};
+  description: "Generate true/false quiz questions from any text with AI. Each question includes detailed explanations. Free AI true/false quiz generator.",
+  path: "/true-false-quiz-generator",
+});
 
 export default function TrueFalseQuizGeneratorPage() {
   return (

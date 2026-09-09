@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "PDF to Quiz Generator — Convert Documents | Examina",
-  description:
-    "Upload a PDF and turn it into multiple choice questions and flashcards with AI. Works with photos and scans too. Free to try.",
-  alternates: { canonical: "https://www.examina.ink/quiz-generator-from-pdf" },
-};
+  description: "Upload a PDF and turn it into multiple choice questions and flashcards with AI. Works with photos and scans too. Free to try.",
+  path: "/quiz-generator-from-pdf",
+});
 
 export default function PdfQuizPage() {
   return (

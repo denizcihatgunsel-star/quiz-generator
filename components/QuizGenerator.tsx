@@ -572,7 +572,6 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
         {!quiz ? (
           <>
             {/* Hero */}
-            {sessionStatus === "loading" ? null : (
             <section
               ref={heroRef}
               className={`relative overflow-hidden ${hideChrome ? "pt-6 pb-16" : "pb-32"} ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#FDE8EC] pt-40 sm:pt-48"}`}
@@ -648,8 +647,11 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                   <p className="text-[11px] uppercase tracking-[0.4em] text-[#A87680]">
                     A quiz generator
                   </p>
-                  <h1 className="mt-8 font-serif text-7xl font-medium tracking-tight leading-[0.95] text-[#3B2027] sm:text-8xl lg:text-9xl">
+                  <div className="mt-6 font-serif text-5xl font-medium tracking-tight leading-[0.95] text-[#3B2027] sm:text-7xl lg:text-8xl" aria-hidden="true">
                     <InteractiveWordmark />
+                  </div>
+                  <h1 className="mt-8 font-serif text-4xl font-medium tracking-tight leading-[1.05] text-[#3B2027] sm:text-5xl lg:text-6xl">
+                    AI Quiz Generator that turns notes into quizzes
                   </h1>
                   <motion.p
                     initial={{ opacity: 0 }}
@@ -923,9 +925,8 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                 </motion.div>
                 </motion.div>
             </section>
-            )}
 
-            {sessionStatus === "loading" ? null : !isLoggedIn && status === "idle" && <UnseenLanding />}
+            {!isLoggedIn && status === "idle" && <UnseenLanding />}
           </>
         ) : (
           /* ========== QUIZ RESULTS ========== */
@@ -1101,11 +1102,21 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
               <img src="/logo.png" alt="Examina" className="w-6 h-6 rounded-lg object-contain" />
               <span className="text-sm text-[#9A7280]">Examina</span>
             </div>
-            <div className="flex flex-wrap gap-6 text-sm text-[#9A7280]">
+            <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-[#9A7280]">
               <a href="#features" className="hover:text-[#3B2027] transition-colors">Features</a>
               <Link href="/pricing" className="hover:text-[#3B2027] transition-colors">Pricing</Link>
               <a href="#faq" className="hover:text-[#3B2027] transition-colors">FAQ</a>
-              <Link href="/dashboard" className="hover:text-[#3B2027] transition-colors">Dashboard</Link>
+              <Link href="/blog" className="hover:text-[#3B2027] transition-colors">Blog</Link>
+              <Link href="/multiple-choice-quiz-maker" className="hover:text-[#3B2027] transition-colors">MCQ Maker</Link>
+              <Link href="/flashcard-generator" className="hover:text-[#3B2027] transition-colors">Flashcards</Link>
+              <Link href="/about" className="hover:text-[#3B2027] transition-colors">About</Link>
+              <Link href="/privacy" className="hover:text-[#3B2027] transition-colors">Privacy</Link>
+              <Link href="/terms" className="hover:text-[#3B2027] transition-colors">Terms</Link>
+              {isLoggedIn ? (
+                <Link href="/dashboard" className="hover:text-[#3B2027] transition-colors">Dashboard</Link>
+              ) : (
+                <Link href="/auth/register" className="hover:text-[#3B2027] transition-colors">Get started</Link>
+              )}
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-[#F3D5DC]">

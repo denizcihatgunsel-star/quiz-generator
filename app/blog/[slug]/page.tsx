@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { POSTS, getPost } from "@/lib/blog/posts";
 import LandingPageLayout from "@/components/LandingPageLayout";
+import { OG_IMAGE, SITE_URL } from "@/lib/seo";
 
 export function generateStaticParams() {
   return POSTS.map((p) => ({ slug: p.slug }));
@@ -16,15 +17,27 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) return {};
+  const url = `${SITE_URL}/blog/${post.slug}`;
   return {
     title: `${post.title} | Examina Blog`,
     description: post.description,
-    alternates: { canonical: `https://www.examina.ink/blog/${post.slug}` },
+    alternates: { canonical: url },
     openGraph: {
       type: "article",
       title: post.title,
       description: post.description,
-      url: `https://www.examina.ink/blog/${post.slug}`,
+      url,
+      images: [OG_IMAGE],
+      publishedTime: post.dateIso,
+      modifiedTime: post.dateIso,
+      siteName: "Examina",
+      locale: "en_US",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+      images: [OG_IMAGE.url],
     },
   };
 }
@@ -43,10 +56,16 @@ export default async function BlogPostPage({
     "@type": "Article",
     headline: post.title,
     description: post.description,
-    datePublished: post.date,
+    datePublished: post.dateIso,
+    dateModified: post.dateIso,
+    image: [OG_IMAGE.url],
     author: { "@type": "Organization", name: "Examina" },
-    publisher: { "@type": "Organization", name: "Examina" },
-    mainEntityOfPage: `https://www.examina.ink/blog/${post.slug}`,
+    publisher: {
+      "@type": "Organization",
+      name: "Examina",
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
   };
 
   const faqJsonLd = {
@@ -75,7 +94,7 @@ export default async function BlogPostPage({
             {post.tag}
           </span>
           <span className="text-xs text-neutral-300">
-            {post.date} · {post.readTime} read
+            <time dateTime={post.dateIso}>{post.date}</time> · {post.readTime} read
           </span>
         </div>
 
