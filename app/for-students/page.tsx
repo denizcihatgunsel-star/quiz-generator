@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "AI Study Tool for Students — Generate Quizzes from Notes | Examina",
-  description:
-    "Turn your lecture notes into practice quizzes with AI. Flashcards, multiple choice, fill-in-the-blank — study smarter with Examina. Free to start.",
-  alternates: { canonical: "https://www.examina.ink/for-students" },
-};
+  description: "Turn your lecture notes into practice quizzes with AI. Flashcards, multiple choice, fill-in-the-blank — study smarter with Examina. Free to start.",
+  path: "/for-students",
+});
 
 export default function ForStudentsPage() {
   return (

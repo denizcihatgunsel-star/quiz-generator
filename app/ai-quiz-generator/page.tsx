@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "AI Quiz Generator — Turn Notes into Quizzes | Examina",
-  description:
-    "Generate quizzes from any text with AI. Multiple choice, flashcards, fill-in-the-blank & true/false in 29 languages. Free to try.",
-  alternates: { canonical: "https://www.examina.ink/ai-quiz-generator" },
-};
+  description: "Generate quizzes from any text with AI. Multiple choice, flashcards, fill-in-the-blank & true/false in 29 languages. Free to try.",
+  path: "/ai-quiz-generator",
+});
 
 export default function AiQuizGeneratorPage() {
   return (

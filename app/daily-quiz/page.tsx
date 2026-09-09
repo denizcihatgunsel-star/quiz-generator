@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Daily Quiz — A New Challenge Every Day | Examina",
-  description:
-    "Play a fresh community quiz every day, earn XP, and keep your study streak alive. Free to play — a new challenge daily.",
-  alternates: { canonical: "https://www.examina.ink/daily-quiz" },
-};
+  description: "Play a fresh community quiz every day, earn XP, and keep your study streak alive. Free to play — a new challenge daily.",
+  path: "/daily-quiz",
+});
 
 export default function DailyQuizPage() {
   return (

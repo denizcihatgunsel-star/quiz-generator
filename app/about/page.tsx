@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About Examina — AI Quiz Generator for Students & Teachers",
-  description:
-    "Examina is an AI-powered quiz generator that turns any lesson into multiple choice, flashcards, fill-in-the-blank, and true/false questions. Learn more about Examina.",
-  alternates: { canonical: "https://www.examina.ink/about" },
-};
+  description: "Examina is an AI-powered quiz generator that turns any lesson into multiple choice, flashcards, fill-in-the-blank, and true/false questions. Learn more about Examina.",
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
 import ToolCrossLinks from "@/components/ToolCrossLinks";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Fill in the Blank Generator AI — Create Cloze Questions | Examina",
-  description:
-    "Generate fill-in-the-blank questions from any text with AI. Test real recall, not just recognition. Free AI cloze question generator.",
-  alternates: { canonical: "https://www.examina.ink/fill-in-the-blank-generator" },
-};
+  description: "Generate fill-in-the-blank questions from any text with AI. Test real recall, not just recognition. Free AI cloze question generator.",
+  path: "/fill-in-the-blank-generator",
+});
 
 export default function FillInTheBlankGeneratorPage() {
   return (
@@ -19,7 +19,7 @@ export default function FillInTheBlankGeneratorPage() {
             Fill in the Blank Generator
           </p>
           <h1 className="text-4xl sm:text-5xl font-medium text-neutral-900 leading-tight mb-6">
-            Test What You
+            Test What You{" "}
             <br />
             Actually Know
           </h1>

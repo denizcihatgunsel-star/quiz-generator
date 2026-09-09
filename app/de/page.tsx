@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import LocalizedLanding, { type LocaleData } from "@/components/LocalizedLanding";
 
-const LANGS = { es: "https://www.examina.ink/es", de: "https://www.examina.ink/de", fr: "https://www.examina.ink/fr", pt: "https://www.examina.ink/pt", tr: "https://www.examina.ink/tr" };
+const LANGS = { en: "https://www.examina.ink/", es: "https://www.examina.ink/es", de: "https://www.examina.ink/de", fr: "https://www.examina.ink/fr", pt: "https://www.examina.ink/pt", tr: "https://www.examina.ink/tr" };
 
 export const metadata: Metadata = {
   title: "KI-Quiz-Generator — Verwandle deine Notizen in Tests | Examina",
@@ -11,7 +11,23 @@ export const metadata: Metadata = {
     canonical: "https://www.examina.ink/de",
     languages: { ...LANGS, "x-default": "https://www.examina.ink/" },
   },
+  openGraph: {
+    type: "website",
+    siteName: "Examina",
+    title: "KI-Quiz-Generator — Verwandle deine Notizen in Tests | Examina",
+    description: "Verwandle deine Notizen in Multiple-Choice-, Karteikarten-, Lückentext- und Richtig/Falsch-Quizze in unter 30 Sekunden. 29 Sprachen, kostenlos starten.",
+    url: "https://www.examina.ink/de",
+    locale: "de_DE",
+    images: [{ url: "https://www.examina.ink/og-image.png", width: 1200, height: 630, alt: "Examina AI Quiz Generator" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "KI-Quiz-Generator — Verwandle deine Notizen in Tests | Examina",
+    description: "Verwandle deine Notizen in Multiple-Choice-, Karteikarten-, Lückentext- und Richtig/Falsch-Quizze in unter 30 Sekunden. 29 Sprachen, kostenlos starten.",
+    images: ["https://www.examina.ink/og-image.png"],
+  },
 };
+
 
 const DATA: LocaleData = {
   code: "de",

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Geist, Geist_Mono, Instrument_Serif, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ReferralAttribution from "@/components/ReferralAttribution";
+import { pageMetadata } from "@/lib/seo";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,44 +30,16 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Examina — AI Quiz Generator | Turn Notes into Quizzes",
-  description:
-    "Examina is the AI quiz generator that turns any text into multiple choice, flashcards, fill-in-the-blank & true/false questions in seconds. Free to try.",
-  alternates: {
-    canonical: "https://www.examina.ink/",
-    languages: {
-      es: "https://www.examina.ink/es",
-      de: "https://www.examina.ink/de",
-      fr: "https://www.examina.ink/fr",
-      pt: "https://www.examina.ink/pt",
-      tr: "https://www.examina.ink/tr",
-      "x-default": "https://www.examina.ink/",
-    },
-  },
-  openGraph: {
-    type: "website",
-    siteName: "Examina",
-    title: "Examina — AI Quiz Generator | Turn Notes into Quizzes Instantly",
+  ...pageMetadata({
+    title: "Examina — AI Quiz Generator | Turn Notes into Quizzes",
     description:
+      "Examina is the AI quiz generator that turns any text into multiple choice, flashcards, fill-in-the-blank & true/false questions in seconds. Free to try.",
+    path: "/",
+    ogTitle: "Examina — AI Quiz Generator | Turn Notes into Quizzes Instantly",
+    ogDescription:
       "Examina turns any lesson into multiple choice, flashcards, fill-in-the-blank, and true/false questions in seconds. Free to try.",
-    url: "https://www.examina.ink/",
-    images: [
-      {
-        url: "https://www.examina.ink/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Examina AI Quiz Generator — generate quizzes from any text",
-      },
-    ],
-    locale: "en_US",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Examina — AI Quiz Generator | Turn Notes into Quizzes Instantly",
-    description:
-      "Examina turns any lesson into multiple choice, flashcards, fill-in-the-blank, and true/false questions in seconds.",
-    images: ["https://www.examina.ink/og-image.png"],
-  },
+    languages: true,
+  }),
   icons: {
     icon: [
       { url: "/logo.png?v=2", type: "image/png" },
@@ -75,14 +49,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const lang = (await headers()).get("x-html-lang") || "en";
   return (
     <html
-      lang="en"
+      lang={lang}
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${spaceGrotesk.variable} h-full antialiased`}
       suppressHydrationWarning
     >

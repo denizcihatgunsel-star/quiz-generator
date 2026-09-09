@@ -115,7 +115,7 @@ export default function MagneticText({
         <motion.span
           key={`${w}-${i}`}
           variants={wordVariants}
-          className={`mr-[0.24em] inline-block will-change-transform ${wordClass}`}
+          className={`inline-block will-change-transform ${wordClass}`}
         >
           <span
             ref={(el) => {
@@ -125,6 +125,7 @@ export default function MagneticText({
           >
             {w}
           </span>
+          {i < words.length - 1 ? " " : null}
         </motion.span>
       ))}
     </span>

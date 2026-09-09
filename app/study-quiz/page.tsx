@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Study Quiz Generator — Active Recall & Flashcards | Examina",
-  description:
-    "Turn your notes into a study quiz that uses active recall and spaced repetition. Flashcards, quizzes & streaks to stay consistent.",
-  alternates: { canonical: "https://www.examina.ink/study-quiz" },
-};
+  description: "Turn your notes into a study quiz that uses active recall and spaced repetition. Flashcards, quizzes & streaks to stay consistent.",
+  path: "/study-quiz",
+});
 
 export default function StudyQuizPage() {
   return (

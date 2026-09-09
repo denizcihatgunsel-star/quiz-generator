@@ -1,6 +1,24 @@
 import Link from "next/link";
 import { ThemeToggle } from "./ThemeToggle";
 
+const FOOTER_TOOLS = [
+  { href: "/multiple-choice-quiz-maker", label: "MCQ Maker" },
+  { href: "/flashcard-generator", label: "Flashcards" },
+  { href: "/fill-in-the-blank-generator", label: "Fill in the Blank" },
+  { href: "/true-false-quiz-generator", label: "True / False" },
+  { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
+];
+
+const FOOTER_LINKS = [
+  { href: "/pricing", label: "Pricing" },
+  { href: "/blog", label: "Blog" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+  { href: "/privacy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
+  { href: "/auth/register", label: "Get started" },
+];
+
 export default function LandingPageLayout({
   children,
 }: {
@@ -20,6 +38,12 @@ export default function LandingPageLayout({
               className="text-xs text-muted-foreground transition-colors hover:text-foreground"
             >
               Pricing
+            </Link>
+            <Link
+              href="/blog"
+              className="hidden text-xs text-muted-foreground transition-colors hover:text-foreground sm:inline"
+            >
+              Blog
             </Link>
             <Link
               href="/auth/register"
@@ -47,6 +71,30 @@ export default function LandingPageLayout({
           </a>
         </div>
       </section>
+      <footer className="border-t border-border bg-background px-6 py-12">
+        <div className="mx-auto flex max-w-5xl flex-col gap-8 sm:flex-row sm:justify-between">
+          <div>
+            <p className="text-sm font-medium text-foreground">Examina</p>
+            <p className="mt-2 text-xs text-muted-foreground">AI quiz generator for notes that stick.</p>
+          </div>
+          <div className="flex flex-col gap-4 sm:items-end">
+            <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted-foreground sm:justify-end">
+              {FOOTER_TOOLS.map((l) => (
+                <Link key={l.href} href={l.href} className="hover:text-foreground">
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted-foreground sm:justify-end">
+              {FOOTER_LINKS.map((l) => (
+                <Link key={l.href} href={l.href} className="hover:text-foreground">
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

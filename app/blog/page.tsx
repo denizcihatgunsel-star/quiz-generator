@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import LandingPageLayout from "@/components/LandingPageLayout";
 import { POSTS } from "@/lib/blog/posts";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Blog — AI Quiz Generator Tips & Study Guides | Examina",
-  description:
-    "Tips, guides, and insights on AI quiz generation, study techniques, active recall, and educational technology from the Examina team.",
-  alternates: { canonical: "https://www.examina.ink/blog" },
-};
+  description: "Tips, guides, and insights on AI quiz generation, study techniques, active recall, and educational technology from the Examina team.",
+  path: "/blog",
+});
 
 export default function BlogPage() {
   return (
