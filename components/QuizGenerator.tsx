@@ -574,7 +574,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
             {/* Hero */}
             <section
               ref={heroRef}
-              className={`relative overflow-hidden ${hideChrome ? "pt-6 pb-16" : "pb-32"} ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#FDE8EC] pt-40 sm:pt-48"}`}
+              className={`relative overflow-hidden ${hideChrome ? "pt-6 pb-16" : "pb-32"} ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-gradient-to-b from-[#FDE8EC]/55 via-transparent to-transparent pt-40 sm:pt-48"}`}
             >
               {!isLoggedIn && !hideChrome && (
                 <div className="pointer-events-none absolute inset-0 overflow-hidden">
