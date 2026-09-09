@@ -3,13 +3,10 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Soft filled displacement field (Unseen-style liquid) — not stroked sine
- * ribbons or concentric drop-ring ripples. Prefer WebGL2 full-screen quad;
- * fall back to low-res 2D ImageData if WebGL2 is unavailable.
- *
- * Visibility: stronger plum/rose in the lower ~55%, softer top for H1
- * readability, clearer horizontal ridges + crest specular, non-premultiplied
- * alpha so translucent water does not wash out on blush.
+ * Unseen-style liquid sheet on blush — horizontal glossy ridges in the lower
+ * ~45–55% with soft Gaussian field wake (no drop rings). Upper field stays
+ * transparent so page cream/blush chrome remains light (not night-plum).
+ * WebGL2 full-screen quad; low-res 2D ImageData fallback.
  */
 export default function WaterCanvas({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -59,7 +56,7 @@ export default function WaterCanvas({ className }: { className?: string }) {
           x: px / Math.max(width, 1),
           y: py / Math.max(height, 1),
           life: 1,
-          strength: 0.85,
+          strength: 0.9,
         });
         lastInjectX = px;
         lastInjectY = py;
@@ -76,8 +73,8 @@ export default function WaterCanvas({ className }: { className?: string }) {
 
     const tickWakes = () => {
       for (let i = wakes.length - 1; i >= 0; i--) {
-        wakes[i].life *= 0.965;
-        wakes[i].strength *= 0.978;
+        wakes[i].life *= 0.962;
+        wakes[i].strength *= 0.975;
         if (wakes[i].life < 0.03) wakes.splice(i, 1);
       }
       if (px > 0) {
@@ -103,7 +100,6 @@ export default function WaterCanvas({ className }: { className?: string }) {
 
     if (supportsWebGL2) {
       // Non-premultiplied so translucent plum/rose composites correctly on blush
-      // (premultiplied + cream RGB was washing water to invisible).
       const gl = canvas.getContext("webgl2", {
         alpha: true,
         antialias: false,
@@ -164,63 +160,78 @@ float wakeField(vec2 uv){
   for (int i = 0; i < 18; i++) {
     if (i >= uWakeCount) break;
     vec4 w = uWakes[i];
-    vec2 d = (uv - w.xy) * vec2(1.0, uRes.y / max(uRes.x, 1.0));
-    // Stronger Gaussian so pointer wake reads on blush (still soft field, no rings)
-    float g = exp(-dot(d, d) * mix(22.0, 8.0, w.w));
-    h += g * w.z * w.w * 1.35;
+    // Soft Gaussian field — horizontally elongated, no concentric rings
+    vec2 d = (uv - w.xy) * vec2(0.85, uRes.y / max(uRes.x, 1.0) * 1.35);
+    float g = exp(-dot(d, d) * mix(18.0, 7.0, w.w));
+    h += g * w.z * w.w * 1.45;
   }
   return h;
 }
 
 void main(){
   vec2 uv = vUv;
-  // vUv.y: 0 = bottom, 1 = top (clip -1..1 mapped)
-  vec2 p = uv + (uParallax - 0.5) * 0.045;
-  float t = uTime * 0.00018;
-  float n1 = fbm(p * vec2(2.4, 1.6) + vec2(t * 0.7, t * 0.35));
-  float n2 = fbm(p * vec2(5.2, 3.4) - vec2(t * 0.45, -t * 0.55));
-  float base = n1 * 0.72 + n2 * 0.28;
+  // vUv.y: 0 = bottom, 1 = top
+  float bottomness = 1.0 - uv.y;
+  // Clear liquid sheet horizon ~45–55% (softstep, not a hard cut)
+  float sheetMask = smoothstep(0.40, 0.56, bottomness);
+  float lowerMask = smoothstep(0.42, 0.92, bottomness);
+
+  vec2 p = uv + (uParallax - 0.5) * 0.05;
+  float t = uTime * 0.00016;
+
+  // Anisotropic field — stretch so ridges read as horizontal liquid sheet
+  vec2 aniso = p * vec2(1.55, 3.8);
+  float n1 = fbm(aniso + vec2(t * 0.55, t * 0.22));
+  float n2 = fbm(aniso * 1.85 - vec2(t * 0.38, -t * 0.42));
+  float base = n1 * 0.68 + n2 * 0.32;
   float wake = wakeField(uv);
-  float height = base * 0.55 + wake * 1.15;
-  // Clearer horizontal displacement ridges
-  height += 0.14 * sin((uv.x + uParallax.x * 0.2) * 7.854 + t * 2.4) *
-            cos((uv.y + uParallax.y * 0.15) * 5.027 + t * 1.6);
 
-  float bottomness = 1.0 - uv.y; // 1 at bottom, 0 at top
-  float lowerMask = smoothstep(0.35, 0.95, bottomness); // ~lower 55–65%
+  // Stronger horizontal displacement ridges (glossy liquid sheet)
+  float ridgeWave =
+    0.20 * sin((uv.x + uParallax.x * 0.25) * 8.2 + t * 2.1 + n1 * 3.2) *
+           cos((uv.y + uParallax.y * 0.12) * 16.5 + t * 1.35) +
+    0.12 * sin((uv.x * 4.1 - t * 1.4) + n2 * 2.0) *
+           sin((uv.y * 22.0) + t * 0.9);
 
-  float ry = clamp(uv.y + (height - 0.45) * 0.28 + (0.5 - uParallax.y) * 0.04, 0.0, 1.0);
-  // Cream top stays light for H1; aggressive plum in lower field
-  vec3 cream = vec3(0.992, 0.945, 0.925);
-  vec3 blush = vec3(0.992, 0.910, 0.925);
+  float height = base * 0.5 + wake * 1.2 + ridgeWave;
+
+  vec3 cream = vec3(0.984, 0.945, 0.933); // #FBF1EE
+  vec3 blush = vec3(0.992, 0.910, 0.925); // ~#FDE8EC
   vec3 plumSoft = vec3(0.690, 0.376, 0.478); // #B0607A
   vec3 plumDeep = vec3(0.231, 0.125, 0.153); // #3B2027
-  vec3 sky = mix(cream, blush, smoothstep(0.15, 0.85, ry));
-  vec3 depth = mix(plumSoft, plumDeep, smoothstep(0.15, 0.92, bottomness + height * 0.2));
-  // Raised depth mix (was 0.22 + tiny) — stronger in lower half
-  float depthAmt = mix(0.06, 0.58, lowerMask) + height * 0.38 + wake * 0.12;
-  depthAmt = clamp(depthAmt, 0.0, 0.78);
-  vec3 water = mix(sky, depth, depthAmt);
+  vec3 specular = mix(vec3(0.965, 0.890, 0.910), vec3(1.0), 0.62); // #F6E3E8 → white
 
-  float eps = 1.5 / max(uRes.x, 1.0);
-  float hx = fbm((p + vec2(eps, 0.0)) * vec2(2.4, 1.6) + vec2(t * 0.7, t * 0.35))
-           - fbm((p - vec2(eps, 0.0)) * vec2(2.4, 1.6) + vec2(t * 0.7, t * 0.35));
-  float hy = fbm((p + vec2(0.0, eps)) * vec2(2.4, 1.6) + vec2(t * 0.7, t * 0.35))
-           - fbm((p - vec2(0.0, eps)) * vec2(2.4, 1.6) + vec2(t * 0.7, t * 0.35));
-  // Darker ridge shadows + brighter crest specular (#F6E3E8 / white)
-  float ridge = smoothstep(0.008, 0.05, abs(hx) + abs(hy) * 0.55);
-  float crest = smoothstep(0.0, 0.1, height - 0.38) * (1.0 - smoothstep(0.58, 0.9, height));
-  float spec = crest * (0.4 + 0.6 * ridge);
-  vec3 specular = mix(vec3(0.965, 0.890, 0.910), vec3(1.0), 0.55); // #F6E3E8 → white
-  water = mix(water, plumDeep * 0.85, ridge * lowerMask * 0.22);
-  water = mix(water, specular, spec * 0.62);
-  water += specular * wake * 0.28;
+  // Near-horizon reflection of light sky; deeper plum in troughs toward bottom
+  float depthAmt = clamp(0.28 + lowerMask * 0.42 + height * 0.22 + wake * 0.08, 0.0, 0.88);
+  vec3 skyReflect = mix(cream, blush, 0.55 + height * 0.2);
+  vec3 depth = mix(plumSoft, plumDeep, smoothstep(0.35, 0.95, bottomness + (0.5 - height) * 0.25));
+  vec3 water = mix(skyReflect, depth, depthAmt);
 
-  // Top alpha ~0.15–0.35 (readable H1); bottom ~0.55–0.75
-  float alpha = mix(0.22, 0.68, lowerMask) + height * 0.1 + wake * 0.1;
-  alpha = clamp(alpha, mix(0.15, 0.55, lowerMask), mix(0.35, 0.75, lowerMask));
-  float grain = (hash(gl_FragCoord.xy + uTime) - 0.5) * 0.03;
-  water += grain;
+  // Fake normals from anisotropic height for darker ridge shadows + crest gloss
+  float eps = 1.2 / max(uRes.x, 1.0);
+  float hx = fbm((aniso + vec2(eps * 1.55, 0.0)) + vec2(t * 0.55, t * 0.22))
+           - fbm((aniso - vec2(eps * 1.55, 0.0)) + vec2(t * 0.55, t * 0.22));
+  float hy = fbm((aniso + vec2(0.0, eps * 3.8)) + vec2(t * 0.55, t * 0.22))
+           - fbm((aniso - vec2(0.0, eps * 3.8)) + vec2(t * 0.55, t * 0.22));
+  float ridge = smoothstep(0.004, 0.045, abs(hx) * 0.7 + abs(hy) * 1.1);
+  float crest = smoothstep(0.0, 0.09, height - 0.32) * (1.0 - smoothstep(0.55, 0.88, height));
+  float spec = crest * (0.35 + 0.65 * ridge);
+
+  water = mix(water, plumDeep * 0.9, ridge * lowerMask * 0.32);
+  water = mix(water, specular, spec * 0.72 * sheetMask);
+  water += specular * wake * 0.22 * sheetMask;
+  // Soft horizon highlight band (sheet catching light)
+  float horizonGlow = smoothstep(0.42, 0.52, bottomness) * (1.0 - smoothstep(0.52, 0.62, bottomness));
+  water = mix(water, mix(blush, specular, 0.45), horizonGlow * 0.35);
+
+  // Upper chrome stays transparent; sheet becomes opaque-ish below horizon
+  float alpha = sheetMask * (0.78 + height * 0.12 + wake * 0.08 + ridge * 0.06);
+  alpha = clamp(alpha, 0.0, 0.94);
+  // Soft feather above sheet so H1 stays on light cream
+  alpha *= mix(0.0, 1.0, smoothstep(0.36, 0.52, bottomness));
+
+  float grain = (hash(gl_FragCoord.xy + uTime) - 0.5) * 0.025;
+  water += grain * sheetMask;
   outColor = vec4(water, alpha);
 }`;
 
@@ -281,7 +292,6 @@ void main(){
             gl.clearColor(0, 0, 0, 0);
             gl.clear(gl.COLOR_BUFFER_BIT);
             gl.enable(gl.BLEND);
-            // Correct non-premultiplied blend so translucent water stays visible
             gl.blendFuncSeparate(
               gl.SRC_ALPHA,
               gl.ONE_MINUS_SRC_ALPHA,
@@ -391,62 +401,71 @@ void main(){
       const render2d = (t: number) => {
         if (disposed) return;
         tickWakes();
-        const time = t * 0.00018;
+        const time = t * 0.00016;
         const aspect = height / Math.max(width, 1);
         for (let y = 0; y < COL_H; y++) {
           for (let x = 0; x < COL_W; x++) {
             const uvx = x / (COL_W - 1);
-            const uvy = y / (COL_H - 1);
-            // ImageData y=0 is top; match GL bottomness (1 at bottom)
+            const uvy = y / (COL_H - 1); // 0 top
             const bottomness = uvy;
+            const sheetMask = Math.min(
+              1,
+              Math.max(0, (bottomness - 0.4) / 0.16)
+            );
             const lowerMask = Math.min(
               1,
-              Math.max(0, (bottomness - 0.35) / 0.6)
+              Math.max(0, (bottomness - 0.42) / 0.5)
             );
-            const pxn = uvx + (sx - 0.5) * 0.045;
-            const pyn = (1 - uvy) + (sy - 0.5) * 0.045;
-            const n1 = fbm(pxn * 2.4 + time * 0.7, pyn * 1.6 + time * 0.35);
-            const n2 = fbm(pxn * 5.2 - time * 0.45, pyn * 3.4 + time * 0.55);
-            let h = (n1 * 0.72 + n2 * 0.28) * 0.55;
+            const pxn = (uvx + (sx - 0.5) * 0.05) * 1.55;
+            const pyn = (1 - uvy + (sy - 0.5) * 0.05) * 3.8;
+            const n1 = fbm(pxn + time * 0.55, pyn + time * 0.22);
+            const n2 = fbm(pxn * 1.85 - time * 0.38, pyn * 1.85 + time * 0.42);
+            let h = (n1 * 0.68 + n2 * 0.32) * 0.5;
             h +=
-              0.14 *
-              Math.sin((uvx + sx * 0.2) * 7.854 + time * 2.4) *
-              Math.cos(((1 - uvy) + sy * 0.15) * 5.027 + time * 1.6);
+              0.2 *
+                Math.sin((uvx + sx * 0.25) * 8.2 + time * 2.1 + n1 * 3.2) *
+                Math.cos(((1 - uvy) + sy * 0.12) * 16.5 + time * 1.35) +
+              0.12 *
+                Math.sin(uvx * 4.1 - time * 1.4 + n2 * 2.0) *
+                Math.sin((1 - uvy) * 22.0 + time * 0.9);
             for (let wi = 0; wi < wakes.length; wi++) {
               const w = wakes[wi];
-              const adx = uvx - w.x;
-              const ady = (uvy - w.y) * aspect;
+              const adx = (uvx - w.x) * 0.85;
+              const ady = (uvy - w.y) * aspect * 1.35;
               const g = Math.exp(
-                -(adx * adx + ady * ady) * (8 + 14 * (1 - w.strength))
+                -(adx * adx + ady * ady) * (7 + 11 * (1 - w.strength))
               );
-              h += g * w.life * w.strength * 1.15;
+              h += g * w.life * w.strength * 1.2;
             }
-            const ry = Math.min(1, Math.max(0, 1 - uvy + (h - 0.45) * 0.28));
-            // Boosted 2D colors — cream top, aggressive plum bottom
-            let r = 253 - ry * 6;
-            let gch = 241 - ry * 14;
-            let b = 236 - ry * 8;
             const depthAmt = Math.min(
-              0.78,
-              0.06 * (1 - lowerMask) + 0.58 * lowerMask + h * 0.38
+              0.88,
+              0.28 + lowerMask * 0.42 + h * 0.22
             );
-            const pr = 176 * (1 - bottomness) + 59 * bottomness; // #B0607A → #3B2027
+            // cream/blush sky reflect → plumSoft/plumDeep
+            let r = 251 * (1 - 0.55) + 253 * 0.55;
+            let gch = 241 * (1 - 0.55) + 232 * 0.55;
+            let b = 238 * (1 - 0.55) + 236 * 0.55;
+            const pr = 176 * (1 - bottomness) + 59 * bottomness;
             const pg = 96 * (1 - bottomness) + 32 * bottomness;
             const pb = 122 * (1 - bottomness) + 39 * bottomness;
             r = r * (1 - depthAmt) + pr * depthAmt;
             gch = gch * (1 - depthAmt) + pg * depthAmt;
             b = b * (1 - depthAmt) + pb * depthAmt;
-            const crest = Math.max(0, Math.min(1, (h - 0.38) / 0.1));
-            const spec = crest * 0.62;
-            // Crest specular #F6E3E8 / white
-            r = r * (1 - spec) + (246 * 0.45 + 255 * 0.55) * spec;
-            gch = gch * (1 - spec) + (227 * 0.45 + 255 * 0.55) * spec;
-            b = b * (1 - spec) + (232 * 0.45 + 255 * 0.55) * spec;
-            const aLo = 0.15 + lowerMask * 0.4;
-            const aHi = 0.35 + lowerMask * 0.4;
-            const alpha =
-              Math.min(aHi, Math.max(aLo, 0.22 + lowerMask * 0.46 + h * 0.1)) *
-              255;
+            const crest = Math.max(0, Math.min(1, (h - 0.32) / 0.09));
+            const spec = crest * 0.72 * sheetMask;
+            r = r * (1 - spec) + (246 * 0.38 + 255 * 0.62) * spec;
+            gch = gch * (1 - spec) + (227 * 0.38 + 255 * 0.62) * spec;
+            b = b * (1 - spec) + (232 * 0.38 + 255 * 0.62) * spec;
+            // Darker ridges
+            const ridge = Math.min(1, Math.abs(h - 0.45) * 2.2);
+            const ridgeAmt = ridge * lowerMask * 0.22;
+            r = r * (1 - ridgeAmt) + 59 * 0.9 * ridgeAmt;
+            gch = gch * (1 - ridgeAmt) + 32 * 0.9 * ridgeAmt;
+            b = b * (1 - ridgeAmt) + 39 * 0.9 * ridgeAmt;
+            let alpha =
+              sheetMask * (0.78 + h * 0.12) *
+              Math.min(1, Math.max(0, (bottomness - 0.36) / 0.16));
+            alpha = Math.min(0.94, Math.max(0, alpha)) * 255;
             const idx = (y * COL_W + x) * 4;
             data[idx] = r;
             data[idx + 1] = gch;

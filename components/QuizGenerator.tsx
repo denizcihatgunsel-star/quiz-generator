@@ -574,10 +574,11 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
             {/* Hero */}
             <section
               ref={heroRef}
-              className={`relative overflow-hidden ${hideChrome ? "pt-6 pb-16" : "pb-32"} ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-gradient-to-b from-[#FDE8EC]/55 via-transparent to-transparent pt-40 sm:pt-48"}`}
+              className={`relative overflow-hidden ${hideChrome ? "pt-6 pb-16" : "pb-32"} ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-gradient-to-b from-[#FBF1EE] via-[#FDE8EC] to-[#F6E3E8] pt-40 sm:pt-48"}`}
             >
               {!isLoggedIn && !hideChrome && (
-                <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
+                  {/* Liquid sheet sits on light blush chrome — upper field transparent in shader */}
                   <WaterCanvas className="pointer-events-none absolute inset-0 h-full w-full" />
                 </div>
               )}
