@@ -6,6 +6,10 @@ import { useEffect, useRef } from "react";
  * Soft filled displacement field (Unseen-style liquid) — not stroked sine
  * ribbons or concentric drop-ring ripples. Prefer WebGL2 full-screen quad;
  * fall back to low-res 2D ImageData if WebGL2 is unavailable.
+ *
+ * Visibility: stronger plum/rose in the lower ~55%, softer top for H1
+ * readability, clearer horizontal ridges + crest specular, non-premultiplied
+ * alpha so translucent water does not wash out on blush.
  */
 export default function WaterCanvas({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -55,7 +59,7 @@ export default function WaterCanvas({ className }: { className?: string }) {
           x: px / Math.max(width, 1),
           y: py / Math.max(height, 1),
           life: 1,
-          strength: 0.55,
+          strength: 0.85,
         });
         lastInjectX = px;
         lastInjectY = py;
@@ -98,10 +102,12 @@ export default function WaterCanvas({ className }: { className?: string }) {
     })();
 
     if (supportsWebGL2) {
+      // Non-premultiplied so translucent plum/rose composites correctly on blush
+      // (premultiplied + cream RGB was washing water to invisible).
       const gl = canvas.getContext("webgl2", {
         alpha: true,
         antialias: false,
-        premultipliedAlpha: true,
+        premultipliedAlpha: false,
         powerPreference: "low-power",
       });
 
@@ -159,46 +165,61 @@ float wakeField(vec2 uv){
     if (i >= uWakeCount) break;
     vec4 w = uWakes[i];
     vec2 d = (uv - w.xy) * vec2(1.0, uRes.y / max(uRes.x, 1.0));
-    float g = exp(-dot(d, d) * mix(28.0, 12.0, w.w));
-    h += g * w.z * w.w;
+    // Stronger Gaussian so pointer wake reads on blush (still soft field, no rings)
+    float g = exp(-dot(d, d) * mix(22.0, 8.0, w.w));
+    h += g * w.z * w.w * 1.35;
   }
   return h;
 }
 
 void main(){
   vec2 uv = vUv;
+  // vUv.y: 0 = bottom, 1 = top (clip -1..1 mapped)
   vec2 p = uv + (uParallax - 0.5) * 0.045;
   float t = uTime * 0.00018;
   float n1 = fbm(p * vec2(2.4, 1.6) + vec2(t * 0.7, t * 0.35));
   float n2 = fbm(p * vec2(5.2, 3.4) - vec2(t * 0.45, -t * 0.55));
   float base = n1 * 0.72 + n2 * 0.28;
   float wake = wakeField(uv);
-  float height = base * 0.55 + wake * 0.9;
-  height += 0.08 * sin((uv.x + uParallax.x * 0.2) * 6.2831 + t * 2.4) *
-            cos((uv.y + uParallax.y * 0.15) * 4.188 + t * 1.6);
+  float height = base * 0.55 + wake * 1.15;
+  // Clearer horizontal displacement ridges
+  height += 0.14 * sin((uv.x + uParallax.x * 0.2) * 7.854 + t * 2.4) *
+            cos((uv.y + uParallax.y * 0.15) * 5.027 + t * 1.6);
 
-  float ry = clamp(uv.y + (height - 0.45) * 0.22 + (0.5 - uParallax.y) * 0.04, 0.0, 1.0);
+  float bottomness = 1.0 - uv.y; // 1 at bottom, 0 at top
+  float lowerMask = smoothstep(0.35, 0.95, bottomness); // ~lower 55–65%
+
+  float ry = clamp(uv.y + (height - 0.45) * 0.28 + (0.5 - uParallax.y) * 0.04, 0.0, 1.0);
+  // Cream top stays light for H1; aggressive plum in lower field
   vec3 cream = vec3(0.992, 0.945, 0.925);
   vec3 blush = vec3(0.992, 0.910, 0.925);
-  vec3 plumSoft = vec3(0.690, 0.376, 0.478);
-  vec3 plumDeep = vec3(0.231, 0.125, 0.153);
+  vec3 plumSoft = vec3(0.690, 0.376, 0.478); // #B0607A
+  vec3 plumDeep = vec3(0.231, 0.125, 0.153); // #3B2027
   vec3 sky = mix(cream, blush, smoothstep(0.15, 0.85, ry));
-  vec3 depth = mix(plumSoft, plumDeep, smoothstep(0.25, 0.95, 1.0 - ry));
-  vec3 water = mix(sky, depth, 0.22 + height * 0.28);
+  vec3 depth = mix(plumSoft, plumDeep, smoothstep(0.15, 0.92, bottomness + height * 0.2));
+  // Raised depth mix (was 0.22 + tiny) — stronger in lower half
+  float depthAmt = mix(0.06, 0.58, lowerMask) + height * 0.38 + wake * 0.12;
+  depthAmt = clamp(depthAmt, 0.0, 0.78);
+  vec3 water = mix(sky, depth, depthAmt);
 
   float eps = 1.5 / max(uRes.x, 1.0);
   float hx = fbm((p + vec2(eps, 0.0)) * vec2(2.4, 1.6) + vec2(t * 0.7, t * 0.35))
            - fbm((p - vec2(eps, 0.0)) * vec2(2.4, 1.6) + vec2(t * 0.7, t * 0.35));
   float hy = fbm((p + vec2(0.0, eps)) * vec2(2.4, 1.6) + vec2(t * 0.7, t * 0.35))
            - fbm((p - vec2(0.0, eps)) * vec2(2.4, 1.6) + vec2(t * 0.7, t * 0.35));
-  float crest = smoothstep(0.02, 0.12, height - 0.42) * (1.0 - smoothstep(0.55, 0.85, height));
-  float spec = crest * (0.35 + 0.65 * smoothstep(0.0, 0.08, abs(hx) + abs(hy)));
-  vec3 specular = mix(vec3(0.965, 0.890, 0.910), vec3(1.0), 0.35);
-  water = mix(water, specular, spec * 0.42);
-  water += specular * wake * 0.18;
+  // Darker ridge shadows + brighter crest specular (#F6E3E8 / white)
+  float ridge = smoothstep(0.008, 0.05, abs(hx) + abs(hy) * 0.55);
+  float crest = smoothstep(0.0, 0.1, height - 0.38) * (1.0 - smoothstep(0.58, 0.9, height));
+  float spec = crest * (0.4 + 0.6 * ridge);
+  vec3 specular = mix(vec3(0.965, 0.890, 0.910), vec3(1.0), 0.55); // #F6E3E8 → white
+  water = mix(water, plumDeep * 0.85, ridge * lowerMask * 0.22);
+  water = mix(water, specular, spec * 0.62);
+  water += specular * wake * 0.28;
 
-  float alpha = clamp(0.38 + height * 0.12 + wake * 0.08, 0.28, 0.48);
-  float grain = (hash(gl_FragCoord.xy + uTime) - 0.5) * 0.035;
+  // Top alpha ~0.15–0.35 (readable H1); bottom ~0.55–0.75
+  float alpha = mix(0.22, 0.68, lowerMask) + height * 0.1 + wake * 0.1;
+  alpha = clamp(alpha, mix(0.15, 0.55, lowerMask), mix(0.35, 0.75, lowerMask));
+  float grain = (hash(gl_FragCoord.xy + uTime) - 0.5) * 0.03;
   water += grain;
   outColor = vec4(water, alpha);
 }`;
@@ -260,7 +281,13 @@ void main(){
             gl.clearColor(0, 0, 0, 0);
             gl.clear(gl.COLOR_BUFFER_BIT);
             gl.enable(gl.BLEND);
-            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            // Correct non-premultiplied blend so translucent water stays visible
+            gl.blendFuncSeparate(
+              gl.SRC_ALPHA,
+              gl.ONE_MINUS_SRC_ALPHA,
+              gl.ONE,
+              gl.ONE_MINUS_SRC_ALPHA
+            );
             gl.useProgram(program);
             gl.uniform2f(uRes, canvas.width, canvas.height);
             gl.uniform1f(uTime, t);
@@ -370,35 +397,56 @@ void main(){
           for (let x = 0; x < COL_W; x++) {
             const uvx = x / (COL_W - 1);
             const uvy = y / (COL_H - 1);
+            // ImageData y=0 is top; match GL bottomness (1 at bottom)
+            const bottomness = uvy;
+            const lowerMask = Math.min(
+              1,
+              Math.max(0, (bottomness - 0.35) / 0.6)
+            );
             const pxn = uvx + (sx - 0.5) * 0.045;
-            const pyn = uvy + (sy - 0.5) * 0.045;
+            const pyn = (1 - uvy) + (sy - 0.5) * 0.045;
             const n1 = fbm(pxn * 2.4 + time * 0.7, pyn * 1.6 + time * 0.35);
             const n2 = fbm(pxn * 5.2 - time * 0.45, pyn * 3.4 + time * 0.55);
             let h = (n1 * 0.72 + n2 * 0.28) * 0.55;
+            h +=
+              0.14 *
+              Math.sin((uvx + sx * 0.2) * 7.854 + time * 2.4) *
+              Math.cos(((1 - uvy) + sy * 0.15) * 5.027 + time * 1.6);
             for (let wi = 0; wi < wakes.length; wi++) {
               const w = wakes[wi];
               const adx = uvx - w.x;
               const ady = (uvy - w.y) * aspect;
-              const g = Math.exp(-(adx * adx + ady * ady) * (12 + 16 * (1 - w.strength)));
-              h += g * w.life * w.strength * 0.9;
+              const g = Math.exp(
+                -(adx * adx + ady * ady) * (8 + 14 * (1 - w.strength))
+              );
+              h += g * w.life * w.strength * 1.15;
             }
-            const ry = Math.min(1, Math.max(0, uvy + (h - 0.45) * 0.22));
-            let r = 253 - ry * 8;
-            let gch = 241 - ry * 20;
-            let b = 236 - ry * 10;
-            const depthT = 0.22 + h * 0.28;
-            const pr = 176 * (1 - ry) + 59 * ry;
-            const pg = 96 * (1 - ry) + 32 * ry;
-            const pb = 122 * (1 - ry) + 39 * ry;
-            r = r * (1 - depthT) + pr * depthT;
-            gch = gch * (1 - depthT) + pg * depthT;
-            b = b * (1 - depthT) + pb * depthT;
-            const crest = Math.max(0, Math.min(1, (h - 0.42) / 0.12));
-            const spec = crest * 0.42;
-            r = r * (1 - spec) + 246 * spec;
-            gch = gch * (1 - spec) + 227 * spec;
-            b = b * (1 - spec) + 232 * spec;
-            const alpha = Math.min(0.48, Math.max(0.28, 0.38 + h * 0.12)) * 255;
+            const ry = Math.min(1, Math.max(0, 1 - uvy + (h - 0.45) * 0.28));
+            // Boosted 2D colors — cream top, aggressive plum bottom
+            let r = 253 - ry * 6;
+            let gch = 241 - ry * 14;
+            let b = 236 - ry * 8;
+            const depthAmt = Math.min(
+              0.78,
+              0.06 * (1 - lowerMask) + 0.58 * lowerMask + h * 0.38
+            );
+            const pr = 176 * (1 - bottomness) + 59 * bottomness; // #B0607A → #3B2027
+            const pg = 96 * (1 - bottomness) + 32 * bottomness;
+            const pb = 122 * (1 - bottomness) + 39 * bottomness;
+            r = r * (1 - depthAmt) + pr * depthAmt;
+            gch = gch * (1 - depthAmt) + pg * depthAmt;
+            b = b * (1 - depthAmt) + pb * depthAmt;
+            const crest = Math.max(0, Math.min(1, (h - 0.38) / 0.1));
+            const spec = crest * 0.62;
+            // Crest specular #F6E3E8 / white
+            r = r * (1 - spec) + (246 * 0.45 + 255 * 0.55) * spec;
+            gch = gch * (1 - spec) + (227 * 0.45 + 255 * 0.55) * spec;
+            b = b * (1 - spec) + (232 * 0.45 + 255 * 0.55) * spec;
+            const aLo = 0.15 + lowerMask * 0.4;
+            const aHi = 0.35 + lowerMask * 0.4;
+            const alpha =
+              Math.min(aHi, Math.max(aLo, 0.22 + lowerMask * 0.46 + h * 0.1)) *
+              255;
             const idx = (y * COL_W + x) * 4;
             data[idx] = r;
             data[idx + 1] = gch;
