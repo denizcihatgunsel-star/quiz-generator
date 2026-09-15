@@ -1,5 +1,6 @@
 import { PLANS, type PlanId } from "@/lib/subscription";
 import SiteHeader from "@/components/SiteHeader";
+import { StructuredData } from "@/components/StructuredData";
 import { CardShell, ManageBilling, PlanCta, PricingActionsProvider } from "./PricingClient";
 
 const CHECK = (
@@ -30,9 +31,40 @@ const pricingFaqs = [
 
 const featuredId: PlanId = "plus";
 
+const pricingFaqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: pricingFaqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const productSchema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "Examina Quiz Generator",
+  description:
+    "AI-powered quiz generator with free and paid plans. Turns any text into multiple choice, flashcard, fill-in-the-blank, and true/false questions.",
+  brand: { "@type": "Brand", name: "Examina" },
+  offers: Object.values(PLANS).map((plan) => ({
+    "@type": "Offer",
+    name: plan.name,
+    price: String(plan.price),
+    priceCurrency: "USD",
+    description:
+      plan.quizzesPerMonth === Infinity
+        ? "Unlimited quizzes per month"
+        : `${plan.quizzesPerMonth} quizzes per month`,
+  })),
+};
+
 export default function PricingPage() {
   return (
     <div className="min-h-screen bg-background">
+      <StructuredData data={pricingFaqSchema} />
+      <StructuredData data={productSchema} />
       <SiteHeader />
 
       <main className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 sm:py-20">

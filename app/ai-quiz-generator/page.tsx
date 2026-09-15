@@ -3,8 +3,8 @@ import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 
 export const metadata: Metadata = pageMetadata({
-  title: "AI Quiz Generator — Turn Notes into Quizzes | Examina",
-  description: "Generate quizzes from any text with AI. Multiple choice, flashcards, fill-in-the-blank & true/false in 29 languages. Free to try.",
+  title: "Generate a Quiz with AI — From Any Notes in 29 Languages | Examina",
+  description: "Create a quiz from your notes with AI: multiple choice, flashcards, fill-in-the-blank, and true/false questions in 29 languages. Start free — no credit card.",
   path: "/ai-quiz-generator",
 });
 

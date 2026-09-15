@@ -37,7 +37,6 @@ export default function sitemap() {
     { url: `${SITE}/quiz-generator-from-text`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE}/create-a-quiz`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE}/study-quiz`, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${SITE}/study`, changeFrequency: "weekly", priority: 0.7 },
     { url: `${SITE}/daily-quiz`, changeFrequency: "weekly", priority: 0.7 },
     { url: `${SITE}/for-teachers`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE}/for-students`, changeFrequency: "monthly", priority: 0.8 },
@@ -49,6 +48,6 @@ export default function sitemap() {
     { url: `${SITE}/blog`, changeFrequency: "weekly", priority: 0.8 },
   ].map((p) => ({ ...p, lastModified: now }));
 
-  // Intentionally omit thin client shells /explore and /daily-challenge (noindex instead)
+  // Intentionally omit thin client shells /explore, /daily-challenge, and /study (noindex instead)
   return [...pages, ...posts, ...languages];
 }

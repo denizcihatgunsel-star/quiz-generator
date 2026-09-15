@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
 
@@ -120,6 +121,62 @@ export default function HomeSections() {
               <p className="mt-2 text-sm text-[#9A7280]">{s.label}</p>
             </motion.div>
           ))}
+        </div>
+      </motion.section>
+
+      {/* Who it's for */}
+      <motion.section
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.6, ease: EASE_OUT }}
+        className="py-20 sm:py-28"
+      >
+        <div className="mx-auto max-w-6xl px-6">
+          <p className="mb-4 text-center text-xs uppercase tracking-[0.2em] text-[#A87680]">
+            Made for the classroom
+          </p>
+          <h2 className="mb-12 text-center text-3xl font-medium tracking-tight text-[#3B2027] sm:text-4xl">
+            Students, teachers, <span className="font-serif italic text-[#B0607A]">and live quizzes.</span>
+          </h2>
+          <div className="grid gap-5 sm:grid-cols-3">
+            <Link
+              href="/for-students"
+              className="group rounded-2xl border border-[#F3D5DC] bg-white/70 p-7 backdrop-blur-xl transition-colors hover:border-[#E9B8C4] hover:bg-white/90"
+            >
+              <h3 className="font-serif text-lg italic text-[#3B2027]">For students</h3>
+              <p className="mt-2.5 text-sm leading-relaxed text-[#9A7280]">
+                Turn lecture notes into practice quizzes and flashcards, then study with active recall.
+              </p>
+              <span className="mt-4 inline-block text-sm text-[#B0607A] transition-transform group-hover:translate-x-0.5">
+                Study smarter →
+              </span>
+            </Link>
+            <Link
+              href="/for-teachers"
+              className="group rounded-2xl border border-[#F3D5DC] bg-white/70 p-7 backdrop-blur-xl transition-colors hover:border-[#E9B8C4] hover:bg-white/90"
+            >
+              <h3 className="font-serif text-lg italic text-[#3B2027]">For teachers</h3>
+              <p className="mt-2.5 text-sm leading-relaxed text-[#9A7280]">
+                Create formative assessments, homework quizzes, and review materials in seconds.
+              </p>
+              <span className="mt-4 inline-block text-sm text-[#B0607A] transition-transform group-hover:translate-x-0.5">
+                Save planning time →
+              </span>
+            </Link>
+            <Link
+              href="/classroom/join"
+              className="group rounded-2xl border border-[#F3D5DC] bg-white/70 p-7 backdrop-blur-xl transition-colors hover:border-[#E9B8C4] hover:bg-white/90"
+            >
+              <h3 className="font-serif text-lg italic text-[#3B2027]">Live classroom quizzes</h3>
+              <p className="mt-2.5 text-sm leading-relaxed text-[#9A7280]">
+                Join a live quiz with a classroom code and answer in real time alongside your class.
+              </p>
+              <span className="mt-4 inline-block text-sm text-[#B0607A] transition-transform group-hover:translate-x-0.5">
+                Join a quiz →
+              </span>
+            </Link>
+          </div>
         </div>
       </motion.section>
 
