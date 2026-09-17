@@ -78,8 +78,20 @@ const organizationSchema = {
 };
 
 export default function Home() {
-  return (
+    return (
     <>
+      {/* Lightweight SSR FAQ for crawlers; rich UI loads client-side below the fold */}
+      <section id="seo-ssr-faq" className="sr-only" aria-label="Frequently asked questions">
+        <h2>Frequently asked questions</h2>
+        <ul>
+          {FAQ_ITEMS.map((f) => (
+            <li key={f.q}>
+              <h3>{f.q}</h3>
+              <p>{f.a}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
       <StructuredData data={faqSchema} />
       <StructuredData data={softwareAppSchema} />
       <StructuredData data={organizationSchema} />

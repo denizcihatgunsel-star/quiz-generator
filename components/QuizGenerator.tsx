@@ -1,5 +1,7 @@
 "use client";
 
+import dynamic from "next/dynamic";
+
 import { useState, useRef, useEffect, useCallback, type MouseEvent } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -15,7 +17,6 @@ import UserMenu from "./UserMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import EditorialNav from "./EditorialNav";
 import AmbientBackground from "./AmbientBackground";
-import UnseenLanding from "./UnseenLanding";
 import WaterCanvas from "./WaterCanvas";
 import InteractiveWordmark from "./InteractiveWordmark";
 import SoundToggle from "./SoundToggle";
@@ -24,9 +25,13 @@ import ImageOCR from "./ImageOCR";
 import QuizEditor from "./QuizEditor";
 import VideoExplanationLink from "./VideoExplanationLink";
 import MagneticText from "./MagneticText";
-import HomeSections from "./HomeSections";
 import QuizStory from "./QuizStory";
 import { useTranslation } from "@/lib/i18n";
+
+
+// Below-fold marketing: client-only to keep homepage HTML lean for crawlers/CDN
+const UnseenLanding = dynamic(() => import("./UnseenLanding"), { ssr: false });
+const HomeSections = dynamic(() => import("./HomeSections"), { ssr: false });
 
 const EXAMPLE_LESSON = `The water cycle, also known as the hydrological cycle, describes the continuous movement of water on, above, and below Earth's surface. The main stages are:
 
