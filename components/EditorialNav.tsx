@@ -15,7 +15,10 @@ export default function EditorialNav() {
     >
       <div className="flex w-full max-w-3xl items-center justify-between gap-4 rounded-full border border-[#F3D5DC] bg-white/85 px-4 py-2.5 shadow-sm backdrop-blur-md sm:px-5">
         <Link href="/" className="flex items-center gap-2.5">
-          <img src="/logo.png" alt="Examina" className="h-7 w-7 rounded-full object-contain" />
+          <picture>
+            <source srcSet="/logo.webp" type="image/webp" />
+            <img src="/logo.png?v=3" alt="Examina" width={28} height={28} className="h-7 w-7 rounded-full object-contain" />
+          </picture>
           <span className="text-sm font-medium text-[#3B2027]">Examina</span>
         </Link>
 

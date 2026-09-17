@@ -269,6 +269,30 @@ export default function UnseenLanding() {
             <Link href="/blog" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
               Blog
             </Link>
+            <Link href="/contact" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
+              Contact
+            </Link>
+            <Link href="/ai-quiz-generator" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
+              AI Quiz
+            </Link>
+            <Link href="/free-quiz-generator" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
+              Free Quiz
+            </Link>
+            <Link href="/create-a-quiz" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
+              Create
+            </Link>
+            <Link href="/quiz-generator-from-pdf" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
+              From PDF
+            </Link>
+            <Link href="/quiz-generator-from-text" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
+              From Text
+            </Link>
+            <Link href="/study-quiz" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
+              Study
+            </Link>
+            <Link href="/daily-quiz" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
+              Daily
+            </Link>
             <Link href="/multiple-choice-quiz-maker" className="text-xs uppercase tracking-[0.25em] text-[#E7BEC9] transition-colors duration-200 hover:text-white">
               MCQ
             </Link>

@@ -498,7 +498,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-2.5">
-              <img src="/logo.png" alt="Examina" className="w-7 h-7 rounded-lg object-contain" />
+              <img src="/logo.png?v=3" alt="Examina" className="w-7 h-7 rounded-lg object-contain" />
               <span className="font-medium text-foreground tracking-tight">Examina</span>
             </Link>
             <div className="hidden sm:flex items-center gap-6">
@@ -1099,7 +1099,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div className="flex items-center gap-2.5">
-              <img src="/logo.png" alt="Examina" className="w-6 h-6 rounded-lg object-contain" />
+              <img src="/logo.png?v=3" alt="Examina" className="w-6 h-6 rounded-lg object-contain" />
               <span className="text-sm text-[#9A7280]">Examina</span>
             </div>
             <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-[#9A7280]">
@@ -1107,6 +1107,14 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
               <Link href="/pricing" className="hover:text-[#3B2027] transition-colors">Pricing</Link>
               <a href="#faq" className="hover:text-[#3B2027] transition-colors">FAQ</a>
               <Link href="/blog" className="hover:text-[#3B2027] transition-colors">Blog</Link>
+              <Link href="/contact" className="hover:text-[#3B2027] transition-colors">Contact</Link>
+              <Link href="/ai-quiz-generator" className="hover:text-[#3B2027] transition-colors">AI Quiz</Link>
+              <Link href="/free-quiz-generator" className="hover:text-[#3B2027] transition-colors">Free Quiz</Link>
+              <Link href="/create-a-quiz" className="hover:text-[#3B2027] transition-colors">Create a Quiz</Link>
+              <Link href="/quiz-generator-from-pdf" className="hover:text-[#3B2027] transition-colors">From PDF</Link>
+              <Link href="/quiz-generator-from-text" className="hover:text-[#3B2027] transition-colors">From Text</Link>
+              <Link href="/study-quiz" className="hover:text-[#3B2027] transition-colors">Study Quiz</Link>
+              <Link href="/daily-quiz" className="hover:text-[#3B2027] transition-colors">Daily Quiz</Link>
               <Link href="/multiple-choice-quiz-maker" className="hover:text-[#3B2027] transition-colors">MCQ Maker</Link>
               <Link href="/flashcard-generator" className="hover:text-[#3B2027] transition-colors">Flashcards</Link>
               <Link href="/about" className="hover:text-[#3B2027] transition-colors">About</Link>

@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+# Public join page must stay crawlable; rest of /classroom/ is app shell
+Disallow: /classroom/
 Allow: /classroom/join
 Disallow: /api/
 Disallow: /auth/
@@ -8,7 +10,6 @@ Disallow: /m/
 Disallow: /admin/
 Disallow: /settings/
 Disallow: /analytics/
-Disallow: /classroom/
 Disallow: /referral/
 
 Sitemap: https://www.examina.ink/sitemap.xml

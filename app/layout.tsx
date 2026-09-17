@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   }),
   icons: {
     icon: [
-      { url: "/logo.png?v=2", type: "image/png" },
+      { url: "/logo.png?v=3", type: "image/png" },
       { url: "/favicon.ico?v=2" },
     ],
     apple: [{ url: "/apple-icon.png?v=2" }],
@@ -62,7 +62,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <link rel="icon" href="/logo.png?v=2" />
+        <link rel="icon" href="/logo.png?v=3" />
         <script
           dangerouslySetInnerHTML={{
             __html: `

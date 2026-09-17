@@ -50,6 +50,57 @@ function nextWithHtmlLang(request: NextRequest) {
   });
 }
 
+
+const MARKETING_EXACT = new Set([
+  "/",
+  "/pricing",
+  "/about",
+  "/contact",
+  "/privacy",
+  "/terms",
+  "/blog",
+  "/ai-quiz-generator",
+  "/free-quiz-generator",
+  "/create-a-quiz",
+  "/quiz-generator-from-pdf",
+  "/quiz-generator-from-text",
+  "/study-quiz",
+  "/daily-quiz",
+  "/flashcard-generator",
+  "/multiple-choice-quiz-maker",
+  "/true-false-quiz-generator",
+  "/fill-in-the-blank-generator",
+  "/for-teachers",
+  "/for-students",
+  "/classroom/join",
+  "/es",
+  "/de",
+  "/fr",
+  "/pt",
+  "/tr",
+]);
+
+function hasSessionCookie(request: NextRequest): boolean {
+  return Boolean(
+    request.cookies.get("next-auth.session-token") ||
+      request.cookies.get("__Secure-next-auth.session-token") ||
+      request.cookies.get("__Host-next-auth.session-token"),
+  );
+}
+
+function withMarketingCache(request: NextRequest, response: NextResponse): NextResponse {
+  const { pathname } = request.nextUrl;
+  const isMarketing =
+    MARKETING_EXACT.has(pathname) || pathname.startsWith("/blog/");
+  if (isMarketing && !hasSessionCookie(request) && request.method === "GET") {
+    response.headers.set(
+      "Cache-Control",
+      "public, s-maxage=60, stale-while-revalidate=600",
+    );
+  }
+  return response;
+}
+
 export function middleware(request: NextRequest) {
   const host = (request.headers.get("host") ?? "").split(":")[0].toLowerCase();
   if (host === "examina.ink") {
@@ -82,7 +133,7 @@ export function middleware(request: NextRequest) {
       url.search = search;
       return NextResponse.redirect(url);
     }
-    return nextWithHtmlLang(request);
+    return withMarketingCache(request, nextWithHtmlLang(request));
   }
 
   if (isMobile) {
@@ -99,7 +150,7 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  return nextWithHtmlLang(request);
+  return withMarketingCache(request, nextWithHtmlLang(request));
 }
 
 export const config = {
