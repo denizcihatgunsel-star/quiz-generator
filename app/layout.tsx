@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { Geist, Geist_Mono, Instrument_Serif, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
@@ -43,21 +42,22 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/logo.png?v=3", type: "image/png" },
-      { url: "/favicon.ico?v=2" },
+      { url: "/favicon.ico?v=3" },
     ],
-    apple: [{ url: "/apple-icon.png?v=2" }],
+    apple: [{ url: "/apple-icon.png?v=3" }],
   },
 };
 
-export default async function RootLayout({
+export const revalidate = 60;
+
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const lang = (await headers()).get("x-html-lang") || "en";
   return (
     <html
-      lang={lang}
+      lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${spaceGrotesk.variable} h-full antialiased`}
       suppressHydrationWarning
     >

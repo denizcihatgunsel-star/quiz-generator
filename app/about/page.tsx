@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = pageMetadata({
   title: "About Examina — AI Quiz Generator for Students & Teachers",
   description: "Examina is an AI quiz generator that turns any lesson into multiple choice, flashcards, fill-in-the-blank, and true/false questions.",

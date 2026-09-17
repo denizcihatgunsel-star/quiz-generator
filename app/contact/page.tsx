@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = pageMetadata({
   title: "Contact Examina | Support & Feedback",
   description: "Get in touch with the Examina team. Reach us at support@examina.ink for help with accounts, billing, or feedback.",

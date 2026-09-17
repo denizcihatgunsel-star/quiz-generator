@@ -1,6 +1,8 @@
 import QuizGenerator from "@/components/QuizGenerator";
 import { StructuredData } from "@/components/StructuredData";
 
+export const revalidate = 60;
+
 const FAQ_ITEMS = [
   {
     q: "What file types can I upload?",
