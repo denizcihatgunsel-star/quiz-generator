@@ -15,6 +15,16 @@
       "source": "/ultiple-choice-quiz-maker",
       "destination": "/multiple-choice-quiz-maker",
       "statusCode": 301
+    },
+    {
+      "source": "/sitemap_index.xml",
+      "destination": "/sitemap.xml",
+      "statusCode": 301
+    },
+    {
+      "source": "/sitemap-index.xml",
+      "destination": "/sitemap.xml",
+      "statusCode": 301
     }
   ],
   "headers": [
@@ -225,6 +235,15 @@
     },
     {
       "source": "/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=60, stale-while-revalidate=600"
+        }
+      ]
+    },
+    {
+      "source": "/pricing",
       "headers": [
         {
           "key": "Cache-Control",
