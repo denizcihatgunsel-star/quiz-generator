@@ -67,6 +67,13 @@ export function pageMetadata(opts: {
     },
     ...(opts.noIndex
       ? { robots: { index: false, follow: false, googleBot: { index: false, follow: false } } }
-      : {}),
+      : {
+          robots: {
+            index: true,
+            follow: true,
+            "max-image-preview": "large" as const,
+            googleBot: { index: true, follow: true, "max-image-preview": "large" as const },
+          },
+        }),
   };
 }

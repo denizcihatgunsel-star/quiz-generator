@@ -56,6 +56,7 @@ const softwareAppSchema = {
     "Bloom's Taxonomy mapping",
     "Quiz sharing via link or PDF export",
   ],
+  publisher: { "@type": "Organization", "@id": "https://www.examina.ink/#organization" },
   offers: [
     {
       "@type": "Offer",
@@ -103,6 +104,7 @@ const softwareAppSchema = {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": "https://www.examina.ink/#organization",
   name: "Examina",
   url: "https://www.examina.ink",
   logo: "https://www.examina.ink/logo.png",
@@ -128,15 +130,6 @@ export default function Home() {
       <StructuredData data={faqSchema} />
       <StructuredData data={softwareAppSchema} />
       <StructuredData data={organizationSchema} />
-      {/* Server-rendered FAQ answers matching FAQPage JSON-LD (always in HTML) */}
-      <section className="sr-only" aria-label="Frequently asked questions">
-        {FAQ_ITEMS.map((item) => (
-          <div key={item.q}>
-            <h2>{item.q}</h2>
-            <p>{item.a}</p>
-          </div>
-        ))}
-      </section>
       <QuizGenerator />
     </>
   );
