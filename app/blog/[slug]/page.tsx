@@ -169,6 +169,29 @@ export default async function BlogPostPage({
           </div>
         </section>
 
+        {post.tools && post.tools.length > 0 && (
+          <section className="mt-14 rounded-2xl border border-neutral-200 bg-white p-8 text-center">
+            <h2 className="text-xl font-medium tracking-tight text-neutral-900">
+              Try it with Examina
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-neutral-500">
+              Turn yesterday&apos;s notes into questions, flashcards, and practice you can take
+              today.
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              {post.tools.map((t) => (
+                <Link
+                  key={t.href}
+                  href={t.href}
+                  className="rounded-full border border-neutral-200 px-5 py-2.5 text-sm font-medium text-neutral-700 transition-colors hover:border-neutral-900 hover:text-neutral-900"
+                >
+                  {t.label}
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
         <div className="mt-14 border-t border-neutral-200 pt-10">
           <p className="mb-4 text-sm text-neutral-400">Keep reading</p>
           <div className="flex flex-wrap gap-3">

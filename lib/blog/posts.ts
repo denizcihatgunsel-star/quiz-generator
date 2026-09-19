@@ -10,6 +10,8 @@ export interface BlogPost {
   readTime: string;
   sections: { h: string; p?: string[]; list?: string[] }[];
   faq: { q: string; a: string }[];
+  /** Internal links to Examina tool pages (rendered as a call-to-action strip) */
+  tools?: { href: string; label: string }[];
 }
 
 export const POSTS: BlogPost[] = [
@@ -338,6 +340,359 @@ export const POSTS: BlogPost[] = [
         q: "What's the best study routine with these tools?",
         a: "Start small: one quiz per lecture, taken the same day, plus scheduled flashcard reviews. Consistency beats intensity — a 30-minute daily loop outperforms a weekend marathon.",
       },
+    ],
+  },
+  {
+    slug: "ai-multiple-choice-quiz-maker",
+    title: "How to Make a Multiple-Choice Quiz with AI (Distractors That Actually Work)",
+    description:
+      "The anatomy of a good multiple-choice question, common AI pitfalls, and a repeatable workflow for generating reliable MCQ tests from your notes.",
+    tag: "For Educators",
+    date: "Mar 2026",
+    dateIso: "2026-03-19",
+    readTime: "5 min",
+    sections: [
+      {
+        h: "What separates a good multiple-choice question from a bad one",
+        p: [
+          "A multiple-choice question is only as good as its alternatives. If the wrong answers are obviously wrong, you've built a recognition test — students eliminate the garbage options and can guess the right one, which is why 'multiple guess' quizzes flatter weak preparation.",
+          "A strong question presents four options that are all plausible to a partially-prepared student, with one that is unambiguously correct. The distractors should be drawn from real misconceptions, not random filler.",
+        ],
+      },
+      {
+        h: "The four parts of a well-built distractor",
+        list: [
+          "Plausibility — each wrong option must be something a student who half-understands the topic would believe",
+          "Misconception anchoring — base distractors on common errors (units, sign, causality, over-generalization)",
+          "Similar length and structure to the correct answer — short correct answers next to long distractors are a giveaway",
+          "One unambiguous correct answer — never two defensible options",
+        ],
+      },
+      {
+        h: "Where AI-generated MCQs trip up",
+        p: [
+          "Generative models excel at vocabulary but can drift on expert topics: vague distractors, 'all of the above' crutches, or questions that test keyword matching rather than understanding. The fix is review discipline: skim the question set once with an eye for anything you could eliminate on style alone.",
+          "That review pass is fast when the generation is structured — Bloom's level and difficulty tags on every question let you spot a lopsided test at a glance.",
+        ],
+      },
+      {
+        h: "A repeatable AI workflow",
+        p: [
+          "Paste the week's lesson or textbook chapter, ask for multiple-choice questions across the Bloom's levels, then skim for distractors and balance. Differentiated version for a second class? Regenerate from the same source — the model re-authors rather than reuses, which also makes it hard for students to memorize a shared question bank.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "How many options should each question have?",
+        a: "Three or four. Four is the standard for assessing serious exams; three is fine for quick checks. Fewer than three makes guessing too easy, more than four rarely adds discrimination.",
+      },
+      {
+        q: "Are generated distractors actually plausible?",
+        a: "Usually — but they improve with review. Look specifically for options that are obviously wrong and replace or regenerate them, because an implausible distractor turns a 4-option question into a 2-option question.",
+      },
+      {
+        q: "Do the questions map to Bloom's Taxonomy?",
+        a: "Yes. Every Examina question carries a Bloom's level and difficulty tag, so you can check whether your quiz tests recall, comprehension, or application.",
+      },
+    ],
+    tools: [
+      { href: "/multiple-choice-quiz-maker", label: "Multiple-Choice Quiz Maker" },
+      { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
+      { href: "/create-a-quiz", label: "Create a Quiz" },
+    ],
+  },
+  {
+    slug: "spaced-repetition-schedule",
+    title: "The Ultimate Spaced Repetition Schedule (Backed by Research)",
+    description:
+      "How to build a review schedule that catches forgetting right before it happens — from the first learning session to exam day.",
+    tag: "Study Tips",
+    date: "Apr 2026",
+    dateIso: "2026-04-02",
+    readTime: "5 min",
+    sections: [
+      {
+        h: "Why review needs a schedule at all",
+        p: [
+          "Memory decays on a predictable curve: most of what you learn is gone within days unless it's pulled back. Re-reading briefly flattens the curve; retrieval practice at planned intervals flattens it dramatically. The intervals are the entire game — too long and you've forgotten, too short and you're wasting sessions on material you still know.",
+        ],
+      },
+      {
+        h: "A practical interval ladder",
+        list: [
+          "Same day — first quiz or flashcard pass, 1–2 hours after learning",
+          "Day 2 — refresh before it slips; this is when most forgetting would start",
+          "Day 4 — second retrieval; correctly answered cards get quiet",
+          "Day 7 — weekly review consolidates the week's material",
+          "Day 21 — month checkpoint; keeps exam-month material alive",
+          "Before the exam — one final pass on the cards you still miss",
+        ],
+      },
+      {
+        h: "How the ladder becomes automatic",
+        p: [
+          "Tracking six intervals by hand works until it doesn't — schedules collapse under a real workload. Spaced-repetition tools mark each card new, learning, or mature and reschedule it automatically based on how you answer, which is exactly how effective review becomes routine rather than willpower.",
+        ],
+      },
+      {
+        h: "What actually makes the schedule work",
+        p: [
+          "Two things: a queue you don't have to think about, and honest grading. If you mark a card 'easy' when you barely recalled it, the schedule lengthens and you'll hit exam week with soft memory. Grade harder than feels comfortable — your future self won't mind the extra pass.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "What intervals should I actually use as a beginner?",
+        a: "Start simple: same day, day 2, day 7. Add the day-4 and day-21 rungs once you're consistent. Perfect scheduling beats none by a little; consistent scheduling beats occasional intense sessions by a lot.",
+      },
+      {
+        q: "How many new items per day is realistic?",
+        a: "For flashcards, 20–30 new cards a day is a healthy ceiling for most people. More than that and the review backlog doubles quickly and the queue becomes demoralizing.",
+      },
+      {
+        q: "Does Examina schedule reviews for me?",
+        a: "Yes — study mode tracks each card's state (new, learning, mature) and schedules the next review automatically, so the ladder above runs itself.",
+      },
+    ],
+    tools: [
+      { href: "/study-quiz", label: "Study Quiz" },
+      { href: "/flashcard-generator", label: "Flashcard Generator" },
+    ],
+  },
+  {
+    slug: "flashcards-vs-quizzes",
+    title: "Flashcards vs Quizzes: Which Should You Use to Study?",
+    description:
+      "Flashcards and quizzes are both retrieval practice — but they test you differently. Here's when to use each and how to combine them.",
+    tag: "Study Tips",
+    date: "Apr 2026",
+    dateIso: "2026-04-16",
+    readTime: "4 min",
+    sections: [
+      {
+        h: "Same engine, different gears",
+        p: [
+          "Both flashcards and quizzes work through retrieval: forcing your brain to reconstruct the answer. That shared mechanism is why both outperform re-reading. The difference is in the size and format of what you're asked to recall.",
+          "A flashcard asks one atomic fact. A quiz asks you to reason across multiple facts — context switching, applying a concept to a scenario, or choosing between subtly different claims. One builds precise memory; the other builds flexible understanding.",
+        ],
+      },
+      {
+        h: "When flashcards win",
+        list: [
+          "Vocabulary and definitions — languages, terminology, formulas, dates",
+          "Scheduling, because one-fact cards grade cleanly (know it / don't)",
+          "High-volume material where a quiz would take too long",
+        ],
+      },
+      {
+        h: "When quizzes win",
+        list: [
+          "After a first pass, when you need to connect ideas rather than recognize terms",
+          "Before an exam, to simulate the real task under a little time pressure",
+          "Diagnosing what you don't know — missing a connected question reveals a gap a single card can't",
+        ],
+      },
+      {
+        h: "The combination that beats either alone",
+        p: [
+          "Learn with cards, verify with quizzes. Build your vocabulary or fact base with flashcards and spaced repetition, then take a quiz on the same material to see whether your recall survives in context. Re-write the cards you get wrong in the quiz — you've found the boundary of your knowledge, and that's exactly where studying should aim.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Should I do flashcards or quizzes first?",
+        a: "Flashcards first for raw recall, quizzes second to connect the facts. Skipping straight to quizzes on unfamiliar material just turns them into low-confidence guessing.",
+      },
+      {
+        q: "Is quizzing alone enough?",
+        a: "For exam-style subjects, mostly — but vocabulary and formulas benefit from the atomic, spaced flashcard format. Using both usually beats choosing one.",
+      },
+      {
+        q: "Can I get both from the same material?",
+        a: "Yes — one generation pass produces multiple-choice questions and flashcards from the same source, so you learn and verify against the same content.",
+      },
+    ],
+    tools: [
+      { href: "/flashcard-generator", label: "Flashcard Generator" },
+      { href: "/study-quiz", label: "Study Quiz" },
+      { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
+    ],
+  },
+  {
+    slug: "formative-assessment-with-ai",
+    title: "Formative Assessment with AI: Quick Checks That Actually Inform Teaching",
+    description:
+      "Exit tickets, do-nows, and five-minute checks students won't dread — generated in seconds from your lesson content.",
+    tag: "For Educators",
+    date: "May 2026",
+    dateIso: "2026-05-07",
+    readTime: "5 min",
+    sections: [
+      {
+        h: "What formative assessment is supposed to do",
+        p: [
+          "Formative assessment isn't grading — it's signaling. A well-run quick check tells you, mid-lesson, whether the class understood the concept you just taught, so you can slow down, re-teach, or move on. The problem has always been throughput: writing a good check and marking it takes an evening, so most teachers run a fraction of the checks they'd like.",
+        ],
+      },
+      {
+        h: "Formats that work without killing your evening",
+        list: [
+          "Do-nows — three questions from yesterday's lesson to open the period",
+          "Exit tickets — two or three items from today's lesson, answered on the way out",
+          "Show-me boards — four quick multiple-choice items as a mid-lesson pulse",
+          "Leveled checks — one item at Remember, one at Apply, for a 60-second spread read",
+        ],
+      },
+      {
+        h: "The five-minute generation workflow",
+        p: [
+          "Paste the lesson's key points, pick a format from above, and generate. You want a short set with Bloom's levels visible so you can see at a glance whether students got the concept or just the vocabulary. That level breakdown is the difference between 'they were confused' and 'they were lost at application but fine at recall'.",
+        ],
+      },
+      {
+        h: "What to do with the results",
+        p: [
+          "Sort the misses by level, not by who. If the class fails Apply questions but passes Remember, the concept was taught once and never connected — tomorrow's opener should re-model the application, not repeat the definition. If a handful of students miss across all levels, they need a smaller-group conversation. That's the loop AI makes cheap enough to run every day.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "How often should I run formative checks?",
+        a: "At least one pulse per lesson — an opener, a midpoint check, or an exit ticket. Daily frequency matters more than length: five minutes every day outperforms a 40-minute quiz once a week.",
+      },
+      {
+        q: "Do students take these with accounts?",
+        a: "For live checks, no. Project the quiz and students answer with a join code from any phone — no sign-up, which lowers friction and maximizes participation.",
+      },
+      {
+        q: "Is this free?",
+        a: "Examina's free plan covers 5 quizzes a month — plenty for daily checks across a couple of classes. The Team plan is built for educators with unlimited generation and a shared library.",
+      },
+    ],
+    tools: [
+      { href: "/for-teachers", label: "For Teachers" },
+      { href: "/classroom/join", label: "Classroom Quiz" },
+      { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
+    ],
+  },
+  {
+    slug: "classroom-quiz-games",
+    title: "How to Run a Classroom Quiz Game: Scoring, Teams, and Tech",
+    description:
+      "A teacher's playbook for live quiz games — join codes, team formats, fairness rules, and pacing tips that keep every student in.",
+    tag: "For Educators",
+    date: "May 2026",
+    dateIso: "2026-05-21",
+    readTime: "5 min",
+    sections: [
+      {
+        h: "Why live quiz games engage classes",
+        p: [
+          "A live quiz game turns retrieval practice into a shared event. The social stakes — speed, teams, the scoreboard — recruit attention that a worksheet can't, and the questions themselves are still doing the retrieval work. Get the format right and students ask for a game before an exam instead of dreading one.",
+        ],
+      },
+      {
+        h: "Formats that keep every student in",
+        list: [
+          "Teams of four with a rotating captain — nobody hides, everyone defends a stake",
+          "Individual speed rounds for a quick 5-minute opener",
+          "Whole-class with join codes, points awarded for correct-plus-fast",
+          "Bracket mode for a Friday review — small teams, single elimination",
+        ],
+      },
+      {
+        h: "Pacing and fairness rules",
+        p: [
+          "Reveal each question, give a countdown, then show the explanation — the explanation pass is what turns the game into study time. For fairness: randomize team composition, assign one reader per team for students who need it, and highlight the scoreboard without shaming low scores. Celebrate the comeback, not just the lead.",
+        ],
+      },
+      {
+        h: "The tech setup (it's minimal)",
+        p: [
+          "You need one display and phones in students' pockets — no accounts, no apps to install. Generate the question set from the week's content, open the room, and students join with a code. The teacher app shows live progress so you can call 'last question' when momentum peaks rather than when the bell rings.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Do students need to create accounts?",
+        a: "No. Classroom games run with a join code from a browser on any device — students enter a nickname and play.",
+      },
+      {
+        q: "Does it work on phones, tablets, and laptops?",
+        a: "Yes — the player experience runs in the browser, so mixed-device classrooms are fine. Only the host needs an adequate display.",
+      },
+      {
+        q: "Is the game feature free?",
+        a: "Classroom quizzing is part of the free tier, and the Team plan adds unlimited question generation and a shared question library across teachers.",
+      },
+    ],
+    tools: [
+      { href: "/classroom/join", label: "Classroom Quiz" },
+      { href: "/for-teachers", label: "For Teachers" },
+      { href: "/create-a-quiz", label: "Create a Quiz" },
+    ],
+  },
+  {
+    slug: "language-learning-with-ai-flashcards",
+    title: "Learn a Language with AI Flashcards: A System That Actually Works",
+    description:
+      "How to turn vocabulary into effective flashcards — and use AI-generated practice sentences to move from recognition to real recall.",
+    tag: "Study Tips",
+    date: "Jun 2026",
+    dateIso: "2026-06-04",
+    readTime: "5 min",
+    sections: [
+      {
+        h: "Why vocabulary decks fail",
+        p: [
+          "Most learners quit their flashcard app for the same reason: recognition becomes a reflex while recall stays weak. See the L2 word, nudge the memory, 'flash' — but ask them to produce the word from the L1 meaning and it's gone. Language memory built only on recognition is exactly the wrong kind.",
+        ],
+      },
+      {
+        h: "How to build language flashcards right",
+        list: [
+          "Front in the language you struggle with; use it both directions",
+          "One word or phrase per card, with one meaning — no synonym decks",
+          "Add a sentence-level example the first time you miss the card",
+          "Prefer word-in-context cards (fill the gap) over isolated word pairs once the basics stick",
+        ],
+      },
+      {
+        h: "Add retrieval sentences to break the recognition reflex",
+        p: [
+          "The upgrade is context. Generate sample sentences for each card in your target language, then quiz yourself sentence-in, production-out: given a scenario in your native language, produce the target-language sentence. You're no longer recognizing a word; you're retrieving a construction, which is the skill actual conversation needs.",
+        ],
+      },
+      {
+        h: "The full system in two passes a day",
+        p: [
+          "Pass one: scheduled cards only — five minutes, honest grading. Pass two: one fresh mini-generation on the day's theme, then add its sentences back into the deck for tomorrow. That's a loop that compounds: the deck grows, the schedule keeps it reviewed, and every miss becomes a sentence to practice. Languages are vocabulary plus pattern; this system maintains both.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Does it generate cards in my target language?",
+        a: "Yes — Examina generates questions and flashcards in 29 languages, including example sentences, so your deck matches the language you're actually learning.",
+      },
+      {
+        q: "How many new cards per day?",
+        a: "20 new cards daily with reviews is sustainable for most learners. Language decks benefit from production practice, so keep the review queue small and the quality high.",
+      },
+      {
+        q: "Does this help with grammar, or just vocabulary?",
+        a: "Vocabulary first; grammar second. Context sentences expose common patterns (gender agreement, verb regimes) far faster than word-pair decks, and cloze-style cards train the structures themselves.",
+      },
+    ],
+    tools: [
+      { href: "/flashcard-generator", label: "Flashcard Generator" },
+      { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
+      { href: "/quiz-generator-from-pdf", label: "Quiz from PDF" },
     ],
   },
 ];
