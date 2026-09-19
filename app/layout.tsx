@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Instrument_Serif, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ReferralAttribution from "@/components/ReferralAttribution";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -46,6 +46,19 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: "/apple-icon.png?v=3" }],
   },
+  metadataBase: new URL(SITE_URL),
+  formatDetection: { telephone: false },
+  appleWebApp: {
+    capable: true,
+    title: "Examina",
+    statusBarStyle: "black-translucent",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#FDE8EC",
 };
 
 export const revalidate = 60;
@@ -81,6 +94,36 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "@id": `${SITE_URL}/#website`,
+              url: `${SITE_URL}/`,
+              name: "Examina",
+              alternateName: "Examina AI Quiz Generator",
+              description:
+                "AI quiz generator that turns any text into multiple choice, flashcards, fill-in-the-blank and true/false questions.",
+              inLanguage: "en",
+              publisher: {
+                "@type": "Organization",
+                "@id": `${SITE_URL}/#organization`,
+                name: "Examina",
+                logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
+              },
+              potentialAction: {
+                "@type": "SearchAction",
+                target: {
+                  "@type": "EntryPoint",
+                  urlTemplate: `${SITE_URL}/explore?q={search_term_string}`,
+                },
+                "query-input": "required name=search_term_string",
+              },
+            }).replace(/</g, "\\u003c"),
+          }}
+        />
         <ThemeProvider>
           <SessionProviderWrapper>
             {children}

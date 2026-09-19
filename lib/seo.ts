@@ -8,6 +8,8 @@ export const OG_IMAGE = {
   alt: "Examina AI Quiz Generator — generate quizzes from any text",
 } as const;
 
+const OG_ALT_LOCALES = ["en_US", "es_ES", "de_DE", "fr_FR", "pt_PT", "tr_TR"];
+
 const LANG_ALTERNATES = {
   en: `${SITE_URL}/`,
   es: `${SITE_URL}/es`,
@@ -53,6 +55,7 @@ export function pageMetadata(opts: {
       url,
       images,
       locale,
+      ...(opts.languages ? { alternateLocale: OG_ALT_LOCALES } : {}),
       ...(opts.publishedTime ? { publishedTime: opts.publishedTime } : {}),
       ...(opts.modifiedTime ? { modifiedTime: opts.modifiedTime } : {}),
     },
