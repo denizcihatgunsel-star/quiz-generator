@@ -18,6 +18,11 @@ export default function AiQuizGeneratorPage() {
         subtitle:
           "Paste your notes and get four question formats mapped to Bloom's Taxonomy — in any of 29 languages — in under 30 seconds.",
         cta: "Start generating free",
+        introTitle: "What makes Examina's AI quiz generator different",
+        intro: [
+          "Most quiz builders make you write the questions yourself. Examina's AI quiz generator reads your material first — lecture notes, a chapter, or even a photo of a page — and writes the questions for you in under 30 seconds. Because the questions map to Bloom's Taxonomy, you get recall checks, comprehension questions, application scenarios, and analysis prompts instead of a flat list that only tests memory.",
+          "The same source material produces multiple choice, flashcards, fill-in-the-blank, and true/false questions, so you can practice the way your exam is actually structured. It also works in 29 languages, which makes it just as useful for learning German vocabulary from a text as it is for revising a biology lecture. Paste your content, pick a format, and start testing yourself immediately — free accounts get 5 generation credits every month.",
+        ],
         featuresTitle: "What you get",
         features: [
           {

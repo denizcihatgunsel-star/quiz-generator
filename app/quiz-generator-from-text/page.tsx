@@ -18,6 +18,11 @@ export default function TextQuizPage() {
         subtitle:
           "Paste your study notes, a textbook passage, or an article and Examina writes questions from it in seconds.",
         cta: "Generate from text",
+        introTitle: "Paste text in, get questions out",
+        intro: [
+          "You already have your material — you just don't have questions for it. With the text-based quiz generator you paste anything from a few sentences to 15,000 characters, and Examina writes multiple choice, flashcards, fill-in-the-blank, and true/false questions from that exact content, with no reformatting and no tables to build.",
+          "Because generation starts from your words rather than a topic search, the questions follow what your instructor actually emphasized instead of generic facts pulled from the web. It handles Markdown, works across 29 languages for language learners, and most quizzes are ready in under 30 seconds.",
+        ],
         featuresTitle: "Why it helps",
         features: [
           {

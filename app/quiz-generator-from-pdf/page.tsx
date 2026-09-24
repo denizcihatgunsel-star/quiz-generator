@@ -18,6 +18,11 @@ export default function PdfQuizPage() {
         subtitle:
           "Upload a study guide, textbook chapter, or handout and Examina reads it and writes the questions for you.",
         cta: "Convert a PDF free",
+        introTitle: "From PDF to quiz in one upload",
+        intro: [
+          "PDFs are how most course material ships — study guides, textbook chapters, past papers, and journal articles. Examina's PDF-to-quiz converter reads the document directly and turns it into multiple choice questions and flashcards, so the review-ready version of your reading is one upload away.",
+          "You're not limited to clean digital text either: snap a photo of a printed page and OCR pulls out the content before generation. Every question ships with an explanation, meaning the same PDF session that tests you also teaches you. Files are read transiently and aren't stored on the server, so converting a confidential handout stays private.",
+        ],
         featuresTitle: "Built for documents",
         features: [
           {

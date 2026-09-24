@@ -11,6 +11,8 @@ export interface KeywordLandingData {
   h1Accent: string;
   subtitle: string;
   cta: string;
+  introTitle?: string;
+  intro?: string[];
   featuresTitle: string;
   features: { title: string; body: string }[];
   howTitle: string;
@@ -118,6 +120,32 @@ export default function KeywordLanding({ data }: { data: KeywordLandingData }) {
             </Link>
           </motion.div>
         </section>
+
+        {data.introTitle && data.intro && data.intro.length > 0 && (
+          <section className="mx-auto max-w-3xl px-6 pb-4 text-center">
+            <motion.h2
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, ease: EASE_OUT }}
+              className="font-serif text-xl text-[#3B2027] sm:text-2xl"
+            >
+              {data.introTitle}
+            </motion.h2>
+            {data.intro.map((p, i) => (
+              <motion.p
+                key={i}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, ease: EASE_OUT, delay: 0.08 }}
+                className="mt-4 text-sm leading-relaxed text-[#9A7280] sm:text-base"
+              >
+                {p}
+              </motion.p>
+            ))}
+          </section>
+        )}
 
         <section className="mx-auto max-w-5xl px-6 pb-24">
           <div className="grid gap-6 sm:grid-cols-3">

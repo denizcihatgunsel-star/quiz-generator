@@ -18,6 +18,11 @@ export default function DailyQuizPage() {
         subtitle:
           "A fresh community quiz every day, built by students and teachers. Earn XP, beat your best, and keep your streak alive.",
         cta: "Play today's quiz",
+        introTitle: "Why a daily quiz builds a lasting habit",
+        intro: [
+          "A daily quiz works because it's small, scheduled, and over before you can talk yourself out of it. Examina surfaces a new community quiz every 24 hours, so there's always a fresh, real challenge waiting — no deciding what to study, no digging through decks at test time.",
+          "Consistency is what actually moves grades, and the daily loop is built around it: completing the challenge earns XP and keeps your streak alive, and your best score on each quiz feeds your history so you can watch improvement over time rather than guessing whether you're making progress.",
+        ],
         featuresTitle: "Why play daily",
         features: [
           {

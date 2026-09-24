@@ -18,6 +18,11 @@ export default function FreeQuizPage() {
         subtitle:
           "No credit card, no catch — start with 5 free AI generations every month and upgrade only when you need more.",
         cta: "Try it free",
+        introTitle: "The genuinely free quiz generator",
+        intro: [
+          "'Free' usually means a trial that expires or a watermark on the result. Examina's free quiz generator gives you a working tool with no credit card and no trial clock: five full AI generations every month, all four question types, share links, flashcard review, and streak tracking.",
+          "When you hit the monthly limit you get a choice instead of a wall — wait for the reset, or upgrade from $2/month. And because the generator works from your own notes, whether text, PDF, or photo, even the free tier produces quizzes tailored to your course rather than generic templates.",
+        ],
         featuresTitle: "The free plan",
         features: [
           {

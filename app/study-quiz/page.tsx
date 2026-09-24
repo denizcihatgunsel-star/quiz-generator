@@ -18,6 +18,11 @@ export default function StudyQuizPage() {
         subtitle:
           "Active recall beats re-reading. Turn your notes into a study quiz, then review on a schedule so knowledge sticks.",
         cta: "Start studying free",
+        introTitle: "A study quiz built for the way memory works",
+        intro: [
+          "Reading notes feels productive but does little for recall. A study quiz forces retrieval — answering without looking — which is the retrieval practice that research consistently links to better exam performance. Examina generates that quiz from your own notes, so it tests your course, not a generic fact bank.",
+          "The study loop goes beyond a single pass: study mode schedules your flashcards with spaced repetition, re-asking them at the moments you'd otherwise forget, while daily challenges and streaks keep the schedule honest. Take a quiz the same day you learn something, review the misses on a schedule, and the material actually sticks.",
+        ],
         featuresTitle: "Built for retention",
         features: [
           {

@@ -18,6 +18,11 @@ export default function CreateQuizPage() {
         subtitle:
           "From blank page to finished, shareable quiz — no templates, no fiddly form builders, just paste and generate.",
         cta: "Create a quiz",
+        introTitle: "Create a quiz online without the form-builder struggle",
+        intro: [
+          "The old way to create a quiz online means wrestling a form builder: manually typing every question, every option, every answer key. Examina skips that entirely — you create a quiz by pasting your content and letting the AI write the questions, so a finished quiz is minutes away instead of an evening of clicking.",
+          "Once it's made, you're not stuck with a static file. Every quiz gets a unique share link that anyone can open without an account, score tracking shows how players perform on each question, and PDF export lets you print a copy or distribute it offline. It's built for teachers handing out a class review and students making a quiz to trade with a study group alike.",
+        ],
         featuresTitle: "Why create with Examina",
         features: [
           {
