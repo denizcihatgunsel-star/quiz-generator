@@ -40,7 +40,7 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
   const [activeTab, setActiveTab] = useState<TabId>("mcq");
   const [copied, setCopied] = useState(false);
   const [taking, setTaking] = useState(false);
-  const [notebookOpen, setNotebookOpen] = useState(false);
+  const [notebookOpen, setNotebookOpen] = useState(true);
   const [attempts, setAttempts] = useState<Attempt[] | null>(null);
   const submittingRef = useRef(false);
 
@@ -170,6 +170,7 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
 
   return (
     <div className={`min-h-screen transition-colors ${theme.page}`}>
+      <div className={`transition-[padding-right] duration-300 ease-out ${notebookOpen ? "lg:pr-[340px]" : ""}`}>
       <header className={`sticky top-0 z-10 border-b backdrop-blur-xl ${theme.card}`}>
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4">
           <Link href="/" className="flex items-center gap-2.5">
@@ -293,27 +294,18 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
           )}
         </div>
       </main>
+      </div>
 
       {quizMeta && (
-        <button
-          onClick={() => setNotebookOpen(true)}
-          className={`fixed bottom-6 right-6 z-30 flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium text-[#F6E3E8] shadow-[0_12px_30px_-10px_rgba(59,32,39,0.6)] transition-all hover:scale-[1.03] active:scale-[0.97] ${theme.accentSolid}`}
-        >
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-          </svg>
-          Notebook
-        </button>
+        <QuizNotebook
+          open={notebookOpen}
+          onToggle={() => setNotebookOpen((o) => !o)}
+          theme={theme}
+          quizId={quizMeta.id}
+          shareId={quizMeta.shareId}
+          topic={quizMeta.topic}
+        />
       )}
-
-      <QuizNotebook
-        open={notebookOpen}
-        onClose={() => setNotebookOpen(false)}
-        theme={theme}
-        quizId={quizMeta?.id}
-        shareId={quizMeta?.shareId}
-        topic={quizMeta?.topic}
-      />
     </div>
   );
 }
