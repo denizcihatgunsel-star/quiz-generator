@@ -8,6 +8,8 @@ import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring, type Variants } from "framer-motion";
 import { QuizData, GenerateStatus } from "@/types/quiz";
 import { PLANS, type PlanId } from "@/lib/subscription";
+import { getQuizTheme } from "@/lib/themes";
+import QuizNotebook from "./QuizNotebook";
 import MultipleChoiceView from "./MultipleChoiceView";
 import ExamView from "./ExamView";
 import FlashcardView from "./FlashcardView";
@@ -110,6 +112,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
   const [usage, setUsage] = useState<UsageInfo | null>(null);
   const [savedShareId, setSavedShareId] = useState<string | null>(null);
   const [savedQuizId, setSavedQuizId] = useState<string | null>(null);
+  const [noteOpen, setNoteOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -998,6 +1001,14 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
 
               <div className="flex flex-wrap gap-3 mb-8">
                 {savedShareId && (
+                  <Link
+                    href={`/quiz/${savedShareId}`}
+                    className="rounded-full bg-[#3B2027] px-5 py-2.5 text-sm font-medium text-[#F6E3E8] shadow-[0_12px_28px_-12px_rgba(59,32,39,0.55)] transition-all hover:scale-[1.02] hover:bg-[#52303B] active:scale-[0.98]"
+                  >
+                    Open quiz with notebook
+                  </Link>
+                )}
+                {savedShareId && (
                   <button onClick={copyShareLink} className="text-sm text-[#9A7280] hover:text-[#3B2027] transition-colors">
                     {copied ? t("quiz.copied") : t("quiz.shareLink")}
                   </button>
@@ -1094,6 +1105,17 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
           </div>
         )}
       </main>
+
+      {quiz && (
+        <QuizNotebook
+          open={noteOpen}
+          onToggle={() => setNoteOpen((o) => !o)}
+          theme={getQuizTheme("rose")}
+          quizId={savedQuizId}
+          shareId={savedShareId}
+          topic={quiz.topic}
+        />
+      )}
 
       {/* ========== SECTIONS ========== */}
       {!hideChrome && <HomeSections />}
