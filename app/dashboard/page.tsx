@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import StreakWidget from "@/components/StreakWidget";
 import SiteHeader from "@/components/SiteHeader";
+import NotesPanel from "@/components/NotesPanel";
+import { getQuizTheme } from "@/lib/themes";
 import { LoadingDots } from "@/components/ui";
 
 interface SavedQuizItem {
@@ -418,6 +420,16 @@ export default function DashboardPage() {
             </div>
           </div>
         )}
+
+        <div className="mb-12 rounded-2xl border border-[#F3D5DC] bg-white/70 p-6 shadow-[0_16px_50px_-28px_rgba(176,96,122,0.4)] backdrop-blur-xl">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="font-serif text-2xl italic text-[#3B2027]">Notes</h2>
+            <span className="text-xs text-[#9A7280]">
+              Write down steps, formulas, or anything you want to remember.
+            </span>
+          </div>
+          <NotesPanel theme={getQuizTheme("rose")} showTopic />
+        </div>
 
         <div className="mb-12 grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-5 shadow-[0_16px_50px_-28px_rgba(176,96,122,0.5)] backdrop-blur-xl">

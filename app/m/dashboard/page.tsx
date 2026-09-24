@@ -5,6 +5,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import StreakWidget from "@/components/StreakWidget";
+import NotesPanel from "@/components/NotesPanel";
+import { getQuizTheme } from "@/lib/themes";
 
 interface SavedQuizItem {
   id: string;
@@ -168,6 +170,13 @@ export default function MobileDashboard() {
           </div>
         </div>
       )}
+
+      <div className="mt-8">
+        <h2 className="mb-3 font-serif text-xl italic text-[#3B2027]">Notes</h2>
+        <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-4 shadow-[0_14px_40px_-28px_rgba(176,96,122,0.5)] backdrop-blur-xl">
+          <NotesPanel theme={getQuizTheme("rose")} showTopic />
+        </div>
+      </div>
 
       <div className="mt-8">
         <h2 className="mb-3 font-serif text-xl italic text-[#3B2027]">Quiz history</h2>

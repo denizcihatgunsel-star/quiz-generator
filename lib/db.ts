@@ -88,6 +88,30 @@ export function ensureVerificationColumns(): Promise<void> {
           // created by another instance — ignore
         }
       }
+
+      // Notebook table (freeform notes taken during quizzes / from dashboard)
+      try {
+        await db.$executeRawUnsafe(`SELECT "id" FROM "Note" LIMIT 1`);
+      } catch {
+        try {
+          await db.$executeRawUnsafe(
+            `CREATE TABLE IF NOT EXISTS "Note" (
+              "id" TEXT PRIMARY KEY NOT NULL,
+              "userId" TEXT NOT NULL,
+              "quizId" TEXT,
+              "topic" TEXT NOT NULL DEFAULT '',
+              "content" TEXT NOT NULL DEFAULT '',
+              "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              "updatedAt" DATETIME NOT NULL
+            )`
+          );
+          await db.$executeRawUnsafe(
+            `CREATE INDEX IF NOT EXISTS "Note_userId_quizId_idx" ON "Note"("userId", "quizId")`
+          );
+        } catch {
+          // created by another instance — ignore
+        }
+      }
     })().catch((err) => {
       console.error("Verification column check failed:", err);
       globalForMigration.verificationColumnsReady = undefined;

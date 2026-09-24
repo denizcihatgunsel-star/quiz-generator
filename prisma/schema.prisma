@@ -34,6 +34,7 @@ model User {
   referredBy        String?
   bonusQuizzes      Int      @default(0)
   apiKeys           ApiKey[]
+  notes             Note[]
   teamId            String?  // team this user belongs to
   team              Team?    @relation("TeamMembers", fields: [teamId], references: [id])
   ownedTeam         Team?    @relation("TeamOwner")
@@ -263,4 +264,20 @@ model GeneratedItem {
   updatedAt          DateTime @updatedAt
 
   @@index([draftSetId, reviewStatus])
+}
+
+// User notebooks: freeform notes taken while working through a quiz,
+// plus standalone notes created from the dashboard.
+model Note {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quizId    String?  // optional link back to the quiz this note belongs to
+  shareId   String?  // copy of the quiz shareId for linking (quiz may be deleted later)
+  topic     String   @default("") // quiz topic (cached for display)
+  content   String   @default("") // note body (freeform text)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, quizId])
 }

@@ -9,6 +9,7 @@ import FlashcardView from "@/components/FlashcardView";
 import FillInTheBlankView from "@/components/FillInTheBlankView";
 import TrueFalseView from "@/components/TrueFalseView";
 import QuizRunner from "@/components/QuizRunner";
+import QuizNotebook from "@/components/QuizNotebook";
 
 const TABS = [
   { id: "mcq", label: "Quiz", icon: "\ud83e\udde0" },
@@ -31,10 +32,12 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
   const { id } = use(params);
   const { data: session } = useSession();
   const [quiz, setQuiz] = useState<QuizData | null>(null);
+  const [quizMeta, setQuizMeta] = useState<{ id: string; shareId: string | null; topic: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabId>("mcq");
   const [taking, setTaking] = useState(false);
+  const [notebookOpen, setNotebookOpen] = useState(false);
   const [attempts, setAttempts] = useState<Attempt[] | null>(null);
   const submittingRef = useRef(false);
 
@@ -61,6 +64,7 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
           setError(d.error);
         } else {
           setQuiz(d.data);
+          setQuizMeta({ id: d.id, shareId: d.shareId ?? null, topic: d.topic ?? "" });
         }
       })
       .catch(() => setError("Failed to load quiz."))
@@ -212,6 +216,28 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
           )}
         </div>
       </main>
+
+      {quizMeta && (
+        <button
+          onClick={() => setNotebookOpen(true)}
+          className={`fixed bottom-5 right-4 z-30 flex items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-medium text-[#F6E3E8] shadow-[0_10px_25px_-8px_rgba(59,32,39,0.6)] transition-all active:scale-[0.97] ${theme.accentSolid}`}
+          aria-label="Open notebook"
+        >
+          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          Notebook
+        </button>
+      )}
+
+      <QuizNotebook
+        open={notebookOpen}
+        onClose={() => setNotebookOpen(false)}
+        theme={theme}
+        quizId={quizMeta?.id}
+        shareId={quizMeta?.shareId}
+        topic={quizMeta?.topic}
+      />
     </div>
   );
 }
