@@ -1133,6 +1133,9 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
               <a href="https://huzzler.so/products/OL96zAi7Ub/examina?utm_source=huzzler_product_website&amp;utm_medium=badge&amp;utm_campaign=badge" target="_blank" rel="noopener noreferrer">
                 <img alt="Huzzler Embed Badge" src="https://huzzler.so/assets/images/embeddable-badges/featured.png" width="159" height="55" />
               </a>
+              <a href="https://smollaunch.com/products/examina?utm_source=badge&utm_medium=referral&utm_campaign=launching_soon&utm_content=examina" target="_blank" rel="noopener">
+                <img src="https://smollaunch.com/badges/launching.svg" alt="Examina — Launching soon on Smol Launch" loading="lazy" width="250" height="60" />
+              </a>
             </div>
             <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-[#9A7280]">
               <a href="#features" className="hover:text-[#3B2027] transition-colors">Features</a>
