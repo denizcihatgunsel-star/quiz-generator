@@ -1129,6 +1129,11 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
               <img src="/logo.png?v=3" alt="Examina" className="w-6 h-6 rounded-lg object-contain" />
               <span className="text-sm text-[#9A7280]">Examina</span>
             </div>
+            <div className="flex items-center gap-4">
+              <a href="https://huzzler.so/products/OL96zAi7Ub/examina?utm_source=huzzler_product_website&amp;utm_medium=badge&amp;utm_campaign=badge" target="_blank" rel="noopener noreferrer">
+                <img alt="Huzzler Embed Badge" src="https://huzzler.so/assets/images/embeddable-badges/featured.png" width="159" height="55" />
+              </a>
+            </div>
             <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-[#9A7280]">
               <a href="#features" className="hover:text-[#3B2027] transition-colors">Features</a>
               <Link href="/pricing" className="hover:text-[#3B2027] transition-colors">Pricing</Link>
