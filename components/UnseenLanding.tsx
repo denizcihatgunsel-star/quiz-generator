@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useInView, animate } from "framer-motion";
 import Link from "next/link";
-import DotMap from "./DotMap";
+import GlobeStudy from "./GlobeStudy";
 
 const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
 
@@ -195,20 +195,24 @@ export default function UnseenLanding() {
         </div>
       </Reveal>
 
-      {/* World — scroll to explore */}
+      {/* World — interactive globe */}
       <section className="border-t border-[#F3D5DC] pt-24 sm:pt-32">
         <div className="mx-auto max-w-5xl px-6">
           <div className="flex items-baseline justify-between">
             <Kicker>World</Kicker>
             <span className="text-[11px] uppercase tracking-[0.3em] text-[#C98A98]">
-              Scroll to explore
+              Drag to spin · click to pin
             </span>
           </div>
-          <div aria-hidden className="mt-6 flex justify-center">
-            <span className="bounce-soft text-lg text-[#C98A98]">↓</span>
-          </div>
         </div>
-        <DotMap className="mx-auto mt-14 w-full max-w-4xl" />
+        <div className="mx-auto mt-10 h-[440px] w-full max-w-4xl overflow-hidden rounded-3xl border border-[#F3D5DC] sm:h-[600px]">
+          <GlobeStudy
+            background="#3B2027"
+            baseColor="#F1D3DA"
+            phrase="studyanywhereanytimewithexamina"
+            pointer={{ zoom: 0 }}
+          />
+        </div>
       </section>
 
       {/* Start studying */}

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import DotMap from "@/components/DotMap";
+import GlobeStudy from "@/components/GlobeStudy";
 
 const ARROW = (
   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -200,15 +200,22 @@ export default function MobileHome() {
         </div>
       </section>
 
-      {/* World — scroll to explore */}
+      {/* World — interactive globe */}
       <section className="mt-10">
         <div className="flex items-baseline justify-between px-4">
           <h2 className="font-serif text-xl italic text-[#3B2027]">World</h2>
           <span className="text-[10px] uppercase tracking-[0.3em] text-[#C98A98]">
-            Scroll to explore
+            Drag to spin
           </span>
         </div>
-        <DotMap variant="mobile" className="mx-auto mt-4 w-full" />
+        <div className="mx-4 mt-4 h-[400px] overflow-hidden rounded-3xl border border-[#F3D5DC]">
+          <GlobeStudy
+            background="#3B2027"
+            baseColor="#F1D3DA"
+            phrase="studyanywhereanytimewithexamina"
+            pointer={{ zoom: 0 }}
+          />
+        </div>
       </section>
     </div>
   );
