@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import QuizGenerator from "@/components/QuizGenerator";
 import { StructuredData } from "@/components/StructuredData";
-import { HalloweenCauldronSection } from "@/components/seasonal/halloween/HalloweenLayer";
 
 export const revalidate = 60;
 
@@ -130,7 +129,6 @@ export default function Home() {
     return (
     <>
       <QuizGenerator />
-      <HalloweenCauldronSection />
       {/* Lightweight SSR FAQ for crawlers; rich UI loads client-side below the fold */}
       <section id="seo-ssr-faq" className="sr-only" aria-label="Frequently asked questions">
         <h2>Frequently asked questions</h2>

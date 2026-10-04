@@ -8,9 +8,9 @@ import Link from "next/link";
  * PotionCauldron: Interactive cauldron with stirring mechanic
  * 
  * - SVG cauldron with bubbling ectoplasm
- * - Drag/touch to stir (wand follows pointer)
+ * - Real drag/touch stirring with angular movement detection
  * - Stirring speed drives bubble particles
- * - Sample Bloom's taxonomy questions float up
+ * - Sample Bloom's taxonomy questions float up from vapor
  * - Keyboard accessible with "Stir" button
  * - aria-live announces new questions
  * - Responsive on mobile
@@ -23,24 +23,34 @@ interface SampleQuestion {
 }
 
 const SAMPLE_QUESTIONS: SampleQuestion[] = [
-  { text: "What is 2 + 2?", bloom: "Remember", color: "#8B4513" },
-  { text: "Explain photosynthesis in your own words", bloom: "Understand", color: "#4a7c59" },
-  { text: "Apply the quadratic formula to x² + 5x + 6 = 0", bloom: "Apply", color: "#7c3aed" },
-  { text: "Compare mitosis and meiosis", bloom: "Analyze", color: "#b45309" },
-  { text: "Evaluate the impact of the Industrial Revolution", bloom: "Evaluate", color: "#be123c" },
-  { text: "Design an experiment to test water quality", bloom: "Create", color: "#15803d" },
+  { text: "What is the derivative of x²?", bloom: "Remember", color: "#8B4513" },
+  { text: "Explain why photosynthesis needs light", bloom: "Understand", color: "#4a7c59" },
+  { text: "A car travels 150 km in 2.5 h; what is its average speed?", bloom: "Apply", color: "#7c3aed" },
+  { text: "Compare the causes of WWI and WWII", bloom: "Analyze", color: "#b45309" },
+  { text: "Which statistical test fits this dataset, and why?", bloom: "Evaluate", color: "#be123c" },
+  { text: "Design an experiment to test plant growth vs. light colour", bloom: "Create", color: "#15803d" },
 ];
+
+interface Bubble {
+  id: string;
+  x: number;
+  duration: number;
+}
 
 export default function PotionCauldron() {
   const [stirSpeed, setStirSpeed] = useState(0);
   const [visibleQuestions, setVisibleQuestions] = useState<SampleQuestion[]>([]);
-  const [wandPos, setWandPos] = useState({ x: 50, y: 40 });
+  const [wandAngle, setWandAngle] = useState(0);
+  const [wandDistance, setWandDistance] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  
   const containerRef = useRef<HTMLDivElement>(null);
-  const lastPosRef = useRef({ x: 50, y: 40 });
-  const velocityRef = useRef(0);
+  const lastAngleRef = useRef(0);
   const questionIndexRef = useRef(0);
+  const questionTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const bubbleTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -51,36 +61,117 @@ export default function PotionCauldron() {
     return () => mediaQuery.removeEventListener("change", handler);
   }, []);
 
+  // Generate bubbles based on stir speed
+  useEffect(() => {
+    if (reducedMotion) return;
+
+    if (bubbleTimerRef.current) {
+      clearInterval(bubbleTimerRef.current);
+    }
+
+    const interval = stirSpeed > 3 ? 200 : 1500; // Fast when stirring, slow when idle
+    
+    bubbleTimerRef.current = setInterval(() => {
+      setBubbles(prev => {
+        const newBubbles = [...prev];
+        if (newBubbles.length >= 12) {
+          newBubbles.shift(); // Remove oldest
+        }
+        newBubbles.push({
+          id: `bubble-${Date.now()}-${Math.random()}`,
+          x: 75 + Math.random() * 50, // SVG coordinates
+          duration: 1.6 + Math.random() * 0.8,
+        });
+        return newBubbles;
+      });
+    }, interval);
+
+    return () => {
+      if (bubbleTimerRef.current) {
+        clearInterval(bubbleTimerRef.current);
+      }
+    };
+  }, [stirSpeed, reducedMotion]);
+
+  // Remove bubbles after animation
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setBubbles(prev => prev.slice(-12));
+    }, 3000);
+    return () => clearTimeout(timeout);
+  }, [bubbles.length]);
+
+  // Auto-spawn questions while stirring
+  useEffect(() => {
+    if (reducedMotion || stirSpeed < 3) {
+      if (questionTimerRef.current) {
+        clearInterval(questionTimerRef.current);
+        questionTimerRef.current = null;
+      }
+      return;
+    }
+
+    if (!questionTimerRef.current) {
+      questionTimerRef.current = setInterval(() => {
+        if (visibleQuestions.length < 3) {
+          const nextQuestion = SAMPLE_QUESTIONS[questionIndexRef.current % SAMPLE_QUESTIONS.length];
+          setVisibleQuestions(prev => [...prev, nextQuestion]);
+          questionIndexRef.current++;
+        }
+      }, 2500);
+    }
+
+    return () => {
+      if (questionTimerRef.current) {
+        clearInterval(questionTimerRef.current);
+        questionTimerRef.current = null;
+      }
+    };
+  }, [stirSpeed, visibleQuestions.length, reducedMotion]);
+
+  // Auto-fade questions after 8 seconds
+  useEffect(() => {
+    if (visibleQuestions.length === 0) return;
+    
+    const timeout = setTimeout(() => {
+      setVisibleQuestions(prev => prev.slice(1));
+    }, 8000);
+
+    return () => clearTimeout(timeout);
+  }, [visibleQuestions]);
+
   const handlePointerMove = useCallback(
     (clientX: number, clientY: number) => {
       if (!containerRef.current) return;
 
       const rect = containerRef.current.getBoundingClientRect();
-      const x = ((clientX - rect.left) / rect.width) * 100;
-      const y = ((clientY - rect.top) / rect.height) * 100;
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
 
-      // Clamp to cauldron bounds
-      const clampedX = Math.max(20, Math.min(80, x));
-      const clampedY = Math.max(30, Math.min(70, y));
+      const dx = clientX - centerX;
+      const dy = clientY - centerY;
 
-      const dx = clampedX - lastPosRef.current.x;
-      const dy = clampedY - lastPosRef.current.y;
-      const speed = Math.sqrt(dx * dx + dy * dy);
+      // Calculate angle and distance
+      const angle = Math.atan2(dy, dx);
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const normalizedDistance = Math.min(distance / (rect.width / 2), 1);
 
-      velocityRef.current = speed;
-      setStirSpeed(Math.min(10, speed * 2));
+      setWandAngle(angle);
+      setWandDistance(normalizedDistance * 0.4);
 
-      lastPosRef.current = { x: clampedX, y: clampedY };
-      setWandPos({ x: clampedX, y: clampedY });
+      // Calculate angular velocity for stirring
+      let angleDiff = angle - lastAngleRef.current;
+      
+      // Handle wrap-around
+      if (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+      if (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
 
-      // Spawn question when stirring fast enough
-      if (speed > 1.5 && visibleQuestions.length < 3) {
-        const nextQuestion = SAMPLE_QUESTIONS[questionIndexRef.current % SAMPLE_QUESTIONS.length];
-        setVisibleQuestions((prev) => [...prev, nextQuestion]);
-        questionIndexRef.current++;
-      }
+      const angularSpeed = Math.abs(angleDiff) * 50; // Scale factor
+      setStirSpeed(Math.min(10, angularSpeed));
+
+      lastAngleRef.current = angle;
     },
-    [visibleQuestions.length]
+    []
   );
 
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -93,6 +184,7 @@ export default function PotionCauldron() {
 
   const handlePointerMoveEvent = (e: React.PointerEvent) => {
     if (!isDragging) return;
+    e.preventDefault();
     handlePointerMove(e.clientX, e.clientY);
   };
 
@@ -101,66 +193,33 @@ export default function PotionCauldron() {
     if (containerRef.current) {
       containerRef.current.releasePointerCapture(e.pointerId);
     }
-  };
-
-  const handleKeyboardStir = () => {
-    // Simulate stirring motion
-    const angle = Math.random() * Math.PI * 2;
-    const radius = 15;
-    const newX = 50 + Math.cos(angle) * radius;
-    const newY = 50 + Math.sin(angle) * radius;
-
-    setWandPos({ x: newX, y: newY });
-    setStirSpeed(5);
-
-    if (visibleQuestions.length < 3) {
-      const nextQuestion = SAMPLE_QUESTIONS[questionIndexRef.current % SAMPLE_QUESTIONS.length];
-      setVisibleQuestions((prev) => [...prev, nextQuestion]);
-      questionIndexRef.current++;
-    }
-
+    // Decay stir speed
     setTimeout(() => setStirSpeed(0), 500);
   };
 
+  const handleKeyboardStir = () => {
+    // Simulate stirring burst
+    setStirSpeed(8);
+    
+    if (visibleQuestions.length < 3) {
+      const nextQuestion = SAMPLE_QUESTIONS[questionIndexRef.current % SAMPLE_QUESTIONS.length];
+      setVisibleQuestions(prev => [...prev, nextQuestion]);
+      questionIndexRef.current++;
+    }
+
+    setTimeout(() => setStirSpeed(0), 1000);
+  };
+
+  // Decay stir speed
   useEffect(() => {
+    if (stirSpeed === 0 || isDragging) return;
+    
     const decay = setInterval(() => {
-      setStirSpeed((prev) => Math.max(0, prev * 0.95));
-      velocityRef.current *= 0.95;
+      setStirSpeed(prev => Math.max(0, prev * 0.85));
     }, 100);
 
     return () => clearInterval(decay);
-  }, []);
-
-  const removeQuestion = (index: number) => {
-    setVisibleQuestions((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  // Auto-spawn questions when idle
-  useEffect(() => {
-    if (reducedMotion) return;
-
-    const idleInterval = setInterval(() => {
-      if (stirSpeed < 1 && visibleQuestions.length < 3) {
-        const nextQuestion = SAMPLE_QUESTIONS[questionIndexRef.current % SAMPLE_QUESTIONS.length];
-        setVisibleQuestions((prev) => [...prev, nextQuestion]);
-        questionIndexRef.current++;
-      }
-    }, 2500);
-
-    return () => clearInterval(idleInterval);
-  }, [stirSpeed, visibleQuestions.length, reducedMotion]);
-
-  // Generate idle bubbles
-  const [idleBubbles, setIdleBubbles] = useState<number[]>([]);
-  useEffect(() => {
-    if (reducedMotion || stirSpeed > 2) return;
-
-    const bubbleInterval = setInterval(() => {
-      setIdleBubbles((prev) => [...prev, Date.now()].slice(-12));
-    }, 1500);
-
-    return () => clearInterval(bubbleInterval);
-  }, [reducedMotion, stirSpeed]);
+  }, [stirSpeed, isDragging]);
 
   return (
     <section className="relative py-12 px-6">
@@ -176,160 +235,138 @@ export default function PotionCauldron() {
 
         <div className="flex flex-col md:flex-row gap-8 items-start md:items-center justify-center">
           {/* Cauldron */}
-          <div
-            ref={containerRef}
-            className="relative mx-auto touch-none select-none cursor-pointer w-[180px] h-[180px] sm:w-[240px] sm:h-[240px]"
-            style={{
-              touchAction: "none",
-            }}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMoveEvent}
-            onPointerUp={handlePointerUp}
-            onPointerCancel={handlePointerUp}
-            role="application"
-            aria-label="Interactive cauldron. Drag to stir and reveal sample questions."
-          >
-            <svg
-              viewBox="0 0 200 200"
-              className="w-full h-full"
-              xmlns="http://www.w3.org/2000/svg"
+          <div className="relative flex flex-col items-center gap-3">
+            <div
+              ref={containerRef}
+              className="relative touch-none select-none cursor-pointer w-[180px] h-[180px] sm:w-[240px] sm:h-[240px]"
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMoveEvent}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerUp}
+              style={{ touchAction: "none" }}
+              role="application"
+              aria-label="Interactive cauldron. Drag to stir and reveal sample questions."
             >
-              {/* Idle bubbles */}
-              {!reducedMotion && stirSpeed < 2 && (
-                <>
-                  {idleBubbles.map((timestamp) => (
-                    <motion.circle
-                      key={`idle-${timestamp}`}
-                      cx={85 + Math.random() * 30}
-                      cy={120}
-                      r={2 + Math.random() * 2}
-                      fill="#2ecc71"
-                      opacity={0.6}
-                      initial={{ cy: 120, opacity: 0.6 }}
-                      animate={{ cy: 50, opacity: 0 }}
-                      transition={{
-                        duration: 1.6 + Math.random() * 0.8,
-                        ease: "easeOut",
-                      }}
-                    />
-                  ))}
-                </>
-              )}
-
-              {/* Stirring bubbles */}
-              {!reducedMotion && stirSpeed > 0 && (
-                <>
-                  {Array.from({ length: Math.min(12, Math.floor(stirSpeed * 1.5)) }).map(
-                    (_, i) => (
-                      <motion.circle
-                        key={`stir-${i}-${Date.now()}`}
-                        cx={75 + Math.random() * 50}
-                        cy={120}
-                        r={2 + Math.random() * 3}
-                        fill="#2ecc71"
-                        opacity={0.7}
-                        initial={{ cy: 120, opacity: 0.7 }}
-                        animate={{ cy: 50, opacity: 0 }}
-                        transition={{
-                          duration: 1.6 + Math.random() * 0.8,
-                          ease: "easeOut",
-                        }}
-                      />
-                    )
-                  )}
-                </>
-              )}
-
-              {/* Cauldron body - plum tone */}
-              <path
-                d="M60 80 L70 140 Q100 155 130 140 L140 80 Q100 90 60 80"
-                fill="#6A3A4C"
-                stroke="#4A2537"
-                strokeWidth="2"
-              />
-
-              {/* Liquid surface - green bubbles only */}
-              <ellipse cx="100" cy="85" rx="42" ry="12" fill="#2ecc71" opacity="0.7">
-                {!reducedMotion && (
-                  <animate
-                    attributeName="ry"
-                    values="12;13;12"
-                    dur="2s"
-                    repeatCount="indefinite"
-                  />
-                )}
-              </ellipse>
-
-              {/* Rim */}
-              <ellipse
-                cx="100"
-                cy="80"
-                rx="45"
-                ry="8"
-                fill="none"
-                stroke="#3B2027"
-                strokeWidth="3"
-              />
-
-              {/* Legs */}
-              <path d="M70 140 L65 155" stroke="#3B2027" strokeWidth="3" />
-              <path d="M100 145 L100 160" stroke="#3B2027" strokeWidth="3" />
-              <path d="M130 140 L135 155" stroke="#3B2027" strokeWidth="3" />
-
-              {/* Wand */}
-              <motion.g
-                animate={{ x: wandPos.x - 50, y: wandPos.y - 40 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              <svg
+                viewBox="0 0 200 200"
+                className="w-full h-full"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <line
-                  x1="100"
-                  y1="40"
-                  x2="100"
-                  y2="10"
-                  stroke="#8b4513"
+                {/* Bubbles rising from liquid */}
+                {!reducedMotion && bubbles.map((bubble) => (
+                  <motion.circle
+                    key={bubble.id}
+                    cx={bubble.x}
+                    cy={120}
+                    r={2 + Math.random() * 3}
+                    fill="#2ecc71"
+                    opacity={0.7}
+                    initial={{ cy: 120, opacity: 0.7, scale: 1 }}
+                    animate={{ cy: 30, opacity: 0, scale: 1.5 }}
+                    transition={{
+                      duration: bubble.duration,
+                      ease: "easeOut",
+                    }}
+                  />
+                ))}
+
+                {/* Cauldron body - plum tone */}
+                <path
+                  d="M60 80 L70 140 Q100 155 130 140 L140 80 Q100 90 60 80"
+                  fill="#6A3A4C"
+                  stroke="#4A2537"
                   strokeWidth="2"
                 />
-                <circle cx="100" cy="8" r="4" fill="#ffa500" />
-                <circle cx="100" cy="8" r="2" fill="#ffff00">
+
+                {/* Liquid surface - green */}
+                <ellipse cx="100" cy="85" rx="42" ry="12" fill="#2ecc71" opacity="0.7">
                   {!reducedMotion && (
                     <animate
-                      attributeName="opacity"
-                      values="1;0.3;1"
-                      dur="1s"
+                      attributeName="ry"
+                      values="12;13;12"
+                      dur="2s"
                       repeatCount="indefinite"
                     />
                   )}
-                </circle>
-              </motion.g>
-            </svg>
+                </ellipse>
 
-            {/* Instruction overlay */}
-            {!isDragging && stirSpeed === 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="absolute inset-0 flex items-center justify-center pointer-events-none"
-              >
-                <div className="bg-[#FDE8EC]/90 backdrop-blur-sm px-4 py-2 rounded-lg border border-[#F3D5DC] text-sm text-[#3B2027]">
-                  Drag to stir
-                </div>
-              </motion.div>
-            )}
+                {/* Rim */}
+                <ellipse
+                  cx="100"
+                  cy="80"
+                  rx="45"
+                  ry="8"
+                  fill="none"
+                  stroke="#3B2027"
+                  strokeWidth="3"
+                />
+
+                {/* Legs */}
+                <path d="M70 140 L65 155" stroke="#3B2027" strokeWidth="3" strokeLinecap="round" />
+                <path d="M100 145 L100 160" stroke="#3B2027" strokeWidth="3" strokeLinecap="round" />
+                <path d="M130 140 L135 155" stroke="#3B2027" strokeWidth="3" strokeLinecap="round" />
+
+                {/* Wand - follows drag */}
+                <motion.g
+                  animate={{
+                    rotate: (wandAngle * 180 / Math.PI) + 90,
+                    x: Math.cos(wandAngle) * wandDistance * 100,
+                    y: Math.sin(wandAngle) * wandDistance * 100,
+                  }}
+                  transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                  style={{ transformOrigin: "100px 70px" }}
+                >
+                  <line
+                    x1="100"
+                    y1="70"
+                    x2="100"
+                    y2="40"
+                    stroke="#8b4513"
+                    strokeWidth="2.5"
+                  />
+                  <circle cx="100" cy="37" r="5" fill="#ffa500" />
+                  <circle cx="100" cy="37" r="3" fill="#ffff00">
+                    {!reducedMotion && stirSpeed > 2 && (
+                      <animate
+                        attributeName="opacity"
+                        values="1;0.4;1"
+                        dur="0.5s"
+                        repeatCount="indefinite"
+                      />
+                    )}
+                  </circle>
+                </motion.g>
+              </svg>
+
+              {/* Instruction overlay */}
+              {!isDragging && stirSpeed < 1 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="absolute bottom-[-40px] left-1/2 transform -translate-x-1/2 pointer-events-none"
+                >
+                  <div className="bg-[#FDE8EC]/90 backdrop-blur-sm px-4 py-2 rounded-lg border border-[#F3D5DC] text-sm text-[#3B2027] whitespace-nowrap">
+                    Drag to stir
+                  </div>
+                </motion.div>
+              )}
+            </div>
+
+            <button
+              onClick={handleKeyboardStir}
+              className="mt-8 px-4 py-2 bg-[#3B2027] text-[#F6E3E8] text-sm font-medium hover:bg-[#52303B] transition-colors rounded-lg"
+              aria-label="Stir the cauldron to reveal a question"
+            >
+              Stir
+            </button>
           </div>
 
           {/* Questions panel */}
-          <div className="flex-1 max-w-md">
+          <div className="flex-1 max-w-md w-full">
             <div className="mb-4">
-              <p className="text-xs uppercase tracking-wider text-[#A87680] mb-3">
+              <p className="text-xs uppercase tracking-wider text-[#A87680]">
                 Sample questions
               </p>
-              <button
-                onClick={handleKeyboardStir}
-                className="px-4 py-2 bg-[#3B2027] text-[#F6E3E8] text-sm font-medium hover:bg-[#52303B] transition-colors rounded-lg"
-                aria-label="Stir the cauldron to reveal a question"
-              >
-                Stir
-              </button>
             </div>
 
             <div
@@ -342,50 +379,27 @@ export default function PotionCauldron() {
                 {visibleQuestions.map((q, i) => (
                   <motion.div
                     key={`${q.text}-${i}`}
-                    initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                    initial={{ opacity: 0, y: 40, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{ duration: 0.5 }}
+                    exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.3 } }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
                     className="p-4 border border-[#F3D5DC] bg-[#FDE8EC] rounded-xl shadow-sm"
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-xs font-medium px-2 py-0.5 rounded bg-[#F3D5DC] text-[#3B2027]">
-                            Sample
-                          </span>
-                          <span
-                            className="text-xs font-medium px-2 py-0.5 rounded"
-                            style={{
-                              backgroundColor: `${q.color}20`,
-                              color: q.color,
-                            }}
-                          >
-                            {q.bloom}
-                          </span>
-                        </div>
-                        <p className="text-sm text-[#3B2027] leading-relaxed">{q.text}</p>
-                      </div>
-                      <button
-                        onClick={() => removeQuestion(i)}
-                        className="text-[#9A7280] hover:text-[#3B2027] transition-colors"
-                        aria-label="Dismiss question"
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs font-medium px-2 py-0.5 rounded bg-[#F3D5DC] text-[#3B2027]">
+                        Sample
+                      </span>
+                      <span
+                        className="text-xs font-medium px-2 py-0.5 rounded"
+                        style={{
+                          backgroundColor: `${q.color}20`,
+                          color: q.color,
+                        }}
                       >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
+                        {q.bloom}
+                      </span>
                     </div>
+                    <p className="text-sm text-[#3B2027] leading-relaxed">{q.text}</p>
                   </motion.div>
                 ))}
               </AnimatePresence>
@@ -403,22 +417,14 @@ export default function PotionCauldron() {
         <div className="text-center mt-10">
           <Link
             href="#generate"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-medium rounded-full hover:opacity-90 transition-opacity shadow-lg"
+            className="inline-flex items-center gap-3 rounded-full bg-[#3B2027] py-3 pl-6 pr-2 text-sm font-medium text-[#F6E3E8] transition-colors duration-200 hover:bg-[#52303B] shadow-[0_12px_28px_-12px_rgba(59,32,39,0.55)]"
           >
-            Generate your own quiz
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 7l5 5m0 0l-5 5m5-5H6"
-              />
-            </svg>
+            <span>Generate your own quiz</span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027] transition-transform duration-200 hover:translate-x-0.5">
+              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
+              </svg>
+            </span>
           </Link>
         </div>
       </div>

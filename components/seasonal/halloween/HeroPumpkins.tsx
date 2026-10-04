@@ -29,9 +29,9 @@ interface Pumpkin {
 }
 
 const PUMPKINS: Pumpkin[] = [
-  { id: "p1", position: "top-right", size: 72, delay: 0, hideOnTablet: false },
-  { id: "p2", position: "bottom-left", size: 80, delay: 1.3, hideOnTablet: true },
-  { id: "p3", position: "middle-right", size: 64, delay: 2.6, hideOnTablet: true },
+  { id: "p1", position: "top-right", size: 88, delay: 0, hideOnTablet: false },
+  { id: "p2", position: "bottom-left", size: 96, delay: 1.3, hideOnTablet: true },
+  { id: "p3", position: "middle-right", size: 72, delay: 2.6, hideOnTablet: true },
 ];
 
 export default function HeroPumpkins() {
@@ -49,11 +49,11 @@ export default function HeroPumpkins() {
   const getPositionStyle = (position: string) => {
     switch (position) {
       case "top-right":
-        return { right: "2%", top: "140px" }; // Below Sound off button (top-20 = 80px + margin)
+        return { right: "3%", top: "140px" }; // Below Sound off button
       case "bottom-left":
-        return { left: "2%", bottom: "15%" };
+        return { left: "3%", bottom: "18%" };
       case "middle-right":
-        return { right: "3%", top: "50%" };
+        return { left: "2%", top: "45%" }; // Changed to left for better spacing
       default:
         return {};
     }
@@ -76,7 +76,7 @@ export default function HeroPumpkins() {
             reducedMotion
               ? { opacity: 0.4 }
               : {
-                  opacity: [0.35, 0.5, 0.35],
+                  opacity: [0.35, 0.45, 0.35],
                 }
           }
           transition={{
@@ -90,50 +90,47 @@ export default function HeroPumpkins() {
             viewBox="0 0 100 100"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            style={{ filter: "drop-shadow(0 0 12px rgba(255, 122, 26, 0.5))" }}
+            style={{ filter: "drop-shadow(0 0 10px rgba(255, 122, 26, 0.4))" }}
           >
-            {/* Stem */}
+            {/* Simple stem */}
             <path
-              d="M48 10 Q50 5 52 10 L52 18 Q52 20 50 20 Q48 20 48 18 Z"
+              d="M48 10 Q50 7 52 10 L52 18 Q52 20 50 20 Q48 20 48 18 Z"
               fill="#4a7c59"
             />
-            {/* Pumpkin body */}
+            
+            {/* Pumpkin body - clean ellipse */}
             <ellipse cx="50" cy="55" rx="35" ry="32" fill="#ff7a1a" />
-            {/* Ridges */}
+            
+            {/* Subtle ribs only */}
             <path
               d="M50 25 Q48 50 50 85"
               stroke="#e66a10"
               strokeWidth="2"
-              opacity="0.7"
+              opacity="0.6"
             />
             <path
               d="M38 30 Q36 55 38 82"
               stroke="#e66a10"
               strokeWidth="1.5"
-              opacity="0.5"
+              opacity="0.4"
             />
             <path
               d="M62 30 Q64 55 62 82"
               stroke="#e66a10"
               strokeWidth="1.5"
-              opacity="0.5"
-            />
-            {/* Eyes */}
-            <path
-              d="M35 45 L40 50 L35 55 Z"
-              fill="#2d1810"
+              opacity="0.4"
             />
             <path
-              d="M65 45 L60 50 L65 55 Z"
-              fill="#2d1810"
+              d="M28 38 Q26 55 28 78"
+              stroke="#d96410"
+              strokeWidth="1"
+              opacity="0.3"
             />
-            {/* Mouth */}
             <path
-              d="M40 65 Q50 72 60 65"
-              stroke="#2d1810"
-              strokeWidth="3"
-              strokeLinecap="round"
-              fill="none"
+              d="M72 38 Q74 55 72 78"
+              stroke="#d96410"
+              strokeWidth="1"
+              opacity="0.3"
             />
           </svg>
         </motion.div>

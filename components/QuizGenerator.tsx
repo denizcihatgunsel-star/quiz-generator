@@ -32,6 +32,7 @@ import { useTranslation } from "@/lib/i18n";
 
 // Halloween seasonal components
 const HalloweenHeroOverlay = dynamic(() => import("./seasonal/halloween/HalloweenLayer").then(m => ({ default: m.HalloweenHeroOverlay })), { ssr: false });
+const HalloweenCauldronSection = dynamic(() => import("./seasonal/halloween/HalloweenLayer").then(m => ({ default: m.HalloweenCauldronSection })), { ssr: false });
 const HalloweenButtonGlow = dynamic(() => import("./seasonal/halloween/HalloweenButtonGlow"), { ssr: false });
 
 // Below-fold marketing: client-only to keep homepage HTML lean for crawlers/CDN
@@ -688,17 +689,33 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     transition={{ duration: 0.7, delay: 0.75 }}
                     className="mt-12 flex flex-col items-center justify-center gap-5 sm:flex-row"
                   >
-                    <a
-                      href="#generate"
-                      className="group flex items-center gap-3 rounded-full bg-[#3B2027] py-3 pl-6 pr-2 text-sm font-medium text-[#F6E3E8] transition-colors duration-200 hover:bg-[#52303B]"
-                    >
-                      <span>Start generating</span>
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027] transition-transform duration-200 group-hover:translate-x-0.5">
-                        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
-                        </svg>
-                      </span>
-                    </a>
+                    {halloweenActive ? (
+                      <HalloweenButtonGlow>
+                        <a
+                          href="#generate"
+                          className="group flex items-center gap-3 rounded-full bg-[#3B2027] py-3 pl-6 pr-2 text-sm font-medium text-[#F6E3E8] transition-colors duration-200 hover:bg-[#52303B]"
+                        >
+                          <span>Start generating</span>
+                          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027] transition-transform duration-200 group-hover:translate-x-0.5">
+                            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
+                            </svg>
+                          </span>
+                        </a>
+                      </HalloweenButtonGlow>
+                    ) : (
+                      <a
+                        href="#generate"
+                        className="group flex items-center gap-3 rounded-full bg-[#3B2027] py-3 pl-6 pr-2 text-sm font-medium text-[#F6E3E8] transition-colors duration-200 hover:bg-[#52303B]"
+                      >
+                          <span>Start generating</span>
+                          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027] transition-transform duration-200 group-hover:translate-x-0.5">
+                            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
+                            </svg>
+                          </span>
+                        </a>
+                      )}
                     <a
                       href="#selected"
                       className="text-sm text-[#9A7280] underline underline-offset-4 transition-colors duration-200 hover:text-[#3B2027]"
@@ -973,6 +990,9 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
             </section>
 
             {!isLoggedIn && status === "idle" && <UnseenLanding />}
+            
+            {/* ========== HALLOWEEN CAULDRON ========== */}
+            {!isLoggedIn && status === "idle" && !hideChrome && <HalloweenCauldronSection />}
           </>
         ) : (
           /* ========== QUIZ RESULTS ========== */

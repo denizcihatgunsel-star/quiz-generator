@@ -75,7 +75,7 @@ export default function HalloweenButtonGlow({ children }: { children: React.Reac
 
   return (
     <div
-      className="relative inline-block will-change-auto"
+      className="relative inline-block will-change-auto rounded-[inherit]"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onFocusCapture={handleFocus}
@@ -84,15 +84,16 @@ export default function HalloweenButtonGlow({ children }: { children: React.Reac
     >
       {/* Glow effect */}
       <div
-        className="absolute inset-[-2px] rounded-[inherit] pointer-events-none transition-opacity duration-200"
+        className="absolute inset-[-2px] rounded-[inherit] pointer-events-none transition-all duration-200"
         style={{
           opacity: isActive ? 1 : 0,
           boxShadow: isActive
-            ? "0 0 0 2px rgba(255, 122, 26, 0.4), 0 0 20px rgba(176, 96, 122, 0.3)"
+            ? "0 0 0 2px rgba(255, 122, 26, 0.5), 0 0 24px rgba(176, 96, 122, 0.4), inset 0 0 20px rgba(255, 122, 26, 0.1)"
             : "none",
           background: isActive
-            ? "linear-gradient(135deg, rgba(255, 122, 26, 0.15), rgba(176, 96, 122, 0.15))"
+            ? "linear-gradient(135deg, rgba(255, 122, 26, 0.2), rgba(176, 96, 122, 0.2))"
             : "transparent",
+          borderRadius: "inherit",
         }}
       />
 
