@@ -207,16 +207,16 @@ body[data-season="halloween"]::before {
 [data-season="halloween"] .bg-purple-50,
 [data-season="halloween"] .bg-\[\#F6DCE5\],
 [data-season="halloween"] .bg-\[\#FDE8EC\],
-[data-season="halloween"] span[style*="background"],
-[data-season="halloween"] .rounded {
+[data-season="halloween"] #generate span[style*="background"],
+[data-season="halloween"] #generate .rounded {
   background: #FFF7EC !important;
   color: #2A1520 !important;
   border: 1px solid #E8C9A0 !important;
 }
 
 /* Specifically target chips in quiz/generator */
-[data-season="halloween"] [class*="px-"][class*="py-"][class*="rounded"],
-[data-season="halloween"] [class*="chip"] {
+[data-season="halloween"] #generate span[class*="px-"][class*="py-"][class*="rounded"],
+[data-season="halloween"] #generate [class*="chip"] {
   background: #FFF7EC !important;
   color: #2A1520 !important;
   border: 1px solid #E8C9A0 !important;
