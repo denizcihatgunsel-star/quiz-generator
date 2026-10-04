@@ -1,7 +1,7 @@
 <!--
   Source: freesvg.org "bubbling potion". Public domain.
 -->
-<svg width="1161" height="1080" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 1161 1080" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
  <defs>
   <radialGradient gradientUnits="userSpaceOnUse" gradientTransform="matrix(2 0 0 -2 480 3200)" r="45.9729" cy="1238.5913" cx="636.4982" id="imagebot_277">
    <stop stop-color="#FFFFFF" offset="0"/>
