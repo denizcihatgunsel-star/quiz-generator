@@ -178,10 +178,8 @@ export default function PotionCauldron() {
           {/* Cauldron */}
           <div
             ref={containerRef}
-            className="relative mx-auto touch-none select-none cursor-pointer"
+            className="relative mx-auto touch-none select-none cursor-pointer w-[180px] h-[180px] sm:w-[240px] sm:h-[240px]"
             style={{
-              width: "240px",
-              height: "240px",
               touchAction: "none",
             }}
             onPointerDown={handlePointerDown}
