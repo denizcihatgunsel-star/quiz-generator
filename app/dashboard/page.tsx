@@ -264,14 +264,25 @@ export default function DashboardPage() {
 
         <div className="mb-10 flex flex-wrap gap-3">
           {userRole === "student" && (
-            <Link href="/study" className={primaryBtn}>
-              {BOOK} Study Mode
-            </Link>
+            <>
+              <Link href="/study" className={primaryBtn}>
+                {BOOK} Study Mode
+              </Link>
+              <Link href="/classroom/join" className={ghostBtn}>
+                {USERS} Join a Class
+              </Link>
+            </>
           )}
           {userRole === "teacher" && (
-            <Link href="/classroom/join" className={primaryBtn}>
-              {USERS} Classroom
-            </Link>
+            <button
+              onClick={() => {
+                const quizList = document.querySelector('[data-quiz-history]');
+                quizList?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className={primaryBtn}
+            >
+              {USERS} Host a Live Quiz
+            </button>
           )}
           <Link href="/analytics" className={ghostBtn}>
             {CHART} {userRole === "teacher" ? "Class Analytics" : "Analytics"}
@@ -486,7 +497,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3" data-quiz-history>
           <h2 className="font-serif text-2xl italic text-[#3B2027]">Quiz history</h2>
           <div className="flex gap-1 rounded-full border border-[#F3D5DC] bg-white/70 p-1 backdrop-blur-xl">
             {(["all", "scored", "unscored"] as const).map((f) => (
@@ -584,9 +595,12 @@ export default function DashboardPage() {
                           setStartingLive(null);
                         }}
                         disabled={startingLive === q.id}
-                        className="rounded-full border border-[color:var(--success)]/20 bg-[color:var(--success)]/10 px-3.5 py-1.5 text-xs font-medium text-[color:var(--success)] transition-colors hover:opacity-80 disabled:opacity-60"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-1.5 text-xs font-semibold text-white shadow-md shadow-violet-500/20 transition-all hover:shadow-lg hover:shadow-violet-500/30 disabled:opacity-60"
                       >
-                        {startingLive === q.id ? "..." : "Go Live"}
+                        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        {startingLive === q.id ? "Starting..." : "Go Live"}
                       </button>
                     )}
                     {q.shareId && (

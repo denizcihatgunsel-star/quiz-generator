@@ -11,6 +11,7 @@ const FOOTER_TOOLS = [
 
 const FOOTER_LINKS = [
   { href: "/pricing", label: "Pricing" },
+  { href: "/classroom/join", label: "Join a class" },
   { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },

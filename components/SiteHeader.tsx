@@ -14,6 +14,7 @@ interface NavItem {
 const appNav: NavItem[] = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/study", label: "Study" },
+  { href: "/classroom/join", label: "Classroom" },
   { href: "/explore", label: "Explore" },
   { href: "/pricing", label: "Pricing" },
 ];
@@ -74,6 +75,12 @@ export default function SiteHeader() {
             </Link>
           ) : (
             <div className="flex items-center gap-1.5">
+              <Link
+                href="/classroom/join"
+                className="hidden h-9 items-center rounded-lg border border-border px-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+              >
+                Join class
+              </Link>
               <Link
                 href="/auth/login"
                 className="hidden h-9 items-center rounded-lg px-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
