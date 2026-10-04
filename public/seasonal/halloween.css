@@ -27,24 +27,16 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: 
-    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 1;
-  opacity: 0.5;
+  opacity: 0.04;
 }
 
-/* Override body::before in Halloween mode - hide ALL patterns from base CSS */
-/* The grain is provided by [data-season="halloween"]::before which has higher z-index */
-body[data-season="halloween"]::before {
-  content: none !important;
-  background: transparent !important;
-  background-image: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
+/* Hide base dot grid and ambient blobs */
+[data-season="halloween"] .ambient-dotgrid,
+[data-season="halloween"] .ambient-blob {
   display: none !important;
-  width: 0 !important;
-  height: 0 !important;
 }
 
 /* Hide ALL wave canvases and grid/noise overlay */
@@ -509,107 +501,8 @@ body[data-season="halloween"]::before {
   margin-right: auto !important;
 }
 
-/* Cauldron as decoration - in right margin BESIDE generator box, vertically level with it */
-/* At 1280-1440px viewport, positioned around x 900-1000px (just outside generator's right edge) */
-/* Below 1180px, hide desktop cauldron and show mobile one under generator */
-[data-season="halloween"] .halloween-cauldron-container {
-  position: fixed !important;
-  left: 50% !important;
-  top: 50% !important;
-  transform: translate(420px, -50px) !important;
-  z-index: 1 !important;
-  pointer-events: none !important;
-  opacity: 0.9;
-  width: auto !important;
-  max-width: 140px !important;
-  height: auto !important;
-  background: transparent !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-  box-shadow: none !important;
-}
-
-/* All children and nested divs also transparent, no styling */
-[data-season="halloween"] .halloween-cauldron-container > div,
-[data-season="halloween"] .halloween-cauldron-container > div > div:first-child {
-  background: transparent !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-  box-shadow: none !important;
-  width: auto !important;
-  max-width: 140px !important;
-  height: auto !important;
-}
-
-[data-season="halloween"] .halloween-cauldron-container img {
-  width: auto !important;
-  max-width: 140px !important;
-  height: auto !important;
-  object-fit: contain !important;
-  background: transparent !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-  box-shadow: none !important;
-}
-
-/* Sample question cards - solid white, fully outside generator box in right margin */
-[data-season="halloween"] .halloween-cauldron-container > div:last-child > div {
-  background: #FFFFFF !important;
-  border-color: #E8C9A0 !important;
-}
-
-[data-season="halloween"] .halloween-cauldron-container > div:last-child > div p,
-[data-season="halloween"] .halloween-cauldron-container > div:last-child > div span {
-  color: #2A1520 !important;
-}
-
-/* Question cards rise and fade before reaching generator */
-[data-season="halloween"] .halloween-cauldron-container > div:last-child {
-  max-height: 300px;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-}
-
-/* Hide desktop cauldron below 1180px viewport width */
-@media (max-width: 1179px) {
-  [data-season="halloween"] .halloween-cauldron-container.hidden {
-    display: none !important;
-  }
-  
-  /* Below 1180px, mobile cauldron under generator: centered, max 120px */
-  [data-season="halloween"] .halloween-cauldron-container.md\:hidden {
-    position: relative !important;
-    left: auto !important;
-    top: auto !important;
-    transform: none !important;
-    margin: 2rem auto 0 !important;
-    width: auto !important;
-    max-width: 120px !important;
-    opacity: 1;
-    padding-bottom: 80px !important;
-    text-align: center;
-  }
-  
-  [data-season="halloween"] .halloween-cauldron-container.md\:hidden > div,
-  [data-season="halloween"] .halloween-cauldron-container.md\:hidden img {
-    max-width: 120px !important;
-  }
-}
-
+/* Remove any blurred backdrop or shadow layers on mobile */
 @media (max-width: 767px) {
-  /* Mobile: small cauldron BELOW generator, centered at max 120px */
-  [data-season="halloween"] .halloween-cauldron-container.md\:hidden {
-    max-width: 120px !important;
-    display: flex !important;
-  }
-  
-  /* FORCE hide desktop cauldron on mobile - override Tailwind .hidden.md:block */
-  [data-season="halloween"] .halloween-cauldron-container.hidden.md\:block {
-    display: none !important;
-  }
-  
-  /* Remove any blurred backdrop or shadow layers */
   [data-season="halloween"] header::before,
   [data-season="halloween"] header::after,
   [data-season="halloween"] nav::before {
@@ -623,7 +516,7 @@ body[data-season="halloween"]::before {
   z-index: 1 !important;
 }
 
-/* Crisp moon - #FFE9C2 disc with double-layer halo */
+/* Crisp moon - #FFE9C2 disc (halo applied inline in component) */
 [data-season="halloween"] .halloween-moon {
   position: absolute;
   top: 10%;
@@ -634,20 +527,7 @@ body[data-season="halloween"]::before {
   border-radius: 50%;
   pointer-events: none;
   z-index: 1;
-  box-shadow: 
-    0 0 40px 12px rgba(255, 233, 194, 0.55),
-    0 0 90px 30px rgba(255, 233, 194, 0.25);
   filter: none;
-}
-
-/* Ensure hero section doesn't clip moon's box-shadow halo */
-[data-season="halloween"] section.relative.overflow-hidden {
-  overflow: visible !important;
-}
-
-/* But keep overflow hidden on specific inner containers that need it */
-[data-season="halloween"] section .pointer-events-none.absolute.inset-0.overflow-hidden {
-  overflow: hidden !important;
 }
 
 /* Fog band - clearly visible cream band (120px tall) at hero bottom, above background but below content */

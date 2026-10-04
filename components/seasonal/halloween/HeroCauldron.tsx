@@ -7,12 +7,12 @@ import Image from "next/image";
 /**
  * HeroCauldron: Licensed cauldron with rising question cards
  * 
- * - 220px desktop / 140px mobile
+ * - desktop variant: 140x140 cauldron + sample cards column (w-full = 200px, max 2 cards)
+ * - mobile variant: 120x120 cauldron only, no cards
  * - Loaded from /seasonal/cauldron.svg (public domain, freesvg.org)
  * - Has built-in green bubbles, add few CSS bubbles only
- * - Question cards float up, one every 2.5s, max 3 visible
+ * - Question cards float up, one every 2.5s, max 2 visible for desktop
  * - White cards with 'Sample' tag + Bloom chip
- * - Cards rise and fade before reaching generator (mask in CSS)
  */
 
 interface SampleQuestion {
@@ -36,7 +36,11 @@ interface Bubble {
   delay: number;
 }
 
-export default function HeroCauldron() {
+interface HeroCauldronProps {
+  variant?: "desktop" | "mobile";
+}
+
+export default function HeroCauldron({ variant = "desktop" }: HeroCauldronProps) {
   const [visibleQuestions, setVisibleQuestions] = useState<SampleQuestion[]>([]);
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -75,12 +79,12 @@ export default function HeroCauldron() {
     return () => clearInterval(interval);
   }, [reducedMotion]);
 
-  // Spawn questions every 2.5s
+  // Spawn questions every 2.5s (desktop only, max 2 cards)
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion || variant === "mobile") return;
 
     const interval = setInterval(() => {
-      if (visibleQuestions.length < 3) {
+      if (visibleQuestions.length < 2) {
         const nextQuestion = SAMPLE_QUESTIONS[questionIndexRef.current % SAMPLE_QUESTIONS.length];
         setVisibleQuestions(prev => [...prev, nextQuestion]);
         questionIndexRef.current++;
@@ -88,7 +92,7 @@ export default function HeroCauldron() {
     }, 2500);
 
     return () => clearInterval(interval);
-  }, [visibleQuestions.length, reducedMotion]);
+  }, [visibleQuestions.length, reducedMotion, variant]);
 
   // Auto-fade questions after 8s
   useEffect(() => {
@@ -101,15 +105,17 @@ export default function HeroCauldron() {
     return () => clearTimeout(timeout);
   }, [visibleQuestions]);
 
+  const cauldronSize = variant === "desktop" ? 140 : 120;
+
   return (
-    <div className="flex flex-col items-center gap-6 w-full md:w-auto">
+    <div className="flex flex-col items-center gap-4 w-full">
       {/* Cauldron - loaded from licensed SVG file */}
-      <div className="w-[140px] h-[140px] md:w-[220px] md:h-[220px] relative">
+      <div className="relative" style={{ width: cauldronSize, height: cauldronSize }}>
         <Image 
           src="/seasonal/cauldron.svg" 
           alt="" 
-          width={220} 
-          height={220}
+          width={cauldronSize} 
+          height={cauldronSize}
           className="w-full h-full"
           aria-hidden="true"
           priority
@@ -142,37 +148,39 @@ export default function HeroCauldron() {
         )}
       </div>
 
-      {/* Question cards */}
-      <div className="w-full max-w-sm space-y-3" role="region" aria-live="polite">
-        <AnimatePresence mode="popLayout">
-          {visibleQuestions.map((q, i) => (
-            <motion.div
-              key={`${q.text}-${i}`}
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.3 } }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="p-3 bg-white border border-[#E8C9A0] rounded-lg shadow-sm"
-            >
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-[#F6B26B] bg-opacity-20 text-[#2A1520]">
-                  Sample
-                </span>
-                <span
-                  className="text-[10px] font-medium px-2 py-0.5 rounded"
-                  style={{
-                    backgroundColor: `${q.color}20`,
-                    color: q.color,
-                  }}
-                >
-                  {q.bloom}
-                </span>
-              </div>
-              <p className="text-xs text-[#2A1520] leading-relaxed">{q.text}</p>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
+      {/* Question cards - desktop only */}
+      {variant === "desktop" && (
+        <div className="w-full space-y-3" role="region" aria-live="polite">
+          <AnimatePresence mode="popLayout">
+            {visibleQuestions.map((q, i) => (
+              <motion.div
+                key={`${q.text}-${i}`}
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.3 } }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="p-3 bg-white border border-[#E8C9A0] rounded-lg shadow-sm text-[#2A1520]"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-[#F6B26B] bg-opacity-20 text-[#2A1520]">
+                    Sample
+                  </span>
+                  <span
+                    className="text-[10px] font-medium px-2 py-0.5 rounded"
+                    style={{
+                      backgroundColor: `${q.color}20`,
+                      color: q.color,
+                    }}
+                  >
+                    {q.bloom}
+                  </span>
+                </div>
+                <p className="text-xs text-[#2A1520] leading-relaxed">{q.text}</p>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+      )}
     </div>
   );
 }

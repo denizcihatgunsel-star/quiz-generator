@@ -772,12 +772,12 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
 
                 {/* Quiz Input */}
                 {(isLoggedIn || canGenerateDemo) && (
-                  <>
-                    {/* Hero Cauldron for Halloween - decoration only, absolute positioned */}
+                  <div className="relative">
+                    {/* Desktop cauldron decoration - right margin, xl breakpoint */}
                     {!isLoggedIn && halloweenActive && (
-                      <motion.div variants={heroItem} className="halloween-cauldron-container hidden md:block">
-                        <HeroCauldron />
-                      </motion.div>
+                      <div aria-hidden className="pointer-events-none absolute left-full top-0 ml-6 hidden w-[200px] xl:flex flex-col items-center gap-4">
+                        <HeroCauldron variant="desktop" />
+                      </div>
                     )}
                     
                   <motion.div variants={heroItem} id="generate" className={`relative max-w-2xl scroll-mt-28 ${isLoggedIn ? "" : "mx-auto"}`}>
@@ -960,13 +960,13 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     )}
                   </motion.div>
                   
-                  {/* Mobile cauldron - 140px BELOW generator */}
-                  {!isLoggedIn && halloweenActive && canGenerateDemo && (
-                    <motion.div variants={heroItem} className="md:hidden halloween-cauldron-container">
-                      <HeroCauldron />
-                    </motion.div>
+                  {/* Mobile/tablet cauldron - below generator, hidden on xl */}
+                  {!isLoggedIn && halloweenActive && (
+                    <div aria-hidden className="pointer-events-none mx-auto mt-6 flex w-[120px] justify-center xl:hidden">
+                      <HeroCauldron variant="mobile" />
+                    </div>
                   )}
-                  </>
+                  </div>
                 )}
                 </motion.div>
                 </motion.div>

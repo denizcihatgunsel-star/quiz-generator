@@ -124,8 +124,14 @@ export function HalloweenBats() {
 export function HalloweenAtmosphere() {
   return (
     <>
-      {/* Pale moon - top-left behind headline */}
-      <div className="halloween-moon halloween-decoration" aria-hidden="true" />
+      {/* Pale moon - top-left behind headline with double-layer halo */}
+      <div 
+        className="halloween-moon halloween-decoration" 
+        aria-hidden="true"
+        style={{
+          boxShadow: '0 0 40px 12px rgba(255, 233, 194, 0.55), 0 0 90px 30px rgba(255, 233, 194, 0.25)'
+        }}
+      />
       
       {/* Fog band - bottom of hero */}
       <div className="halloween-fog halloween-decoration" aria-hidden="true" />
