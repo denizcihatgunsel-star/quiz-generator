@@ -33,9 +33,15 @@
   opacity: 0.04;
 }
 
-/* Hide base dot grid and ambient blobs */
+/* Hide base dot grid, ambient blobs, and body::before grid pattern */
 [data-season="halloween"] .ambient-dotgrid,
 [data-season="halloween"] .ambient-blob {
+  display: none !important;
+}
+
+/* FORCE hide body::before which contains the diagonal grid pattern from base CSS */
+body[data-season="halloween"]::before {
+  content: none !important;
   display: none !important;
 }
 

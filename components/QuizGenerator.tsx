@@ -773,9 +773,9 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                 {/* Quiz Input */}
                 {(isLoggedIn || canGenerateDemo) && (
                   <div className="relative">
-                    {/* Desktop cauldron decoration - right margin, xl breakpoint */}
+                    {/* Desktop cauldron decoration - right margin, 1280px+ only */}
                     {!isLoggedIn && halloweenActive && (
-                      <div aria-hidden className="pointer-events-none absolute left-full top-0 ml-6 hidden w-[200px] xl:flex flex-col items-center gap-4">
+                      <div aria-hidden className="pointer-events-none absolute left-full top-0 ml-6 hidden min-[1280px]:flex w-[200px] flex-col items-center gap-4">
                         <HeroCauldron variant="desktop" />
                       </div>
                     )}
@@ -960,9 +960,9 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     )}
                   </motion.div>
                   
-                  {/* Mobile/tablet cauldron - below generator, hidden on xl */}
+                  {/* Mobile/tablet cauldron - below generator, hidden at 1280px+ */}
                   {!isLoggedIn && halloweenActive && (
-                    <div aria-hidden className="pointer-events-none mx-auto mt-6 flex w-[120px] justify-center xl:hidden">
+                    <div aria-hidden className="pointer-events-none mx-auto mt-6 flex w-[120px] justify-center min-[1280px]:hidden">
                       <HeroCauldron variant="mobile" />
                     </div>
                   )}
