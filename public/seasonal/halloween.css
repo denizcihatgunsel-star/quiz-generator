@@ -35,12 +35,14 @@
   opacity: 0.5;
 }
 
-/* Override body::before in Halloween mode - it has the checker/grid pattern we want to hide */
+/* Override body::before in Halloween mode - remove diagonal 45deg patterns, keep only grain */
+/* The base body::before has 3 gradients: 45deg diagonal, -45deg diagonal, and 0deg grain */
+/* We want to REMOVE the diagonals but KEEP the 0deg grain */
 body[data-season="halloween"]::before {
-  background-image: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-  display: none !important;
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px) !important;
+  opacity: 0.5 !important;
+  visibility: visible !important;
+  display: block !important;
 }
 
 /* Hide ALL wave canvases and grid/noise overlay */
@@ -593,14 +595,15 @@ body[data-season="halloween"]::before {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   /* Mobile: small cauldron BELOW generator, centered at max 120px */
   [data-season="halloween"] .halloween-cauldron-container.md\:hidden {
     max-width: 120px !important;
+    display: flex !important;
   }
   
-  /* Hide desktop cauldron on mobile - it has 'hidden md:block' classes */
-  [data-season="halloween"] .halloween-cauldron-container.hidden {
+  /* FORCE hide desktop cauldron on mobile - override Tailwind .hidden.md:block */
+  [data-season="halloween"] .halloween-cauldron-container.hidden.md\:block {
     display: none !important;
   }
   
