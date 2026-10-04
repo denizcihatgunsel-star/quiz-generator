@@ -35,8 +35,15 @@
   opacity: 0.5;
 }
 
-/* Hide wave lines canvas */
-[data-season="halloween"] canvas[aria-hidden="true"] {
+/* Hide ALL wave canvases and grid/noise overlay */
+[data-season="halloween"] canvas[aria-hidden="true"],
+[data-season="halloween"] canvas,
+[data-season="halloween"] .pointer-events-none.absolute.inset-0 > canvas {
+  display: none !important;
+}
+
+/* Hide grid/noise texture overlays (keep only 0.04 grain) */
+[data-season="halloween"] .pointer-events-none.absolute.inset-0.z-\[1\].overflow-hidden {
   display: none !important;
 }
 
@@ -64,7 +71,7 @@
   opacity: 0.8;
 }
 
-/* Header/Nav pill - cream #FFF7EC */
+/* Header/Nav pill - cream #FFF7EC with #E8C9A0 borders */
 [data-season="halloween"] nav {
   background: #FFF7EC !important;
   backdrop-filter: blur(12px);
@@ -83,13 +90,28 @@
   color: #3B2027 !important;
 }
 
-/* Fixed Sound off button - cream with plum text */
+/* Create Quiz nav button - solid plum with cream text */
+[data-season="halloween"] nav a[href="/auth/register"],
+[data-season="halloween"] nav a[href*="create"] {
+  background: #3B2027 !important;
+  color: #FFF7EC !important;
+  border-color: #3B2027 !important;
+}
+
+/* Fixed Sound off button - cream with plum text, never overlap generator */
 [data-season="halloween"] button[aria-pressed] {
   background: #FFF7EC !important;
   border: 1px solid #E8C9A0 !important;
   color: #3B2027 !important;
   backdrop-filter: blur(8px);
   box-shadow: 0 2px 8px rgba(42, 21, 32, 0.08);
+  bottom: 2rem !important;
+}
+
+@media (min-width: 640px) {
+  [data-season="halloween"] button[aria-pressed] {
+    bottom: 1.25rem !important;
+  }
 }
 
 /* Hero section - remove blush gradient */
@@ -110,10 +132,34 @@
   box-shadow: 0 2px 12px rgba(42, 21, 32, 0.08) !important;
 }
 
-/* Character count and labels */
+/* Small controls (pale rose) become cream with plum text */
+[data-season="halloween"] select,
+[data-season="halloween"] input[type="text"],
+[data-season="halloween"] input[type="file"],
+[data-season="halloween"] textarea {
+  background: #FFF7EC !important;
+  border-color: #E8C9A0 !important;
+  color: #2A1520 !important;
+}
+
+/* Character count and labels - all helper text #2A1520 */
 [data-season="halloween"] .text-\[\#E9B8C4\],
-[data-season="halloween"] .text-\[\#B0607A\] {
-  color: #E8833A !important;
+[data-season="halloween"] .text-\[\#B0607A\],
+[data-season="halloween"] .text-\[\#9A7280\],
+[data-season="halloween"] .text-\[\#8C5A68\],
+[data-season="halloween"] .text-\[\#A87680\] {
+  color: #2A1520 !important;
+  opacity: 0.8;
+}
+
+/* Bloom chips - cream #FFF7EC with plum #2A1520 text */
+[data-season="halloween"] [class*="bloom-"],
+[data-season="halloween"] .bg-violet-50,
+[data-season="halloween"] .bg-violet-100,
+[data-season="halloween"] .bg-purple-50 {
+  background: #FFF7EC !important;
+  color: #2A1520 !important;
+  border-color: #E8C9A0 !important;
 }
 
 /* Progress bars */
@@ -139,6 +185,14 @@
 [data-season="halloween"] button.gradient-shift:hover,
 [data-season="halloween"] button#generate-btn:hover {
   background: #2A1520 !important;
+}
+
+/* Disabled Generate button - plum at 0.7 opacity with cream text */
+[data-season="halloween"] button#generate-btn:disabled,
+[data-season="halloween"] button.gradient-shift:disabled {
+  background: #3B2027 !important;
+  color: #FFF7EC !important;
+  opacity: 0.7 !important;
 }
 
 [data-season="halloween"] .text-\[\#F6E3E8\],
@@ -210,10 +264,22 @@
   opacity: 1 !important;
 }
 
-/* Footer logo and wordmark */
-[data-season="halloween"] footer svg,
+/* Footer logo - make visible on dark plum */
+[data-season="halloween"] footer svg path,
+[data-season="halloween"] footer svg {
+  fill: rgba(255, 247, 236, 0.75) !important;
+}
+
+/* Footer badges - small cream rounded backing */
 [data-season="halloween"] footer img {
-  filter: brightness(0) invert(1) opacity(0.75);
+  background: #FFF7EC;
+  padding: 4px 8px;
+  border-radius: 6px;
+  opacity: 0.9;
+}
+
+[data-season="halloween"] footer img:hover {
+  opacity: 1;
 }
 
 /* Gradient text */
@@ -304,37 +370,133 @@
   background: rgba(232, 131, 58, 0.15) !important;
 }
 
-/* Hero layout - two columns on desktop */
-[data-season="halloween"] .max-w-5xl {
-  display: flex !important;
-  flex-direction: row !important;
-  gap: 3rem !important;
-  max-width: 80rem !important;
-  align-items: flex-start !important;
+/* Generator keeps original size - NO two-column layout */
+[data-season="halloween"] #generate {
+  /* Restore to main: full width, centered */
+  max-width: 48rem !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Cauldron as decoration - absolute positioned, pointer-events none */
+[data-season="halloween"] .halloween-cauldron-container {
+  position: absolute !important;
+  right: 5% !important;
+  top: 20% !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  opacity: 0.85;
 }
 
 @media (max-width: 768px) {
-  [data-season="halloween"] .max-w-5xl {
-    flex-direction: column !important;
+  /* Mobile: small cauldron BELOW generator (140px) */
+  [data-season="halloween"] .halloween-cauldron-container {
+    position: relative !important;
+    right: auto !important;
+    top: auto !important;
+    margin: 2rem auto 0 !important;
+    width: 140px !important;
+    opacity: 1;
+  }
+  
+  [data-season="halloween"] .halloween-cauldron-container svg {
+    width: 140px !important;
+    height: 140px !important;
   }
 }
 
-/* Generator section takes left column */
-[data-season="halloween"] #generate {
-  flex: 1 1 auto !important;
-  max-width: 100% !important;
-  margin: 0 !important;
+/* Halloween decorations layer - all behind content, no pointer events */
+[data-season="halloween"] .halloween-decoration {
+  pointer-events: none !important;
+  z-index: 1 !important;
 }
 
-/* Cauldron on the right */
-[data-season="halloween"] .halloween-cauldron-container {
-  flex: 0 0 280px !important;
-  order: 2 !important;
+/* Pale moon - top-left behind headline */
+[data-season="halloween"] .halloween-moon {
+  position: absolute;
+  top: 10%;
+  left: 8%;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, #FFF1D6 0%, rgba(255, 241, 214, 0.4) 40%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Fog band - drifting along bottom of hero */
+[data-season="halloween"] .halloween-fog {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to top, rgba(255, 247, 236, 0.3) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-season="halloween"] .halloween-fog {
+    animation: fog-drift 20s ease-in-out infinite;
+  }
+}
+
+@keyframes fog-drift {
+  0%, 100% { opacity: 0.3; transform: translateX(0); }
+  50% { opacity: 0.5; transform: translateX(-20px); }
+}
+
+/* Cobwebs - thin, low opacity, top corners */
+[data-season="halloween"] .halloween-cobweb {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.15;
+}
+
+[data-season="halloween"] .halloween-cobweb-tl {
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+}
+
+[data-season="halloween"] .halloween-cobweb-tr {
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+}
+
+/* Candle glow - warm amber near cauldron */
+[data-season="halloween"] .halloween-candle-glow {
+  position: absolute;
+  right: 10%;
+  top: 30%;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(232, 131, 58, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-season="halloween"] .halloween-candle-glow {
+    animation: candle-flicker 3s ease-in-out infinite;
+  }
+}
+
+@keyframes candle-flicker {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.8; }
 }
 
 @media (max-width: 768px) {
-  [data-season="halloween"] .halloween-cauldron-container {
-    flex: 1 1 auto !important;
-    order: 3 !important;
+  [data-season="halloween"] .halloween-moon,
+  [data-season="halloween"] .halloween-cobweb,
+  [data-season="halloween"] .halloween-candle-glow {
+    display: none;
   }
 }

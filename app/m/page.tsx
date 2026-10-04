@@ -11,6 +11,7 @@ import { isHalloweenActive } from "@/lib/seasonal";
 // Halloween seasonal components
 const HalloweenPumpkins = dynamic(() => import("@/components/seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenPumpkins })), { ssr: false });
 const HalloweenBats = dynamic(() => import("@/components/seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenBats })), { ssr: false });
+const HalloweenAtmosphere = dynamic(() => import("@/components/seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenAtmosphere })), { ssr: false });
 const HeroCauldron = dynamic(() => import("@/components/seasonal/halloween/HeroCauldron"), { ssr: false });
 
 const ARROW = (
@@ -51,8 +52,13 @@ function MobileHomeContent() {
   return (
     <div className="relative">
       {/* Halloween decorations */}
-      {halloweenActive && <HalloweenPumpkins />}
-      {halloweenActive && <HalloweenBats />}
+      {halloweenActive && (
+        <>
+          <HalloweenPumpkins />
+          <HalloweenBats />
+          <HalloweenAtmosphere />
+        </>
+      )}
       
       {/* Floating pastel orbs — pure CSS, animated on mobile */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">

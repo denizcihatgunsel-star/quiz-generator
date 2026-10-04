@@ -2,13 +2,15 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 /**
- * HalloweenDecorations: Flat vector SVG decorations (Final Spec)
+ * HalloweenDecorations: All decorations behind content, pointer-events none
  * 
- * - 2 pumpkins: flat #E8833A, 90-120px, bottom corners, NO carved faces, hidden <640px
- * - 3 bats: flat, 16-28px, top-right area (left of right edge - 120px, below 140px from top)
- * - Gentle drift, professional flat style
+ * - 2 pumpkins: loaded from /seasonal/pumpkin.svg, hidden <640px
+ * - 5-6 bats: top-right area, clear of nav and Sound off pill
+ * - Moon, fog, cobwebs, candle glow
+ * - Professional flat style, gentle animations
  */
 
 export function HalloweenPumpkins() {
@@ -26,40 +28,34 @@ export function HalloweenPumpkins() {
     <>
       {/* Bottom left pumpkin - hidden <640px */}
       <motion.div
-        className="hidden sm:block fixed bottom-8 left-8 z-[3] pointer-events-none"
+        className="halloween-decoration hidden sm:block fixed bottom-8 left-8 z-[1]"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 0.8, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
       >
-        <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
-          {/* Flat pumpkin #E8833A - NO carved face */}
-          <ellipse cx="55" cy="60" rx="42" ry="38" fill="#E8833A" />
-          {/* Stem */}
-          <path d="M52 25 Q55 22 58 25 L58 32 Q58 35 55 35 Q52 35 52 32 Z" fill="#78350F" />
-          {/* Subtle ribs for dimension */}
-          <path d="M55 23 Q53 60 55 97" stroke="#C2410C" strokeWidth="2.5" opacity="0.3" />
-          <path d="M40 32 Q39 60 40 92" stroke="#C2410C" strokeWidth="2" opacity="0.25" />
-          <path d="M70 32 Q71 60 70 92" stroke="#C2410C" strokeWidth="2" opacity="0.25" />
-        </svg>
+        <Image 
+          src="/seasonal/pumpkin.svg" 
+          alt="" 
+          width={110} 
+          height={110}
+          aria-hidden="true"
+        />
       </motion.div>
 
       {/* Bottom right pumpkin - hidden <640px */}
       <motion.div
-        className="hidden sm:block fixed bottom-8 right-8 z-[3] pointer-events-none"
+        className="halloween-decoration hidden sm:block fixed bottom-8 right-8 z-[1]"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 0.8, y: 0 }}
         transition={{ duration: 0.6, delay: 0.5 }}
       >
-        <svg width="95" height="95" viewBox="0 0 95 95" fill="none">
-          {/* Flat pumpkin #E8833A - NO carved face */}
-          <ellipse cx="47" cy="52" rx="36" ry="33" fill="#E8833A" />
-          {/* Stem */}
-          <path d="M45 22 Q47 20 49 22 L49 28 Q49 30 47 30 Q45 30 45 28 Z" fill="#78350F" />
-          {/* Subtle ribs */}
-          <path d="M47 20 Q45 52 47 83" stroke="#C2410C" strokeWidth="2" opacity="0.3" />
-          <path d="M34 28 Q33 52 34 78" stroke="#C2410C" strokeWidth="1.8" opacity="0.25" />
-          <path d="M60 28 Q61 52 60 78" stroke="#C2410C" strokeWidth="1.8" opacity="0.25" />
-        </svg>
+        <Image 
+          src="/seasonal/pumpkin.svg" 
+          alt="" 
+          width={95} 
+          height={95}
+          aria-hidden="true"
+        />
       </motion.div>
     </>
   );
@@ -76,12 +72,14 @@ export function HalloweenBats() {
     return () => mediaQuery.removeEventListener("change", handler);
   }, []);
 
-  // 3 bats, top-right area
-  // kept left of (right edge - 120px) and below 140px from top (clear Sound off pill)
+  // 5-6 bats, top-right area, clear of nav and Sound off pill
   const bats = [
     { id: 1, right: "140px", top: "160px", size: 28, delay: 0, duration: 16 },
     { id: 2, right: "200px", top: "220px", size: 20, delay: 2, duration: 18 },
     { id: 3, right: "170px", top: "290px", size: 24, delay: 4, duration: 17 },
+    { id: 4, right: "240px", top: "180px", size: 22, delay: 1, duration: 19 },
+    { id: 5, right: "130px", top: "250px", size: 18, delay: 3, duration: 20 },
+    { id: 6, right: "210px", top: "150px", size: 26, delay: 5, duration: 18 },
   ];
 
   return (
@@ -89,7 +87,7 @@ export function HalloweenBats() {
       {bats.map((bat) => (
         <motion.div
           key={bat.id}
-          className="hidden md:block fixed z-[3] pointer-events-none"
+          className="halloween-decoration hidden md:block fixed z-[1]"
           style={{
             right: bat.right,
             top: bat.top,
@@ -118,6 +116,35 @@ export function HalloweenBats() {
           </svg>
         </motion.div>
       ))}
+    </>
+  );
+}
+
+export function HalloweenAtmosphere() {
+  return (
+    <>
+      {/* Pale moon - top-left behind headline */}
+      <div className="halloween-moon halloween-decoration" aria-hidden="true" />
+      
+      {/* Fog band - bottom of hero */}
+      <div className="halloween-fog halloween-decoration" aria-hidden="true" />
+      
+      {/* Cobwebs - top corners */}
+      <div className="halloween-cobweb halloween-cobweb-tl halloween-decoration" aria-hidden="true">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0 L50 50 M0 20 L50 50 M0 40 L50 50 M20 0 L50 50 M40 0 L50 50" 
+                stroke="#2A1520" strokeWidth="0.5" opacity="0.3"/>
+        </svg>
+      </div>
+      <div className="halloween-cobweb halloween-cobweb-tr halloween-decoration" aria-hidden="true">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M100 0 L50 50 M100 20 L50 50 M100 40 L50 50 M80 0 L50 50 M60 0 L50 50" 
+                stroke="#2A1520" strokeWidth="0.5" opacity="0.3"/>
+        </svg>
+      </div>
+      
+      {/* Candle glow - near cauldron */}
+      <div className="halloween-candle-glow halloween-decoration" aria-hidden="true" />
     </>
   );
 }

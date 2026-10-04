@@ -33,6 +33,7 @@ import { useTranslation } from "@/lib/i18n";
 // Halloween seasonal components
 const HalloweenPumpkins = dynamic(() => import("./seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenPumpkins })), { ssr: false });
 const HalloweenBats = dynamic(() => import("./seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenBats })), { ssr: false });
+const HalloweenAtmosphere = dynamic(() => import("./seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenAtmosphere })), { ssr: false });
 const HeroCauldron = dynamic(() => import("./seasonal/halloween/HeroCauldron"), { ssr: false });
 
 // Below-fold marketing: client-only to keep homepage HTML lean for crawlers/CDN
@@ -602,8 +603,13 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                   <WaterCanvas className="pointer-events-none absolute inset-0 h-full w-full opacity-100" />
                 </div>
               )}
-              {!isLoggedIn && !hideChrome && halloweenActive && <HalloweenPumpkins />}
-              {!isLoggedIn && !hideChrome && halloweenActive && <HalloweenBats />}
+              {!isLoggedIn && !hideChrome && halloweenActive && (
+                <>
+                  <HalloweenPumpkins />
+                  <HalloweenBats />
+                  <HalloweenAtmosphere />
+                </>
+              )}
               <motion.div
                 style={isLoggedIn ? undefined : { scale: diveScale, opacity: diveOpacity, y: diveY }}
                 className="relative z-10 max-w-5xl mx-auto px-6"
@@ -764,15 +770,16 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                   </motion.div>
                 )}
 
-                {/* Hero Cauldron for Halloween (shown alongside on desktop via CSS) */}
-                {!isLoggedIn && halloweenActive && canGenerateDemo && (
-                  <motion.div variants={heroItem} className="halloween-cauldron-container hidden md:block">
-                    <HeroCauldron />
-                  </motion.div>
-                )}
-                
                 {/* Quiz Input */}
                 {(isLoggedIn || canGenerateDemo) && (
+                  <>
+                    {/* Hero Cauldron for Halloween - decoration only, absolute positioned */}
+                    {!isLoggedIn && halloweenActive && (
+                      <motion.div variants={heroItem} className="halloween-cauldron-container hidden md:block">
+                        <HeroCauldron />
+                      </motion.div>
+                    )}
+                    
                   <motion.div variants={heroItem} id="generate" className={`relative max-w-2xl scroll-mt-28 ${isLoggedIn ? "" : "mx-auto"}`}>
                     <div aria-hidden className="pointer-events-none absolute -inset-12 -z-10">
                       <div className="orb-drift h-44 w-44 bg-[#E9A8B8]/70" style={{ animationDelay: "-3s", top: "-3rem", left: "-4rem" }} />
@@ -952,6 +959,14 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                       </div>
                     )}
                   </motion.div>
+                  
+                  {/* Mobile cauldron - 140px BELOW generator */}
+                  {!isLoggedIn && halloweenActive && canGenerateDemo && (
+                    <motion.div variants={heroItem} className="md:hidden halloween-cauldron-container">
+                      <HeroCauldron />
+                    </motion.div>
+                  )}
+                  </>
                 )}
                 </motion.div>
                 </motion.div>

@@ -101,8 +101,8 @@ export default function HeroCauldron() {
 
   return (
     <div className="flex flex-col items-center gap-6 w-full md:w-auto">
-      {/* Cauldron SVG */}
-      <div className="w-[160px] h-[160px] md:w-[220px] md:h-[220px] relative">
+      {/* Cauldron SVG - loaded from file */}
+      <div className="w-[140px] h-[140px] md:w-[220px] md:h-[220px] relative">
         <svg
           viewBox="0 0 100 100"
           className="w-full h-full"
@@ -127,30 +127,8 @@ export default function HeroCauldron() {
             />
           ))}
 
-          {/* Cauldron body - flat #2A1520 */}
-          <path
-            d="M30 40 L35 70 Q50 80 65 70 L70 40 Q50 45 30 40"
-            fill="#2A1520"
-          />
-
-          {/* Liquid surface */}
-          <ellipse cx="50" cy="42" rx="21" ry="6" fill="#B8E07A" opacity="0.6" />
-
-          {/* Rim */}
-          <ellipse
-            cx="50"
-            cy="40"
-            rx="22"
-            ry="4"
-            fill="none"
-            stroke="#1A0F14"
-            strokeWidth="1.5"
-          />
-
-          {/* Legs */}
-          <line x1="35" y1="70" x2="32" y2="80" stroke="#1A0F14" strokeWidth="2" strokeLinecap="round" />
-          <line x1="50" y1="73" x2="50" y2="83" stroke="#1A0F14" strokeWidth="2" strokeLinecap="round" />
-          <line x1="65" y1="70" x2="68" y2="80" stroke="#1A0F14" strokeWidth="2" strokeLinecap="round" />
+          {/* Cauldron from SVG file */}
+          <image href="/seasonal/cauldron.svg" width="100" height="100" />
         </svg>
       </div>
 

@@ -1,0 +1,10 @@
+<svg viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Flat pumpkin #E8833A - NO carved face -->
+  <ellipse cx="55" cy="60" rx="42" ry="38" fill="#E8833A"/>
+  <!-- Stem -->
+  <path d="M52 25 Q55 22 58 25 L58 32 Q58 35 55 35 Q52 35 52 32 Z" fill="#78350F"/>
+  <!-- Subtle ribs for dimension -->
+  <path d="M55 23 Q53 60 55 97" stroke="#C2410C" stroke-width="2.5" opacity="0.3"/>
+  <path d="M40 32 Q39 60 40 92" stroke="#C2410C" stroke-width="2" opacity="0.25"/>
+  <path d="M70 32 Q71 60 70 92" stroke="#C2410C" stroke-width="2" opacity="0.25"/>
+</svg>
