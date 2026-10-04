@@ -35,6 +35,14 @@
   opacity: 0.5;
 }
 
+/* Override body::before in Halloween mode - it has the checker/grid pattern we want to hide */
+body[data-season="halloween"]::before {
+  background-image: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  display: none !important;
+}
+
 /* Hide ALL wave canvases and grid/noise overlay */
 [data-season="halloween"] canvas[aria-hidden="true"],
 [data-season="halloween"] canvas,
@@ -499,7 +507,7 @@
 
 /* Cauldron as decoration - in right margin BESIDE generator box, vertically level with it */
 /* At 1280-1440px viewport, positioned around x 900-1000px (just outside generator's right edge) */
-/* Below 1180px (min-width 1180px), hide desktop cauldron and show mobile one under generator */
+/* Below 1180px, hide desktop cauldron and show mobile one under generator */
 [data-season="halloween"] .halloween-cauldron-container {
   position: fixed !important;
   left: 50% !important;
@@ -508,16 +516,36 @@
   z-index: 1 !important;
   pointer-events: none !important;
   opacity: 0.9;
-  width: 140px !important;
+  width: auto !important;
   max-width: 140px !important;
   height: auto !important;
-  aspect-ratio: 1161 / 1080 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+/* All children and nested divs also transparent, no styling */
+[data-season="halloween"] .halloween-cauldron-container > div,
+[data-season="halloween"] .halloween-cauldron-container > div > div:first-child {
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  width: auto !important;
+  max-width: 140px !important;
+  height: auto !important;
 }
 
 [data-season="halloween"] .halloween-cauldron-container img {
-  width: 100% !important;
-  height: 100% !important;
+  width: auto !important;
+  max-width: 140px !important;
+  height: auto !important;
   object-fit: contain !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
 }
 
 /* Sample question cards - solid white, fully outside generator box in right margin */
@@ -544,21 +572,31 @@
   [data-season="halloween"] .halloween-cauldron-container.hidden {
     display: none !important;
   }
-}
-
-@media (max-width: 768px) {
-  /* Mobile: small cauldron BELOW generator (140px), with bottom padding for nav */
+  
+  /* Below 1180px, mobile cauldron under generator: centered, max 120px */
   [data-season="halloween"] .halloween-cauldron-container.md\:hidden {
     position: relative !important;
     left: auto !important;
     top: auto !important;
     transform: none !important;
     margin: 2rem auto 0 !important;
-    width: 140px !important;
-    max-width: 140px !important;
+    width: auto !important;
+    max-width: 120px !important;
     opacity: 1;
     padding-bottom: 80px !important;
-    aspect-ratio: 1161 / 1080 !important;
+    text-align: center;
+  }
+  
+  [data-season="halloween"] .halloween-cauldron-container.md\:hidden > div,
+  [data-season="halloween"] .halloween-cauldron-container.md\:hidden img {
+    max-width: 120px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Mobile: small cauldron BELOW generator, centered at max 120px */
+  [data-season="halloween"] .halloween-cauldron-container.md\:hidden {
+    max-width: 120px !important;
   }
   
   /* Hide desktop cauldron on mobile - it has 'hidden md:block' classes */
@@ -580,7 +618,7 @@
   z-index: 1 !important;
 }
 
-/* Crisp moon - #FFE9C2 disc with soft halo */
+/* Crisp moon - #FFE9C2 disc with double-layer halo */
 [data-season="halloween"] .halloween-moon {
   position: absolute;
   top: 10%;
@@ -591,20 +629,36 @@
   border-radius: 50%;
   pointer-events: none;
   z-index: 1;
-  box-shadow: 0 0 60px rgba(255, 233, 194, 0.5);
+  box-shadow: 
+    0 0 40px 12px rgba(255, 233, 194, 0.55),
+    0 0 90px 30px rgba(255, 233, 194, 0.25);
   filter: none;
 }
 
-/* Fog band - clearly visible cream band (120px tall, opacity 0.4) along bottom of hero */
+/* Ensure hero section doesn't clip moon's box-shadow halo */
+[data-season="halloween"] section.relative.overflow-hidden {
+  overflow: visible !important;
+}
+
+/* But keep overflow hidden on specific inner containers that need it */
+[data-season="halloween"] section .pointer-events-none.absolute.inset-0.overflow-hidden {
+  overflow: hidden !important;
+}
+
+/* Fog band - clearly visible cream band (120px tall) at hero bottom, above background but below content */
 [data-season="halloween"] .halloween-fog {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 120px;
-  background: linear-gradient(to top, rgba(255, 247, 236, 0.4) 0%, rgba(255, 247, 236, 0.25) 60%, transparent 100%);
-  pointer-events: none;
-  z-index: 2;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: 120px !important;
+  background: linear-gradient(to top, rgba(255, 247, 236, 0.4) 0%, transparent 100%) !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
