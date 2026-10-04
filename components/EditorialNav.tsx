@@ -36,6 +36,12 @@ export default function EditorialNav() {
 
         <div className="flex items-center gap-3">
           <Link
+            href="/classroom/join"
+            className="hidden text-sm text-neutral-500 transition-colors duration-200 hover:text-[#3B2027] sm:block"
+          >
+            Join class
+          </Link>
+          <Link
             href="/auth/login"
             className="hidden text-sm text-neutral-500 transition-colors duration-200 hover:text-[#3B2027] sm:block"
           >
