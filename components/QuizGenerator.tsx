@@ -602,8 +602,8 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                   <WaterCanvas className="pointer-events-none absolute inset-0 h-full w-full opacity-100" />
                 </div>
               )}
-              {!isLoggedIn && !hideChrome && <HalloweenPumpkins />}
-              {!isLoggedIn && !hideChrome && <HalloweenBats />}
+              {!isLoggedIn && !hideChrome && halloweenActive && <HalloweenPumpkins />}
+              {!isLoggedIn && !hideChrome && halloweenActive && <HalloweenBats />}
               <motion.div
                 style={isLoggedIn ? undefined : { scale: diveScale, opacity: diveOpacity, y: diveY }}
                 className="relative z-10 max-w-5xl mx-auto px-6"

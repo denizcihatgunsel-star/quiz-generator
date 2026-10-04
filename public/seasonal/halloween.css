@@ -128,12 +128,16 @@
 
 /* Primary buttons - plum #3B2027 with cream text */
 [data-season="halloween"] .bg-\[\#3B2027\],
-[data-season="halloween"] .bg-\[linear-gradient\(120deg\,\#3B2027\,\#6A3A4C\,\#3B2027\)\] {
+[data-season="halloween"] .bg-\[linear-gradient\(120deg\,\#3B2027\,\#6A3A4C\,\#3B2027\)\],
+[data-season="halloween"] button.gradient-shift,
+[data-season="halloween"] button#generate-btn {
   background: #3B2027 !important;
   color: #FFF7EC !important;
 }
 
-[data-season="halloween"] .hover\:bg-\[\#52303B\]:hover {
+[data-season="halloween"] .hover\:bg-\[\#52303B\]:hover,
+[data-season="halloween"] button.gradient-shift:hover,
+[data-season="halloween"] button#generate-btn:hover {
   background: #2A1520 !important;
 }
 
@@ -180,26 +184,36 @@
   box-shadow: 0 2px 8px rgba(42, 21, 32, 0.06) !important;
 }
 
-/* Footer - gradient ends in dark plum #2A1520 */
+/* Footer - solid dark plum #2A1520 */
 [data-season="halloween"] footer {
-  background: linear-gradient(to bottom, transparent 0%, #2A1520 100%);
+  background: #2A1520 !important;
   border-color: rgba(232, 201, 160, 0.2) !important;
-  padding-top: 80px !important;
 }
 
 [data-season="halloween"] footer a,
-[data-season="halloween"] footer p {
+[data-season="halloween"] footer p,
+[data-season="halloween"] footer span,
+[data-season="halloween"] footer div {
   color: rgba(255, 247, 236, 0.75) !important;
 }
 
 [data-season="halloween"] footer a:hover {
   color: #FFF7EC !important;
+  opacity: 1 !important;
 }
 
 /* Footer Get started button - plum style */
-[data-season="halloween"] footer a[href="/auth/register"] {
+[data-season="halloween"] footer a[href="/auth/register"],
+[data-season="halloween"] footer button {
   background: #3B2027 !important;
   color: #FFF7EC !important;
+  opacity: 1 !important;
+}
+
+/* Footer logo and wordmark */
+[data-season="halloween"] footer svg,
+[data-season="halloween"] footer img {
+  filter: brightness(0) invert(1) opacity(0.75);
 }
 
 /* Gradient text */
@@ -240,39 +254,87 @@
   opacity: 0.5;
 }
 
-/* Remove violet/purple gradients */
-[data-season="halloween"] .from-violet-600,
-[data-season="halloween"] .to-indigo-600 {
+/* Override ALL pink/purple/blush colors - replace with plum/orange/cream */
+[data-season="halloween"] .bg-\[\#3B2027\],
+[data-season="halloween"] .bg-\[\#52303B\] {
   background: #3B2027 !important;
 }
 
-/* Hero layout - two columns on desktop for Halloween */
-[data-season="halloween"] section > div > div.max-w-5xl {
-  display: flex;
-  flex-direction: row;
-  gap: 2rem;
+[data-season="halloween"] .bg-\[\#B0607A\],
+[data-season="halloween"] .bg-\[\#C98A98\],
+[data-season="halloween"] .bg-\[\#E9A8B8\],
+[data-season="halloween"] .bg-\[\#F6DCE5\],
+[data-season="halloween"] .bg-\[\#F6E3E8\],
+[data-season="halloween"] .bg-\[\#F6E4EA\],
+[data-season="halloween"] .bg-\[\#FDE8EC\] {
+  background: #FFF7EC !important;
+}
+
+[data-season="halloween"] .text-\[\#B0607A\],
+[data-season="halloween"] .text-\[\#C98A98\],
+[data-season="halloween"] .text-\[\#E9A8B8\],
+[data-season="halloween"] .text-\[\#F6DCE5\],
+[data-season="halloween"] .text-\[\#F6E3E8\],
+[data-season="halloween"] .text-\[\#F6E4EA\],
+[data-season="halloween"] .text-\[\#FDE8EC\] {
+  color: #2A1520 !important;
+}
+
+[data-season="halloween"] .from-violet-600,
+[data-season="halloween"] .to-indigo-600,
+[data-season="halloween"] .from-violet-50,
+[data-season="halloween"] .to-violet-300,
+[data-season="halloween"] .bg-violet-50,
+[data-season="halloween"] .bg-violet-300,
+[data-season="halloween"] .bg-violet-600 {
+  background: #3B2027 !important;
+}
+
+/* All sections with blush/pink backgrounds */
+[data-season="halloween"] section {
+  background: transparent !important;
+}
+
+[data-season="halloween"] .bg-gradient-to-b {
+  background: transparent !important;
+}
+
+/* Override all orb colors */
+[data-season="halloween"] .orb-drift {
+  background: rgba(232, 131, 58, 0.15) !important;
+}
+
+/* Hero layout - two columns on desktop */
+[data-season="halloween"] .max-w-5xl {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 3rem !important;
   max-width: 80rem !important;
-  align-items: flex-start;
+  align-items: flex-start !important;
 }
 
 @media (max-width: 768px) {
-  [data-season="halloween"] section > div > div.max-w-5xl {
-    flex-direction: column;
-  }
-  
-  [data-season="halloween"] .halloween-cauldron-container {
-    order: 2;
+  [data-season="halloween"] .max-w-5xl {
+    flex-direction: column !important;
   }
 }
 
-/* Generator box in Halloween mode */
+/* Generator section takes left column */
 [data-season="halloween"] #generate {
-  flex: 1;
+  flex: 1 1 auto !important;
   max-width: 100% !important;
   margin: 0 !important;
 }
 
-/* Cauldron container */
+/* Cauldron on the right */
 [data-season="halloween"] .halloween-cauldron-container {
-  flex-shrink: 0;
+  flex: 0 0 280px !important;
+  order: 2 !important;
+}
+
+@media (max-width: 768px) {
+  [data-season="halloween"] .halloween-cauldron-container {
+    flex: 1 1 auto !important;
+    order: 3 !important;
+  }
 }

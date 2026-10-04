@@ -1,9 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
 import GlobeStudy from "@/components/GlobeStudy";
+import { isHalloweenActive } from "@/lib/seasonal";
+
+// Halloween seasonal components
+const HalloweenPumpkins = dynamic(() => import("@/components/seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenPumpkins })), { ssr: false });
+const HalloweenBats = dynamic(() => import("@/components/seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenBats })), { ssr: false });
+const HeroCauldron = dynamic(() => import("@/components/seasonal/halloween/HeroCauldron"), { ssr: false });
 
 const ARROW = (
   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -24,9 +32,11 @@ interface Daily {
   reward: number;
 }
 
-export default function MobileHome() {
+function MobileHomeContent() {
   const { data: session } = useSession();
   const [daily, setDaily] = useState<Daily | null>(null);
+  const searchParams = useSearchParams();
+  const halloweenActive = isHalloweenActive(searchParams);
 
   useEffect(() => {
     if (!session?.user) return;
@@ -40,6 +50,10 @@ export default function MobileHome() {
 
   return (
     <div className="relative">
+      {/* Halloween decorations */}
+      {halloweenActive && <HalloweenPumpkins />}
+      {halloweenActive && <HalloweenBats />}
+      
       {/* Floating pastel orbs — pure CSS, animated on mobile */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="orb-drift h-40 w-40 rounded-full bg-[#E9A8B8]/70 blur-2xl" style={{ top: "-2rem", right: "-3rem" }} />
@@ -87,6 +101,13 @@ export default function MobileHome() {
             </Link>
           </div>
         </div>
+        
+        {/* Halloween cauldron - 160px on mobile */}
+        {halloweenActive && (
+          <div className="mt-8 flex justify-center">
+            <HeroCauldron />
+          </div>
+        )}
       </section>
 
       {/* Daily challenge banner */}
@@ -218,5 +239,13 @@ export default function MobileHome() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function MobileHome() {
+  return (
+    <Suspense fallback={<div className="min-h-screen" />}>
+      <MobileHomeContent />
+    </Suspense>
   );
 }
