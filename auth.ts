@@ -40,6 +40,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   pages: {
     signIn: "/auth/login",
+    // Send OAuth/config failures back to the login page with a friendly
+    // message instead of Auth.js's bare "Server error" page.
+    error: "/auth/login",
   },
   callbacks: {
     async jwt({ token, account, user }) {

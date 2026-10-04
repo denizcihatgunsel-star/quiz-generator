@@ -10,6 +10,8 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/m/dashboard";
+  // Set by Auth.js (pages.error) when an OAuth sign-in fails.
+  const authError = searchParams.get("error");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,6 +53,12 @@ function LoginForm() {
       <h1 className="mt-1 text-3xl font-medium tracking-tight text-[#3B2027]">
         Sign in to <span className="font-serif italic text-[#B0607A]">Examina</span>
       </h1>
+
+      {authError && (
+        <p role="alert" className="mt-5 rounded-xl border border-[#F1C8C8] bg-[#FDF1F1] px-3.5 py-2.5 text-sm text-[#C25B5B]">
+          Sign-in didn&apos;t complete. Please try again.
+        </p>
+      )}
 
       <div className="mt-7 rounded-2xl border border-[#F3D5DC] bg-white/75 p-6 shadow-[0_20px_60px_-30px_rgba(176,96,122,0.5)] backdrop-blur-xl">
         <form onSubmit={handleSubmit} className="space-y-4">
