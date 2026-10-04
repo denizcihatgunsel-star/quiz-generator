@@ -125,7 +125,7 @@ export default function UnseenLanding() {
       <Marquee />
 
       {/* Selected — four ways to study */}
-      <Reveal id="features" className="py-24 sm:py-32">
+      <Reveal className="py-24 sm:py-32">
         <div className="mx-auto max-w-5xl px-6">
           <div className="flex items-baseline justify-between border-b border-[#F3D5DC] pb-8">
             <Kicker>Selected</Kicker>

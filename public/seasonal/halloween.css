@@ -40,11 +40,15 @@
 [data-season="halloween"] canvas,
 [data-season="halloween"] .pointer-events-none.absolute.inset-0 > canvas {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
-/* Hide grid/noise texture overlays (keep only 0.04 grain) */
-[data-season="halloween"] .pointer-events-none.absolute.inset-0.z-\[1\].overflow-hidden {
-  display: none !important;
+/* Hide ALL grid/noise texture overlays (keep only 0.04 grain from ::before) */
+[data-season="halloween"] .pointer-events-none.absolute.inset-0.z-\[1\].overflow-hidden,
+[data-season="halloween"] section > div.pointer-events-none.absolute.inset-0 {
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 /* Override page background color */
@@ -71,28 +75,35 @@
   opacity: 0.8;
 }
 
-/* Header - fully transparent, no backdrop, no cream */
-[data-season="halloween"] header,
-[data-season="halloween"] header > div {
+/* Header - fully transparent wrapper, higher z-index to stay above decorations */
+[data-season="halloween"] header {
   background: transparent !important;
   background-color: transparent !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+  z-index: 50 !important;
 }
 
-/* Nav pill - cream #FFF7EC with #E8C9A0 borders */
+[data-season="halloween"] header > div {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Nav pill - cream #FFF7EC with #E8C9A0 borders, opaque background */
 [data-season="halloween"] nav {
   background: #FFF7EC !important;
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid #E8C9A0 !important;
   box-shadow: 0 2px 8px rgba(42, 21, 32, 0.08);
 }
 
-/* Ensure no sticky header cream strip */
-[data-season="halloween"] .sticky,
-[data-season="halloween"] .fixed {
+/* Ensure sticky header stays above decorations with opaque cream pill */
+[data-season="halloween"] header.sticky,
+[data-season="halloween"] header.fixed {
   background: transparent !important;
   background-color: transparent !important;
+  z-index: 50 !important;
 }
 
 [data-season="halloween"] nav a,
@@ -217,13 +228,34 @@
   color: #FFF7EC !important;
 }
 
-/* Force Generate button background (catch all classes/states) */
+/* Force Generate button background (catch all classes/states) - NUCLEAR OVERRIDE */
 [data-season="halloween"] button#generate-btn,
 [data-season="halloween"] button[type="button"].px-5.py-2,
+[data-season="halloween"] button.btn-sheen,
+[data-season="halloween"] button.gradient-shift,
 [data-season="halloween"] motion.button {
   background: #3B2027 !important;
   background-image: none !important;
   background-color: #3B2027 !important;
+}
+
+/* Remove any ::before/::after overlays from Generate button */
+[data-season="halloween"] button#generate-btn::before,
+[data-season="halloween"] button#generate-btn::after,
+[data-season="halloween"] button.btn-sheen::before,
+[data-season="halloween"] button.btn-sheen::after {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+/* Start generating arrow - plum #3B2027 in white circle */
+[data-season="halloween"] a[href="#generate"] svg {
+  color: #3B2027 !important;
+  stroke: #3B2027 !important;
+}
+
+[data-season="halloween"] a[href="#generate"] .bg-\[\#F6E3E8\] {
+  background: #FFF7EC !important;
 }
 
 /* All nested elements in buttons get cream text/fill */
@@ -332,18 +364,21 @@
   fill: rgba(255, 247, 236, 0.75) !important;
 }
 
-/* Footer badges - visible with small cream rounded backing */
+/* Footer badges - FORCE VISIBLE with small cream rounded backing */
 [data-season="halloween"] footer img,
 [data-season="halloween"] footer a img,
+[data-season="halloween"] footer a[href*="huzzler"] img,
+[data-season="halloween"] footer a[href*="smolllaunch"] img,
 [data-season="halloween"] footer iframe {
   display: inline-block !important;
   visibility: visible !important;
   background: #FFF7EC !important;
   padding: 6px 10px !important;
   border-radius: 8px !important;
-  opacity: 0.95 !important;
+  opacity: 1 !important;
   height: auto !important;
   filter: none !important;
+  max-width: none !important;
 }
 
 [data-season="halloween"] footer img:hover,
@@ -351,13 +386,19 @@
   opacity: 1 !important;
 }
 
-/* Ensure badge wrapper links are visible */
+/* Ensure badge wrapper links and containers are visible */
 [data-season="halloween"] footer a[href*="huzzler"],
 [data-season="halloween"] footer a[href*="smolllaunch"],
 [data-season="halloween"] footer a[href*="launch"],
+[data-season="halloween"] footer div.flex.items-center.gap-4,
 [data-season="halloween"] footer .launch-badge {
   display: inline-block !important;
   opacity: 1 !important;
+  visibility: visible !important;
+}
+
+[data-season="halloween"] footer div.flex.items-center.gap-4 {
+  display: flex !important;
 }
 
 /* Gradient text */
@@ -456,16 +497,19 @@
   margin-right: auto !important;
 }
 
-/* Cauldron as decoration - ABOVE generator, right of headline/CTA */
+/* Cauldron as decoration - in right margin BESIDE generator box, vertically level with it */
+/* At 1280-1440px viewport, positioned around x 900-1000px (just outside generator's right edge) */
+/* Below 1180px (min-width 1180px), hide desktop cauldron and show mobile one under generator */
 [data-season="halloween"] .halloween-cauldron-container {
-  position: absolute !important;
-  right: 8% !important;
-  top: 15% !important;
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(420px, -50px) !important;
   z-index: 1 !important;
   pointer-events: none !important;
   opacity: 0.9;
-  width: 220px !important;
-  max-width: 220px !important;
+  width: 140px !important;
+  max-width: 140px !important;
   height: auto !important;
   aspect-ratio: 1161 / 1080 !important;
 }
@@ -476,6 +520,17 @@
   object-fit: contain !important;
 }
 
+/* Sample question cards - solid white, fully outside generator box in right margin */
+[data-season="halloween"] .halloween-cauldron-container > div:last-child > div {
+  background: #FFFFFF !important;
+  border-color: #E8C9A0 !important;
+}
+
+[data-season="halloween"] .halloween-cauldron-container > div:last-child > div p,
+[data-season="halloween"] .halloween-cauldron-container > div:last-child > div span {
+  color: #2A1520 !important;
+}
+
 /* Question cards rise and fade before reaching generator */
 [data-season="halloween"] .halloween-cauldron-container > div:last-child {
   max-height: 300px;
@@ -484,12 +539,20 @@
   mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
 }
 
+/* Hide desktop cauldron below 1180px viewport width */
+@media (max-width: 1179px) {
+  [data-season="halloween"] .halloween-cauldron-container.hidden {
+    display: none !important;
+  }
+}
+
 @media (max-width: 768px) {
   /* Mobile: small cauldron BELOW generator (140px), with bottom padding for nav */
   [data-season="halloween"] .halloween-cauldron-container.md\:hidden {
     position: relative !important;
-    right: auto !important;
+    left: auto !important;
     top: auto !important;
+    transform: none !important;
     margin: 2rem auto 0 !important;
     width: 140px !important;
     max-width: 140px !important;
@@ -517,29 +580,31 @@
   z-index: 1 !important;
 }
 
-/* Pale moon - top-left behind headline */
+/* Crisp moon - #FFE9C2 disc with soft halo */
 [data-season="halloween"] .halloween-moon {
   position: absolute;
   top: 10%;
   left: 8%;
-  width: 120px;
-  height: 120px;
-  background: radial-gradient(circle, #FFF1D6 0%, rgba(255, 241, 214, 0.4) 40%, transparent 70%);
+  width: 90px;
+  height: 90px;
+  background: #FFE9C2;
   border-radius: 50%;
   pointer-events: none;
   z-index: 1;
+  box-shadow: 0 0 60px rgba(255, 233, 194, 0.5);
+  filter: none;
 }
 
-/* Fog band - visible cream band along bottom of hero */
+/* Fog band - clearly visible cream band (120px tall, opacity 0.4) along bottom of hero */
 [data-season="halloween"] .halloween-fog {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 150px;
-  background: linear-gradient(to top, rgba(255, 247, 236, 0.5) 0%, rgba(255, 247, 236, 0.35) 50%, transparent 100%);
+  height: 120px;
+  background: linear-gradient(to top, rgba(255, 247, 236, 0.4) 0%, rgba(255, 247, 236, 0.25) 60%, transparent 100%);
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
 }
 
 @media (prefers-reduced-motion: no-preference) {
