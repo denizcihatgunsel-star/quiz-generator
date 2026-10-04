@@ -901,7 +901,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                           disabled={!isReady || status === "loading" || atLimit}
                           whileHover={!isReady || status === "loading" || atLimit ? undefined : { scale: 1.02 }}
                           whileTap={!isReady || status === "loading" || atLimit ? undefined : { scale: 0.98 }}
-                          className={`btn-sheen px-5 py-2 bg-[linear-gradient(120deg,#3B2027,#6A3A4C,#3B2027)] gradient-shift text-[#F6E3E8] text-sm font-medium disabled:opacity-60 transition-opacity duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready-rose" : ""}`}
+                          className={`btn-sheen px-5 py-2 ${halloweenActive ? "bg-[#3B2027]" : "bg-[linear-gradient(120deg,#3B2027,#6A3A4C,#3B2027)] gradient-shift"} text-[#F6E3E8] text-sm font-medium disabled:opacity-60 transition-opacity duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready-rose" : ""}`}
                           aria-busy={status === "loading"}
                         >
                           {status === "loading" ? t("input.generating") : t("input.generate")}
