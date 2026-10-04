@@ -30,6 +30,9 @@ import MagneticText from "./MagneticText";
 import QuizStory from "./QuizStory";
 import { useTranslation } from "@/lib/i18n";
 
+// Halloween seasonal components
+const HalloweenHeroOverlay = dynamic(() => import("./seasonal/halloween/HalloweenLayer").then(m => ({ default: m.HalloweenHeroOverlay })), { ssr: false });
+const HalloweenButtonGlow = dynamic(() => import("./seasonal/halloween/HalloweenButtonGlow"), { ssr: false });
 
 // Below-fold marketing: client-only to keep homepage HTML lean for crawlers/CDN
 const UnseenLanding = dynamic(() => import("./UnseenLanding"), { ssr: false });
@@ -465,6 +468,15 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
 
   const [heroHover, setHeroHover] = useState(false);
   const [storyOpen, setStoryOpen] = useState(false);
+  const [halloweenActive, setHalloweenActive] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const { isHalloweenActive } = require("@/lib/seasonal");
+      const params = new URLSearchParams(window.location.search);
+      setHalloweenActive(isHalloweenActive(params));
+    }
+  }, []);
 
   const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
   const heroContainer: Variants = {
@@ -589,6 +601,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                   <WaterCanvas className="pointer-events-none absolute inset-0 h-full w-full opacity-100" />
                 </div>
               )}
+              {!isLoggedIn && !hideChrome && <HalloweenHeroOverlay />}
               <motion.div
                 style={isLoggedIn ? undefined : { scale: diveScale, opacity: diveOpacity, y: diveY }}
                 className="relative z-10 max-w-5xl mx-auto px-6"
@@ -708,9 +721,17 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     <Link href="/auth/register" className="px-6 py-3 bg-[#3B2027] text-[#F6E3E8] text-sm font-medium hover:bg-[#52303B] transition-colors duration-200">
                       {t("hero.createAccount")}
                     </Link>
-                    <Link href="/auth/login" className="text-sm text-[#9A7280] hover:text-[#3B2027] transition-colors duration-200">
-                      {t("hero.signIn")}
-                    </Link>
+                    {halloweenActive ? (
+                      <HalloweenButtonGlow>
+                        <Link href="/auth/login" className="text-sm text-[#9A7280] hover:text-[#3B2027] transition-colors duration-200">
+                          {t("hero.signIn")}
+                        </Link>
+                      </HalloweenButtonGlow>
+                    ) : (
+                      <Link href="/auth/login" className="text-sm text-[#9A7280] hover:text-[#3B2027] transition-colors duration-200">
+                        {t("hero.signIn")}
+                      </Link>
+                    )}
                   </motion.div>
                 )}
 
@@ -866,16 +887,33 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                           </select>
                         </div>
 
-                        <motion.button
-                          onClick={() => handleGenerate()}
-                          disabled={!isReady || status === "loading" || atLimit}
-                          whileHover={!isReady || status === "loading" || atLimit ? undefined : { scale: 1.02 }}
-                          whileTap={!isReady || status === "loading" || atLimit ? undefined : { scale: 0.98 }}
-                          className={`btn-sheen px-5 py-2 bg-[linear-gradient(120deg,#3B2027,#6A3A4C,#3B2027)] gradient-shift text-[#F6E3E8] text-sm font-medium disabled:opacity-60 transition-opacity duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready-rose" : ""}`}
-                          aria-busy={status === "loading"}
-                        >
-                          {status === "loading" ? t("input.generating") : t("input.generate")}
-                        </motion.button>
+                        {halloweenActive ? (
+                          <HalloweenButtonGlow>
+                            <motion.button
+                              id="generate-btn"
+                              onClick={() => handleGenerate()}
+                              disabled={!isReady || status === "loading" || atLimit}
+                              whileHover={!isReady || status === "loading" || atLimit ? undefined : { scale: 1.02 }}
+                              whileTap={!isReady || status === "loading" || atLimit ? undefined : { scale: 0.98 }}
+                              className={`btn-sheen px-5 py-2 bg-[linear-gradient(120deg,#3B2027,#6A3A4C,#3B2027)] gradient-shift text-[#F6E3E8] text-sm font-medium disabled:opacity-60 transition-opacity duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready-rose" : ""}`}
+                              aria-busy={status === "loading"}
+                            >
+                              {status === "loading" ? t("input.generating") : t("input.generate")}
+                            </motion.button>
+                          </HalloweenButtonGlow>
+                        ) : (
+                          <motion.button
+                            id="generate-btn"
+                            onClick={() => handleGenerate()}
+                            disabled={!isReady || status === "loading" || atLimit}
+                            whileHover={!isReady || status === "loading" || atLimit ? undefined : { scale: 1.02 }}
+                            whileTap={!isReady || status === "loading" || atLimit ? undefined : { scale: 0.98 }}
+                            className={`btn-sheen px-5 py-2 bg-[linear-gradient(120deg,#3B2027,#6A3A4C,#3B2027)] gradient-shift text-[#F6E3E8] text-sm font-medium disabled:opacity-60 transition-opacity duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready-rose" : ""}`}
+                            aria-busy={status === "loading"}
+                          >
+                            {status === "loading" ? t("input.generating") : t("input.generate")}
+                          </motion.button>
+                        )}
                       </div>
                     </div>
                     </div>
