@@ -108,10 +108,12 @@ function MobileHomeContent() {
           </div>
         </div>
         
-        {/* Halloween cauldron - 160px on mobile */}
+        {/* Halloween cauldron - 100px on mobile with bottom padding for nav */}
         {halloweenActive && (
-          <div className="mt-8 flex justify-center">
-            <HeroCauldron />
+          <div className="mt-8 flex justify-center pb-[120px]" style={{ paddingBottom: 'calc(120px + env(safe-area-inset-bottom))' }}>
+            <div className="w-[100px]">
+              <HeroCauldron variant="mobile" />
+            </div>
           </div>
         )}
       </section>

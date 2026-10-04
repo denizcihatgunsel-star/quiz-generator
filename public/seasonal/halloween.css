@@ -85,18 +85,23 @@ body[data-season="halloween"]::before {
   opacity: 0.8;
 }
 
-/* Header - fully transparent wrapper, higher z-index to stay above decorations */
+/* Header - transparent on desktop, solid cream on scroll/mobile to prevent content show-through */
 [data-season="halloween"] header {
   background: transparent !important;
-  background-color: transparent !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   z-index: 50 !important;
 }
 
+[data-season="halloween"] header.sticky,
+[data-season="halloween"] header.fixed {
+  background: #FFF7EC !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
 [data-season="halloween"] header > div {
   background: transparent !important;
-  background-color: transparent !important;
 }
 
 /* Nav pill - cream #FFF7EC with #E8C9A0 borders, opaque background */
@@ -238,12 +243,21 @@ body[data-season="halloween"]::before {
   color: #FFF7EC !important;
 }
 
-/* Force Generate button background (catch all classes/states) - NUCLEAR OVERRIDE */
+/* Force Generate button background - SOLID plum, no gradient */
 [data-season="halloween"] button#generate-btn,
 [data-season="halloween"] button[type="button"].px-5.py-2,
 [data-season="halloween"] button.btn-sheen,
 [data-season="halloween"] button.gradient-shift,
+[data-season="halloween"] button[class*="gradient"],
 [data-season="halloween"] motion.button {
+  background: #3B2027 !important;
+  background-image: none !important;
+  background-color: #3B2027 !important;
+}
+
+/* Also override enabled state specifically */
+[data-season="halloween"] button#generate-btn:not(:disabled),
+[data-season="halloween"] button.gradient-shift:not(:disabled) {
   background: #3B2027 !important;
   background-image: none !important;
   background-color: #3B2027 !important;
@@ -258,14 +272,17 @@ body[data-season="halloween"]::before {
   opacity: 0 !important;
 }
 
-/* Start generating arrow - plum #3B2027 in white circle */
-[data-season="halloween"] a[href="#generate"] svg {
+/* Start generating arrow - plum #3B2027 in cream circle */
+[data-season="halloween"] a[href="#generate"] svg,
+[data-season="halloween"] a[href="/m/create"] svg {
   color: #3B2027 !important;
   stroke: #3B2027 !important;
 }
 
-[data-season="halloween"] a[href="#generate"] .bg-\[\#F6E3E8\] {
+[data-season="halloween"] a[href="#generate"] .bg-\[\#F6E3E8\],
+[data-season="halloween"] a[href="/m/create"] .bg-\[\#F6E3E8\] {
   background: #FFF7EC !important;
+  color: #3B2027 !important;
 }
 
 /* All nested elements in buttons get cream text/fill */
