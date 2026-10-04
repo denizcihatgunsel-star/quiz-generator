@@ -52,16 +52,16 @@ export default function ForTeachersPage() {
                 desc: "Check understanding mid-lesson or at the end of class. Paste the key points from today's lesson and generate a quick quiz.",
               },
               {
+                title: "Live classroom quizzes",
+                desc: "Host any quiz live in class. Students join with a code and answer in real time. See responses as they come in.",
+              },
+              {
                 title: "Homework & reading checks",
                 desc: "Assign a chapter, then generate a quiz to verify students engaged with the material. Share via link for online submission.",
               },
               {
                 title: "Review sessions",
                 desc: "Before a unit test, generate practice quizzes from your lesson notes. Share the link and let students practice on their own time.",
-              },
-              {
-                title: "Full practice exams",
-                desc: "Combine quizzes from multiple lessons to build comprehensive review materials for midterms and finals.",
               },
             ].map((item, i) => (
               <div key={i} className="p-8 border border-black/5">

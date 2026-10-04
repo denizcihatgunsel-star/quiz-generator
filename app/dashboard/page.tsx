@@ -264,13 +264,18 @@ export default function DashboardPage() {
 
         <div className="mb-10 flex flex-wrap gap-3">
           {userRole === "student" && (
-            <Link href="/study" className={primaryBtn}>
-              {BOOK} Study Mode
-            </Link>
+            <>
+              <Link href="/study" className={primaryBtn}>
+                {BOOK} Study Mode
+              </Link>
+              <Link href="/classroom/join" className={ghostBtn}>
+                {USERS} Join a Class
+              </Link>
+            </>
           )}
           {userRole === "teacher" && (
             <Link href="/classroom/join" className={primaryBtn}>
-              {USERS} Classroom
+              {USERS} Join a Class
             </Link>
           )}
           <Link href="/analytics" className={ghostBtn}>

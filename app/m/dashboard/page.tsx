@@ -120,7 +120,7 @@ export default function MobileDashboard() {
           href={userRole === "teacher" ? "/m/classroom/join" : "/m/study"}
           className="flex-1 rounded-full bg-[#3B2027] py-3 text-center text-sm font-medium text-[#F6E3E8] shadow-[0_12px_28px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98]"
         >
-          {userRole === "teacher" ? "Classroom" : "Study mode"}
+          {userRole === "teacher" ? "Join a Class" : "Study mode"}
         </Link>
         <Link
           href="/m/analytics"

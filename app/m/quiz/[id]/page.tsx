@@ -32,13 +32,15 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
   const { id } = use(params);
   const { data: session } = useSession();
   const [quiz, setQuiz] = useState<QuizData | null>(null);
-  const [quizMeta, setQuizMeta] = useState<{ id: string; shareId: string | null; topic: string } | null>(null);
+  const [quizMeta, setQuizMeta] = useState<{ id: string; shareId: string | null; topic: string; isOwner?: boolean } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabId>("mcq");
   const [taking, setTaking] = useState(false);
   const [notebookOpen, setNotebookOpen] = useState(false);
   const [attempts, setAttempts] = useState<Attempt[] | null>(null);
+  const [userRole, setUserRole] = useState<"student" | "teacher">("student");
+  const [startingLive, setStartingLive] = useState(false);
   const submittingRef = useRef(false);
 
   const theme = getQuizTheme(quiz?.theme);
@@ -64,7 +66,7 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
           setError(d.error);
         } else {
           setQuiz(d.data);
-          setQuizMeta({ id: d.id, shareId: d.shareId ?? null, topic: d.topic ?? "" });
+          setQuizMeta({ id: d.id, shareId: d.shareId ?? null, topic: d.topic ?? "", isOwner: d.isOwner });
         }
       })
       .catch(() => setError("Failed to load quiz."))
@@ -74,6 +76,15 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
   useEffect(() => {
     if (!loading && !error) loadAttempts();
   }, [loading, error, session, id]);
+
+  useEffect(() => {
+    if (session) {
+      fetch("/api/user")
+        .then((r) => r.json())
+        .then((d) => { if (d.role) setUserRole(d.role); })
+        .catch(() => {});
+    }
+  }, [session]);
 
   const handleTakeComplete = async (correct: number, total: number) => {
     if (submittingRef.current) return;
@@ -159,13 +170,36 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
                 </button>
               </div>
             ) : (
-              <button
-                onClick={() => setTaking(true)}
-                className="w-full rounded-full bg-[#3B2027] py-3.5 text-sm font-medium text-[#F6E3E8] shadow-[0_12px_30px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98]"
-              >
-                {attempts && attempts.length > 0 ? "Retake quiz" : "Take quiz"}
-                {bestAttempt !== null && ` · best ${bestAttempt}%`}
-              </button>
+              <div className="space-y-2">
+                <button
+                  onClick={() => setTaking(true)}
+                  className="w-full rounded-full bg-[#3B2027] py-3.5 text-sm font-medium text-[#F6E3E8] shadow-[0_12px_30px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98]"
+                >
+                  {attempts && attempts.length > 0 ? "Retake quiz" : "Take quiz"}
+                  {bestAttempt !== null && ` · best ${bestAttempt}%`}
+                </button>
+                {quizMeta?.isOwner && userRole === "teacher" && (
+                  <button
+                    onClick={async () => {
+                      setStartingLive(true);
+                      try {
+                        const res = await fetch("/api/classroom", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ quizId: quizMeta.id }),
+                        });
+                        const data = await res.json();
+                        if (res.ok) window.location.href = `/classroom/host/${data.code}`;
+                      } catch { /* ignore */ }
+                      setStartingLive(false);
+                    }}
+                    disabled={startingLive}
+                    className="w-full rounded-full border border-[color:var(--success)]/20 bg-[color:var(--success)]/10 py-3.5 text-sm font-medium text-[color:var(--success)] transition-colors hover:opacity-80 disabled:opacity-60"
+                  >
+                    {startingLive ? "Starting..." : "Host Live in Class"}
+                  </button>
+                )}
+              </div>
             )}
           </div>
         )}
