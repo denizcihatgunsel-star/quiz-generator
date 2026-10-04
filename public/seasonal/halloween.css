@@ -34,16 +34,17 @@
   opacity: 0.5;
 }
 
-/* Override body::before in Halloween mode - remove ALL background patterns */
-/* The grain is already provided by [data-season="halloween"]::before */
-body[data-season="halloween"]::before,
-[data-season="halloween"]::before + body::before,
-html body[data-season="halloween"]::before {
-  background: none !important;
+/* Override body::before in Halloween mode - hide ALL patterns from base CSS */
+/* The grain is provided by [data-season="halloween"]::before which has higher z-index */
+body[data-season="halloween"]::before {
+  content: none !important;
+  background: transparent !important;
   background-image: none !important;
   opacity: 0 !important;
   visibility: hidden !important;
   display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 /* Hide ALL wave canvases and grid/noise overlay */
