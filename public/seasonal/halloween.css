@@ -303,8 +303,7 @@ body[data-season="halloween"]::before {
 
 /* Disabled Generate button - plum at 0.7 opacity with cream text */
 [data-season="halloween"] button#generate-btn:disabled,
-[data-season="halloween"] button.gradient-shift:disabled,
-[data-season="halloween"] button:disabled {
+[data-season="halloween"] button.gradient-shift:disabled {
   background: #3B2027 !important;
   background-image: none !important;
   color: #FFF7EC !important;
