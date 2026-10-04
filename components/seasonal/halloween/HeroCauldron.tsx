@@ -8,7 +8,7 @@ import Image from "next/image";
  * HeroCauldron: Licensed cauldron with rising question cards
  * 
  * - desktop variant: 140x140 cauldron + sample cards column (w-full = 200px, max 2 cards)
- * - mobile variant: 120x120 cauldron only, no cards
+ * - mobile variant: 100x100 cauldron only, no cards
  * - Loaded from /seasonal/cauldron.svg (public domain, freesvg.org)
  * - Has built-in green bubbles, add few CSS bubbles only
  * - Question cards float up, one every 2.5s, max 2 visible for desktop
@@ -105,7 +105,7 @@ export default function HeroCauldron({ variant = "desktop" }: HeroCauldronProps)
     return () => clearTimeout(timeout);
   }, [visibleQuestions]);
 
-  const cauldronSize = variant === "desktop" ? 140 : 120;
+  const cauldronSize = variant === "desktop" ? 140 : 100;
 
   return (
     <div className="flex flex-col items-center gap-4 w-full">
