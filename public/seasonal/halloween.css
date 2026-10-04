@@ -153,13 +153,6 @@ body[data-season="halloween"]::before {
   color: #3B2027 !important;
   backdrop-filter: blur(8px);
   box-shadow: 0 2px 8px rgba(42, 21, 32, 0.08);
-  bottom: 2rem !important;
-}
-
-@media (min-width: 640px) {
-  [data-season="halloween"] button[aria-pressed] {
-    bottom: 1.25rem !important;
-  }
 }
 
 /* Hero section - remove blush gradient */
@@ -303,7 +296,8 @@ body[data-season="halloween"]::before {
 
 /* Disabled Generate button - plum at 0.7 opacity with cream text */
 [data-season="halloween"] button#generate-btn:disabled,
-[data-season="halloween"] button.gradient-shift:disabled {
+[data-season="halloween"] button.gradient-shift:disabled,
+[data-season="halloween"] button:disabled {
   background: #3B2027 !important;
   background-image: none !important;
   color: #FFF7EC !important;
