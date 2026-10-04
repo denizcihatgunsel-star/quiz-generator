@@ -49,10 +49,26 @@ export const metadata: Metadata = {
   },
 };
 
+// Check if Halloween theme should be active server-side (by date, not query param)
+function getThemeColor(): string {
+  if (process.env.NEXT_PUBLIC_SEASONAL_THEME === 'halloween') {
+    try {
+      const now = new Date();
+      const cutoff = new Date('2026-11-01T00:00:00+03:00');
+      if (now < cutoff) {
+        return '#C2410C'; // Halloween orange
+      }
+    } catch {
+      // Fall through to default
+    }
+  }
+  return '#FDE8EC'; // Normal blush
+}
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#FDE8EC",
+  themeColor: getThemeColor(),
 };
 
 export const revalidate = 60;

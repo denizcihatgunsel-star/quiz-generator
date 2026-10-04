@@ -55,6 +55,7 @@ export default function HomeSections() {
     <div className="border-t border-[#F3D5DC]">
       {/* What you get */}
       <motion.section
+        id="features"
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}

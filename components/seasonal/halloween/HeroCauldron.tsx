@@ -2,15 +2,17 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 /**
- * HeroCauldron: Flat cauldron in hero right column
+ * HeroCauldron: Licensed cauldron with rising question cards
  * 
- * - 220px desktop / 160px mobile
- * - Color: #2A1520, no face
- * - Lime #B8E07A bubbles only, 6-10 bubbles, ~2s rise
+ * - 220px desktop / 140px mobile
+ * - Loaded from /seasonal/cauldron.svg (public domain, freesvg.org)
+ * - Has built-in green bubbles, add few CSS bubbles only
  * - Question cards float up, one every 2.5s, max 3 visible
  * - White cards with 'Sample' tag + Bloom chip
+ * - Cards rise and fade before reaching generator (mask in CSS)
  */
 
 interface SampleQuestion {
@@ -48,15 +50,15 @@ export default function HeroCauldron() {
     return () => mediaQuery.removeEventListener("change", handler);
   }, []);
 
-  // Generate bubbles continuously
+  // Generate few CSS bubbles (cauldron has built-in bubbles)
   useEffect(() => {
     if (reducedMotion) return;
 
-    const bubbleCount = 6 + Math.floor(Math.random() * 5); // 6-10 bubbles
+    const bubbleCount = 3; // Just 3 CSS bubbles since SVG has animated ones
     const initialBubbles: Bubble[] = Array.from({ length: bubbleCount }, (_, i) => ({
       id: `bubble-${Date.now()}-${i}`,
-      x: 35 + Math.random() * 30, // SVG coordinates
-      delay: i * 0.3,
+      x: 40 + Math.random() * 20, // SVG coordinates
+      delay: i * 0.4,
     }));
     
     setBubbles(initialBubbles);
@@ -64,11 +66,11 @@ export default function HeroCauldron() {
     const interval = setInterval(() => {
       const newBubbles: Bubble[] = Array.from({ length: bubbleCount }, (_, i) => ({
         id: `bubble-${Date.now()}-${i}`,
-        x: 35 + Math.random() * 30,
-        delay: i * 0.3,
+        x: 40 + Math.random() * 20,
+        delay: i * 0.4,
       }));
       setBubbles(newBubbles);
-    }, 2500);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [reducedMotion]);
@@ -101,35 +103,43 @@ export default function HeroCauldron() {
 
   return (
     <div className="flex flex-col items-center gap-6 w-full md:w-auto">
-      {/* Cauldron SVG - loaded from file */}
+      {/* Cauldron - loaded from licensed SVG file */}
       <div className="w-[140px] h-[140px] md:w-[220px] md:h-[220px] relative">
-        <svg
-          viewBox="0 0 100 100"
+        <Image 
+          src="/seasonal/cauldron.svg" 
+          alt="" 
+          width={220} 
+          height={220}
           className="w-full h-full"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {/* Bubbles - lime #B8E07A */}
-          {!reducedMotion && bubbles.map((bubble) => (
-            <motion.circle
-              key={bubble.id}
-              cx={bubble.x}
-              cy={60}
-              r={1.5 + Math.random() * 2}
-              fill="#B8E07A"
-              opacity={0.8}
-              initial={{ cy: 60, opacity: 0.8, scale: 1 }}
-              animate={{ cy: 20, opacity: 0, scale: 1.5 }}
-              transition={{
-                duration: 2 + Math.random() * 0.5,
-                delay: bubble.delay,
-                ease: "easeOut",
-              }}
-            />
-          ))}
-
-          {/* Cauldron from SVG file */}
-          <image href="/seasonal/cauldron.svg" width="100" height="100" />
-        </svg>
+          aria-hidden="true"
+          priority
+        />
+        {/* Few CSS bubbles (cauldron SVG has animated bubbles) */}
+        {!reducedMotion && (
+          <svg
+            viewBox="0 0 100 100"
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {bubbles.map((bubble) => (
+              <motion.circle
+                key={bubble.id}
+                cx={bubble.x}
+                cy={70}
+                r={2 + Math.random() * 1.5}
+                fill="#B8E07A"
+                opacity={0.7}
+                initial={{ cy: 70, opacity: 0.7, scale: 1 }}
+                animate={{ cy: 30, opacity: 0, scale: 1.3 }}
+                transition={{
+                  duration: 2.5 + Math.random() * 0.5,
+                  delay: bubble.delay,
+                  ease: "easeOut",
+                }}
+              />
+            ))}
+          </svg>
+        )}
       </div>
 
       {/* Question cards */}

@@ -71,7 +71,12 @@
   opacity: 0.8;
 }
 
-/* Header/Nav pill - cream #FFF7EC with #E8C9A0 borders */
+/* Header - transparent, only nav pill has cream */
+[data-season="halloween"] header {
+  background: transparent !important;
+}
+
+/* Nav pill - cream #FFF7EC with #E8C9A0 borders */
 [data-season="halloween"] nav {
   background: #FFF7EC !important;
   backdrop-filter: blur(12px);
@@ -96,6 +101,12 @@
   background: #3B2027 !important;
   color: #FFF7EC !important;
   border-color: #3B2027 !important;
+}
+
+[data-season="halloween"] nav a[href="/auth/register"] *,
+[data-season="halloween"] nav a[href*="create"] * {
+  color: #FFF7EC !important;
+  fill: #FFF7EC !important;
 }
 
 /* Fixed Sound off button - cream with plum text, never overlap generator */
@@ -152,14 +163,26 @@
   opacity: 0.8;
 }
 
-/* Bloom chips - cream #FFF7EC with plum #2A1520 text */
+/* ALL chips - cream #FFF7EC with plum #2A1520 text and #E8C9A0 border */
 [data-season="halloween"] [class*="bloom-"],
 [data-season="halloween"] .bg-violet-50,
 [data-season="halloween"] .bg-violet-100,
-[data-season="halloween"] .bg-purple-50 {
+[data-season="halloween"] .bg-purple-50,
+[data-season="halloween"] .bg-\[\#F6DCE5\],
+[data-season="halloween"] .bg-\[\#FDE8EC\],
+[data-season="halloween"] span[style*="background"],
+[data-season="halloween"] .rounded {
   background: #FFF7EC !important;
   color: #2A1520 !important;
-  border-color: #E8C9A0 !important;
+  border: 1px solid #E8C9A0 !important;
+}
+
+/* Specifically target chips in quiz/generator */
+[data-season="halloween"] [class*="px-"][class*="py-"][class*="rounded"],
+[data-season="halloween"] [class*="chip"] {
+  background: #FFF7EC !important;
+  color: #2A1520 !important;
+  border: 1px solid #E8C9A0 !important;
 }
 
 /* Progress bars */
@@ -172,13 +195,23 @@
   background: linear-gradient(to right, #E8833A, #C2410C) !important;
 }
 
-/* Primary buttons - plum #3B2027 with cream text */
+/* Primary buttons - plum #3B2027 with cream text and icons */
 [data-season="halloween"] .bg-\[\#3B2027\],
 [data-season="halloween"] .bg-\[linear-gradient\(120deg\,\#3B2027\,\#6A3A4C\,\#3B2027\)\],
 [data-season="halloween"] button.gradient-shift,
-[data-season="halloween"] button#generate-btn {
+[data-season="halloween"] button#generate-btn,
+[data-season="halloween"] a[href="#generate"] {
   background: #3B2027 !important;
   color: #FFF7EC !important;
+}
+
+/* All nested elements in buttons get cream text/fill */
+[data-season="halloween"] button#generate-btn *,
+[data-season="halloween"] button.gradient-shift *,
+[data-season="halloween"] a[href="#generate"] *,
+[data-season="halloween"] .bg-\[\#3B2027\] * {
+  color: #FFF7EC !important;
+  fill: currentColor !important;
 }
 
 [data-season="halloween"] .hover\:bg-\[\#52303B\]:hover,
@@ -193,6 +226,11 @@
   background: #3B2027 !important;
   color: #FFF7EC !important;
   opacity: 0.7 !important;
+}
+
+[data-season="halloween"] button#generate-btn:disabled *,
+[data-season="halloween"] button.gradient-shift:disabled * {
+  color: #FFF7EC !important;
 }
 
 [data-season="halloween"] .text-\[\#F6E3E8\],
@@ -270,16 +308,21 @@
   fill: rgba(255, 247, 236, 0.75) !important;
 }
 
-/* Footer badges - small cream rounded backing */
-[data-season="halloween"] footer img {
-  background: #FFF7EC;
-  padding: 4px 8px;
-  border-radius: 6px;
-  opacity: 0.9;
+/* Footer badges - visible with small cream rounded backing */
+[data-season="halloween"] footer img,
+[data-season="halloween"] footer a img {
+  display: inline-block !important;
+  visibility: visible !important;
+  background: #FFF7EC !important;
+  padding: 6px 10px !important;
+  border-radius: 8px !important;
+  opacity: 0.95 !important;
+  height: auto !important;
 }
 
-[data-season="halloween"] footer img:hover {
-  opacity: 1;
+[data-season="halloween"] footer img:hover,
+[data-season="halloween"] footer a img:hover {
+  opacity: 1 !important;
 }
 
 /* Gradient text */
@@ -378,14 +421,22 @@
   margin-right: auto !important;
 }
 
-/* Cauldron as decoration - absolute positioned, pointer-events none */
+/* Cauldron as decoration - ABOVE generator, right of headline/CTA */
 [data-season="halloween"] .halloween-cauldron-container {
   position: absolute !important;
-  right: 5% !important;
-  top: 20% !important;
+  right: 8% !important;
+  top: 15% !important;
   z-index: 1 !important;
   pointer-events: none !important;
-  opacity: 0.85;
+  opacity: 0.9;
+}
+
+/* Question cards rise and fade before reaching generator */
+[data-season="halloween"] .halloween-cauldron-container > div:last-child {
+  max-height: 300px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
 }
 
 @media (max-width: 768px) {
@@ -399,6 +450,7 @@
     opacity: 1;
   }
   
+  [data-season="halloween"] .halloween-cauldron-container img,
   [data-season="halloween"] .halloween-cauldron-container svg {
     width: 140px !important;
     height: 140px !important;
@@ -424,14 +476,14 @@
   z-index: 1;
 }
 
-/* Fog band - drifting along bottom of hero */
+/* Fog band - visible cream band along bottom of hero */
 [data-season="halloween"] .halloween-fog {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 120px;
-  background: linear-gradient(to top, rgba(255, 247, 236, 0.3) 0%, transparent 100%);
+  height: 150px;
+  background: linear-gradient(to top, rgba(255, 247, 236, 0.5) 0%, rgba(255, 247, 236, 0.35) 50%, transparent 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -443,30 +495,28 @@
 }
 
 @keyframes fog-drift {
-  0%, 100% { opacity: 0.3; transform: translateX(0); }
-  50% { opacity: 0.5; transform: translateX(-20px); }
+  0%, 100% { opacity: 1; transform: translateX(0); }
+  50% { opacity: 0.8; transform: translateX(-30px); }
 }
 
-/* Cobwebs - thin, low opacity, top corners */
+/* Cobwebs - visible, top corners below nav */
 [data-season="halloween"] .halloween-cobweb {
-  position: absolute;
+  position: fixed;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.15;
+  opacity: 0.35;
+  width: 140px;
+  height: 140px;
 }
 
 [data-season="halloween"] .halloween-cobweb-tl {
-  top: 0;
+  top: 80px;
   left: 0;
-  width: 100px;
-  height: 100px;
 }
 
 [data-season="halloween"] .halloween-cobweb-tr {
-  top: 0;
+  top: 80px;
   right: 0;
-  width: 100px;
-  height: 100px;
 }
 
 /* Candle glow - warm amber near cauldron */
