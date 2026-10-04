@@ -690,33 +690,17 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     transition={{ duration: 0.7, delay: 0.75 }}
                     className="mt-12 flex flex-col items-center justify-center gap-5 sm:flex-row"
                   >
-                    {halloweenActive ? (
-                      <HalloweenButtonGlow>
-                        <a
-                          href="#generate"
-                          className="group flex items-center gap-3 rounded-full bg-[#3B2027] py-3 pl-6 pr-2 text-sm font-medium text-[#F6E3E8] transition-colors duration-200 hover:bg-[#52303B]"
-                        >
-                          <span>Start generating</span>
-                          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027] transition-transform duration-200 group-hover:translate-x-0.5">
-                            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
-                            </svg>
-                          </span>
-                        </a>
-                      </HalloweenButtonGlow>
-                    ) : (
-                      <a
-                        href="#generate"
-                        className="group flex items-center gap-3 rounded-full bg-[#3B2027] py-3 pl-6 pr-2 text-sm font-medium text-[#F6E3E8] transition-colors duration-200 hover:bg-[#52303B]"
-                      >
-                          <span>Start generating</span>
-                          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027] transition-transform duration-200 group-hover:translate-x-0.5">
-                            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
-                            </svg>
-                          </span>
-                        </a>
-                      )}
+                    <a
+                      href="#generate"
+                      className="group flex items-center gap-3 rounded-full bg-[#3B2027] py-3 pl-6 pr-2 text-sm font-medium text-[#F6E3E8] transition-colors duration-200 hover:bg-[#52303B]"
+                    >
+                      <span>Start generating</span>
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F6E3E8] text-[#3B2027] transition-transform duration-200 group-hover:translate-x-0.5">
+                        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m0 0l-6-6m6 6l-6 6" />
+                        </svg>
+                      </span>
+                    </a>
                     <a
                       href="#features"
                       className="text-sm text-[#9A7280] underline underline-offset-4 transition-colors duration-200 hover:text-[#3B2027]"
@@ -739,17 +723,9 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     <Link href="/auth/register" className="px-6 py-3 bg-[#3B2027] text-[#F6E3E8] text-sm font-medium hover:bg-[#52303B] transition-colors duration-200">
                       {t("hero.createAccount")}
                     </Link>
-                    {halloweenActive ? (
-                      <HalloweenButtonGlow>
-                        <Link href="/auth/login" className="text-sm text-[#9A7280] hover:text-[#3B2027] transition-colors duration-200">
-                          {t("hero.signIn")}
-                        </Link>
-                      </HalloweenButtonGlow>
-                    ) : (
-                      <Link href="/auth/login" className="text-sm text-[#9A7280] hover:text-[#3B2027] transition-colors duration-200">
-                        {t("hero.signIn")}
-                      </Link>
-                    )}
+                    <Link href="/auth/login" className="text-sm text-[#9A7280] hover:text-[#3B2027] transition-colors duration-200">
+                      {t("hero.signIn")}
+                    </Link>
                   </motion.div>
                 )}
 
@@ -788,15 +764,16 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                   </motion.div>
                 )}
 
-                {/* Halloween: Two-column layout (generator + cauldron) */}
-                {(isLoggedIn || canGenerateDemo) && halloweenActive && !isLoggedIn && (
-                  <div className="flex flex-col md:flex-row gap-8 items-start max-w-6xl mx-auto">
-                    <motion.div variants={heroItem} className="flex-1">
-                      {/* Generator on left */}
+                {/* Hero Cauldron for Halloween (shown alongside on desktop via CSS) */}
+                {!isLoggedIn && halloweenActive && canGenerateDemo && (
+                  <motion.div variants={heroItem} className="halloween-cauldron-container hidden md:block">
+                    <HeroCauldron />
+                  </motion.div>
+                )}
                 
                 {/* Quiz Input */}
                 {(isLoggedIn || canGenerateDemo) && (
-                  <motion.div variants={heroItem} id="generate" className={`relative ${halloweenActive && !isLoggedIn ? "" : "max-w-2xl"} scroll-mt-28 ${isLoggedIn || (halloweenActive && !isLoggedIn) ? "" : "mx-auto"}`}>
+                  <motion.div variants={heroItem} id="generate" className={`relative max-w-2xl scroll-mt-28 ${isLoggedIn ? "" : "mx-auto"}`}>
                     <div aria-hidden className="pointer-events-none absolute -inset-12 -z-10">
                       <div className="orb-drift h-44 w-44 bg-[#E9A8B8]/70" style={{ animationDelay: "-3s", top: "-3rem", left: "-4rem" }} />
                       <div className="orb-drift h-36 w-36 bg-[#F6DCE5]/90" style={{ animationDelay: "-8s", bottom: "-2rem", right: "-3.5rem" }} />
@@ -911,33 +888,17 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                           </select>
                         </div>
 
-                        {halloweenActive ? (
-                          <HalloweenButtonGlow>
-                            <motion.button
-                              id="generate-btn"
-                              onClick={() => handleGenerate()}
-                              disabled={!isReady || status === "loading" || atLimit}
-                              whileHover={!isReady || status === "loading" || atLimit ? undefined : { scale: 1.02 }}
-                              whileTap={!isReady || status === "loading" || atLimit ? undefined : { scale: 0.98 }}
-                              className={`btn-sheen px-5 py-2 bg-[linear-gradient(120deg,#3B2027,#6A3A4C,#3B2027)] gradient-shift text-[#F6E3E8] text-sm font-medium disabled:opacity-60 transition-opacity duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready-rose" : ""}`}
-                              aria-busy={status === "loading"}
-                            >
-                              {status === "loading" ? t("input.generating") : t("input.generate")}
-                            </motion.button>
-                          </HalloweenButtonGlow>
-                        ) : (
-                          <motion.button
-                            id="generate-btn"
-                            onClick={() => handleGenerate()}
-                            disabled={!isReady || status === "loading" || atLimit}
-                            whileHover={!isReady || status === "loading" || atLimit ? undefined : { scale: 1.02 }}
-                            whileTap={!isReady || status === "loading" || atLimit ? undefined : { scale: 0.98 }}
-                            className={`btn-sheen px-5 py-2 bg-[linear-gradient(120deg,#3B2027,#6A3A4C,#3B2027)] gradient-shift text-[#F6E3E8] text-sm font-medium disabled:opacity-60 transition-opacity duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready-rose" : ""}`}
-                            aria-busy={status === "loading"}
-                          >
-                            {status === "loading" ? t("input.generating") : t("input.generate")}
-                          </motion.button>
-                        )}
+                        <motion.button
+                          id="generate-btn"
+                          onClick={() => handleGenerate()}
+                          disabled={!isReady || status === "loading" || atLimit}
+                          whileHover={!isReady || status === "loading" || atLimit ? undefined : { scale: 1.02 }}
+                          whileTap={!isReady || status === "loading" || atLimit ? undefined : { scale: 0.98 }}
+                          className={`btn-sheen px-5 py-2 bg-[linear-gradient(120deg,#3B2027,#6A3A4C,#3B2027)] gradient-shift text-[#F6E3E8] text-sm font-medium disabled:opacity-60 transition-opacity duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready-rose" : ""}`}
+                          aria-busy={status === "loading"}
+                        >
+                          {status === "loading" ? t("input.generating") : t("input.generate")}
+                        </motion.button>
                       </div>
                     </div>
                     </div>
@@ -992,18 +953,6 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     )}
                   </motion.div>
                 )}
-                
-                {/* Close Halloween two-column wrapper and add cauldron on right */}
-                {halloweenActive && !isLoggedIn && (isLoggedIn || canGenerateDemo) && (
-                  <>
-                    </motion.div>
-                    <motion.div variants={heroItem} className="flex-shrink-0">
-                      <HeroCauldron />
-                    </motion.div>
-                  </div>
-                  </>
-                )}
-                
                 </motion.div>
                 </motion.div>
             </section>

@@ -245,3 +245,34 @@
 [data-season="halloween"] .to-indigo-600 {
   background: #3B2027 !important;
 }
+
+/* Hero layout - two columns on desktop for Halloween */
+[data-season="halloween"] section > div > div.max-w-5xl {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  max-width: 80rem !important;
+  align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+  [data-season="halloween"] section > div > div.max-w-5xl {
+    flex-direction: column;
+  }
+  
+  [data-season="halloween"] .halloween-cauldron-container {
+    order: 2;
+  }
+}
+
+/* Generator box in Halloween mode */
+[data-season="halloween"] #generate {
+  flex: 1;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+/* Cauldron container */
+[data-season="halloween"] .halloween-cauldron-container {
+  flex-shrink: 0;
+}
