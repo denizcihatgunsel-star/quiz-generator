@@ -28,21 +28,22 @@
   right: 0;
   bottom: 0;
   background-image: 
-    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px),
-    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px);
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px);
   pointer-events: none;
   z-index: 1;
   opacity: 0.5;
 }
 
-/* Override body::before in Halloween mode - remove diagonal 45deg patterns, keep only grain */
-/* The base body::before has 3 gradients: 45deg diagonal, -45deg diagonal, and 0deg grain */
-/* We want to REMOVE the diagonals but KEEP the 0deg grain */
-body[data-season="halloween"]::before {
-  background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px) !important;
-  opacity: 0.5 !important;
-  visibility: visible !important;
-  display: block !important;
+/* Override body::before in Halloween mode - remove ALL background patterns */
+/* The grain is already provided by [data-season="halloween"]::before */
+body[data-season="halloween"]::before,
+[data-season="halloween"]::before + body::before,
+html body[data-season="halloween"]::before {
+  background: none !important;
+  background-image: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  display: none !important;
 }
 
 /* Hide ALL wave canvases and grid/noise overlay */
