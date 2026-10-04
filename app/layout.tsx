@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ReferralAttribution from "@/components/ReferralAttribution";
+import HalloweenLayout from "@/components/seasonal/halloween/HalloweenLayout";
 import { pageMetadata, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
@@ -136,8 +137,10 @@ export default function RootLayout({
         />
         <ThemeProvider>
           <SessionProviderWrapper>
-            {children}
-            <ReferralAttribution />
+            <HalloweenLayout>
+              {children}
+              <ReferralAttribution />
+            </HalloweenLayout>
           </SessionProviderWrapper>
         </ThemeProvider>
         <Analytics />

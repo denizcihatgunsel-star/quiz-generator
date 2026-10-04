@@ -31,9 +31,9 @@ import QuizStory from "./QuizStory";
 import { useTranslation } from "@/lib/i18n";
 
 // Halloween seasonal components
-const HalloweenHeroOverlay = dynamic(() => import("./seasonal/halloween/HalloweenLayer").then(m => ({ default: m.HalloweenHeroOverlay })), { ssr: false });
-const HalloweenCauldronSection = dynamic(() => import("./seasonal/halloween/HalloweenLayer").then(m => ({ default: m.HalloweenCauldronSection })), { ssr: false });
-const HalloweenButtonGlow = dynamic(() => import("./seasonal/halloween/HalloweenButtonGlow"), { ssr: false });
+const HalloweenPumpkins = dynamic(() => import("./seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenPumpkins })), { ssr: false });
+const HalloweenBats = dynamic(() => import("./seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenBats })), { ssr: false });
+const HeroCauldron = dynamic(() => import("./seasonal/halloween/HeroCauldron"), { ssr: false });
 
 // Below-fold marketing: client-only to keep homepage HTML lean for crawlers/CDN
 const UnseenLanding = dynamic(() => import("./UnseenLanding"), { ssr: false });
@@ -602,7 +602,8 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                   <WaterCanvas className="pointer-events-none absolute inset-0 h-full w-full opacity-100" />
                 </div>
               )}
-              {!isLoggedIn && !hideChrome && <HalloweenHeroOverlay />}
+              {!isLoggedIn && !hideChrome && <HalloweenPumpkins />}
+              {!isLoggedIn && !hideChrome && <HalloweenBats />}
               <motion.div
                 style={isLoggedIn ? undefined : { scale: diveScale, opacity: diveOpacity, y: diveY }}
                 className="relative z-10 max-w-5xl mx-auto px-6"
@@ -717,7 +718,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                         </a>
                       )}
                     <a
-                      href="#selected"
+                      href="#features"
                       className="text-sm text-[#9A7280] underline underline-offset-4 transition-colors duration-200 hover:text-[#3B2027]"
                     >
                       How it works
@@ -787,9 +788,15 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                   </motion.div>
                 )}
 
+                {/* Halloween: Two-column layout (generator + cauldron) */}
+                {(isLoggedIn || canGenerateDemo) && halloweenActive && !isLoggedIn && (
+                  <div className="flex flex-col md:flex-row gap-8 items-start max-w-6xl mx-auto">
+                    <motion.div variants={heroItem} className="flex-1">
+                      {/* Generator on left */}
+                
                 {/* Quiz Input */}
                 {(isLoggedIn || canGenerateDemo) && (
-                  <motion.div variants={heroItem} id="generate" className={`relative max-w-2xl scroll-mt-28 ${isLoggedIn ? "" : "mx-auto"}`}>
+                  <motion.div variants={heroItem} id="generate" className={`relative ${halloweenActive && !isLoggedIn ? "" : "max-w-2xl"} scroll-mt-28 ${isLoggedIn || (halloweenActive && !isLoggedIn) ? "" : "mx-auto"}`}>
                     <div aria-hidden className="pointer-events-none absolute -inset-12 -z-10">
                       <div className="orb-drift h-44 w-44 bg-[#E9A8B8]/70" style={{ animationDelay: "-3s", top: "-3rem", left: "-4rem" }} />
                       <div className="orb-drift h-36 w-36 bg-[#F6DCE5]/90" style={{ animationDelay: "-8s", bottom: "-2rem", right: "-3.5rem" }} />
@@ -985,14 +992,23 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     )}
                   </motion.div>
                 )}
+                
+                {/* Close Halloween two-column wrapper and add cauldron on right */}
+                {halloweenActive && !isLoggedIn && (isLoggedIn || canGenerateDemo) && (
+                  <>
+                    </motion.div>
+                    <motion.div variants={heroItem} className="flex-shrink-0">
+                      <HeroCauldron />
+                    </motion.div>
+                  </div>
+                  </>
+                )}
+                
                 </motion.div>
                 </motion.div>
             </section>
 
             {!isLoggedIn && status === "idle" && <UnseenLanding />}
-            
-            {/* ========== HALLOWEEN CAULDRON ========== */}
-            {!isLoggedIn && status === "idle" && !hideChrome && <HalloweenCauldronSection />}
           </>
         ) : (
           /* ========== QUIZ RESULTS ========== */
