@@ -44,7 +44,6 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
-    "playwright": "^1.63.0",
     "prisma": "^7.5.0",
     "tailwindcss": "^4",
     "topojson-client": "^3.1.0",
