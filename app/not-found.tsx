@@ -3,12 +3,10 @@ import Link from "next/link";
 import LandingPageLayout from "@/components/LandingPageLayout";
 
 export const metadata: Metadata = {
+  title: "Page Not Found | Examina",
   robots: {
     index: false,
     follow: false,
-  },
-  alternates: {
-    canonical: null,
   },
 };
 

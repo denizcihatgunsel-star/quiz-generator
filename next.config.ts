@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
       {
         source: "/flashcard-generator",
         destination: "/ai-flashcards",
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: "/ultiple-choice-quiz-maker",
