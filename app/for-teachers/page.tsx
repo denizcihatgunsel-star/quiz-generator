@@ -63,6 +63,10 @@ export default function ForTeachersPage() {
                 title: "Review sessions",
                 desc: "Before a unit test, generate practice quizzes from your lesson notes. Share the link and let students practice on their own time.",
               },
+              {
+                title: "Full practice exams",
+                desc: "Combine quizzes from multiple lessons to build comprehensive review materials for midterms and finals.",
+              },
             ].map((item, i) => (
               <div key={i} className="p-8 border border-black/5">
                 <h3 className="text-neutral-900 font-medium mb-2">

@@ -44,6 +44,7 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
   const [attempts, setAttempts] = useState<Attempt[] | null>(null);
   const [userRole, setUserRole] = useState<"student" | "teacher">("student");
   const [startingLive, setStartingLive] = useState(false);
+  const [liveError, setLiveError] = useState<string | null>(null);
   const submittingRef = useRef(false);
 
   const theme = getQuizTheme(quiz?.theme);
@@ -230,39 +231,51 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
                 </button>
               </div>
             ) : (
-              <div className="flex flex-wrap items-center gap-3">
-                <button
-                  onClick={() => setTaking(true)}
-                  className="rounded-full bg-[#3B2027] px-6 py-3 text-sm font-medium text-[#F6E3E8] shadow-[0_12px_30px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98]"
-                >
-                  {attempts && attempts.length > 0 ? "Retake quiz" : "Take quiz"}
-                </button>
-                {quizMeta?.isOwner && userRole === "teacher" && (
+              <div>
+                <div className="flex flex-wrap items-center gap-3">
                   <button
-                    onClick={async () => {
-                      setStartingLive(true);
-                      try {
-                        const res = await fetch("/api/classroom", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({ quizId: quizMeta.id }),
-                        });
-                        const data = await res.json();
-                        if (res.ok) window.location.href = `/classroom/host/${data.code}`;
-                      } catch { /* ignore */ }
-                      setStartingLive(false);
-                    }}
-                    disabled={startingLive}
-                    className="rounded-full border border-[color:var(--success)]/20 bg-[color:var(--success)]/10 px-6 py-3 text-sm font-medium text-[color:var(--success)] transition-colors hover:opacity-80 disabled:opacity-60"
+                    onClick={() => setTaking(true)}
+                    className="rounded-full bg-[#3B2027] px-6 py-3 text-sm font-medium text-[#F6E3E8] shadow-[0_12px_30px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98]"
                   >
-                    {startingLive ? "Starting..." : "Host Live in Class"}
+                    {attempts && attempts.length > 0 ? "Retake quiz" : "Take quiz"}
                   </button>
-                )}
-                <VideoExplanationLink topic={quiz.topic} />
-                {bestAttempt !== null && (
-                  <span className={`text-sm ${theme.muted}`}>
-                    Best: <span className={`font-medium ${theme.accent}`}>{bestAttempt}%</span>
-                  </span>
+                  {quizMeta?.isOwner && userRole === "teacher" && (
+                    <button
+                      onClick={async () => {
+                        setStartingLive(true);
+                        setLiveError(null);
+                        try {
+                          const res = await fetch("/api/classroom", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ quizId: quizMeta.id }),
+                          });
+                          const data = await res.json();
+                          if (res.ok) {
+                            window.location.href = `/classroom/host/${data.code}`;
+                          } else {
+                            setLiveError(data.error || "Failed to start classroom");
+                          }
+                        } catch {
+                          setLiveError("Connection error. Please try again.");
+                        }
+                        setStartingLive(false);
+                      }}
+                      disabled={startingLive}
+                      className="rounded-full border border-[color:var(--success)]/20 bg-[color:var(--success)]/10 px-6 py-3 text-sm font-medium text-[color:var(--success)] transition-colors hover:opacity-80 disabled:opacity-60"
+                    >
+                      {startingLive ? "Starting..." : "Host Live in Class"}
+                    </button>
+                  )}
+                  <VideoExplanationLink topic={quiz.topic} />
+                  {bestAttempt !== null && (
+                    <span className={`text-sm ${theme.muted}`}>
+                      Best: <span className={`font-medium ${theme.accent}`}>{bestAttempt}%</span>
+                    </span>
+                  )}
+                </div>
+                {liveError && (
+                  <p className="mt-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{liveError}</p>
                 )}
               </div>
             )}

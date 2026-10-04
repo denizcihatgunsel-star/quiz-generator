@@ -116,12 +116,24 @@ export default function MobileDashboard() {
       </div>
 
       <div className="mt-6 flex items-center justify-between gap-3">
-        <Link
-          href={userRole === "teacher" ? "/m/classroom/join" : "/m/study"}
-          className="flex-1 rounded-full bg-[#3B2027] py-3 text-center text-sm font-medium text-[#F6E3E8] shadow-[0_12px_28px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98]"
-        >
-          {userRole === "teacher" ? "Join a Class" : "Study mode"}
-        </Link>
+        {userRole === "teacher" ? (
+          <button
+            onClick={() => {
+              const quizList = document.querySelector('[data-quiz-history]');
+              quizList?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
+            className="flex-1 rounded-full bg-[#3B2027] py-3 text-center text-sm font-medium text-[#F6E3E8] shadow-[0_12px_28px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98]"
+          >
+            Host a Live Quiz
+          </button>
+        ) : (
+          <Link
+            href="/m/study"
+            className="flex-1 rounded-full bg-[#3B2027] py-3 text-center text-sm font-medium text-[#F6E3E8] shadow-[0_12px_28px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98]"
+          >
+            Study mode
+          </Link>
+        )}
         <Link
           href="/m/analytics"
           className="flex-1 rounded-full border border-[#F3D5DC] bg-white/70 py-3 text-center text-sm font-medium text-[#7E3E55] transition-colors hover:bg-[#F6EBEE] active:scale-[0.98]"
@@ -178,7 +190,7 @@ export default function MobileDashboard() {
         </div>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-8" data-quiz-history>
         <h2 className="mb-3 font-serif text-xl italic text-[#3B2027]">Quiz history</h2>
 
         {quizzes.length === 0 ? (
