@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, LANGUAGE_COUNT } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 
 export const metadata: Metadata = pageMetadata({
   title: "Quiz Generator from Text — Paste & Generate | Examina",
-  description: "Paste any notes and generate multiple choice, flashcards & true/false questions instantly. Works in 29 languages. Free to try.",
+  description: `Paste any notes and generate multiple choice, flashcards & true/false questions instantly. Works in ${LANGUAGE_COUNT} languages. Free to try.`,
   path: "/quiz-generator-from-text",
 });
 
@@ -21,7 +21,7 @@ export default function TextQuizPage() {
         introTitle: "Paste text in, get questions out",
         intro: [
           "You already have your material — you just don't have questions for it. With the text-based quiz generator you paste anything from a few sentences to 15,000 characters, and Examina writes multiple choice, flashcards, fill-in-the-blank, and true/false questions from that exact content, with no reformatting and no tables to build.",
-          "Because generation starts from your words rather than a topic search, the questions follow what your instructor actually emphasized instead of generic facts pulled from the web. It handles Markdown, works across 29 languages for language learners, and most quizzes are ready in under 30 seconds.",
+          "Because generation starts from your words rather than a topic search, the questions follow what your instructor actually emphasized instead of generic facts pulled from the web. Working from your own class notes? Try the notes to quiz generator.",
         ],
         featuresTitle: "Why it helps",
         features: [
@@ -47,17 +47,17 @@ export default function TextQuizPage() {
         faqTitle: "Frequently asked questions",
         faq: [
           { q: "What formats can I paste?", a: "Plain text, Markdown, and TXT all work. You can paste anything from a few lines to 15,000 characters." },
-          { q: "Does it work in languages other than English?", a: "Yes — 29 languages are supported, making it ideal for language learning." },
+          { q: "Does it work in languages other than English?", a: `Yes — ${LANGUAGE_COUNT} languages are supported, making it ideal for language learning.` },
           { q: "How long does generation take?", a: "Most quizzes are ready in under 30 seconds." },
           { q: "Is the text generator free?", a: "Free accounts get 5 generations per month. Paid plans start at $2/month." },
         ],
         relatedTitle: "Explore more ways to study",
         related: [
           { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
+          { href: "/notes-to-quiz", label: "Notes to Quiz" },
           { href: "/quiz-generator-from-pdf", label: "PDF to Quiz" },
           { href: "/create-a-quiz", label: "Create a Quiz" },
           { href: "/study-quiz", label: "Study Quiz" },
-          { href: "/true-false-quiz-generator", label: "True & False Generator" },
         ],
       }}
     />

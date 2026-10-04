@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 export const SITE_URL = "https://www.examina.ink";
+export const LANGUAGE_COUNT = 15;
 export const OG_IMAGE = {
   url: `${SITE_URL}/og-image.png`,
   width: 1200,

@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+
 export const dynamic = "force-static";
 export const revalidate = 60;
+
+export const metadata: Metadata = pageMetadata({
+  title: "Pricing — Quiz Generator Plans | Examina",
+  description: "Free plan: 5 quizzes/month. Paid plans from $2/month with more quizzes, PDF downloads, and team features. No credit card required to start.",
+  path: "/pricing",
+});
 
 import { PLANS, type PlanId } from "@/lib/subscription";
 import SiteHeader from "@/components/SiteHeader";

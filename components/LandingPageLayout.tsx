@@ -3,7 +3,7 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const FOOTER_TOOLS = [
   { href: "/multiple-choice-quiz-maker", label: "MCQ Maker" },
-  { href: "/flashcard-generator", label: "Flashcards" },
+  { href: "/ai-flashcards", label: "Flashcards" },
   { href: "/fill-in-the-blank-generator", label: "Fill in the Blank" },
   { href: "/true-false-quiz-generator", label: "True / False" },
   { href: "/ai-quiz-generator", label: "AI Quiz Generator" },

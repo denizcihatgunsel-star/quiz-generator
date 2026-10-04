@@ -37,6 +37,9 @@ export default function AboutPage() {
                 chapters, training documents, or any study material, and Examina
                 generates a complete quiz in under 30 seconds.
               </p>
+              <p className="mt-4 text-sm text-neutral-500">
+                Examina is not affiliated with examina.io.
+              </p>
             </div>
 
             <div>
@@ -105,7 +108,7 @@ export default function AboutPage() {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mt-6">
                 {[
                   { number: "4", label: "Question types" },
-                  { number: "29", label: "Languages" },
+                  { number: "15", label: "Languages" },
                   { number: "<30s", label: "Generation time" },
                   { number: "Free", label: "To start" },
                 ].map((stat) => (

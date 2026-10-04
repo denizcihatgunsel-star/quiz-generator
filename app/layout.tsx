@@ -29,16 +29,10 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  ...pageMetadata({
-    title: "Examina — AI Quiz Generator | Turn Notes into Quizzes",
-    description:
-      "Examina is the AI quiz generator that turns any text into multiple choice, flashcards, fill-in-the-blank & true/false questions in seconds. Free to try.",
-    path: "/",
-    ogTitle: "Examina — AI Quiz Generator | Turn Notes into Quizzes Instantly",
-    ogDescription:
-      "Examina turns any lesson into multiple choice, flashcards, fill-in-the-blank, and true/false questions in seconds. Free to try.",
-    languages: true,
-  }),
+  title: {
+    template: "%s | Examina",
+    default: "Examina — AI Quiz Generator",
+  },
   icons: {
     icon: [
       { url: "/logo.png?v=3", type: "image/png" },
@@ -46,7 +40,6 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: "/apple-icon.png?v=3" }],
   },
-  metadataBase: new URL(SITE_URL),
   formatDetection: { telephone: false },
   appleWebApp: {
     capable: true,
@@ -63,6 +56,7 @@ export const viewport: Viewport = {
 
 export const revalidate = 60;
 
+// Force recompilation
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -99,28 +93,44 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "WebSite",
-              "@id": `${SITE_URL}/#website`,
-              url: `${SITE_URL}/`,
-              name: "Examina",
-              alternateName: "Examina AI Quiz Generator",
-              description:
-                "AI quiz generator that turns any text into multiple choice, flashcards, fill-in-the-blank and true/false questions.",
-              inLanguage: "en",
-              publisher: {
-                "@type": "Organization",
-                "@id": `${SITE_URL}/#organization`,
-                name: "Examina",
-                logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
-              },
-              potentialAction: {
-                "@type": "SearchAction",
-                target: {
-                  "@type": "EntryPoint",
-                  urlTemplate: `${SITE_URL}/explore?q={search_term_string}`,
+              "@graph": [
+                {
+                  "@type": "WebSite",
+                  "@id": `${SITE_URL}/#website`,
+                  url: `${SITE_URL}/`,
+                  name: "Examina",
+                  alternateName: "Examina AI Quiz Generator",
+                  description:
+                    "AI quiz generator that turns any text into multiple choice, flashcards, fill-in-the-blank and true/false questions.",
+                  inLanguage: "en",
+                  publisher: { "@id": `${SITE_URL}/#organization` },
+                  potentialAction: {
+                    "@type": "SearchAction",
+                    target: {
+                      "@type": "EntryPoint",
+                      urlTemplate: `${SITE_URL}/explore?q={search_term_string}`,
+                    },
+                    "query-input": "required name=search_term_string",
+                  },
                 },
-                "query-input": "required name=search_term_string",
-              },
+                {
+                  "@type": "Organization",
+                  "@id": `${SITE_URL}/#organization`,
+                  name: "Examina",
+                  url: SITE_URL,
+                  logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
+                  description: "AI quiz generator that turns notes and PDFs into quizzes and flashcards",
+                  sameAs: [
+                    "https://www.indiehackers.com/product/examina",
+                    "https://www.saashub.com/examina",
+                    "https://peerlist.io/denizcih_dev",
+                    "https://sideprojectors.com/project/96481/examina",
+                    "https://peerpush.com/p/examina",
+                    "https://tinystartups.com/startup/examina",
+                    "https://smollaunch.com/products/examina",
+                  ],
+                },
+              ],
             }).replace(/</g, "\\u003c"),
           }}
         />

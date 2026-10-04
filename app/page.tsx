@@ -1,7 +1,20 @@
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import QuizGenerator from "@/components/QuizGenerator";
 import { StructuredData } from "@/components/StructuredData";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = pageMetadata({
+  title: "Examina — AI Quiz Generator | Turn Notes into Quizzes",
+  description:
+    "Examina is the AI quiz generator that turns any text into multiple choice, flashcards, fill-in-the-blank & true/false questions in seconds. Free to try.",
+  path: "/",
+  ogTitle: "Examina — AI Quiz Generator | Turn Notes into Quizzes Instantly",
+  ogDescription:
+    "Examina turns any lesson into multiple choice, flashcards, fill-in-the-blank, and true/false questions in seconds. Free to try.",
+  languages: true,
+});
 
 const FAQ_ITEMS = [
   {
