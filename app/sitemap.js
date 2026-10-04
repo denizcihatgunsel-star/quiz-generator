@@ -27,7 +27,8 @@ export default function sitemap() {
   const pages = [
     { url: `${SITE}/`, changeFrequency: "weekly", priority: 1 },
     { url: `${SITE}/pricing`, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${SITE}/flashcard-generator`, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${SITE}/ai-flashcards`, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${SITE}/notes-to-quiz`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE}/multiple-choice-quiz-maker`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE}/true-false-quiz-generator`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE}/fill-in-the-blank-generator`, changeFrequency: "monthly", priority: 0.9 },

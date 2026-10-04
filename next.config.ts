@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/flashcard-generator",
+        destination: "/ai-flashcards",
+        permanent: true,
+      },
+      {
         source: "/ultiple-choice-quiz-maker",
         destination: "/multiple-choice-quiz-maker",
         permanent: true,

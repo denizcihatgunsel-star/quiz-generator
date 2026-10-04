@@ -54,7 +54,7 @@ export default function StudyQuizPage() {
         relatedTitle: "Explore more ways to study",
         related: [
           { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
-          { href: "/flashcard-generator", label: "Flashcard Generator" },
+          { href: "/ai-flashcards", label: "Flashcard Generator" },
           { href: "/create-a-quiz", label: "Create a Quiz" },
           { href: "/study", label: "Study Mode" },
           { href: "/daily-quiz", label: "Daily Quiz" },
