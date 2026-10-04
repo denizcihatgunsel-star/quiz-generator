@@ -26,6 +26,7 @@ export default function HalloweenButtonGlow({ children }: { children: React.Reac
   const [isFocused, setIsFocused] = useState(false);
   const [bats, setBats] = useState<BatAnimation[]>([]);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [hasTriggered, setHasTriggered] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -37,16 +38,18 @@ export default function HalloweenButtonGlow({ children }: { children: React.Reac
   }, []);
 
   const triggerBats = () => {
-    if (reducedMotion) return;
+    if (reducedMotion || hasTriggered) return;
     
     const newBats: BatAnimation[] = [
       { id: `bat-left-${Date.now()}`, direction: "left" },
       { id: `bat-right-${Date.now() + 1}`, direction: "right" },
     ];
     setBats(newBats);
+    setHasTriggered(true);
 
     setTimeout(() => {
       setBats([]);
+      setHasTriggered(false);
     }, 600);
   };
 
@@ -59,12 +62,12 @@ export default function HalloweenButtonGlow({ children }: { children: React.Reac
     setIsHovered(false);
   };
 
-  const handleFocus = () => {
+  const handleFocus = (e: React.FocusEvent) => {
     setIsFocused(true);
     triggerBats();
   };
 
-  const handleBlur = () => {
+  const handleBlur = (e: React.FocusEvent) => {
     setIsFocused(false);
   };
 
@@ -72,15 +75,16 @@ export default function HalloweenButtonGlow({ children }: { children: React.Reac
 
   return (
     <div
-      className="relative inline-block"
+      className="relative inline-block will-change-auto"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
+      onFocusCapture={handleFocus}
+      onBlurCapture={handleBlur}
+      style={{ isolation: "isolate" }}
     >
       {/* Glow effect */}
       <div
-        className="absolute inset-0 rounded-[inherit] pointer-events-none transition-opacity duration-200"
+        className="absolute inset-[-2px] rounded-[inherit] pointer-events-none transition-opacity duration-200"
         style={{
           opacity: isActive ? 1 : 0,
           boxShadow: isActive
