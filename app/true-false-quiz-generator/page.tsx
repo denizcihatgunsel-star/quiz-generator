@@ -6,7 +6,7 @@ import { SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "True or False Generator — AI True/False Quiz Maker",
-  description: "Free AI true or false generator: turn notes, PDFs or pasted text into true/false questions with answers and explanations. Templates and examples inside.",
+  description: "AI true or false generator: turn notes, PDFs or pasted text into true/false questions with answers and explanations. Free plan includes 5 quizzes a month.",
   path: "/true-false-quiz-generator",
 });
 
@@ -25,7 +25,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "What can I upload?",
-    a: "PDF, TXT and Markdown files, or paste 50–15,000 characters of text.",
+    a: "PDF (Starter and above), TXT and Markdown files, or paste 50–15,000 characters of text.",
   },
   {
     q: "How do I make good true or false questions?",
