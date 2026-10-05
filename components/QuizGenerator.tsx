@@ -31,11 +31,7 @@ import QuizStory from "./QuizStory";
 import { useTranslation } from "@/lib/i18n";
 
 // Halloween seasonal components
-const HalloweenPumpkins = dynamic(() => import("./seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenPumpkins })), { ssr: false });
-const HalloweenBats = dynamic(() => import("./seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenBats })), { ssr: false });
-const HalloweenAtmosphere = dynamic(() => import("./seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenAtmosphere })), { ssr: false });
-const HauntedHillScene = dynamic(() => import("./seasonal/halloween/HauntedHillScene"), { ssr: false });
-const HeroCauldron = dynamic(() => import("./seasonal/halloween/HeroCauldron"), { ssr: false });
+// Halloween decorations removed - using background image slot instead
 
 // Below-fold marketing: client-only to keep homepage HTML lean for crawlers/CDN
 const UnseenLanding = dynamic(() => import("./UnseenLanding"), { ssr: false });
@@ -604,13 +600,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                   <WaterCanvas className="pointer-events-none absolute inset-0 h-full w-full opacity-100" />
                 </div>
               )}
-              {!isLoggedIn && !hideChrome && halloweenActive && (
-                <>
-                  <HauntedHillScene />
-                  <HalloweenPumpkins />
-                  <HalloweenBats />
-                </>
-              )}
+              {/* Halloween decorations removed - using background image slot */}
               <motion.div
                 style={isLoggedIn ? undefined : { scale: diveScale, opacity: diveOpacity, y: diveY }}
                 className="relative z-10 max-w-5xl mx-auto px-6"
@@ -774,12 +764,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                 {/* Quiz Input */}
                 {(isLoggedIn || canGenerateDemo) && (
                   <div className="relative">
-                    {/* Desktop cauldron decoration - right margin, 1400px+ only */}
-                    {!isLoggedIn && halloweenActive && (
-                      <div aria-hidden className="pointer-events-none absolute left-full top-0 ml-6 hidden min-[1400px]:flex w-[180px] flex-col items-center gap-4">
-                        <HeroCauldron variant="desktop" />
-                      </div>
-                    )}
+                    {/* Cauldron decoration removed */}
                     
                   <motion.div variants={heroItem} id="generate" className={`relative max-w-2xl scroll-mt-28 ${isLoggedIn ? "" : "mx-auto"}`}>
                     <div aria-hidden className="pointer-events-none absolute -inset-12 -z-10">
@@ -961,12 +946,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     )}
                   </motion.div>
                   
-                  {/* Mobile/tablet cauldron - below generator, hidden at 1400px+ */}
-                  {!isLoggedIn && halloweenActive && (
-                    <div aria-hidden className="pointer-events-none mx-auto mt-6 flex w-[120px] justify-center min-[1400px]:hidden">
-                      <HeroCauldron variant="mobile" />
-                    </div>
-                  )}
+                  {/* Cauldron decoration removed */}
                   </div>
                 )}
                 </motion.div>

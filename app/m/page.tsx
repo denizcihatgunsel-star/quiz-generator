@@ -8,11 +8,7 @@ import dynamic from "next/dynamic";
 import GlobeStudy from "@/components/GlobeStudy";
 import { isHalloweenActive } from "@/lib/seasonal";
 
-// Halloween seasonal components
-const HalloweenPumpkins = dynamic(() => import("@/components/seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenPumpkins })), { ssr: false });
-const HalloweenBats = dynamic(() => import("@/components/seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenBats })), { ssr: false });
-const HauntedHillScene = dynamic(() => import("@/components/seasonal/halloween/HauntedHillScene"), { ssr: false });
-const HeroCauldron = dynamic(() => import("@/components/seasonal/halloween/HeroCauldron"), { ssr: false });
+// Halloween decorations removed - using background image slot instead
 
 const ARROW = (
   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -52,13 +48,7 @@ function MobileHomeContent() {
   return (
     <div className="relative">
       {/* Halloween decorations */}
-      {halloweenActive && (
-        <>
-          <HauntedHillScene />
-          <HalloweenPumpkins />
-          <HalloweenBats />
-        </>
-      )}
+      {/* Halloween decorations removed - using background image slot */}
       
       {/* Floating pastel orbs — pure CSS, animated on mobile */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
@@ -108,14 +98,7 @@ function MobileHomeContent() {
           </div>
         </div>
         
-        {/* Halloween cauldron - 100px on mobile with bottom padding for nav */}
-        {halloweenActive && (
-          <div className="mt-8 flex justify-center pb-[120px]" style={{ paddingBottom: 'calc(120px + env(safe-area-inset-bottom))' }}>
-            <div className="w-[100px]">
-              <HeroCauldron variant="mobile" />
-            </div>
-          </div>
-        )}
+        {/* Cauldron decoration removed */}
       </section>
 
       {/* Daily challenge banner */}

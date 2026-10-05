@@ -117,7 +117,13 @@ body[data-season="halloween"]::before {
   background: transparent !important;
 }
 
-/* Nav pill - dark translucent rgba(26,14,28,.6) with backdrop blur, cream text */
+/* Remove light peach top bar - header transparent */
+[data-season="halloween"] header {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Nav pill - dark see-through rgba(26,14,28,.6) with backdrop blur, cream text */
 [data-season="halloween"] nav {
   background: rgba(26, 14, 28, 0.6) !important;
   backdrop-filter: blur(12px);
@@ -126,7 +132,7 @@ body[data-season="halloween"]::before {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Ensure sticky header stays above decorations */
+/* Ensure sticky header stays above content */
 [data-season="halloween"] header.sticky,
 [data-season="halloween"] header.fixed {
   background: transparent !important;
@@ -168,22 +174,74 @@ body[data-season="halloween"]::before {
   box-shadow: 0 2px 8px rgba(42, 21, 32, 0.08);
 }
 
-/* Hero section - Haunted Hill night sky gradient #2A1530 -> #5B2A4A -> #E8743B */
+/* Hero section - Full-bleed background image slot with gradient fallback */
 [data-season="halloween"] section.bg-gradient-to-b {
+  position: relative;
   background: linear-gradient(to bottom, #2A1530 0%, #5B2A4A 50%, #E8743B 100%) !important;
+  overflow: hidden;
 }
 
-/* Hero text readability over dark sky */
+/* Background image slot - behind content */
+[data-season="halloween"] section.bg-gradient-to-b::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* When background images exist, they'll be loaded via picture element in component */
+/* Bottom scrim for blend */
+[data-season="halloween"] section.bg-gradient-to-b::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to bottom, transparent 0%, #1A0E1C 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Radial dark scrim behind centre text column for contrast */
+[data-season="halloween"] section.bg-gradient-to-b > div {
+  position: relative;
+  z-index: 2;
+}
+
+[data-season="halloween"] section.bg-gradient-to-b > div::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.35) 0%, transparent 70%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ALL hero text cream with shadow */
 [data-season="halloween"] section h1,
-[data-season="halloween"] section .text-foreground {
+[data-season="halloween"] section .text-foreground,
+[data-season="halloween"] section .font-serif,
+[data-season="halloween"] section p,
+[data-season="halloween"] section a {
   color: #FFF7EC !important;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45) !important;
 }
 
-[data-season="halloween"] section .text-muted-foreground,
-[data-season="halloween"] section p.text-\[13px\] {
+/* Subline at 80% cream */
+[data-season="halloween"] section p.text-\[13px\],
+[data-season="halloween"] section .text-muted-foreground {
   color: #FFF7EC !important;
   opacity: 0.8;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45) !important;
 }
 
 /* Generator box - cream #FFF7EC card with #E8C9A0 border */
@@ -544,267 +602,10 @@ body[data-season="halloween"]::before {
   margin-right: auto !important;
 }
 
-/* Haunted Hill Scene Layers - Designer Final Spec */
-
-/* Moon: centre at x 62%, y 28%, diameter 34vh */
-[data-season="halloween"] .scene-moon {
-  position: absolute;
-  width: 34vh;
-  height: 34vh;
-  left: 62%;
-  top: 28%;
-  transform: translateX(-50%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Witch: small, upper-left of moon, flying left, inside moon disc */
-[data-season="halloween"] .scene-witch {
-  position: absolute;
-  width: 60px;
-  height: 36px;
-  left: 59%;
-  top: 26%;
-  pointer-events: none;
-  z-index: 2;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  [data-season="halloween"] .scene-witch {
-    animation: witch-drift 12s ease-in-out infinite;
-  }
-}
-
-@keyframes witch-drift {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-40px); }
-}
-
-/* House: tower cuts into moon's lower-left */
-[data-season="halloween"] .scene-house {
-  position: absolute;
-  width: 800px;
-  height: 500px;
-  left: 56%;
-  top: 32%;
-  transform: translateX(-50%);
-  pointer-events: none;
-  z-index: 3;
-}
-
-/* Window flicker animation - max 2 at a time */
-@media (prefers-reduced-motion: no-preference) {
-  [data-season="halloween"] .window-flicker:nth-child(8) {
-    animation: window-flicker-1 4s ease-in-out infinite;
-  }
-  
-  [data-season="halloween"] .window-flicker:nth-child(10) {
-    animation: window-flicker-2 5s ease-in-out infinite 1.5s;
-  }
-}
-
-@keyframes window-flicker-1 {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
-@keyframes window-flicker-2 {
-  0%, 100% { opacity: 1; }
-  45%, 55% { opacity: 0.7; }
-}
-
-/* Trees: one on each side, cropped by viewport edge */
-[data-season="halloween"] .scene-trees {
-  position: absolute;
-  width: 100%;
-  height: 400px;
-  left: 0;
-  bottom: 0;
-  pointer-events: none;
-  z-index: 4;
-}
-
-/* Fence at bottom */
-[data-season="halloween"] .scene-fence {
-  position: absolute;
-  width: 100%;
-  height: 150px;
-  left: 0;
-  bottom: 0;
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* Fog: white strip at 15% opacity at hill base only */
-[data-season="halloween"] .scene-fog {
-  position: absolute;
-  bottom: 15%;
-  left: 0;
-  right: 0;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.15);
-  pointer-events: none;
-  z-index: 6;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  [data-season="halloween"] .scene-fog {
-    animation: fog-slide 30s linear infinite;
-  }
-}
-
-@keyframes fog-slide {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100px); }
-}
-
-/* Pumpkins: flat orange with lit face, no glow bloom */
-[data-season="halloween"] .scene-pumpkin {
-  filter: none;
-}
-
-/* Orange word in headline: solid #F28C38, site font */
+/* Orange word in headline: solid #F28C38 */
 [data-season="halloween"] .word-glow {
   color: #F28C38 !important;
-  text-shadow: none !important;
-}
-
-/* Bats: dark silhouettes, kept away from nav and Sound button */
-[data-season="halloween"] .halloween-bat {
-  fill: #1A0E1C !important;
-}
-
-/* Responsive scene adjustments */
-@media (max-width: 1024px) {
-  [data-season="halloween"] .scene-trees {
-    display: none;
-  }
-}
-
-/* Phone 390: moon top-centre 55vw, hide side trees, one pumpkin bottom-right, house small on horizon */
-@media (max-width: 767px) {
-  [data-season="halloween"] .scene-moon {
-    width: 55vw;
-    height: 55vw;
-    left: 50%;
-    top: 5%;
-    transform: translateX(-50%);
-  }
-  
-  [data-season="halloween"] .scene-witch {
-    width: 40px;
-    height: 24px;
-    left: 45%;
-    top: 8%;
-  }
-  
-  [data-season="halloween"] .scene-house {
-    width: 400px;
-    height: 250px;
-    left: 50%;
-    top: 50%;
-    opacity: 0.6;
-  }
-  
-  [data-season="halloween"] .scene-trees {
-    display: none;
-  }
-  
-  /* Hide left pumpkin on mobile */
-  [data-season="halloween"] .scene-pumpkin:first-of-type {
-    display: none;
-  }
-}
-
-/* Halloween decorations layer - all behind content, no pointer events */
-[data-season="halloween"] .halloween-decoration {
-  pointer-events: none !important;
-  z-index: 1 !important;
-}
-
-/* Crisp moon - #FFE9C2 disc (halo applied inline in component) */
-[data-season="halloween"] .halloween-moon {
-  position: absolute;
-  top: 10%;
-  left: 8%;
-  width: 90px;
-  height: 90px;
-  background: #FFE9C2;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 1;
-  filter: none;
-}
-
-/* Fog band - clearly visible cream band (120px tall) at hero bottom, above background but below content */
-[data-season="halloween"] .halloween-fog {
-  position: absolute !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
-  height: 120px !important;
-  background: linear-gradient(to top, rgba(255, 247, 236, 0.4) 0%, transparent 100%) !important;
-  pointer-events: none !important;
-  z-index: 2 !important;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  [data-season="halloween"] .halloween-fog {
-    animation: fog-drift 20s ease-in-out infinite;
-  }
-}
-
-@keyframes fog-drift {
-  0%, 100% { opacity: 1; transform: translateX(0); }
-  50% { opacity: 0.8; transform: translateX(-30px); }
-}
-
-/* Cobwebs - visible, top corners below nav */
-[data-season="halloween"] .halloween-cobweb {
-  position: fixed;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.35;
-  width: 140px;
-  height: 140px;
-}
-
-[data-season="halloween"] .halloween-cobweb-tl {
-  top: 80px;
-  left: 0;
-}
-
-[data-season="halloween"] .halloween-cobweb-tr {
-  top: 80px;
-  right: 0;
-}
-
-/* Candle glow - warm amber near cauldron */
-[data-season="halloween"] .halloween-candle-glow {
-  position: absolute;
-  right: 10%;
-  top: 30%;
-  width: 80px;
-  height: 80px;
-  background: radial-gradient(circle, rgba(232, 131, 58, 0.4) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  [data-season="halloween"] .halloween-candle-glow {
-    animation: candle-flicker 3s ease-in-out infinite;
-  }
-}
-
-@keyframes candle-flicker {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 0.8; }
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45) !important;
 }
 
 /* Body/section text on dark background - cream #FFF7EC */
