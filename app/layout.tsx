@@ -56,7 +56,7 @@ function getThemeColor(): string {
       const now = new Date();
       const cutoff = new Date('2026-11-01T00:00:00+03:00');
       if (now < cutoff) {
-        return '#C2410C'; // Halloween orange
+        return '#2A1530'; // Halloween deep purple
       }
     } catch {
       // Fall through to default

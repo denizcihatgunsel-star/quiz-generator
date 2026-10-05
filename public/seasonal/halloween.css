@@ -15,9 +15,22 @@
  */
 
 [data-season="halloween"] {
-  /* Page background - deep purple to very dark plum */
-  background: linear-gradient(to bottom, #2A1530 0%, #1A0E1C 100%);
+  /* Page background - fade from #1A0E1C to #2A1530 over 160px below hero */
+  background: #1A0E1C;
   background-attachment: fixed;
+}
+
+/* Smooth fade below hero - 160px transition */
+[data-season="halloween"]::after {
+  content: '';
+  position: fixed;
+  top: 100vh;
+  left: 0;
+  right: 0;
+  height: 160px;
+  background: linear-gradient(to bottom, #1A0E1C 0%, #2A1530 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 [data-season="halloween"]::before {
@@ -104,12 +117,12 @@ body[data-season="halloween"]::before {
   background: transparent !important;
 }
 
-/* Nav pill - dark translucent rgba(26,14,28,0.72) with backdrop blur, cream text */
+/* Nav pill - dark translucent rgba(26,14,28,.6) with backdrop blur, cream text */
 [data-season="halloween"] nav {
-  background: rgba(26, 14, 28, 0.72) !important;
+  background: rgba(26, 14, 28, 0.6) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 247, 236, 0.15) !important;
+  border: 1px solid rgba(255, 247, 236, 0.12) !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -148,10 +161,10 @@ body[data-season="halloween"]::before {
 
 /* Fixed Sound off button - dark translucent pill, cream text */
 [data-season="halloween"] button[aria-pressed] {
-  background: rgba(26, 14, 28, 0.72) !important;
-  border: 1px solid rgba(255, 247, 236, 0.15) !important;
+  background: rgba(26, 14, 28, 0.6) !important;
+  border: 1px solid rgba(255, 247, 236, 0.12) !important;
   color: #FFF7EC !important;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
   box-shadow: 0 2px 8px rgba(42, 21, 32, 0.08);
 }
 
@@ -803,6 +816,17 @@ body[data-season="halloween"]::before {
   color: #FFF7EC !important;
 }
 
+/* Links on dark backgrounds - #F6B26B, cream on hover */
+[data-season="halloween"] section a,
+[data-season="halloween"] main > div a {
+  color: #F6B26B !important;
+}
+
+[data-season="halloween"] section a:hover,
+[data-season="halloween"] main > div a:hover {
+  color: #FFF7EC !important;
+}
+
 /* Cards stay cream with plum text */
 [data-season="halloween"] .bg-white p,
 [data-season="halloween"] .bg-white h2,
@@ -811,17 +835,26 @@ body[data-season="halloween"]::before {
   color: #2A1520 !important;
 }
 
-/* Footer text cream at 0.75 opacity */
+/* Footer background and text */
+[data-season="halloween"] footer {
+  background: #140A16 !important;
+}
+
 [data-season="halloween"] footer,
 [data-season="halloween"] footer p,
-[data-season="halloween"] footer a,
 [data-season="halloween"] footer span {
   color: #FFF7EC !important;
   opacity: 0.75;
 }
 
-[data-season="halloween"] footer a:hover {
+/* Links on dark backgrounds: #F6B26B, cream on hover */
+[data-season="halloween"] footer a {
+  color: #F6B26B !important;
   opacity: 1;
+}
+
+[data-season="halloween"] footer a:hover {
+  color: #FFF7EC !important;
 }
 
 /* Footer badges keep cream backing */
@@ -832,13 +865,14 @@ body[data-season="halloween"]::before {
   padding: 4px;
 }
 
-/* Mobile bottom tab nav - dark pill treatment */
+/* Mobile bottom tab nav & phone header - dark pill treatment */
 @media (max-width: 767px) {
   [data-season="halloween"] nav[class*="bottom"],
-  [data-season="halloween"] div[class*="fixed bottom"] nav {
-    background: rgba(26, 14, 28, 0.72) !important;
+  [data-season="halloween"] div[class*="fixed bottom"] nav,
+  [data-season="halloween"] header[class*="sticky"] nav {
+    background: rgba(26, 14, 28, 0.6) !important;
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 247, 236, 0.15) !important;
+    border: 1px solid rgba(255, 247, 236, 0.12) !important;
   }
   
   [data-season="halloween"] nav[class*="bottom"] a,
