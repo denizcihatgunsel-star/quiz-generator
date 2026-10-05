@@ -6,6 +6,7 @@ const FOOTER_TOOLS = [
   { href: "/ai-flashcards", label: "Flashcards" },
   { href: "/fill-in-the-blank-generator", label: "Fill in the Blank" },
   { href: "/true-false-quiz-generator", label: "True / False" },
+  { href: "/study-guide-generator", label: "Study Guide" },
   { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
 ];
 

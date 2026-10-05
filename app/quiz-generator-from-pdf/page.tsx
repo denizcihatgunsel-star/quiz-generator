@@ -20,7 +20,7 @@ export default function PdfQuizPage() {
         cta: "Convert a PDF free",
         introTitle: "From PDF to quiz in one upload",
         intro: [
-          "PDFs are how most course material ships — study guides, textbook chapters, past papers, and journal articles. Examina's PDF-to-quiz converter reads the document directly and turns it into multiple choice questions and flashcards, so the review-ready version of your reading is one upload away.",
+          "PDFs are how most course material ships — study guides, textbook chapters, past papers, and journal articles. Examina's PDF-to-quiz converter reads the document directly and turns it into multiple choice questions and flashcards, so the review-ready version of your reading is one upload away. Want to create a study guide from a PDF or turn it into a true/false quiz from a PDF? Just upload and generate.",
           "You're not limited to clean digital text either: snap a photo of a printed page and OCR pulls out the content before generation. Every question ships with an explanation, meaning the same PDF session that tests you also teaches you. Files are read transiently and aren't stored on the server, so converting a confidential handout stays private.",
         ],
         featuresTitle: "Built for documents",
@@ -54,6 +54,8 @@ export default function PdfQuizPage() {
         relatedTitle: "Explore more ways to study",
         related: [
           { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
+          { href: "/study-guide-generator", label: "Study Guide Generator" },
+          { href: "/true-false-quiz-generator", label: "True/False Quiz Generator" },
           { href: "/quiz-generator-from-text", label: "Quiz Generator from Text" },
           { href: "/free-quiz-generator", label: "Free Quiz Generator" },
           { href: "/study-quiz", label: "Study Quiz" },

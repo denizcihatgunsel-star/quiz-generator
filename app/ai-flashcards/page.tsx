@@ -88,7 +88,7 @@ export default function AiFlashcardsPage() {
           cta: "Generate flashcards free",
           introTitle: "What makes a good AI flashcard",
           intro: [
-            "A good flashcard tests one idea, asks a specific question and has a short answer you can check instantly. Examina reads your whole text for context, pulls out the key terms, definitions and relationships, and writes cards that follow those rules. You get 'What does the mitochondrial inner membrane host?' rather than a card with half the chapter pasted on the back. Each card is tagged with a Bloom's taxonomy level, so your deck goes beyond definitions.",
+            "A good flashcard tests one idea, asks a specific question and has a short answer you can check instantly. Examina reads your whole text for context, pulls out the key terms, definitions and relationships, and writes cards that follow those rules. You get 'What does the mitochondrial inner membrane host?' rather than a card with half the chapter pasted on the back. Each card is tagged with a Bloom's taxonomy level, so your deck goes beyond definitions. Want to build a full study set with quizzes and flashcards? Check out the study guide generator.",
           ],
           featuresTitle: "Flashcards and quizzes from the same notes",
           features: [
@@ -128,6 +128,7 @@ export default function AiFlashcardsPage() {
           relatedTitle: "Explore more ways to study",
           related: [
             { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
+            { href: "/study-guide-generator", label: "Study Guide Generator" },
             { href: "/notes-to-quiz", label: "Notes to Quiz" },
             { href: "/quiz-generator-from-pdf", label: "PDF to Quiz" },
             { href: "/study-quiz", label: "Study Quiz" },
