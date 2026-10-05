@@ -88,7 +88,7 @@ export default function NotesToQuizPage() {
           cta: "Make a quiz from my notes",
           introTitle: "Why quiz yourself on your own notes",
           intro: [
-            "Re-reading notes feels productive, but it mostly builds familiarity, not recall. Answering questions without looking (active recall) is what research keeps linking to better exam results. The catch is that writing good questions takes longer than reading. Examina removes that step. Because the quiz comes from your notes and not a generic question bank, it tests what your lecturer actually covered.",
+            "Re-reading notes feels productive, but it mostly builds familiarity, not recall. Answering questions without looking (active recall) is what research keeps linking to better exam results. The catch is that writing good questions takes longer than reading. Examina removes that step. Because the quiz comes from your notes and not a generic question bank, it tests what your lecturer actually covered. Want to make a study guide from your notes? Check out our guide.",
           ],
           featuresTitle: "Works with messy, real-world notes",
           features: [
@@ -115,7 +115,7 @@ export default function NotesToQuizPage() {
             {
               n: "02",
               title: "Choose how you want to be tested",
-              body: "Multiple choice for exam-style practice, true/false for quick checks, fill-in-the-blank to force exact recall, or flashcards for fast review.",
+              body: "Multiple choice for exam-style practice, true or false questions from your notes for quick checks, fill-in-the-blank to force exact recall, or flashcards for fast review.",
             },
             {
               n: "03",
@@ -128,6 +128,8 @@ export default function NotesToQuizPage() {
           relatedTitle: "Explore more ways to study",
           related: [
             { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
+            { href: "/study-guide-generator", label: "Study Guide Generator" },
+            { href: "/true-false-quiz-generator", label: "True/False Quiz Generator" },
             { href: "/ai-flashcards", label: "AI Flashcards" },
             { href: "/quiz-generator-from-text", label: "Quiz from Text" },
             { href: "/quiz-generator-from-pdf", label: "PDF to Quiz" },

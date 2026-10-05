@@ -137,7 +137,7 @@ export default function AiQuizGeneratorPage() {
           introTitle: "What Examina's AI quiz generator does",
           intro: [
             "Most quiz makers still expect you to write the questions yourself. Examina's AI quiz generator starts from the material you give it (lecture notes, a textbook section, a handout, an article) and writes questions about that content, not generic trivia on a topic. Every question comes with the correct answer, a short explanation and a difficulty tag, so a practice round also teaches you why an answer is right.",
-            `You can paste anywhere from 50 to 15,000 characters per generation, roughly a few paragraphs up to a long chapter section. For longer documents, generate in parts so each quiz stays focused.`,
+            `You can paste anywhere from 50 to 15,000 characters per generation, roughly a few paragraphs up to a long chapter section. For longer documents, generate in parts so each quiz stays focused. Want to turn your notes into a study guide? Check out the study guide generator.`,
           ],
           featuresTitle: "Four question types from one source",
           features: [
@@ -147,7 +147,7 @@ export default function AiQuizGeneratorPage() {
             },
             {
               title: "True/false",
-              body: "Quick checks for facts and common misconceptions, each with an explanation.",
+              body: "Quick checks for facts and common misconceptions, each with an explanation. Learn more about creating true/false questions.",
             },
             {
               title: "Fill-in-the-blank",
@@ -178,6 +178,8 @@ export default function AiQuizGeneratorPage() {
           related: [
             { href: "/notes-to-quiz", label: "Notes to Quiz" },
             { href: "/ai-flashcards", label: "AI Flashcards" },
+            { href: "/true-false-quiz-generator", label: "True/False Quiz Generator" },
+            { href: "/study-guide-generator", label: "Study Guide Generator" },
             { href: "/create-a-quiz", label: "Create a Quiz" },
             { href: "/free-quiz-generator", label: "Free Quiz Generator" },
             { href: "/quiz-generator-from-text", label: "Quiz Generator from Text" },

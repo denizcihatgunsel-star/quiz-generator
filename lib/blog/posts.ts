@@ -51,6 +51,7 @@ export const POSTS: BlogPost[] = [
         h: "How to review the results",
         p: [
           "Don't just take the quiz once. Export the flashcards for spaced repetition, re-take the multiple choice a few days later, and check your score trend in the dashboard. A quiz you revisit is worth ten you skim once.",
+          "Want to go further? Learn how to make a study guide from your notes that includes quizzes and flashcards for complete exam prep.",
         ],
       },
     ],
@@ -106,6 +107,7 @@ export const POSTS: BlogPost[] = [
         h: "Make practice frictionless",
         p: [
           "The barrier to active recall isn't the technique — it's the effort of producing questions. AI quiz generation removes it: paste your notes, get a complete practice test with explanations, and spend your energy on retrieval instead of question-writing.",
+          "Ready to put it into practice? Turn your notes into a study set with the AI study guide generator.",
         ],
       },
     ],
@@ -379,6 +381,7 @@ export const POSTS: BlogPost[] = [
         h: "A repeatable AI workflow",
         p: [
           "Paste the week's lesson or textbook chapter, ask for multiple-choice questions across the Bloom's levels, then skim for distractors and balance. Differentiated version for a second class? Regenerate from the same source — the model re-authors rather than reuses, which also makes it hard for students to memorize a shared question bank.",
+          "Want to explore other question types? Learn about writing true or false questions to complement your MCQs.",
         ],
       },
     ],
@@ -692,6 +695,217 @@ export const POSTS: BlogPost[] = [
     tools: [
       { href: "/flashcard-generator", label: "Flashcard Generator" },
       { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
+      { href: "/quiz-generator-from-pdf", label: "Quiz from PDF" },
+    ],
+  },
+  {
+    slug: "how-to-write-true-or-false-questions",
+    title: "How to Write True or False Questions (With Examples)",
+    description: "Learn how to write true or false questions that test real understanding: 8 rules, good vs bad examples, a free template, and a faster way with AI.",
+    tag: "Study Tips",
+    date: "Oct 2026",
+    dateIso: "2026-10-05",
+    readTime: "6 min",
+    sections: [
+      {
+        h: "Introduction",
+        p: [
+          "True or false questions look like the easiest thing in the world to write. One sentence, two possible answers, done. But anyone who has taken a badly written true/false test knows the problem: you can often guess the answer from the wording alone. A good true/false question tests what someone knows. A bad one tests how well they read test-writers' habits.",
+          "This guide shows you how to make true or false questions that are fair, clear and actually useful, with good and bad examples for each rule and a template you can copy.",
+        ],
+      },
+      {
+        h: "When true/false questions are the right choice",
+        list: [
+          "Quick checks of facts such as dates, definitions and cause and effect.",
+          "Surfacing misconceptions. A false statement built around a common mistake shows instantly who still believes it.",
+          "Warm-ups and reading checks. Students can answer ten in a couple of minutes.",
+        ],
+        p: [
+          "They're weaker for testing complex reasoning, and a student has a 50% chance of guessing right. So use them alongside other formats such as multiple choice, fill-in-the-blank and short answer, not instead of them.",
+        ],
+      },
+      {
+        h: "8 rules for writing good true or false questions",
+        p: [
+          "1. Test one idea per statement. If a statement contains two claims, one might be true and the other false, and the student can't answer honestly. ❌ The heart has four chambers and pumps blood only to the lungs. ✅ The human heart has four chambers. (True) ✅ The right ventricle pumps blood to the lungs. (True)",
+          "2. Avoid absolute and hedge words that give it away. \"Always\", \"never\", \"all\" and \"none\" are usually false; \"often\", \"usually\" and \"may\" are usually true. Test-savvy students know this. ❌ Metals are always solid at room temperature. (Students guess \"false\" from \"always\".) ✅ Mercury is a metal that is liquid at room temperature. (True)",
+          "3. Make the false statements plausible. A false statement should be wrong in one meaningful way: a changed number, a swapped cause, a reversed direction. It shouldn't be absurd. ❌ World War II ended in 1066. ✅ World War II ended in 1918. (False. That's WWI; it tests whether students mix up the two.)",
+          "4. Don't use double negatives. ❌ It is not true that plants do not need sunlight. ✅ Plants need light to carry out photosynthesis. (True)",
+          "5. Keep true and false items a similar length. Writers tend to add qualifiers to make true statements precise, so long statements end up true more often. Watch for it.",
+          "6. Base each statement on the material, not trivia. Ask: \"Would understanding this lesson help someone answer this?\" If the answer depends on a footnote or a trick of phrasing, rewrite it.",
+          "7. Balance the answer key. Aim for roughly half true and half false, in no predictable pattern (not T, F, T, F…).",
+          "8. Add a one-line explanation. \"False: oxygen is a product, not a reactant\" turns a mark into a lesson. This matters most in self-study.",
+        ],
+      },
+      {
+        h: "A true and false quiz template you can copy",
+        p: [
+          "Title: __________________ Class/Topic: __________ Date: ______",
+          "Directions: Write T if the statement is true and F if it is false.",
+          "1. ______________________________________ ___",
+          "2. ______________________________________ ___",
+          "3. ______________________________________ ___",
+          "Answer key + explanations",
+          "1. __ because ____________________________",
+          "2. __ because ____________________________",
+          "Variation: \"correct the false ones.\" Ask students to rewrite every false statement so it becomes true. This removes the 50% guessing advantage and checks real understanding.",
+        ],
+      },
+      {
+        h: "Worked example: from notes to questions",
+        p: [
+          "Say your notes read: \"The water cycle is driven by the sun. Water evaporates from oceans, condenses into clouds, and falls as precipitation. Transpiration from plants also adds water vapor to the air.\"",
+          "Statements you could write:",
+          "1. The sun provides the energy that drives the water cycle. (T)",
+          "2. Condensation is the process of water vapor turning into liquid droplets. (T)",
+          "3. Precipitation is how water vapor enters the atmosphere. (F: that's evaporation and transpiration.)",
+          "4. Plants add water vapor to the air through transpiration. (T)",
+          "5. Clouds form when liquid water evaporates directly into ice crystals. (F: clouds form through condensation.)",
+          "Notice each one tests a single idea from the notes, and the false ones swap a real term for a related but wrong one.",
+        ],
+      },
+      {
+        h: "How to make true or false questions faster with AI",
+        p: [
+          "Writing twenty balanced, well-worded statements by hand takes a while. An AI tool can do the first draft for you. With Examina's true or false quiz generator, you paste notes (or upload a PDF, TXT or Markdown file) and get true/false questions with the correct answer and an explanation for each. Every question is tagged with a Bloom's taxonomy level, so you can tell recall items from understanding items.",
+          "Whatever tool you use, run its output through the 8 rules above. They work just as well as an editing checklist.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "How many true/false questions should a quiz have?",
+        a: "For a quick check, 5–10 is enough. Because of guessing, use more items (or mix formats) when the score really matters.",
+      },
+      {
+        q: "Should I use \"always\" and \"never\"?",
+        a: "Only when the absolute is the point being tested, and then use them in both true and false items.",
+      },
+      {
+        q: "How do I stop students from guessing?",
+        a: "Ask them to correct false statements, mix in other question types, and keep a balanced, random answer key.",
+      },
+    ],
+    tools: [
+      { href: "/true-false-quiz-generator", label: "True/False Quiz Generator" },
+      { href: "/notes-to-quiz", label: "Notes to Quiz" },
+      { href: "/quiz-generator-from-pdf", label: "PDF Quiz Generator" },
+      { href: "/ai-flashcards", label: "AI Flashcards" },
+    ],
+  },
+  {
+    slug: "how-to-make-a-study-guide-from-notes",
+    title: "How to Make a Study Guide from Your Notes (Fast)",
+    description: "A fast, step-by-step way to turn messy notes into a study guide that tests you: pick key ideas, write questions, make flashcards, and review on a schedule.",
+    tag: "Study Tips",
+    date: "Oct 2026",
+    dateIso: "2026-10-05",
+    readTime: "7 min",
+    sections: [
+      {
+        h: "Introduction",
+        p: [
+          "You have weeks of notes, an exam coming up, and no idea where to start. Making a study guide is the classic answer, but many students spend hours rewriting notes into a prettier version of the same notes, then read it and feel ready, until the exam.",
+          "The fix is to build a study guide that asks you questions instead of just restating information. Here's a fast method that works on paper, in a doc, or with an AI tool.",
+        ],
+      },
+      {
+        h: "Step 1: Collect and trim (10 minutes)",
+        p: [
+          "Gather everything for one exam or one unit: lecture notes, slides, handouts, the chapters you were assigned. Then cut.",
+        ],
+        list: [
+          "Remove anything your teacher said won't be tested.",
+          "Group the rest into 3–6 topics (for example \"Cell structure\", \"Photosynthesis\", \"Respiration\").",
+          "Under each topic, list the 5–10 ideas you'd be embarrassed to get wrong. That list is the skeleton of your study guide.",
+        ],
+      },
+      {
+        h: "Step 2: Turn each key idea into a question (20 minutes)",
+        p: [
+          "This is the step that makes a study guide work. For every key idea, write at least one question you'd have to answer from memory. Use different formats:",
+        ],
+        list: [
+          "Definition → flashcard. Front: What is osmosis? Back: Movement of water across a semi-permeable membrane from lower to higher solute concentration.",
+          "Fact → true/false. Osmosis requires energy from ATP. (False: it's passive.)",
+          "Key term → fill-in-the-blank. The ______ is the powerhouse of the cell.",
+          "Concept → multiple choice. Which process produces the most ATP? (a) glycolysis (b) Krebs cycle (c) electron transport chain (d) fermentation.",
+          "Big idea → \"explain\" question. Explain why a cell placed in salt water shrinks.",
+          "Aim to mix easy recall questions with \"why\" and \"how\" questions. Bloom's taxonomy is a useful checklist here: remember, understand, apply, analyze. Our post on Bloom's taxonomy for quizzes has examples at each level.",
+        ],
+      },
+      {
+        h: "Step 3: Add answers, but hide them",
+        p: [
+          "Put answers on the back of the card, at the bottom of the page, or in a separate column you can fold over. If you can see the answer while reading the question, you're not studying. You're re-reading.",
+        ],
+      },
+      {
+        h: "Step 4: Test yourself and mark what you miss",
+        p: [
+          "Go through the whole guide once without looking. Mark every question you got wrong or hesitated on. That's your real study list, usually a third of the original or less. This is active recall, and it's far more effective than highlighting.",
+        ],
+      },
+      {
+        h: "Step 5: Review on a schedule",
+        p: [
+          "Revisit the missed questions the next day, then a few days later, then right before the exam. Spacing reviews out beats cramming. Here's a simple spaced repetition schedule you can follow.",
+        ],
+      },
+      {
+        h: "Example: one page of notes → study guide",
+        p: [
+          "Notes (history): The Industrial Revolution began in Britain in the late 18th century. Key drivers: coal, iron, the steam engine (improved by James Watt), and the factory system in textiles. It led to rapid urbanization and new working conditions, including child labor.",
+          "Study guide:",
+        ],
+        list: [
+          "Flashcard: Where did the Industrial Revolution begin? → Britain, late 18th century.",
+          "True/false: James Watt invented the first steam engine. → False: he significantly improved it.",
+          "Fill-in-the-blank: The ______ system transformed textile production. → factory",
+          "Multiple choice: Which was NOT a key driver? (a) coal (b) iron (c) electricity grids (d) steam power → (c)",
+          "Explain: Why did the Industrial Revolution cause urbanization?",
+          "Five questions from four sentences. That's the ratio to aim for.",
+        ],
+      },
+      {
+        h: "Common mistakes to avoid",
+        list: [
+          "Copying notes word for word. If it isn't a question, it isn't testing you.",
+          "Making it too pretty. Colors and fonts eat time you could spend recalling.",
+          "Only easy questions. If you get 100% on the first try, write harder ones.",
+          "Building it the night before. The guide is a tool for several review sessions, not one.",
+        ],
+      },
+      {
+        h: "The fast way: use an AI study guide maker",
+        p: [
+          "Steps 2 and 3 take the most time. That's where AI helps. With Examina's study guide generator, you paste your notes (or upload a PDF, TXT or Markdown file) and get quiz questions and flashcards with answers and explanations, each tagged with a Bloom's level. It doesn't write a summary document. It gives you the question-based study set that steps 2–4 describe, so you can go straight to testing yourself.",
+          "You can also pick a single format: AI flashcards for terms and definitions, True/false quiz generator for quick fact checks, Fill-in-the-blank generator for key vocabulary, Multiple choice quiz maker for exam-style practice, Quiz generator from PDF if your notes are slides or handouts.",
+          "Then do steps 4 and 5 yourself: test, mark, and review on a schedule.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "How long should a study guide be?",
+        a: "As long as your list of key ideas. For one unit, 20–50 questions is typical.",
+      },
+      {
+        q: "Should I handwrite or type it?",
+        a: "Either works. What matters is that it's question-based and you test yourself with it.",
+      },
+      {
+        q: "Can AI make a study guide for me?",
+        a: "AI can draft the questions and flashcards from your notes in seconds. You still need to check them against your material and actually test yourself.",
+      },
+    ],
+    tools: [
+      { href: "/study-guide-generator", label: "Study Guide Generator" },
+      { href: "/ai-flashcards", label: "AI Flashcards" },
+      { href: "/true-false-quiz-generator", label: "True/False Quiz Generator" },
+      { href: "/fill-in-the-blank-generator", label: "Fill-in-the-Blank Generator" },
+      { href: "/multiple-choice-quiz-maker", label: "Multiple Choice Quiz Maker" },
       { href: "/quiz-generator-from-pdf", label: "Quiz from PDF" },
     ],
   },

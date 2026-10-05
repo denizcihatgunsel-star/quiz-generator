@@ -6,6 +6,7 @@ const TOOLS = [
   { href: "/ai-flashcards", label: "Flashcard Generator" },
   { href: "/fill-in-the-blank-generator", label: "Fill in the Blank" },
   { href: "/true-false-quiz-generator", label: "True & False" },
+  { href: "/study-guide-generator", label: "Study Guide Generator" },
   { href: "/quiz-generator-from-pdf", label: "PDF to Quiz" },
 ];
 

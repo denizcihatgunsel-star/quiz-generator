@@ -32,6 +32,7 @@ export default function sitemap() {
     { url: `${SITE}/multiple-choice-quiz-maker`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE}/true-false-quiz-generator`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE}/fill-in-the-blank-generator`, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${SITE}/study-guide-generator`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE}/ai-quiz-generator`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE}/free-quiz-generator`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE}/quiz-generator-from-pdf`, changeFrequency: "monthly", priority: 0.9 },
