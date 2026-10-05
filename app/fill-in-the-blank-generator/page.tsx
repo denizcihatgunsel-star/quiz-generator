@@ -4,7 +4,7 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 import ToolCrossLinks from "@/components/ToolCrossLinks";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Fill in the Blank Generator AI — Create Cloze Questions | Examina",
+  title: "Fill in the Blank Generator AI — Create Cloze Questions",
   description: "Generate fill-in-the-blank questions from any text with AI. Test real recall, not just recognition. Free AI cloze question generator.",
   path: "/fill-in-the-blank-generator",
 });

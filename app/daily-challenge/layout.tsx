@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = {
   ...pageMetadata({
-    title: "Daily Challenge — A New Quiz Every Day | Examina",
+    title: "Daily Challenge — A New Quiz Every Day",
     description: "Test yourself with a fresh community quiz every day, earn XP, and keep your study streak alive. Free to play.",
     path: "/daily-challenge",
     noIndex: true,

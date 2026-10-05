@@ -5,7 +5,7 @@ import KeywordLanding from "@/components/KeywordLanding";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = pageMetadata({
-  title: "AI Flashcards — Generate Flashcards from Notes | Examina",
+  title: "AI Flashcards — Generate Flashcards from Notes",
   description: "Make AI flashcards from your notes, a PDF or a photo in seconds. Study with flip cards and spaced repetition, then quiz yourself. Free to start.",
   path: "/ai-flashcards",
   images: [

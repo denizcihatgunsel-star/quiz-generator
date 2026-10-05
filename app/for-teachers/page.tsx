@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
 
 export const metadata: Metadata = pageMetadata({
-  title: "AI Quiz Generator for Teachers — Create Assessments Fast | Examina",
+  title: "AI Quiz Generator for Teachers — Create Assessments Fast",
   description: "AI quiz generator built for teachers. Paste lesson content and generate classroom-ready quizzes with Bloom's Taxonomy mapping in seconds.",
   path: "/for-teachers",
 });

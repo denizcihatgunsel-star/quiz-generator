@@ -4,7 +4,7 @@ import LocalizedLanding, { type LocaleData } from "@/components/LocalizedLanding
 const LANGS = { en: "https://www.examina.ink/", es: "https://www.examina.ink/es", de: "https://www.examina.ink/de", fr: "https://www.examina.ink/fr", pt: "https://www.examina.ink/pt", tr: "https://www.examina.ink/tr" };
 
 export const metadata: Metadata = {
-  title: "Yapay Zeka Quiz Oluşturucu — Notlarını Teste Dönüştür | Examina",
+  title: "Yapay Zeka Quiz Oluşturucu — Notlarını Teste Dönüştür",
   description:
     "Notlarını 30 saniyeden kısa sürede çoktan seçmeli, bilgi kartı, boşluk doldurma ve doğru/yanlış testlerine dönüştür. 29 dil, ücretsiz başla.",
   alternates: {

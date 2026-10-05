@@ -4,7 +4,7 @@ import LocalizedLanding, { type LocaleData } from "@/components/LocalizedLanding
 const LANGS = { en: "https://www.examina.ink/", es: "https://www.examina.ink/es", de: "https://www.examina.ink/de", fr: "https://www.examina.ink/fr", pt: "https://www.examina.ink/pt", tr: "https://www.examina.ink/tr" };
 
 export const metadata: Metadata = {
-  title: "Générateur de Quiz IA — Transformez vos Notes en Tests | Examina",
+  title: "Générateur de Quiz IA — Transformez vos Notes en Tests",
   description:
     "Transformez vos notes en QCM, flashcards, textes à trous et vrai/faux en moins de 30 secondes. 29 langues, gratuit pour commencer.",
   alternates: {

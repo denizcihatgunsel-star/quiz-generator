@@ -5,7 +5,7 @@ import KeywordLanding from "@/components/KeywordLanding";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Notes to Quiz — Turn Your Notes into a Quiz | Examina",
+  title: "Notes to Quiz — Turn Your Notes into a Quiz",
   description: "Turn lecture notes, typed or handwritten, into a practice quiz in seconds. Multiple choice, true/false and flashcards from your own notes. Start free.",
   path: "/notes-to-quiz",
   images: [

@@ -4,7 +4,7 @@ import LocalizedLanding, { type LocaleData } from "@/components/LocalizedLanding
 const LANGS = { en: "https://www.examina.ink/", es: "https://www.examina.ink/es", de: "https://www.examina.ink/de", fr: "https://www.examina.ink/fr", pt: "https://www.examina.ink/pt", tr: "https://www.examina.ink/tr" };
 
 export const metadata: Metadata = {
-  title: "Generador de Exámenes con IA | Examina",
+  title: "Generador de Exámenes con IA",
   description:
     "Convierte tus apuntes en exámenes de opción múltiple, flashcards, completar frases y verdadero/falso en menos de 30 segundos. 29 idiomas y gratis para empezar.",
   alternates: {

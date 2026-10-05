@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Daily Quiz — A New Challenge Every Day | Examina",
+  title: "Daily Quiz — A New Challenge Every Day",
   description: "Play a fresh community quiz every day, earn XP, and keep your study streak alive. Free to play — a new challenge daily.",
   path: "/daily-quiz",
 });

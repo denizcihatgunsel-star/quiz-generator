@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
 
 export const metadata: Metadata = pageMetadata({
-  title: "AI Study Tool for Students — Generate Quizzes from Notes | Examina",
+  title: "AI Study Tool for Students — Generate Quizzes from Notes",
   description: "Turn your lecture notes into practice quizzes with AI. Flashcards, multiple choice, fill-in-the-blank — study smarter with Examina. Free to start.",
   path: "/for-students",
 });

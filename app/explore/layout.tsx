@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = {
   ...pageMetadata({
-    title: "Explore Community Quizzes — Study Anything | Examina",
+    title: "Explore Community Quizzes — Study Anything",
     description: "Browse quizzes created by students and teachers around the world. Practice biology, history, languages, and more — free.",
     path: "/explore",
     noIndex: true,

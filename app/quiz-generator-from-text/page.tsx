@@ -3,7 +3,7 @@ import { pageMetadata, LANGUAGE_COUNT } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Quiz Generator from Text — Paste & Generate | Examina",
+  title: "Quiz Generator from Text — Paste & Generate",
   description: `Paste any notes and generate multiple choice, flashcards & true/false questions instantly. Works in ${LANGUAGE_COUNT} languages. Free to try.`,
   path: "/quiz-generator-from-text",
 });

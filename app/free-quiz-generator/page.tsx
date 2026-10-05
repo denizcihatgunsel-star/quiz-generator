@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Free Quiz Generator — 5 Quizzes a Month | Examina",
+  title: "Free Quiz Generator — 5 Quizzes a Month",
   description: "Make quizzes online for free with AI. No credit card. Generate up to 5 quizzes a month, or unlock more from $2/month.",
   path: "/free-quiz-generator",
 });

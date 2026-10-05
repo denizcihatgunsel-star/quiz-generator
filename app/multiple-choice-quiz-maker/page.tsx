@@ -4,7 +4,7 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 import ToolCrossLinks from "@/components/ToolCrossLinks";
 
 export const metadata: Metadata = pageMetadata({
-  title: "AI Multiple Choice Quiz Maker — Generate MCQs Instantly | Examina",
+  title: "AI Multiple Choice Quiz Maker — Generate MCQs Instantly",
   description: "Create multiple choice quizzes from any text with AI. Get 5-6 MCQs with explanations, difficulty tags & Bloom's Taxonomy levels. Free to try.",
   path: "/multiple-choice-quiz-maker",
 });

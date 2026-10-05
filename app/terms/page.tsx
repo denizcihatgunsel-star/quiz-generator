@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Terms of Service | Examina",
+  title: "Terms of Service",
   description: "The terms for using Examina: acceptable use of the quiz generator, accounts, plans, and content ownership.",
   path: "/terms",
 });

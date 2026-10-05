@@ -7,7 +7,7 @@ import { POSTS } from "@/lib/blog/posts";
 export const revalidate = 120;
 
 export const metadata: Metadata = pageMetadata({
-  title: "Blog — AI Quiz Generator Tips & Study Guides | Examina",
+  title: "Blog — AI Quiz Generator Tips & Study Guides",
   description: "Tips, guides, and insights on AI quiz generation, study techniques, active recall, and educational technology from the Examina team.",
   path: "/blog",
 });

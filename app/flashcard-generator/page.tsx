@@ -4,7 +4,7 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 import ToolCrossLinks from "@/components/ToolCrossLinks";
 
 export const metadata: Metadata = pageMetadata({
-  title: "AI Flashcard Generator — Create Flashcards from Notes | Examina",
+  title: "AI Flashcard Generator — Create Flashcards from Notes",
   description: "Generate flashcards from any text instantly with AI. Paste your notes, get interactive study cards with 3D flip. Free AI flashcard generator.",
   path: "/flashcard-generator",
 });

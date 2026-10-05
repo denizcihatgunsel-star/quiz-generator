@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Privacy Policy | Examina",
+  title: "Privacy Policy",
   description: "How Examina handles your data: content is used for AI quiz generation only and is not stored, and account data is kept secure.",
   path: "/privacy",
 });

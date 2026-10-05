@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Study Quiz Generator — Active Recall & Flashcards | Examina",
+  title: "Study Quiz Generator — Active Recall & Flashcards",
   description: "Turn your notes into a study quiz that uses active recall and spaced repetition. Flashcards, quizzes & streaks to stay consistent.",
   path: "/study-quiz",
 });

@@ -5,7 +5,7 @@ export const dynamic = "force-static";
 export const revalidate = 60;
 
 export const metadata: Metadata = pageMetadata({
-  title: "Pricing — Quiz Generator Plans | Examina",
+  title: "Pricing — Quiz Generator Plans",
   description: "Free plan: 5 quizzes/month. Paid plans from $2/month with more quizzes, PDF downloads, and team features. No credit card required to start.",
   path: "/pricing",
 });

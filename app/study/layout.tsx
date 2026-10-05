@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Study Mode — Flashcards on a Schedule | Examina",
+  title: "Study Mode — Flashcards on a Schedule",
   description:
     "Review flashcards on a spaced-repetition schedule so knowledge actually sticks. Built for active recall.",
   path: "/study",

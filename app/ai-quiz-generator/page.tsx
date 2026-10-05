@@ -5,7 +5,7 @@ import KeywordLanding from "@/components/KeywordLanding";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = pageMetadata({
-  title: "AI Quiz Generator — Quizzes from Any Material | Examina",
+  title: "AI Quiz Generator — Quizzes from Any Material",
   description: "Paste notes, upload a PDF or snap a photo and Examina's AI quiz generator writes multiple choice, true/false, fill-in-the-blank and flashcards. Free.",
   path: "/ai-quiz-generator",
   images: [
