@@ -75,11 +75,8 @@ export default function HauntedHillScene() {
         />
       </div>
 
-      {/* Fog layer 1 (lower) */}
-      <div className="scene-fog-1" aria-hidden="true" />
-
-      {/* Fog layer 2 (upper) */}
-      <div className="scene-fog-2" aria-hidden="true" />
+      {/* Fog: white strip at 15% opacity at hill base */}
+      <div className="scene-fog" aria-hidden="true" />
     </>
   );
 }

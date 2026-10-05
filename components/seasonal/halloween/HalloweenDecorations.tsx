@@ -72,14 +72,11 @@ export function HalloweenBats() {
     return () => mediaQuery.removeEventListener("change", handler);
   }, []);
 
-  // 5-6 bats, top-right area, clear of nav and Sound off pill
+  // Max 3 bats, kept away from nav and Sound off button
   const bats = [
-    { id: 1, right: "140px", top: "160px", size: 28, delay: 0, duration: 16 },
-    { id: 2, right: "200px", top: "220px", size: 20, delay: 2, duration: 18 },
-    { id: 3, right: "170px", top: "290px", size: 24, delay: 4, duration: 17 },
-    { id: 4, right: "240px", top: "180px", size: 22, delay: 1, duration: 19 },
-    { id: 5, right: "130px", top: "250px", size: 18, delay: 3, duration: 20 },
-    { id: 6, right: "210px", top: "150px", size: 26, delay: 5, duration: 18 },
+    { id: 1, right: "180px", top: "180px", size: 26, delay: 0, duration: 16 },
+    { id: 2, right: "240px", top: "240px", size: 22, delay: 2, duration: 18 },
+    { id: 3, right: "150px", top: "280px", size: 24, delay: 4, duration: 17 },
   ];
 
   return (
@@ -110,10 +107,10 @@ export function HalloweenBats() {
             ease: "easeInOut",
           }}
         >
-          <svg viewBox="0 0 24 24" fill="#0a0510" opacity="0.85">
+          <svg viewBox="0 0 24 24" fill="#1A0E1C" opacity="0.85" className="halloween-bat">
             {/* Dark bat silhouette with spread wings */}
             <path d="M21 10c-.6 0-1 .4-1 1 0 .3.1.6.3.8-.2.1-.4.2-.7.2-.8 0-1.5-.5-1.8-1.2-.1-.2-.3-.3-.5-.3s-.4.1-.5.3c-.4.9-1.3 1.5-2.3 1.5-.5 0-1-.2-1.4-.5-.2-.1-.4-.2-.6-.2s-.4.1-.6.2c-.4.3-.9.5-1.4.5-1 0-1.9-.6-2.3-1.5-.1-.2-.3-.3-.5-.3s-.4.1-.5.3c-.3.7-1 1.2-1.8 1.2-.3 0-.5-.1-.7-.2.2-.2.3-.5.3-.8 0-.6-.4-1-1-1s-1 .4-1 1c0 1.1.9 2 2 2 .4 0 .8-.1 1.1-.3.5.8 1.4 1.3 2.4 1.3.7 0 1.3-.2 1.8-.6.5.4 1.1.6 1.8.6s1.3-.2 1.8-.6c.5.4 1.1.6 1.8.6 1 0 1.9-.5 2.4-1.3.3.2.7.3 1.1.3 1.1 0 2-.9 2-2 0-.6-.4-1-1-1zM12 9c.6 0 1-.4 1-1V7c0-.6-.4-1-1-1s-1 .4-1 1v1c0 .6.4 1 1 1z"/>
-            <ellipse cx="12" cy="15" rx="2.5" ry="3" fill="#0a0510"/>
+            <ellipse cx="12" cy="15" rx="2.5" ry="3" fill="#1A0E1C"/>
           </svg>
         </motion.div>
       ))}

@@ -1,6 +1,6 @@
 <svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
-  <!-- Witch silhouette -->
-  <g fill="#0a0510">
+  <!-- Witch silhouette all one ink #1A0E1C -->
+  <g fill="#1A0E1C">
     <!-- Hat -->
     <path d="M 35,15 L 40,8 L 42,8 L 47,15 Z"/>
     <ellipse cx="41" cy="15" rx="8" ry="2"/>
@@ -12,9 +12,9 @@
     <path d="M 41,24 L 38,32 L 35,38 L 41,36 L 47,38 L 44,32 L 41,24 Z"/>
     
     <!-- Broom stick -->
-    <line x1="30" y1="36" x2="75" y2="38" stroke="#3d2817" stroke-width="1.5"/>
+    <line x1="30" y1="36" x2="75" y2="38" stroke="#1A0E1C" stroke-width="1.5"/>
     
     <!-- Broom bristles -->
-    <path d="M 75,36 L 82,32 L 85,34 L 82,38 L 78,40 L 75,40 Z" fill="#5d4527"/>
+    <path d="M 75,36 L 82,32 L 85,34 L 82,38 L 78,40 L 75,40 Z"/>
   </g>
 </svg>
