@@ -11,7 +11,7 @@ import { isHalloweenActive } from "@/lib/seasonal";
 // Halloween seasonal components
 const HalloweenPumpkins = dynamic(() => import("@/components/seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenPumpkins })), { ssr: false });
 const HalloweenBats = dynamic(() => import("@/components/seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenBats })), { ssr: false });
-const HalloweenAtmosphere = dynamic(() => import("@/components/seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenAtmosphere })), { ssr: false });
+const HauntedHillScene = dynamic(() => import("@/components/seasonal/halloween/HauntedHillScene"), { ssr: false });
 const HeroCauldron = dynamic(() => import("@/components/seasonal/halloween/HeroCauldron"), { ssr: false });
 
 const ARROW = (
@@ -54,9 +54,9 @@ function MobileHomeContent() {
       {/* Halloween decorations */}
       {halloweenActive && (
         <>
+          <HauntedHillScene />
           <HalloweenPumpkins />
           <HalloweenBats />
-          <HalloweenAtmosphere />
         </>
       )}
       
@@ -87,7 +87,7 @@ function MobileHomeContent() {
           className="mx-auto mt-4 max-w-xs font-serif text-lg italic leading-relaxed text-[#8C5A68]"
           style={{ animation: "fade-up 0.6s ease-out 0.15s both" }}
         >
-          Turn your study notes into structured quizzes, instantly.
+          Turn your study notes into structured <span className={halloweenActive ? "word-glow" : ""}>quizzes</span>, instantly.
         </p>
 
         <div className="mt-8 flex flex-col items-center gap-3">

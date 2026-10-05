@@ -34,6 +34,7 @@ import { useTranslation } from "@/lib/i18n";
 const HalloweenPumpkins = dynamic(() => import("./seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenPumpkins })), { ssr: false });
 const HalloweenBats = dynamic(() => import("./seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenBats })), { ssr: false });
 const HalloweenAtmosphere = dynamic(() => import("./seasonal/halloween/HalloweenDecorations").then(m => ({ default: m.HalloweenAtmosphere })), { ssr: false });
+const HauntedHillScene = dynamic(() => import("./seasonal/halloween/HauntedHillScene"), { ssr: false });
 const HeroCauldron = dynamic(() => import("./seasonal/halloween/HeroCauldron"), { ssr: false });
 
 // Below-fold marketing: client-only to keep homepage HTML lean for crawlers/CDN
@@ -605,9 +606,9 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
               )}
               {!isLoggedIn && !hideChrome && halloweenActive && (
                 <>
+                  <HauntedHillScene />
                   <HalloweenPumpkins />
                   <HalloweenBats />
-                  <HalloweenAtmosphere />
                 </>
               )}
               <motion.div
@@ -680,7 +681,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     <InteractiveWordmark />
                   </div>
                   <h1 className="mt-8 font-serif text-4xl font-medium tracking-tight leading-[1.05] text-[#3B2027] sm:text-5xl lg:text-6xl">
-                    AI Quiz Generator that turns notes into quizzes
+                    AI Quiz Generator that turns notes into <span className={halloweenActive ? "word-glow" : ""}>quizzes</span>
                   </h1>
                   <motion.p
                     initial={{ opacity: 0 }}

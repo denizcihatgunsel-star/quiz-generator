@@ -26,9 +26,9 @@ export function HalloweenPumpkins() {
 
   return (
     <>
-      {/* Bottom left pumpkin - hidden <640px */}
+      {/* Bottom left pumpkin with candle glow - hidden <640px */}
       <motion.div
-        className="halloween-decoration hidden sm:block fixed bottom-8 left-8 z-[1]"
+        className="halloween-decoration scene-pumpkin hidden sm:block fixed bottom-8 left-8 z-[1]"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 0.8, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
@@ -42,9 +42,9 @@ export function HalloweenPumpkins() {
         />
       </motion.div>
 
-      {/* Bottom right pumpkin - hidden <640px */}
+      {/* Bottom right pumpkin with candle glow - hidden <640px */}
       <motion.div
-        className="halloween-decoration hidden sm:block fixed bottom-8 right-8 z-[1]"
+        className="halloween-decoration scene-pumpkin hidden sm:block fixed bottom-8 right-8 z-[1]"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 0.8, y: 0 }}
         transition={{ duration: 0.6, delay: 0.5 }}
@@ -110,10 +110,10 @@ export function HalloweenBats() {
             ease: "easeInOut",
           }}
         >
-          <svg viewBox="0 0 24 24" fill="#2A1520" opacity="0.6">
-            {/* Proper bat silhouette with spread wings */}
+          <svg viewBox="0 0 24 24" fill="#0a0510" opacity="0.85">
+            {/* Dark bat silhouette with spread wings */}
             <path d="M21 10c-.6 0-1 .4-1 1 0 .3.1.6.3.8-.2.1-.4.2-.7.2-.8 0-1.5-.5-1.8-1.2-.1-.2-.3-.3-.5-.3s-.4.1-.5.3c-.4.9-1.3 1.5-2.3 1.5-.5 0-1-.2-1.4-.5-.2-.1-.4-.2-.6-.2s-.4.1-.6.2c-.4.3-.9.5-1.4.5-1 0-1.9-.6-2.3-1.5-.1-.2-.3-.3-.5-.3s-.4.1-.5.3c-.3.7-1 1.2-1.8 1.2-.3 0-.5-.1-.7-.2.2-.2.3-.5.3-.8 0-.6-.4-1-1-1s-1 .4-1 1c0 1.1.9 2 2 2 .4 0 .8-.1 1.1-.3.5.8 1.4 1.3 2.4 1.3.7 0 1.3-.2 1.8-.6.5.4 1.1.6 1.8.6s1.3-.2 1.8-.6c.5.4 1.1.6 1.8.6 1 0 1.9-.5 2.4-1.3.3.2.7.3 1.1.3 1.1 0 2-.9 2-2 0-.6-.4-1-1-1zM12 9c.6 0 1-.4 1-1V7c0-.6-.4-1-1-1s-1 .4-1 1v1c0 .6.4 1 1 1z"/>
-            <ellipse cx="12" cy="15" rx="2.5" ry="3" fill="#2A1520"/>
+            <ellipse cx="12" cy="15" rx="2.5" ry="3" fill="#0a0510"/>
           </svg>
         </motion.div>
       ))}

@@ -1,0 +1,61 @@
+<svg viewBox="0 0 1200 150" xmlns="http://www.w3.org/2000/svg">
+  <g fill="#0a0510" opacity="0.8">
+    <!-- Iron fence repeating pattern -->
+    <g id="fencePost">
+      <rect x="0" y="90" width="3" height="50"/>
+      <circle cx="1.5" cy="88" r="3"/>
+    </g>
+    <use href="#fencePost" x="0"/>
+    <use href="#fencePost" x="40"/>
+    <use href="#fencePost" x="80"/>
+    <use href="#fencePost" x="120"/>
+    <use href="#fencePost" x="160"/>
+    <use href="#fencePost" x="200"/>
+    <use href="#fencePost" x="240"/>
+    <use href="#fencePost" x="280"/>
+    <use href="#fencePost" x="320"/>
+    <use href="#fencePost" x="360"/>
+    <use href="#fencePost" x="400"/>
+    <use href="#fencePost" x="440"/>
+    <use href="#fencePost" x="480"/>
+    <use href="#fencePost" x="520"/>
+    <use href="#fencePost" x="560"/>
+    <use href="#fencePost" x="600"/>
+    <use href="#fencePost" x="640"/>
+    <use href="#fencePost" x="680"/>
+    <use href="#fencePost" x="720"/>
+    <use href="#fencePost" x="760"/>
+    <use href="#fencePost" x="800"/>
+    <use href="#fencePost" x="840"/>
+    <use href="#fencePost" x="880"/>
+    <use href="#fencePost" x="920"/>
+    <use href="#fencePost" x="960"/>
+    <use href="#fencePost" x="1000"/>
+    <use href="#fencePost" x="1040"/>
+    <use href="#fencePost" x="1080"/>
+    <use href="#fencePost" x="1120"/>
+    <use href="#fencePost" x="1160"/>
+    
+    <!-- Horizontal fence rails -->
+    <rect x="0" y="100" width="1200" height="2"/>
+    <rect x="0" y="115" width="1200" height="2"/>
+    
+    <!-- Gravestones -->
+    <!-- Gravestone 1 -->
+    <path d="M 250,60 Q 250,50 260,50 L 280,50 Q 290,50 290,60 L 290,130 L 250,130 Z"/>
+    <line x1="255" y1="65" x2="285" y2="65" stroke="#FFF7EC" stroke-width="1" opacity="0.3"/>
+    
+    <!-- Gravestone 2 -->
+    <rect x="450" y="70" width="35" height="60" rx="3"/>
+    <path d="M 450,70 Q 467,55 485,70"/>
+    
+    <!-- Gravestone 3 (tilted) -->
+    <g transform="rotate(-8 720 95)">
+      <path d="M 700,65 Q 700,58 708,58 L 732,58 Q 740,58 740,65 L 740,125 L 700,125 Z"/>
+    </g>
+    
+    <!-- Gravestone 4 -->
+    <rect x="950" y="75" width="30" height="55" rx="2"/>
+    <circle cx="965" cy="75" r="15"/>
+  </g>
+</svg>

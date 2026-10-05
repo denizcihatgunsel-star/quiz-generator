@@ -15,8 +15,8 @@
  */
 
 [data-season="halloween"] {
-  /* Page background - smooth amber to burnt orange gradient */
-  background: linear-gradient(to bottom, #F6B26B 0%, #E89142 40%, #C2410C 100%);
+  /* Page background - deep purple fading to warm tone below hero */
+  background: linear-gradient(to bottom, #1E1030 0%, #2a1a35 50%, #1E1030 100%);
   background-attachment: fixed;
 }
 
@@ -155,9 +155,21 @@ body[data-season="halloween"]::before {
   box-shadow: 0 2px 8px rgba(42, 21, 32, 0.08);
 }
 
-/* Hero section - remove blush gradient */
+/* Hero section - Haunted Hill night sky gradient */
 [data-season="halloween"] section.bg-gradient-to-b {
-  background: transparent !important;
+  background: linear-gradient(to bottom, #1E1030 0%, #4A2245 35%, #6B3A4A 60%, #C2410C 100%) !important;
+}
+
+/* Hero text readability over dark sky */
+[data-season="halloween"] section h1,
+[data-season="halloween"] section .text-foreground {
+  color: #FFF7EC !important;
+}
+
+[data-season="halloween"] section .text-muted-foreground,
+[data-season="halloween"] section p.text-\[13px\] {
+  color: #FFF7EC !important;
+  opacity: 0.8;
 }
 
 /* Generator box - cream #FFF7EC card with #E8C9A0 border */
@@ -517,8 +529,171 @@ body[data-season="halloween"]::before {
   margin-right: auto !important;
 }
 
-/* Remove any blurred backdrop or shadow layers on mobile */
+/* Haunted Hill Scene Layers */
+[data-season="halloween"] .scene-moon {
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  top: 8%;
+  right: 20%;
+  pointer-events: none;
+  z-index: 1;
+  filter: drop-shadow(0 0 80px rgba(245, 158, 11, 0.4));
+}
+
+[data-season="halloween"] .scene-witch {
+  position: absolute;
+  width: 100px;
+  height: 60px;
+  top: 15%;
+  right: 25%;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.9;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-season="halloween"] .scene-witch {
+    animation: witch-fly 40s linear infinite;
+  }
+}
+
+@keyframes witch-fly {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(120px); }
+  100% { transform: translateX(0); }
+}
+
+[data-season="halloween"] .scene-house {
+  position: absolute;
+  width: 800px;
+  height: 500px;
+  left: 50%;
+  top: 20%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.95;
+}
+
+[data-season="halloween"] .scene-trees {
+  position: absolute;
+  width: 100%;
+  height: 400px;
+  left: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+[data-season="halloween"] .scene-fence {
+  position: absolute;
+  width: 100%;
+  height: 150px;
+  left: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Fog layers */
+[data-season="halloween"] .scene-fog-1 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 180px;
+  background: linear-gradient(to top, rgba(230, 220, 240, 0.35) 0%, rgba(230, 220, 240, 0.15) 50%, transparent 100%);
+  pointer-events: none;
+  z-index: 6;
+}
+
+[data-season="halloween"] .scene-fog-2 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 140px;
+  background: linear-gradient(to top, rgba(255, 247, 236, 0.25) 0%, rgba(255, 247, 236, 0.1) 60%, transparent 100%);
+  pointer-events: none;
+  z-index: 7;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-season="halloween"] .scene-fog-1 {
+    animation: fog-drift-1 25s ease-in-out infinite;
+  }
+  
+  [data-season="halloween"] .scene-fog-2 {
+    animation: fog-drift-2 30s ease-in-out infinite reverse;
+  }
+}
+
+@keyframes fog-drift-1 {
+  0%, 100% { opacity: 1; transform: translateX(0); }
+  50% { opacity: 0.8; transform: translateX(-40px); }
+}
+
+@keyframes fog-drift-2 {
+  0%, 100% { opacity: 1; transform: translateX(0); }
+  50% { opacity: 0.7; transform: translateX(30px); }
+}
+
+/* Pumpkin glow */
+[data-season="halloween"] .scene-pumpkin {
+  filter: drop-shadow(0 0 20px rgba(255, 179, 71, 0.6));
+}
+
+/* Orange word glow */
+[data-season="halloween"] .word-glow {
+  color: #F97316 !important;
+  text-shadow: 0 0 20px rgba(249, 115, 22, 0.5), 0 0 40px rgba(249, 115, 22, 0.3);
+}
+
+/* Responsive scene adjustments */
+@media (max-width: 1024px) {
+  [data-season="halloween"] .scene-moon {
+    width: 280px;
+    height: 280px;
+    top: 10%;
+    right: 10%;
+  }
+  
+  [data-season="halloween"] .scene-house {
+    width: 600px;
+    height: 375px;
+    top: 25%;
+  }
+  
+  [data-season="halloween"] .scene-trees {
+    display: none;
+  }
+}
+
 @media (max-width: 767px) {
+  [data-season="halloween"] .scene-moon {
+    width: 200px;
+    height: 200px;
+    top: 8%;
+    right: 5%;
+  }
+  
+  [data-season="halloween"] .scene-witch {
+    width: 60px;
+    height: 36px;
+  }
+  
+  [data-season="halloween"] .scene-house {
+    width: 400px;
+    height: 250px;
+    top: 18%;
+    opacity: 0.7;
+  }
+  
+  [data-season="halloween"] .scene-trees {
+    display: none;
+  }
+  
   [data-season="halloween"] header::before,
   [data-season="halloween"] header::after,
   [data-season="halloween"] nav::before {

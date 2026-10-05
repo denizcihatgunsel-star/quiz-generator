@@ -1,0 +1,29 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hill -->
+  <path d="M 0,400 Q 200,320 400,350 T 800,380 L 800,500 L 0,500 Z" fill="#1a0f1f" opacity="0.9"/>
+  
+  <!-- House base -->
+  <rect x="320" y="260" width="180" height="140" fill="#0a0510"/>
+  
+  <!-- Roof main -->
+  <path d="M 300,260 L 410,180 L 520,260 Z" fill="#0a0510"/>
+  
+  <!-- Tower left -->
+  <rect x="280" y="220" width="50" height="120" fill="#0a0510"/>
+  <path d="M 270,220 L 305,180 L 340,220 Z" fill="#0a0510"/>
+  
+  <!-- Tower right -->
+  <rect x="490" y="200" width="55" height="140" fill="#0a0510"/>
+  <path d="M 480,200 L 517,150 L 555,200 Z" fill="#0a0510"/>
+  
+  <!-- Lit windows warm orange -->
+  <rect x="340" y="290" width="25" height="35" fill="#FFB347"/>
+  <rect x="375" y="290" width="25" height="35" fill="#FFB347"/>
+  <rect x="440" y="290" width="25" height="35" fill="#FFB347"/>
+  <rect x="360" y="340" width="30" height="50" fill="#FFB347"/>
+  <rect x="500" y="240" width="20" height="30" fill="#FFB347"/>
+  
+  <!-- Dark windows -->
+  <rect x="295" y="250" width="20" height="28" fill="#050208"/>
+  <rect x="410" y="340" width="25" height="35" fill="#050208"/>
+</svg>
