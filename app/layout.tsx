@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif, Space_Grotesk } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif, Space_Grotesk, Creepster, Poppins } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -16,6 +16,20 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const creepster = Creepster({
+  weight: "400",
+  variable: "--font-creepster",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const poppins = Poppins({
+  weight: ["400", "500", "600"],
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 const instrumentSerif = Instrument_Serif({
@@ -56,7 +70,7 @@ function getThemeColor(): string {
       const now = new Date();
       const cutoff = new Date('2026-11-01T00:00:00+03:00');
       if (now < cutoff) {
-        return '#2A1530'; // Halloween deep purple
+        return '#0A1614'; // Halloween dark teal
       }
     } catch {
       // Fall through to default
@@ -82,7 +96,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${spaceGrotesk.variable} ${creepster.variable} ${poppins.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

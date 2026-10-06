@@ -1,162 +1,123 @@
 /**
- * Halloween Seasonal Theme - Full Reskin
+ * Halloween Party Theme - Dark Teal 'Halloween Party' Landing
  * 
- * Scoped under [data-season="halloween"]
  * Active when: NEXT_PUBLIC_SEASONAL_THEME=halloween AND before Nov 1 2026, OR ?halloween=1
  * 
- * Final color palette:
- * - Background: Amber #F6B26B (top) -> Burnt Orange #C2410C (bottom), faint grain 0.04 opacity
- * - Text: Dark plum #2A1520 (headings/body), never white on orange
- * - Cards: Cream #FFF7EC with 1px #E8C9A0 border
- * - Buttons: Plum #3B2027 with cream text
- * - Cauldron: #2A1520, lime #B8E07A bubbles only
- * - Pumpkins: Flat #E8833A, no faces
- * - Footer gradient ends in dark plum #2A1520
+ * EXACT SPEC:
+ * - Background: #0A1614
+ * - Cobweb lines: 8% white opacity
+ * - Moon: #8FD9C8 with soft glow
+ * - Bats: teal #2BA89A
+ * - Outline buttons: 1.5px border #35D0B4, cream text
+ * - Last headline line gradient: white to #7FE3D3
+ * - Fonts: Creepster for logo/headline/nav/buttons, Poppins for body (Halloween only)
+ * - theme-color: #0A1614
  */
 
+/* Page background #0A1614 */
 [data-season="halloween"] {
-  /* Page background - fade from #1A0E1C to #2A1530 over 160px below hero */
-  background: #1A0E1C;
+  background: #0A1614;
   background-attachment: fixed;
 }
 
-/* Smooth fade below hero - 160px transition */
+/* Remove old grain overlay */
+[data-season="halloween"]::before {
+  display: none;
+}
+
+/* Cobweb line art - 8% white opacity, top-right */
 [data-season="halloween"]::after {
   content: '';
   position: fixed;
-  top: 100vh;
-  left: 0;
-  right: 0;
-  height: 160px;
-  background: linear-gradient(to bottom, #1A0E1C 0%, #2A1530 100%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-[data-season="halloween"]::before {
-  content: '';
-  position: fixed;
   top: 0;
-  left: 0;
   right: 0;
-  bottom: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  width: 300px;
+  height: 300px;
+  background-image: url("data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23FFFFFF' fill='none' opacity='0.08' stroke-width='1'%3E%3Cpath d='M300 0 L150 150 M300 50 L150 150 M300 100 L150 150 M250 0 L150 150 M200 0 L150 150 M150 150 L150 0 M150 150 L300 150 M150 150 L175 25 M150 150 L225 50'/%3E%3Ccircle cx='150' cy='150' r='3' fill='%23FFFFFF'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: top right;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.04;
 }
 
-/* Hide base dot grid, ambient blobs, and body::before grid pattern */
-[data-season="halloween"] .ambient-dotgrid,
-[data-season="halloween"] .ambient-blob {
-  display: none !important;
+/* Cobweb bottom-left corner */
+[data-season="halloween"] body::before {
+  content: '';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 300px;
+  height: 300px;
+  background-image: url("data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23FFFFFF' fill='none' opacity='0.08' stroke-width='1'%3E%3Cpath d='M0 300 L150 150 M50 300 L150 150 M100 300 L150 150 M0 250 L150 150 M0 200 L150 150 M150 150 L150 300 M150 150 L0 150 M150 150 L25 275 M150 150 L75 225'/%3E%3Ccircle cx='150' cy='150' r='3' fill='%23FFFFFF'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  pointer-events: none;
+  z-index: 1;
 }
 
-/* FORCE hide body::before which contains the diagonal grid pattern from base CSS */
-body[data-season="halloween"]::before {
-  content: none !important;
-  display: none !important;
+/* Body font switch to Poppins when Halloween active */
+[data-season="halloween"] body,
+[data-season="halloween"] p,
+[data-season="halloween"] li,
+[data-season="halloween"] span:not(.halloween-logo):not([class*="creepster"]) {
+  font-family: var(--font-poppins), sans-serif;
 }
 
-/* Hide ALL wave canvases and grid/noise overlay */
-[data-season="halloween"] canvas[aria-hidden="true"],
-[data-season="halloween"] canvas,
-[data-season="halloween"] .pointer-events-none.absolute.inset-0 > canvas {
-  display: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-}
-
-/* Hide ALL grid/noise texture overlays (keep only 0.04 grain from ::before) */
-[data-season="halloween"] .pointer-events-none.absolute.inset-0.z-\[1\].overflow-hidden,
-[data-season="halloween"] section > div.pointer-events-none.absolute.inset-0 {
-  opacity: 0 !important;
-  visibility: hidden !important;
-}
-
-/* Override page background color */
-[data-season="halloween"] .bg-background,
-[data-season="halloween"] .min-h-screen {
-  background: transparent !important;
-}
-
-/* Text colors - dark plum #2A1520 */
-[data-season="halloween"] .text-foreground,
-[data-season="halloween"] h1,
-[data-season="halloween"] h2,
-[data-season="halloween"] h3,
-[data-season="halloween"] .text-\[\#3B2027\],
-[data-season="halloween"] .text-\[\#4A3038\] {
-  color: #2A1520 !important;
-}
-
-[data-season="halloween"] .text-muted-foreground,
-[data-season="halloween"] .text-\[\#9A7280\],
-[data-season="halloween"] .text-\[\#8C5A68\],
-[data-season="halloween"] .text-\[\#A87680\] {
-  color: #2A1520 !important;
-  opacity: 0.8;
-}
-
-/* Header - transparent on desktop, solid cream on scroll/mobile to prevent content show-through */
+/* Header transparent */
 [data-season="halloween"] header {
   background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  z-index: 50 !important;
 }
 
-[data-season="halloween"] header.sticky,
-[data-season="halloween"] header.fixed {
-  background: #FFF7EC !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-}
-
-[data-season="halloween"] header > div {
-  background: transparent !important;
-}
-
-/* Remove light peach top bar - header transparent */
-[data-season="halloween"] header {
-  background: transparent !important;
-  background-color: transparent !important;
-}
-
-/* Nav pill - dark see-through rgba(26,14,28,.6) with backdrop blur, cream text */
 [data-season="halloween"] nav {
-  background: rgba(26, 14, 28, 0.6) !important;
+  background: rgba(10, 22, 20, 0.9) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 247, 236, 0.12) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(53, 208, 180, 0.2) !important;
+  box-shadow: none;
 }
 
-/* Ensure sticky header stays above content */
 [data-season="halloween"] header.sticky,
 [data-season="halloween"] header.fixed {
   background: transparent !important;
-  background-color: transparent !important;
   z-index: 50 !important;
 }
 
-[data-season="halloween"] nav a,
-[data-season="halloween"] nav button,
+/* Nav links - Creepster, cream text */
+[data-season="halloween"] nav a:not([href*="create"]):not([href*="register"]),
+[data-season="halloween"] nav button:not([href*="create"]):not([href*="register"]),
 [data-season="halloween"] nav span {
   color: #FFF7EC !important;
+  font-family: var(--font-creepster), cursive !important;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 400;
 }
 
-[data-season="halloween"] nav a:hover,
+[data-season="halloween"] nav a:hover:not([href*="create"]):not([href*="register"]),
 [data-season="halloween"] nav button:hover {
-  color: rgba(255, 247, 236, 0.8) !important;
+  color: #35D0B4 !important;
 }
 
-/* Create Quiz nav button - solid #F28C38 with cream text */
+/* Create Quiz button - 1.5px border #35D0B4, cream text, Creepster */
 [data-season="halloween"] nav a[href="/auth/register"],
 [data-season="halloween"] nav a[href*="create"] {
-  background: #F28C38 !important;
+  background: transparent !important;
   color: #FFF7EC !important;
-  border-color: #F28C38 !important;
+  border: 1.5px solid #35D0B4 !important;
+  box-shadow: none;
+  font-family: var(--font-creepster), cursive !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 400;
+}
+
+[data-season="halloween"] nav a[href="/auth/register"]:hover,
+[data-season="halloween"] nav a[href*="create"]:hover {
+  background: rgba(53, 208, 180, 0.1) !important;
+  box-shadow: 0 0 20px rgba(53, 208, 180, 0.3);
 }
 
 [data-season="halloween"] nav a[href="/auth/register"] *,
@@ -165,500 +126,265 @@ body[data-season="halloween"]::before {
   fill: #FFF7EC !important;
 }
 
-/* Fixed Sound off button - dark translucent pill, cream text */
-[data-season="halloween"] button[aria-pressed] {
-  background: rgba(26, 14, 28, 0.6) !important;
-  border: 1px solid rgba(255, 247, 236, 0.12) !important;
-  color: #FFF7EC !important;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 2px 8px rgba(42, 21, 32, 0.08);
-}
-
-/* Hero section - Full-bleed background image slot with gradient fallback */
+/* Hero section - dark teal #0A1614 */
 [data-season="halloween"] section.bg-gradient-to-b {
+  background: #0A1614 !important;
   position: relative;
-  background: linear-gradient(to bottom, #2A1530 0%, #5B2A4A 50%, #E8743B 100%) !important;
-  overflow: hidden;
+  overflow: visible;
 }
 
-/* Background image slot - behind content */
-[data-season="halloween"] section.bg-gradient-to-b::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* When background images exist, they'll be loaded via picture element in component */
-/* Bottom scrim for blend */
-[data-season="halloween"] section.bg-gradient-to-b::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 200px;
-  background: linear-gradient(to bottom, transparent 0%, #1A0E1C 100%);
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* Radial dark scrim behind centre text column for contrast */
-[data-season="halloween"] section.bg-gradient-to-b > div {
-  position: relative;
-  z-index: 2;
-}
-
+/* Remove old background slots */
+[data-season="halloween"] section.bg-gradient-to-b::before,
+[data-season="halloween"] section.bg-gradient-to-b::after,
 [data-season="halloween"] section.bg-gradient-to-b > div::before {
-  content: '';
+  display: none;
+}
+
+/* Hero headline - Creepster, white, with last line gradient */
+[data-season="halloween"] .halloween-headline {
+  color: #FFFFFF !important;
+  font-family: var(--font-creepster), cursive !important;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+/* Last line gradient white to #7FE3D3 */
+[data-season="halloween"] .halloween-headline-teal {
+  background: linear-gradient(to right, #FFFFFF 0%, #7FE3D3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+/* Pumpkin O overlay - emoji placeholder, aria-hidden */
+[data-season="halloween"] .halloween-pumpkin-o {
+  position: relative;
+  display: inline-block;
+}
+
+[data-season="halloween"] .halloween-pumpkin-o::after {
+  content: '🎃';
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 800px;
-  height: 600px;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.35) 0%, transparent 70%);
-  z-index: -1;
+  font-size: 0.9em;
+  filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.6));
   pointer-events: none;
 }
 
-/* ALL hero text cream with shadow */
-[data-season="halloween"] section h1,
-[data-season="halloween"] section .text-foreground,
-[data-season="halloween"] section .font-serif,
-[data-season="halloween"] section p,
-[data-season="halloween"] section a {
+/* Hide the actual O for visual replacement */
+[data-season="halloween"] .halloween-pumpkin-o {
+  color: transparent;
+}
+
+/* Subtitle - Poppins body text */
+[data-season="halloween"] .halloween-subtitle,
+[data-season="halloween"] section p {
+  color: rgba(255, 247, 236, 0.85) !important;
+  font-family: var(--font-poppins), sans-serif;
+  text-shadow: none;
+}
+
+/* Hero CTA - 1.5px border #35D0B4, cream text, Creepster */
+[data-season="halloween"] .halloween-cta,
+[data-season="halloween"] section a[href="#generate"] {
+  background: transparent !important;
   color: #FFF7EC !important;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45) !important;
+  border: 1.5px solid #35D0B4 !important;
+  box-shadow: none;
+  font-family: var(--font-creepster), cursive !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 2rem !important;
+  font-weight: 400;
+  display: inline-block;
 }
 
-/* Subline at 80% cream */
-[data-season="halloween"] section p.text-\[13px\],
-[data-season="halloween"] section .text-muted-foreground {
+[data-season="halloween"] .halloween-cta:hover,
+[data-season="halloween"] section a[href="#generate"]:hover {
+  background: rgba(53, 208, 180, 0.15) !important;
+  box-shadow: 0 0 25px rgba(53, 208, 180, 0.4);
+}
+
+/* How it works link */
+[data-season="halloween"] section a[href="#features"] {
+  color: rgba(255, 247, 236, 0.7) !important;
+  font-family: var(--font-poppins), sans-serif;
+  text-shadow: none;
+}
+
+[data-season="halloween"] section a[href="#features"]:hover {
+  color: #35D0B4 !important;
+}
+
+/* Sound off button */
+[data-season="halloween"] button[aria-pressed] {
+  background: rgba(10, 22, 20, 0.95) !important;
+  border: 1px solid rgba(53, 208, 180, 0.3) !important;
   color: #FFF7EC !important;
-  opacity: 0.8;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45) !important;
+  backdrop-filter: blur(12px);
 }
 
-/* Generator box - cream #FFF7EC card with #E8C9A0 border */
-[data-season="halloween"] .border-\[\#F3D5DC\],
-[data-season="halloween"] .border-\[\#F6E4EA\] {
-  border: 1px solid #E8C9A0 !important;
-}
-
+/* Quiz generator box - dark teal surface */
 [data-season="halloween"] .bg-white\/70,
 [data-season="halloween"] .bg-white\/80,
 [data-season="halloween"] .bg-\[white\]\/70 {
-  background: #FFF7EC !important;
-  border: 1px solid rgba(59, 48, 39, 0.08) !important;
-  box-shadow: 0 2px 12px rgba(42, 21, 32, 0.08) !important;
+  background: rgba(10, 22, 20, 0.95) !important;
+  border: 1px solid rgba(53, 208, 180, 0.2) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* Small controls (pale rose) become cream with plum text */
+/* Controls */
 [data-season="halloween"] select,
 [data-season="halloween"] input[type="text"],
 [data-season="halloween"] input[type="file"],
 [data-season="halloween"] textarea {
-  background: #FFF7EC !important;
-  border-color: #E8C9A0 !important;
-  color: #2A1520 !important;
+  background: rgba(7, 19, 17, 0.8) !important;
+  border-color: rgba(53, 208, 180, 0.3) !important;
+  color: #FFF7EC !important;
+  font-family: var(--font-poppins), sans-serif;
 }
 
-/* Character count and labels - all helper text #2A1520 */
+[data-season="halloween"] select option {
+  background: #0A1614;
+  color: #FFF7EC;
+}
+
+/* Labels - Poppins */
+[data-season="halloween"] label,
 [data-season="halloween"] .text-\[\#E9B8C4\],
 [data-season="halloween"] .text-\[\#B0607A\],
 [data-season="halloween"] .text-\[\#9A7280\],
 [data-season="halloween"] .text-\[\#8C5A68\],
 [data-season="halloween"] .text-\[\#A87680\] {
-  color: #2A1520 !important;
-  opacity: 0.8;
+  color: rgba(255, 247, 236, 0.8) !important;
+  font-family: var(--font-poppins), sans-serif;
 }
 
-/* ALL chips - cream #FFF7EC with plum #2A1520 text and #E8C9A0 border */
-[data-season="halloween"] [class*="bloom-"],
-[data-season="halloween"] .bg-violet-50,
-[data-season="halloween"] .bg-violet-100,
-[data-season="halloween"] .bg-purple-50,
-[data-season="halloween"] .bg-\[\#F6DCE5\],
-[data-season="halloween"] .bg-\[\#FDE8EC\],
-[data-season="halloween"] #generate span[style*="background"],
-[data-season="halloween"] #generate .rounded {
-  background: #FFF7EC !important;
-  color: #2A1520 !important;
-  border: 1px solid #E8C9A0 !important;
+/* Chips */
+[data-season="halloween"] .inline-flex.items-center.gap-1\.5,
+[data-season="halloween"] button[class*="rounded-full"][class*="text-xs"] {
+  background: rgba(7, 19, 17, 0.8) !important;
+  border: 1px solid rgba(53, 208, 180, 0.3) !important;
+  color: #FFF7EC !important;
+  font-family: var(--font-poppins), sans-serif;
 }
 
-/* Specifically target chips in quiz/generator */
-[data-season="halloween"] #generate span[class*="px-"][class*="py-"][class*="rounded"],
-[data-season="halloween"] #generate [class*="chip"] {
-  background: #FFF7EC !important;
-  color: #2A1520 !important;
-  border: 1px solid #E8C9A0 !important;
+[data-season="halloween"] .inline-flex.items-center.gap-1\.5 svg,
+[data-season="halloween"] button[class*="rounded-full"][class*="text-xs"] svg {
+  color: #35D0B4 !important;
+  fill: #35D0B4 !important;
 }
 
-/* Progress bars */
-[data-season="halloween"] .bg-\[\#F6E4EA\] {
-  background: rgba(232, 201, 160, 0.3) !important;
-}
-
-[data-season="halloween"] .bg-gradient-to-r.from-\[\#E9A8B8\].to-\[\#B0607A\],
-[data-season="halloween"] .from-\[\#E9A8B8\] {
-  background: linear-gradient(to right, #E8833A, #C2410C) !important;
-}
-
-/* Primary buttons - plum #3B2027 with cream text and icons */
-[data-season="halloween"] .bg-\[\#3B2027\],
-[data-season="halloween"] .bg-\[linear-gradient\(120deg\,\#3B2027\,\#6A3A4C\,\#3B2027\)\],
-[data-season="halloween"] button.gradient-shift,
+/* Generate button - 1.5px border #35D0B4, cream text, Creepster */
 [data-season="halloween"] button#generate-btn,
-[data-season="halloween"] a[href="#generate"] {
-  background: #3B2027 !important;
+[data-season="halloween"] button.gradient-shift {
+  background: transparent !important;
   background-image: none !important;
   color: #FFF7EC !important;
+  border: 1.5px solid #35D0B4 !important;
+  box-shadow: none;
+  font-family: var(--font-creepster), cursive !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 400;
 }
 
-/* Generate button - ORANGE gradient linear-gradient(135deg,#F28C38,#E8743B) with cream text */
-[data-season="halloween"] button#generate-btn,
-[data-season="halloween"] button[type="button"].px-5.py-2,
-[data-season="halloween"] button.btn-sheen,
-[data-season="halloween"] button.gradient-shift,
-[data-season="halloween"] button[class*="gradient"],
-[data-season="halloween"] motion.button {
-  background: linear-gradient(135deg, #F28C38, #E8743B) !important;
-  background-image: linear-gradient(135deg, #F28C38, #E8743B) !important;
-  background-color: #F28C38 !important;
+[data-season="halloween"] button#generate-btn:hover,
+[data-season="halloween"] button.gradient-shift:hover {
+  background: rgba(53, 208, 180, 0.15) !important;
+  box-shadow: 0 0 30px rgba(53, 208, 180, 0.4);
 }
 
-/* Also override enabled state specifically */
-[data-season="halloween"] button#generate-btn:not(:disabled),
-[data-season="halloween"] button.gradient-shift:not(:disabled) {
-  background: linear-gradient(135deg, #F28C38, #E8743B) !important;
-  background-image: linear-gradient(135deg, #F28C38, #E8743B) !important;
-  background-color: #F28C38 !important;
-}
-
-/* Remove any ::before/::after overlays from Generate button */
-[data-season="halloween"] button#generate-btn::before,
-[data-season="halloween"] button#generate-btn::after,
-[data-season="halloween"] button.btn-sheen::before,
-[data-season="halloween"] button.btn-sheen::after {
-  display: none !important;
-  opacity: 0 !important;
-}
-
-/* Start generating arrow - plum #3B2027 in cream circle */
-[data-season="halloween"] a[href="#generate"] svg,
-[data-season="halloween"] a[href="/m/create"] svg {
-  color: #3B2027 !important;
-  stroke: #3B2027 !important;
-}
-
-[data-season="halloween"] a[href="#generate"] .bg-\[\#F6E3E8\],
-[data-season="halloween"] a[href="/m/create"] .bg-\[\#F6E3E8\] {
-  background: #FFF7EC !important;
-  color: #3B2027 !important;
-}
-
-/* All nested elements in buttons get cream text/fill */
-[data-season="halloween"] button#generate-btn *,
-[data-season="halloween"] button.gradient-shift *,
-[data-season="halloween"] a[href="#generate"] *,
-[data-season="halloween"] .bg-\[\#3B2027\] * {
-  color: #FFF7EC !important;
-  fill: currentColor !important;
-}
-
-[data-season="halloween"] .hover\:bg-\[\#52303B\]:hover,
-[data-season="halloween"] button.gradient-shift:hover,
-[data-season="halloween"] button#generate-btn:hover {
-  background: linear-gradient(135deg, #E8743B, #D96730) !important;
-  background-image: linear-gradient(135deg, #E8743B, #D96730) !important;
-}
-
-/* Disabled Generate button - orange gradient at 0.7 opacity with cream text */
 [data-season="halloween"] button#generate-btn:disabled,
-[data-season="halloween"] button.gradient-shift:disabled,
-[data-season="halloween"] button:disabled {
-  background: linear-gradient(135deg, #F28C38, #E8743B) !important;
-  background-image: linear-gradient(135deg, #F28C38, #E8743B) !important;
-  color: #FFF7EC !important;
-  opacity: 0.7 !important;
-}
-
-[data-season="halloween"] button#generate-btn:disabled *,
-[data-season="halloween"] button.gradient-shift:disabled * {
-  color: #FFF7EC !important;
-}
-
-[data-season="halloween"] .text-\[\#F6E3E8\],
-[data-season="halloween"] .text-\[\#F6E4EA\] {
-  color: #FFF7EC !important;
-}
-
-/* Button inner circles - cream */
-[data-season="halloween"] .bg-\[\#F6E3E8\] {
-  background: #FFF7EC !important;
-}
-
-[data-season="halloween"] .text-\[\#3B2027\] {
-  color: #3B2027 !important;
-}
-
-/* Sign in link - plum with underline on hover */
-[data-season="halloween"] a[href="/auth/login"] {
-  color: #3B2027 !important;
-  text-decoration: none;
-}
-
-[data-season="halloween"] a[href="/auth/login"]:hover {
-  text-decoration: underline;
-}
-
-/* Orbs and decorative elements - hide */
-[data-season="halloween"] .orb-drift,
-[data-season="halloween"] .twinkle,
-[data-season="halloween"] .float-glyph {
-  display: none !important;
-}
-
-/* Ask Examina block - cream card matching generator */
-[data-season="halloween"] .border-\[\#F3D5DC\] {
-  border: 1px solid #E8C9A0 !important;
-}
-
-/* Question cards - white with proper borders */
-[data-season="halloween"] .bg-\[\#FDE8EC\] {
-  background: #FFFFFF !important;
-  border: 1px solid #E8C9A0 !important;
-  box-shadow: 0 2px 8px rgba(42, 21, 32, 0.06) !important;
-}
-
-/* Footer - solid dark plum #2A1520 */
-[data-season="halloween"] footer {
-  background: #2A1520 !important;
-  border-color: rgba(232, 201, 160, 0.2) !important;
-}
-
-[data-season="halloween"] footer a,
-[data-season="halloween"] footer p,
-[data-season="halloween"] footer span,
-[data-season="halloween"] footer div {
-  color: rgba(255, 247, 236, 0.75) !important;
-}
-
-[data-season="halloween"] footer a:hover {
-  color: #FFF7EC !important;
-  opacity: 1 !important;
-}
-
-/* Footer Get started button - plum style */
-[data-season="halloween"] footer a[href="/auth/register"],
-[data-season="halloween"] footer button {
-  background: #3B2027 !important;
-  color: #FFF7EC !important;
-  opacity: 1 !important;
-}
-
-/* Footer logo - make visible on dark plum */
-[data-season="halloween"] footer svg path,
-[data-season="halloween"] footer svg {
-  fill: rgba(255, 247, 236, 0.75) !important;
-}
-
-/* Footer badges - FORCE VISIBLE with small cream rounded backing */
-[data-season="halloween"] footer img,
-[data-season="halloween"] footer a img,
-[data-season="halloween"] footer a[href*="huzzler"] img,
-[data-season="halloween"] footer a[href*="smolllaunch"] img,
-[data-season="halloween"] footer iframe {
-  display: inline-block !important;
-  visibility: visible !important;
-  background: #FFF7EC !important;
-  padding: 6px 10px !important;
-  border-radius: 8px !important;
-  opacity: 1 !important;
-  height: auto !important;
-  filter: none !important;
-  max-width: none !important;
-}
-
-[data-season="halloween"] footer img:hover,
-[data-season="halloween"] footer a img:hover {
-  opacity: 1 !important;
-}
-
-/* Ensure badge wrapper links and containers are visible */
-[data-season="halloween"] footer a[href*="huzzler"],
-[data-season="halloween"] footer a[href*="smolllaunch"],
-[data-season="halloween"] footer a[href*="launch"],
-[data-season="halloween"] footer div.flex.items-center.gap-4,
-[data-season="halloween"] footer .launch-badge {
-  display: inline-block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-[data-season="halloween"] footer div.flex.items-center.gap-4 {
-  display: flex !important;
-}
-
-/* Gradient text */
-[data-season="halloween"] .animate-gradient-text {
-  background: linear-gradient(135deg, #C2410C, #E8833A) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-}
-
-/* Shadows - soft */
-[data-season="halloween"] .shadow-\[0_16px_50px_-24px_rgba\(176\,96\,122\,0\.4\)\],
-[data-season="halloween"] .shadow-\[0_12px_28px_-12px_rgba\(59\,32\,39\,0\.55\)\] {
-  box-shadow: 0 2px 12px rgba(42, 21, 32, 0.08) !important;
-}
-
-/* Disable card breathing animation */
-[data-season="halloween"] .card-breathe {
-  animation: none !important;
-}
-
-/* Loading spinner */
-[data-season="halloween"] .shimmer-slide {
-  background: linear-gradient(to right, #E8833A, #C2410C) !important;
-}
-
-/* Ambient particles - hide */
-[data-season="halloween"] .ambient-particle {
-  display: none !important;
-}
-
-/* Border animations */
-[data-season="halloween"] .animate-border::before {
-  background: linear-gradient(90deg, transparent, rgba(232, 201, 160, 0.3), transparent) !important;
-}
-
-/* Ensure proper contrast */
-[data-season="halloween"] button:disabled {
+[data-season="halloween"] button.gradient-shift:disabled {
   opacity: 0.5;
+  box-shadow: none;
 }
 
-/* Override ALL pink/purple/blush colors - replace with plum/orange/cream */
-[data-season="halloween"] .bg-\[\#3B2027\],
-[data-season="halloween"] .bg-\[\#52303B\] {
-  background: #3B2027 !important;
+[data-season="halloween"] button#generate-btn *,
+[data-season="halloween"] button.gradient-shift * {
+  color: #FFF7EC !important;
 }
 
-[data-season="halloween"] .bg-\[\#B0607A\],
-[data-season="halloween"] .bg-\[\#C98A98\],
-[data-season="halloween"] .bg-\[\#E9A8B8\],
-[data-season="halloween"] .bg-\[\#F6DCE5\],
-[data-season="halloween"] .bg-\[\#F6E3E8\],
-[data-season="halloween"] .bg-\[\#F6E4EA\],
-[data-season="halloween"] .bg-\[\#FDE8EC\] {
-  background: #FFF7EC !important;
+[data-season="halloween"] button#generate-btn::before,
+[data-season="halloween"] button#generate-btn::after {
+  display: none !important;
 }
 
-[data-season="halloween"] .text-\[\#B0607A\],
-[data-season="halloween"] .text-\[\#C98A98\],
-[data-season="halloween"] .text-\[\#E9A8B8\],
-[data-season="halloween"] .text-\[\#F6DCE5\],
-[data-season="halloween"] .text-\[\#F6E3E8\],
-[data-season="halloween"] .text-\[\#F6E4EA\],
-[data-season="halloween"] .text-\[\#FDE8EC\] {
-  color: #2A1520 !important;
-}
-
-[data-season="halloween"] .from-violet-600,
-[data-season="halloween"] .to-indigo-600,
-[data-season="halloween"] .from-violet-50,
-[data-season="halloween"] .to-violet-300,
-[data-season="halloween"] .bg-violet-50,
-[data-season="halloween"] .bg-violet-300,
-[data-season="halloween"] .bg-violet-600 {
-  background: #3B2027 !important;
-}
-
-/* All sections with blush/pink backgrounds */
-[data-season="halloween"] section {
-  background: transparent !important;
-}
-
-[data-season="halloween"] .bg-gradient-to-b {
-  background: transparent !important;
-}
-
-/* Override all orb colors */
-[data-season="halloween"] .orb-drift {
-  background: rgba(232, 131, 58, 0.15) !important;
-}
-
-/* Generator keeps original size - NO two-column layout */
-[data-season="halloween"] #generate {
-  /* Restore to main: full width, centered */
-  max-width: 48rem !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-/* Orange word in headline: solid #F28C38 */
-[data-season="halloween"] .word-glow {
-  color: #F28C38 !important;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45) !important;
-}
-
-/* Body/section text on dark background - cream #FFF7EC */
-[data-season="halloween"] section p,
+/* Section headings - Creepster */
 [data-season="halloween"] section h2,
 [data-season="halloween"] section h3,
+[data-season="halloween"] .halloween-section-heading {
+  color: #FFFFFF !important;
+  font-family: var(--font-creepster), cursive !important;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+/* Body text - Poppins */
+[data-season="halloween"] section p:not(.halloween-subtitle),
 [data-season="halloween"] section li,
 [data-season="halloween"] main > div p {
-  color: #FFF7EC !important;
+  color: rgba(255, 247, 236, 0.85) !important;
+  font-family: var(--font-poppins), sans-serif;
 }
 
-/* Links on dark backgrounds - #F6B26B, cream on hover */
-[data-season="halloween"] section a,
+/* Links - teal accent */
+[data-season="halloween"] section a:not([href="#generate"]):not([href="#features"]),
 [data-season="halloween"] main > div a {
-  color: #F6B26B !important;
+  color: #35D0B4 !important;
 }
 
-[data-season="halloween"] section a:hover,
+[data-season="halloween"] section a:not([href="#generate"]):not([href="#features"]):hover,
 [data-season="halloween"] main > div a:hover {
   color: #FFF7EC !important;
 }
 
-/* Cards stay cream with plum text */
+/* Cards - dark teal */
+[data-season="halloween"] .bg-white,
+[data-season="halloween"] .bg-\[white\] {
+  background: rgba(10, 22, 20, 0.95) !important;
+  border: 1px solid rgba(53, 208, 180, 0.2) !important;
+}
+
 [data-season="halloween"] .bg-white p,
 [data-season="halloween"] .bg-white h2,
 [data-season="halloween"] .bg-white h3,
 [data-season="halloween"] .bg-\[white\] p {
-  color: #2A1520 !important;
+  color: #FFF7EC !important;
+  font-family: var(--font-poppins), sans-serif;
 }
 
-/* Footer background and text */
+/* Footer */
 [data-season="halloween"] footer {
-  background: #140A16 !important;
+  background: #0A1614 !important;
+  border-top: 1px solid rgba(53, 208, 180, 0.1);
 }
 
 [data-season="halloween"] footer,
 [data-season="halloween"] footer p,
 [data-season="halloween"] footer span {
-  color: #FFF7EC !important;
-  opacity: 0.75;
+  color: rgba(255, 247, 236, 0.75) !important;
+  font-family: var(--font-poppins), sans-serif;
 }
 
-/* Links on dark backgrounds: #F6B26B, cream on hover */
 [data-season="halloween"] footer a {
-  color: #F6B26B !important;
-  opacity: 1;
+  color: #35D0B4 !important;
 }
 
 [data-season="halloween"] footer a:hover {
   color: #FFF7EC !important;
 }
 
-/* Footer badges keep cream backing */
+/* Footer badges */
 [data-season="halloween"] footer img[alt*="App Store"],
 [data-season="halloween"] footer img[alt*="Google Play"] {
   background: #FFF7EC;
@@ -666,14 +392,15 @@ body[data-season="halloween"]::before {
   padding: 4px;
 }
 
-/* Mobile bottom tab nav & phone header - dark pill treatment */
+/* Mobile nav */
 @media (max-width: 767px) {
   [data-season="halloween"] nav[class*="bottom"],
   [data-season="halloween"] div[class*="fixed bottom"] nav,
   [data-season="halloween"] header[class*="sticky"] nav {
-    background: rgba(26, 14, 28, 0.6) !important;
+    background: rgba(10, 22, 20, 0.95) !important;
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 247, 236, 0.12) !important;
+    border: 1px solid rgba(53, 208, 180, 0.3) !important;
+    border-bottom: none;
   }
   
   [data-season="halloween"] nav[class*="bottom"] a,
@@ -682,12 +409,117 @@ body[data-season="halloween"]::before {
     color: #FFF7EC !important;
     stroke: #FFF7EC !important;
   }
+  
+  [data-season="halloween"] nav[class*="bottom"] a[class*="text-violet"],
+  [data-season="halloween"] nav[class*="bottom"] button[class*="text-violet"] {
+    color: #35D0B4 !important;
+  }
 }
 
-@media (max-width: 768px) {
-  [data-season="halloween"] .halloween-moon,
-  [data-season="halloween"] .halloween-cobweb,
-  [data-season="halloween"] .halloween-candle-glow {
-    display: none;
+/* ========== HALLOWEEN DECORATIONS - PLACEHOLDERS ========== */
+
+/* Moon - #8FD9C8 with soft glow */
+.halloween-moon {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: #8FD9C8;
+  box-shadow: 0 0 80px 30px rgba(143, 217, 200, 0.5),
+              0 0 150px 60px rgba(143, 217, 200, 0.3);
+  z-index: 1;
+}
+
+/* Pumpkin row */
+.halloween-pumpkin-row {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* Pumpkin emoji placeholder */
+.halloween-pumpkin {
+  font-size: 3rem;
+  filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.8));
+  animation: pumpkin-glow 2s ease-in-out infinite;
+}
+
+@keyframes pumpkin-glow {
+  0%, 100% { filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.8)); }
+  50% { filter: drop-shadow(0 0 25px rgba(255, 200, 0, 1)); }
+}
+
+/* Candle emoji */
+.halloween-candle {
+  font-size: 2rem;
+  filter: drop-shadow(0 0 10px rgba(255, 200, 100, 0.6));
+}
+
+/* Bat emoji - teal #2BA89A */
+.halloween-bat {
+  font-size: 2rem;
+  color: #2BA89A;
+  filter: drop-shadow(0 0 8px rgba(43, 168, 154, 0.6));
+}
+
+/* Ghost emoji */
+.halloween-ghost {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.4));
+}
+
+/* Animations */
+@media (prefers-reduced-motion: no-preference) {
+  .halloween-bat {
+    animation: bat-flap 3s ease-in-out infinite;
+  }
+  
+  .halloween-ghost {
+    animation: ghost-float 4s ease-in-out infinite;
+  }
+}
+
+@keyframes bat-flap {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes ghost-float {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  33% { transform: translateY(-15px) translateX(10px); }
+  66% { transform: translateY(-5px) translateX(-10px); }
+}
+
+/* Show/hide elements based on Halloween theme */
+[data-season="halloween"] [data-halloween-hide="true"] {
+  display: none !important;
+}
+
+[data-season="halloween"] [data-halloween-show="true"] {
+  display: inline !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .halloween-moon {
+    width: 250px;
+    height: 250px;
+    box-shadow: 0 0 50px 20px rgba(143, 217, 200, 0.4),
+                0 0 100px 40px rgba(143, 217, 200, 0.2);
+  }
+  
+  .halloween-pumpkin {
+    font-size: 2rem;
+  }
+  
+  .halloween-candle {
+    font-size: 1.5rem;
+  }
+  
+  .halloween-bat,
+  .halloween-ghost {
+    font-size: 1.5rem;
   }
 }

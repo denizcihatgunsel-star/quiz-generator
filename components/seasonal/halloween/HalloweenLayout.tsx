@@ -29,7 +29,7 @@ export default function HalloweenLayout({ children }: { children: React.ReactNod
         metaTheme.setAttribute('name', 'theme-color');
         document.head.appendChild(metaTheme);
       }
-      metaTheme.setAttribute('content', '#2A1530');
+      metaTheme.setAttribute('content', '#0A1614');
       
       // Inject CSS if not already present
       if (!document.getElementById('halloween-theme-css')) {

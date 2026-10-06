@@ -31,7 +31,7 @@ import QuizStory from "./QuizStory";
 import { useTranslation } from "@/lib/i18n";
 
 // Halloween seasonal components
-// Halloween decorations removed - using background image slot instead
+const HalloweenHero = dynamic(() => import("./seasonal/halloween/HalloweenHero"), { ssr: false });
 
 // Below-fold marketing: client-only to keep homepage HTML lean for crawlers/CDN
 const UnseenLanding = dynamic(() => import("./UnseenLanding"), { ssr: false });
@@ -662,7 +662,40 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     {t("hero.subtitle")}
                   </motion.p>
                 </motion.div>
-                ) : hideChrome ? null : (
+                ) : hideChrome ? null : halloweenActive ? (
+                  /* Halloween two-column hero */
+                  <div className="mx-auto max-w-7xl">
+                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+                      {/* Left column - Text */}
+                      <div className="text-left space-y-8">
+                        <h1 className="halloween-headline text-5xl sm:text-6xl lg:text-7xl">
+                          <span className="block">AI QUIZ GENERAT<span className="halloween-pumpkin-o" aria-hidden="true">O</span>R</span>
+                          <span className="block mt-2">THAT TURNS N<span className="halloween-pumpkin-o" aria-hidden="true">O</span>TES</span>
+                          <span className="block mt-2 halloween-headline-teal">INT<span className="halloween-pumpkin-o" aria-hidden="true">O</span> QUIZZES</span>
+                        </h1>
+                        <p className="halloween-subtitle text-lg max-w-lg">
+                          Turn your study notes into structured quizzes, instantly.
+                        </p>
+                        <a
+                          href="#generate"
+                          className="halloween-cta inline-block"
+                        >
+                          Generate Quiz
+                        </a>
+                      </div>
+                      
+                      {/* Right column - Art group */}
+                      <div className="hidden lg:block">
+                        <HalloweenHero />
+                      </div>
+                    </div>
+                    
+                    {/* Mobile art group */}
+                    <div className="lg:hidden mt-12">
+                      <HalloweenHero />
+                    </div>
+                  </div>
+                ) : (
                 <div className="mx-auto max-w-5xl text-center">
                   <p className="text-[11px] uppercase tracking-[0.4em] text-[#A87680]">
                     A quiz generator
@@ -671,7 +704,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     <InteractiveWordmark />
                   </div>
                   <h1 className="mt-8 font-serif text-4xl font-medium tracking-tight leading-[1.05] text-[#3B2027] sm:text-5xl lg:text-6xl">
-                    AI Quiz Generator that turns notes into <span className={halloweenActive ? "word-glow" : ""}>quizzes</span>
+                    AI Quiz Generator that turns notes into quizzes
                   </h1>
                   <motion.p
                     initial={{ opacity: 0 }}
