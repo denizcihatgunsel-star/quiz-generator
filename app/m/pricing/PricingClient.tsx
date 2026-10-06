@@ -12,6 +12,7 @@ import {
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PLANS, type Plan, type PlanId } from "@/lib/subscription";
+import { SaleLabel } from "@/components/seasonal/halloween/SalePrice";
 
 type Actions = {
   session: ReturnType<typeof useSession>["data"];
@@ -130,7 +131,16 @@ export function PricingActionsProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function PlanCta({ plan, isFeatured }: { plan: Plan; isFeatured: boolean }) {
+export function PlanCta({
+  plan,
+  isFeatured,
+  salePrice = null,
+}: {
+  plan: Plan;
+  isFeatured: boolean;
+  /** Halloween sale price (e.g. "$1.60"), computed by the server page; null when no sale */
+  salePrice?: string | null;
+}) {
   const { session, upgrading, handleSelect } = usePricingActions();
   const isBusy = upgrading === plan.id;
 
@@ -150,6 +160,8 @@ export function PlanCta({ plan, isFeatured }: { plan: Plan; isFeatured: boolean 
         ? session
           ? "Downgrade to Free"
           : "Get started free"
+        : salePrice
+        ? <SaleLabel regular={`Get ${plan.name} — $${plan.price}/mo`} sale={`Get ${plan.name} — ${salePrice}/mo`} />
         : `Get ${plan.name} — $${plan.price}/mo`}
     </button>
   );
