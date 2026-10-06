@@ -65,14 +65,16 @@ export default function MobilePricingPage() {
                   {price.sale ? (
                     <div className="flex flex-col items-end">
                       <SalePill />
-                      <div className="flex items-baseline gap-1">
+                      <div className="flex flex-wrap items-baseline justify-end gap-1">
                         <SaleAmount
                           regular={price.regular}
                           sale={price.sale}
                           sizeClassName="font-serif text-3xl"
                           regularClassName={`font-serif text-3xl ${isFeatured ? "text-[#B0607A]" : "text-[#3B2027]"}`}
+                          suffix="/mo"
+                          suffixClassName="text-xs text-[#9A7280]"
+                          gapClassName="gap-1"
                         />
-                        <span className="text-xs text-[#9A7280]">/mo</span>
                       </div>
                       <SaleEnds />
                     </div>
