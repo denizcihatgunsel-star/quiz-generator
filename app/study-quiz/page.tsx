@@ -1,20 +1,61 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
-import { saleLandingData } from "@/lib/pricing";
+import { copyText, saleCopy, saleLandingData } from "@/lib/pricing";
 
 // Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
 export const revalidate = 60;
 
 export const metadata: Metadata = pageMetadata({
-  title: "Study Quiz Generator — Active Recall & Flashcards",
+  title: "Study Quiz — Practice Quizzes with Spaced Repetition",
   description: "Turn your notes into a study quiz that uses active recall and spaced repetition. Flashcards, quizzes & streaks to stay consistent.",
   path: "/study-quiz",
 });
 
+const faqs = [
+  { q: "How is a study quiz different from a normal quiz?", a: "A study quiz is generated from your own notes and is designed to be repeated, so it supports active recall and spaced repetition." },
+  { q: "Does Examina schedule my reviews?", a: "Yes — study mode schedules flashcard reviews at intervals optimized for memory retention." },
+  { q: "Can I track my progress?", a: "Yes, with streaks, XP, and score history across your quizzes." },
+  { q: "Is the study quiz free?", a: "Free accounts get 5 generations per month. Paid plans start at $2/month." },
+];
+
 export default function StudyQuizPage() {
+  const now = new Date();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.examina.ink/study-quiz#webpage",
+        url: "https://www.examina.ink/study-quiz",
+        name: "Study Quiz — Practice Quizzes with Spaced Repetition | Examina",
+        isPartOf: { "@id": "https://www.examina.ink/#website" },
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://www.examina.ink/#software",
+        name: "Examina",
+        applicationCategory: "EducationalApplication",
+        description: "Study quiz generator with active recall, spaced repetition, and streak tracking for consistent learning.",
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) },
+        })),
+      },
+    ],
+  };
+
   return (
-    <KeywordLanding
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <KeywordLanding
       data={saleLandingData({
         kicker: "Study Quiz",
         h1: "Study smarter with",
@@ -49,21 +90,18 @@ export default function StudyQuizPage() {
           { n: "03", title: "Review on a schedule", body: "Use study mode and daily challenges to reinforce what you've learned." },
         ],
         faqTitle: "Frequently asked questions",
-        faq: [
-          { q: "How is a study quiz different from a normal quiz?", a: "A study quiz is generated from your own notes and is designed to be repeated, so it supports active recall and spaced repetition." },
-          { q: "Does Examina schedule my reviews?", a: "Yes — study mode schedules flashcard reviews at intervals optimized for memory retention." },
-          { q: "Can I track my progress?", a: "Yes, with streaks, XP, and score history across your quizzes." },
-          { q: "Is the study quiz free?", a: "Free accounts get 5 generations per month. Paid plans start at $2/month." },
-        ],
+        faq: faqs,
         relatedTitle: "Explore more ways to study",
         related: [
           { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
           { href: "/ai-flashcards", label: "Flashcard Generator" },
           { href: "/create-a-quiz", label: "Create a Quiz" },
+          { href: "/study-guide-generator", label: "Study Guide Generator" },
           { href: "/study", label: "Study Mode" },
           { href: "/daily-quiz", label: "Daily Quiz" },
         ],
-      }, new Date())}
-    />
+      }, now)}
+      />
+    </>
   );
 }

@@ -1021,16 +1021,7 @@ export const POSTS: BlogPost[] = [
         h: "Method 1: AI PDF to quiz generators (fastest)",
         p: [
           "AI quiz generators read your PDF and write questions automatically. Upload a file, pick question types, and get a complete quiz with answer key in under 30 seconds.",
-          "**How to use Examina for PDF to quiz:**",
-        ],
-        list: [
-          "Go to Examina and create a free account (5 quizzes/month, no credit card).",
-          "Click 'Upload' and select your PDF (up to 15,000 characters, roughly 5-10 pages).",
-          "Choose question types: multiple choice, true/false, fill-in-the-blank, or flashcards.",
-          "Click 'Generate.' In 20-30 seconds, you get questions with answers and explanations.",
-          "Review the quiz. Edit any question if needed. Take it online, share by link, or export as PDF.",
-        ],
-        p: [
+          "**How to use Examina for PDF to quiz:** Go to Examina and create a free account (5 quizzes/month, no credit card). Click 'Upload' and select your PDF (up to 15,000 characters, roughly 5-10 pages). Choose question types: multiple choice, true/false, fill-in-the-blank, or flashcards. Click 'Generate.' In 20-30 seconds, you get questions with answers and explanations. Review the quiz. Edit any question if needed. Take it online, share by link, or export as PDF.",
           "**Pros:** Fastest method by far. Automatically generates plausible distractors for multiple choice. Includes Bloom's taxonomy tagging.",
           "**Cons:** Requires a tool subscription after free tier (but cheap—starts at $2/month). Questions should be reviewed for accuracy (like any AI output).",
         ],
@@ -1046,14 +1037,7 @@ export const POSTS: BlogPost[] = [
         h: "Method 3: OCR for scanned PDFs",
         p: [
           "If your PDF is a scanned image (like a photographed textbook page), you need OCR (optical character recognition) to extract the text first.",
-          "**Steps:**",
-        ],
-        list: [
-          "Use a free OCR tool like Adobe Acrobat, Google Drive (upload and 'Open with Google Docs'), or an online OCR service.",
-          "Copy the extracted text.",
-          "Paste it into an AI quiz generator (like Examina) or a quiz platform.",
-        ],
-        p: [
+          "**Steps:** Use a free OCR tool like Adobe Acrobat, Google Drive (upload and 'Open with Google Docs'), or an online OCR service. Copy the extracted text. Paste it into an AI quiz generator (like Examina) or a quiz platform.",
           "Examina also has built-in OCR—just upload a photo of notes and it extracts text automatically before generating questions.",
         ],
       },
@@ -1179,15 +1163,7 @@ export const POSTS: BlogPost[] = [
       {
         h: "How to migrate from Quizlet",
         p: [
-          "Most alternatives let you import Quizlet sets. Here's how:",
-        ],
-        list: [
-          "**To Examina:** Export your Quizlet set as text or CSV. Paste it into Examina or just upload new notes and regenerate with AI.",
-          "**To Anki:** Use the AnkiWeb add-on 'Quizlet to Anki Importer' or export Quizlet as CSV and import to Anki.",
-          "**To Knowt:** Knowt has a built-in Quizlet importer. Paste the Quizlet URL and it converts the set.",
-          "**To Brainscape:** Brainscape can import from spreadsheet. Export Quizlet, upload CSV.",
-        ],
-        p: [
+          "Most alternatives let you import Quizlet sets. **To Examina:** Export your Quizlet set as text or CSV. Paste it into Examina or just upload new notes and regenerate with AI. **To Anki:** Use the AnkiWeb add-on 'Quizlet to Anki Importer' or export Quizlet as CSV and import to Anki. **To Knowt:** Knowt has a built-in Quizlet importer. Paste the Quizlet URL and it converts the set. **To Brainscape:** Brainscape can import from spreadsheet. Export Quizlet, upload CSV.",
           "Alternatively, if your Quizlet sets are old or have errors, regenerating fresh flashcards from your current notes (using an AI tool) often beats importing.",
         ],
       },
