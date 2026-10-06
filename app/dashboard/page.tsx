@@ -9,6 +9,7 @@ import SiteHeader from "@/components/SiteHeader";
 import NotesPanel from "@/components/NotesPanel";
 import { getQuizTheme } from "@/lib/themes";
 import { LoadingDots } from "@/components/ui";
+import HalloweenLayout from "@/components/seasonal/halloween/HalloweenLayout";
 
 interface SavedQuizItem {
   id: string;
@@ -212,6 +213,7 @@ export default function DashboardPage() {
   }
 
   return (
+    <HalloweenLayout>
     <div className="min-h-screen bg-background">
       <SiteHeader />
 
@@ -671,5 +673,6 @@ export default function DashboardPage() {
         )}
       </main>
     </div>
+    </HalloweenLayout>
   );
 }
