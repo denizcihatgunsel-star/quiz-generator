@@ -1546,3 +1546,15 @@ body[data-season="halloween"] {
 [data-season="halloween"] footer .text-\[\#9A7280\]\/60 {
   color: rgba(255, 247, 236, 0.6) !important;
 }
+
+/* Quiz box: "Upload a photo of your notes" dashed button */
+[data-season="halloween"] #generate button.border-dashed {
+  background: transparent !important;
+  border-color: rgba(53, 208, 180, 0.25) !important;
+  color: rgba(255, 247, 236, 0.8) !important;
+}
+
+[data-season="halloween"] #generate button.border-dashed:hover:not(:disabled) {
+  border-color: rgba(53, 208, 180, 0.55) !important;
+  color: #7FE3D3 !important;
+}
