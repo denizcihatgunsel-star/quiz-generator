@@ -148,17 +148,13 @@ export function middleware(request: NextRequest) {
 
   const isMobile = isMobileDevice(request);
 
-  // Folder-only /m gate — NOT startsWith('/m') (would break /multiple-choice-…)
+  // Folder-only /m routes — serve the mobile app shell to ANY client that
+  // requests /m/* (including desktop UA at a phone viewport). Previously
+  // desktop was bounced to / / /pricing, which made Soft A / Pricing A QA
+  // at 390px show the marketing hero instead of Jump Back In + /m/create quiz
+  // + /m/pricing decorations. Mobile still maps / → /m via MOBILE_MAP below.
+  // NOT startsWith('/m') alone on other branches (would break /multiple-choice-…).
   if (pathname === "/m" || pathname.startsWith("/m/")) {
-    if (!isMobile) {
-      let target =
-        pathname === "/m" || pathname === "/m/create"
-          ? "/"
-          : pathname.replace(/^\/m(?=\/|$)/, "") || "/";
-      const url = new URL(target, request.url);
-      url.search = search;
-      return NextResponse.redirect(url);
-    }
     return withAuthHint(request, withMarketingCache(request, nextWithHtmlLang(request)));
   }
 
