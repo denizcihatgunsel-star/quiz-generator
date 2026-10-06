@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
-import { copyText, saleCopy } from "@/lib/pricing";
+import { copyText, planOffers, saleCopy } from "@/lib/pricing";
 import { CopyText } from "@/components/seasonal/halloween/SalePrice";
 
 // Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
@@ -10,8 +10,8 @@ import Link from "next/link";
 import { SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "True or False Generator — AI True/False Quiz Maker",
-  description: "AI true or false generator: turn notes, PDFs or pasted text into true/false questions with answers and explanations. Free plan includes 5 quizzes a month.",
+  title: "True False Quiz Generator — AI True or False Maker Free",
+  description: "True false quiz generator with AI. Turn notes into true/false questions with answers and explanations. Free plan includes 5 quizzes a month.",
   path: "/true-false-quiz-generator",
 });
 
@@ -52,21 +52,37 @@ const FAQ_ITEMS = [
 
 export default function TrueFalseQuizGeneratorPage() {
   const now = new Date();
-  const faqJsonLd = {
+  const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQ_ITEMS.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) },
-    })),
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://www.examina.ink/#software",
+        name: "Examina",
+        url: "https://www.examina.ink",
+        applicationCategory: "EducationalApplication",
+        operatingSystem: "Web",
+        description:
+          "True false quiz generator that creates true or false questions from text with AI. Includes answers and explanations for each question.",
+        offers: planOffers(now),
+        publisher: { "@id": "https://www.examina.ink/#organization" },
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: FAQ_ITEMS.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) },
+        })),
+      },
+    ],
   };
 
   return (
     <LandingPageLayout>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       {/* Hero */}

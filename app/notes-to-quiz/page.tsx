@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata, LANGUAGE_COUNT } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
-import { copyText, saleCopy, saleLandingData } from "@/lib/pricing";
+import { copyText, planOffers, saleCopy, saleLandingData } from "@/lib/pricing";
 
 export const dynamic = "force-static";
 
@@ -9,8 +9,8 @@ export const dynamic = "force-static";
 export const revalidate = 60;
 
 export const metadata: Metadata = pageMetadata({
-  title: "Notes to Quiz — Turn Your Notes into a Quiz",
-  description: "Turn lecture notes, typed or handwritten, into a practice quiz in seconds. Multiple choice, true/false and flashcards from your own notes. Start free.",
+  title: "Notes to Quiz — Turn Notes into Quiz Questions Free",
+  description: "Turn lecture notes into quiz questions in seconds. Upload typed or handwritten notes and get multiple choice, true/false and flashcards. Free.",
   path: "/notes-to-quiz",
   images: [
     {
@@ -62,10 +62,47 @@ export default function NotesToQuizPage() {
         "@type": "WebPage",
         "@id": "https://www.examina.ink/notes-to-quiz#webpage",
         url: "https://www.examina.ink/notes-to-quiz",
-        name: "Notes to Quiz — Turn Your Notes into a Quiz | Examina",
+        name: "Notes to Quiz — Turn Notes into Quiz Questions | Examina",
         isPartOf: { "@id": "https://www.examina.ink/#website" },
         about: { "@id": "https://www.examina.ink/#software" },
         primaryImageOfPage: "https://www.examina.ink/og/notes-to-quiz.png",
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://www.examina.ink/#software",
+        name: "Examina",
+        url: "https://www.examina.ink",
+        applicationCategory: "EducationalApplication",
+        operatingSystem: "Web",
+        description:
+          "Turn notes into quiz questions with AI. Upload typed or handwritten lecture notes and generate multiple choice, true/false, and flashcard questions automatically.",
+        offers: planOffers(now),
+        publisher: { "@id": "https://www.examina.ink/#organization" },
+      },
+      {
+        "@type": "HowTo",
+        name: "How to Turn Notes into a Quiz",
+        description: "Convert lecture notes into quiz questions in three steps",
+        step: [
+          {
+            "@type": "HowToStep",
+            position: 1,
+            name: "Add your notes",
+            text: "Paste typed notes, upload a text file, or photograph handwritten notes. Messy bullet points work fine.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 2,
+            name: "Generate questions",
+            text: "Choose question types: multiple choice, true/false, fill-in-the-blank, or flashcards. Generation takes under 30 seconds.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 3,
+            name: "Practice and review",
+            text: "Take the quiz, review explanations, and track your progress. Share by link or export as PDF on paid plans.",
+          },
+        ],
       },
       {
         "@type": "FAQPage",

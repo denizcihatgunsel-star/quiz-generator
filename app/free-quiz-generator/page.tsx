@@ -1,24 +1,70 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
-import { copyText, saleCopy, saleLandingData } from "@/lib/pricing";
+import { copyText, planOffers, saleCopy, saleLandingData } from "@/lib/pricing";
 
 // Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
 export const revalidate = 60;
 
 export function generateMetadata(): Metadata {
   return pageMetadata({
-    title: "Free Quiz Generator — 5 Quizzes a Month",
+    title: "Free Quiz Maker — Create Quizzes Online Free",
     description: copyText(
-      saleCopy("Make quizzes online for free with AI. No credit card. Generate up to 5 quizzes a month, or unlock more from $2/month.")
+      saleCopy("Free quiz maker with AI. No credit card needed. Generate up to 5 quizzes a month free, or unlock more from $2/month.")
     ),
     path: "/free-quiz-generator",
   });
 }
 
+const faqs = [
+  { q: "Is there really a free plan?", a: "Yes. Everyone starts with 5 free generations per month and full access to all four question types." },
+  { q: "Do I need a credit card to sign up?", a: "No. The free plan never asks for payment details." },
+  { q: "What happens when I hit the free limit?", a: "You can upgrade to a paid plan or wait for your monthly allowance to reset." },
+  { q: "How much do paid plans cost?", a: "Starter is $2/month for 20 quizzes, Plus $5/month for 60, Pro $9/month for 200, and Team $15/month for unlimited." },
+];
+
 export default function FreeQuizPage() {
+  const now = new Date();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.examina.ink/free-quiz-generator#webpage",
+        url: "https://www.examina.ink/free-quiz-generator",
+        name: "Free Quiz Maker — Create Quizzes Online Free | Examina",
+        isPartOf: { "@id": "https://www.examina.ink/#website" },
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://www.examina.ink/#software",
+        name: "Examina",
+        url: "https://www.examina.ink",
+        applicationCategory: "EducationalApplication",
+        operatingSystem: "Web",
+        description:
+          "Free quiz maker that generates quizzes from your notes with AI. No credit card required. 5 free quizzes per month.",
+        offers: planOffers(now),
+        publisher: { "@id": "https://www.examina.ink/#organization" },
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) },
+        })),
+      },
+    ],
+  };
+
   return (
-    <KeywordLanding
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <KeywordLanding
       data={saleLandingData({
         kicker: "Free Quiz Generator",
         h1: "Make free quizzes",
@@ -53,21 +99,18 @@ export default function FreeQuizPage() {
           { n: "03", title: "Generate & study", body: "Take the quiz, review with flashcards, and track your streak." },
         ],
         faqTitle: "Frequently asked questions",
-        faq: [
-          { q: "Is there really a free plan?", a: "Yes. Everyone starts with 5 free generations per month and full access to all four question types." },
-          { q: "Do I need a credit card to sign up?", a: "No. The free plan never asks for payment details." },
-          { q: "What happens when I hit the free limit?", a: "You can upgrade to a paid plan or wait for your monthly allowance to reset." },
-          { q: "How much do paid plans cost?", a: "Starter is $2/month for 20 quizzes, Plus $5/month for 60, Pro $9/month for 200, and Team $15/month for unlimited." },
-        ],
+        faq: faqs,
         relatedTitle: "Explore more ways to study",
         related: [
           { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
           { href: "/create-a-quiz", label: "Create a Quiz" },
           { href: "/quiz-generator-from-pdf", label: "PDF to Quiz" },
+          { href: "/online-quiz-maker", label: "Online Quiz Maker" },
           { href: "/study-quiz", label: "Study Quiz" },
           { href: "/pricing", label: "View Pricing" },
         ],
-      }, new Date())}
-    />
+      }, now)}
+      />
+    </>
   );
 }

@@ -2,19 +2,40 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
 import ToolCrossLinks from "@/components/ToolCrossLinks";
+import { planOffers } from "@/lib/pricing";
 
 // Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
 export const revalidate = 60;
 
 export const metadata: Metadata = pageMetadata({
-  title: "Fill in the Blank Generator AI — Create Cloze Questions",
-  description: "Generate fill-in-the-blank questions from any text with AI. Test real recall, not just recognition. Free AI cloze question generator.",
+  title: "Fill in the Blank Generator — AI Cloze Question Maker Free",
+  description: "Generate fill-in-the-blank questions from any text with AI. Create cloze questions that test recall, not recognition. Free.",
   path: "/fill-in-the-blank-generator",
 });
 
 export default function FillInTheBlankGeneratorPage() {
+  const now = new Date();
+  const softwareAppSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": "https://www.examina.ink/#software",
+    name: "Examina",
+    url: "https://www.examina.ink",
+    applicationCategory: "EducationalApplication",
+    operatingSystem: "Web",
+    description:
+      "Fill in the blank generator that creates cloze questions from text with AI. Tests recall instead of recognition.",
+    offers: planOffers(now),
+    publisher: { "@id": "https://www.examina.ink/#organization" },
+  };
+
   return (
-    <LandingPageLayout>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppSchema) }}
+      />
+      <LandingPageLayout>
       {/* Hero */}
       <section className="py-24 sm:py-32">
         <div className="max-w-5xl mx-auto px-6">
@@ -169,5 +190,6 @@ export default function FillInTheBlankGeneratorPage() {
         ]}
       />
     </LandingPageLayout>
+    </>
   );
 }

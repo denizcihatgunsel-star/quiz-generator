@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata, LANGUAGE_COUNT } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
-import { copyText, saleCopy, saleLandingData } from "@/lib/pricing";
+import { copyText, planOffers, saleCopy, saleLandingData } from "@/lib/pricing";
 
 export const dynamic = "force-static";
 
@@ -9,8 +9,8 @@ export const dynamic = "force-static";
 export const revalidate = 60;
 
 export const metadata: Metadata = pageMetadata({
-  title: "AI Flashcards — Generate Flashcards from Notes",
-  description: "Make AI flashcards from your notes, a PDF or a photo in seconds. Study with flip cards and spaced repetition, then quiz yourself. Free to start.",
+  title: "AI Flashcards — Generate Flashcards from Notes Free",
+  description: "Generate AI flashcards from your notes, PDF or photo in seconds. Study with 3D flip cards and spaced repetition. Free to start.",
   path: "/ai-flashcards",
   images: [
     {
@@ -66,6 +66,18 @@ export default function AiFlashcardsPage() {
         isPartOf: { "@id": "https://www.examina.ink/#website" },
         about: { "@id": "https://www.examina.ink/#software" },
         primaryImageOfPage: "https://www.examina.ink/og/ai-flashcards.png",
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://www.examina.ink/#software",
+        name: "Examina",
+        url: "https://www.examina.ink",
+        applicationCategory: "EducationalApplication",
+        operatingSystem: "Web",
+        description:
+          "AI flashcard generator that creates study flashcards from notes, PDFs, or photos. Includes spaced repetition and 3D flip animations.",
+        offers: planOffers(now),
+        publisher: { "@id": "https://www.examina.ink/#organization" },
       },
       {
         "@type": "FAQPage",
