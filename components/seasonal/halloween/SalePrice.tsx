@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import styles from "./SalePrice.module.css";
 import { HALLOWEEN_SALE_ENDS, HALLOWEEN_SALE_LABEL } from "@/lib/pricing";
 
@@ -19,6 +20,7 @@ export function SalePill() {
  */
 export function SaleAmount({
   regular,
+  regularNode,
   sale,
   sizeClassName,
   regularClassName,
@@ -27,6 +29,8 @@ export function SaleAmount({
   gapClassName,
 }: {
   regular: string;
+  /** Theme-off markup for the regular price, identical to the pre-sale JSX (text nodes matter for kerning) */
+  regularNode: ReactNode;
   sale: string;
   sizeClassName: string;
   regularClassName: string;
@@ -36,7 +40,7 @@ export function SaleAmount({
 }) {
   return (
     <>
-      <span className={`${regularClassName} ${styles.regularOnly}`}>{regular}</span>
+      <span className={`${regularClassName} ${styles.regularOnly}`}>{regularNode}</span>
       <span className={`${suffixClassName} ${styles.regularOnly}`}>{suffix}</span>
       <span className={`${sizeClassName} ${styles.saleInline}`} data-sale="was">
         <del className={styles.oldPrice}>
