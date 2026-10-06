@@ -1616,3 +1616,94 @@ body[data-season="halloween"] {
 [data-season="halloween"] footer p.text-xs {
   color: rgba(255, 247, 236, 0.7) !important;
 }
+
+/* ====================================================================
+   HOTFIX (input legibility) - colour-only, Halloween theme only
+   Root cause: the chat bubbles kept their light pink fill (bg-[#FBEAEE])
+   while `section p` recoloured their text cream (~1.1:1), and form fields
+   relied on `color` alone: no -webkit-text-fill-color, untouched Tailwind
+   placeholder colours, and no autofill handling, so any inherited/UA fill
+   could hide typed text. `:not(#hx-0)` only lifts specificity above the
+   older #generate / page-scoped field rules; nothing here changes layout.
+   ==================================================================== */
+[data-season="halloween"] :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]):not([type="hidden"]),
+  textarea,
+  select,
+  [contenteditable]:not([contenteditable="false"])
+):not(#hx-0) {
+  color: #F5EEDC !important;
+  -webkit-text-fill-color: #F5EEDC !important;
+  caret-color: #35D0B4 !important;
+  background-color: #0F1F1C !important;
+  background-image: none !important;
+}
+
+[data-season="halloween"] :is(input, textarea):not(#hx-0)::placeholder {
+  color: rgba(245, 238, 220, 0.55) !important;
+  -webkit-text-fill-color: rgba(245, 238, 220, 0.55) !important;
+  opacity: 1 !important;
+}
+
+[data-season="halloween"] [contenteditable]:not([contenteditable="false"]):empty:not(#hx-0)::before {
+  color: rgba(245, 238, 220, 0.55) !important;
+  -webkit-text-fill-color: rgba(245, 238, 220, 0.55) !important;
+}
+
+[data-season="halloween"] select:not(#hx-0) option,
+[data-season="halloween"] select:not(#hx-0) optgroup {
+  background-color: #0F1F1C !important;
+  color: #F5EEDC !important;
+}
+
+/* Chrome / Safari autofill: keep the dark field + cream text */
+[data-season="halloween"] :is(input, textarea, select):not(#hx-0):is(:-webkit-autofill, :-webkit-autofill:hover, :-webkit-autofill:focus, :-webkit-autofill:active) {
+  -webkit-text-fill-color: #F5EEDC !important;
+  caret-color: #35D0B4 !important;
+  -webkit-box-shadow: inset 0 0 0 1000px #0F1F1C !important;
+  box-shadow: inset 0 0 0 1000px #0F1F1C !important;
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+
+/* Selection: teal tint, cream text */
+[data-season="halloween"] ::selection,
+[data-season="halloween"]::selection {
+  background: rgba(53, 208, 180, 0.35);
+  color: #F5EEDC;
+  -webkit-text-fill-color: #F5EEDC;
+}
+
+/* Ask Examina chat (components/ChatBot.tsx): bubbles readable on the theme */
+[data-season="halloween"] div:has(> div > div > input[placeholder^="Ask Examina"]) .bg-\[\#FBEAEE\] {
+  background: #13302B !important;
+  box-shadow: inset 0 0 0 1px rgba(53, 208, 180, 0.25);
+  color: #F5EEDC !important;
+}
+
+[data-season="halloween"] div:has(> div > div > input[placeholder^="Ask Examina"]) div.bg-\[\#3B2027\] {
+  background: rgba(53, 208, 180, 0.22) !important;
+  box-shadow: inset 0 0 0 1px rgba(53, 208, 180, 0.45);
+  color: #F5EEDC !important;
+}
+
+[data-season="halloween"] div:has(> div > div > input[placeholder^="Ask Examina"]) :is(.bg-\[\#FBEAEE\], div.bg-\[\#3B2027\]) :is(p, strong, em, span) {
+  color: #F5EEDC !important;
+  -webkit-text-fill-color: #F5EEDC !important;
+}
+
+[data-season="halloween"] div:has(> div > div > input[placeholder^="Ask Examina"]) .bg-\[\#B0607A\] {
+  background: #35D0B4 !important;
+}
+
+[data-season="halloween"] div:has(> div > div > input[placeholder^="Ask Examina"]) div.w-7.h-7.bg-\[\#3B2027\] {
+  color: #7FE3D3 !important;
+}
+
+/* Signed-in generator nav (QuizGenerator, fixed bar): keep a dark backdrop so
+   scrolled content never shows through the links */
+[data-season="halloween"] nav.fixed.bg-background\/80 {
+  background: rgba(10, 22, 20, 0.88) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(53, 208, 180, 0.18) !important;
+}
