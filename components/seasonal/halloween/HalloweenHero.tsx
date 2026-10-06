@@ -24,34 +24,43 @@ export default function HalloweenHero() {
       
       {/* 3 Filled bats around upper moon - solid teal silhouettes */}
       <div className="absolute" style={{ top: '6%', left: '8%', zIndex: 2, transform: 'rotate(-12deg)' }}>
-        <Image
-          src="/seasonal/halloween/bat-filled.svg"
-          alt=""
-          width={68}
-          height={34}
-          className="halloween-bat"
-          aria-hidden="true"
-        />
+        <div style={{ width: '64px', height: '32px' }} className="max-[767px]:!w-[42px] max-[767px]:!h-[21px]">
+          <Image
+            src="/seasonal/halloween/bat-filled.svg"
+            alt=""
+            width={64}
+            height={32}
+            className="halloween-bat"
+            aria-hidden="true"
+            style={{ width: '100%', height: '100%' }}
+          />
+        </div>
       </div>
       <div className="absolute" style={{ top: '4%', right: '12%', zIndex: 2, transform: 'rotate(15deg)' }}>
-        <Image
-          src="/seasonal/halloween/bat-filled.svg"
-          alt=""
-          width={64}
-          height={32}
-          className="halloween-bat"
-          aria-hidden="true"
-        />
+        <div style={{ width: '68px', height: '34px' }} className="max-[767px]:!w-[44px] max-[767px]:!h-[22px]">
+          <Image
+            src="/seasonal/halloween/bat-filled.svg"
+            alt=""
+            width={68}
+            height={34}
+            className="halloween-bat"
+            aria-hidden="true"
+            style={{ width: '100%', height: '100%' }}
+          />
+        </div>
       </div>
       <div className="absolute" style={{ top: '10%', right: '6%', zIndex: 2, transform: 'rotate(-8deg) scaleX(-1)' }}>
-        <Image
-          src="/seasonal/halloween/bat-filled.svg"
-          alt=""
-          width={72}
-          height={36}
-          className="halloween-bat"
-          aria-hidden="true"
-        />
+        <div style={{ width: '72px', height: '36px' }} className="max-[767px]:!w-[46px] max-[767px]:!h-[23px]">
+          <Image
+            src="/seasonal/halloween/bat-filled.svg"
+            alt=""
+            width={72}
+            height={36}
+            className="halloween-bat"
+            aria-hidden="true"
+            style={{ width: '100%', height: '100%' }}
+          />
+        </div>
       </div>
       
       {/* Left ghost at mid-height */}
@@ -70,7 +79,7 @@ export default function HalloweenHero() {
       <div 
         className="halloween-pumpkin-row absolute" 
         style={{ 
-          bottom: '8%', 
+          bottom: '4%', 
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 3,
