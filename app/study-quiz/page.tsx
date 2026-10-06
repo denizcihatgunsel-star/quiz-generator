@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
+import { saleLandingData } from "@/lib/pricing";
+
+// Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
+export const revalidate = 60;
 
 export const metadata: Metadata = pageMetadata({
   title: "Study Quiz Generator — Active Recall & Flashcards",
@@ -11,7 +15,7 @@ export const metadata: Metadata = pageMetadata({
 export default function StudyQuizPage() {
   return (
     <KeywordLanding
-      data={{
+      data={saleLandingData({
         kicker: "Study Quiz",
         h1: "Study smarter with",
         h1Accent: "quizzes",
@@ -59,7 +63,7 @@ export default function StudyQuizPage() {
           { href: "/study", label: "Study Mode" },
           { href: "/daily-quiz", label: "Daily Quiz" },
         ],
-      }}
+      }, new Date())}
     />
   );
 }
