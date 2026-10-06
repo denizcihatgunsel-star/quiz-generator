@@ -11,8 +11,10 @@ export function SalePill() {
 }
 
 /**
- * Regular price for theme-off, plus the struck-through old price and the new price for the
- * Halloween theme. `sizeClassName` is the existing price typography (font + size + weight),
+ * Regular price (+ suffix) for theme-off, exactly as before, plus the struck-through old price
+ * and the new price for the Halloween theme. The new price and its suffix never split; in narrow
+ * cards the old price sits on its own line above them. Render inside the existing
+ * `flex items-baseline flex-wrap` price row. `sizeClassName` is the existing price typography,
  * `regularClassName` the existing regular price classes (typography + color).
  */
 export function SaleAmount({
@@ -20,23 +22,31 @@ export function SaleAmount({
   sale,
   sizeClassName,
   regularClassName,
+  suffix,
+  suffixClassName,
+  gapClassName,
 }: {
   regular: string;
   sale: string;
   sizeClassName: string;
   regularClassName: string;
+  suffix: string;
+  suffixClassName: string;
+  gapClassName: string;
 }) {
   return (
     <>
       <span className={`${regularClassName} ${styles.regularOnly}`}>{regular}</span>
+      <span className={`${suffixClassName} ${styles.regularOnly}`}>{suffix}</span>
       <span className={`${sizeClassName} ${styles.saleInline}`} data-sale="was">
         <del className={styles.oldPrice}>
           <span className="sr-only">was </span>
           {regular}
         </del>
       </span>
-      <span className={`${sizeClassName} ${styles.newPrice} ${styles.saleInline}`} data-sale="price">
-        {sale}
+      <span className={`${styles.saleGroup} ${gapClassName}`} data-sale="price">
+        <span className={`${sizeClassName} ${styles.newPrice}`}>{sale}</span>
+        <span className={suffixClassName}>{suffix}</span>
       </span>
     </>
   );
