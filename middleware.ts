@@ -81,12 +81,37 @@ const MARKETING_EXACT = new Set([
   "/tr",
 ]);
 
+// Auth.js v5 names the session cookie authjs.session-token (prefixed __Secure-
+// on https, chunked as .0/.1 when large); NextAuth v4 used next-auth.*. Accept both.
+const SESSION_COOKIE_RE = /^(?:__Secure-|__Host-)?(?:authjs|next-auth)\.session-token(?:\.\d+)?$/;
+
 function hasSessionCookie(request: NextRequest): boolean {
-  return Boolean(
-    request.cookies.get("next-auth.session-token") ||
-      request.cookies.get("__Secure-next-auth.session-token") ||
-      request.cookies.get("__Host-next-auth.session-token"),
-  );
+  return request.cookies.getAll().some((c) => SESSION_COOKIE_RE.test(c.name));
+}
+
+/**
+ * Non-secret, JS-readable hint that a session cookie exists (the real one is
+ * httpOnly). The inline script in app/layout.tsx uses it to keep / and /m blank
+ * until the client session resolves, so the signed-out homepage never paints
+ * first for signed-in users. Only touched when it is out of date, so anonymous
+ * responses (and their CDN cache headers) are unchanged.
+ */
+const AUTH_HINT_COOKIE = "examina_auth_hint";
+
+function withAuthHint(request: NextRequest, response: NextResponse): NextResponse {
+  const signedIn = hasSessionCookie(request);
+  const hinted = request.cookies.get(AUTH_HINT_COOKIE)?.value === "1";
+  if (signedIn && !hinted) {
+    response.cookies.set(AUTH_HINT_COOKIE, "1", {
+      path: "/",
+      sameSite: "lax",
+      secure: request.nextUrl.protocol === "https:",
+      maxAge: 60 * 60 * 24 * 30,
+    });
+  } else if (!signedIn && hinted) {
+    response.cookies.set(AUTH_HINT_COOKIE, "", { path: "/", maxAge: 0 });
+  }
+  return response;
 }
 
 function withMarketingCache(request: NextRequest, response: NextResponse): NextResponse {
@@ -134,7 +159,7 @@ export function middleware(request: NextRequest) {
       url.search = search;
       return NextResponse.redirect(url);
     }
-    return withMarketingCache(request, nextWithHtmlLang(request));
+    return withAuthHint(request, withMarketingCache(request, nextWithHtmlLang(request)));
   }
 
   if (isMobile) {
@@ -151,7 +176,7 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  return withMarketingCache(request, nextWithHtmlLang(request));
+  return withAuthHint(request, withMarketingCache(request, nextWithHtmlLang(request)));
 }
 
 export const config = {
