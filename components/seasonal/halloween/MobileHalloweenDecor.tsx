@@ -175,8 +175,8 @@ export default function MobileHalloweenDecor({
           }}
         />
         {/* Side ghosts / bats — left pair tucked beside/behind label, not over "Pricing" */}
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 36, height: 36, top: 52, left: -32 }} />
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, top: -16, left: -24, transform: "rotate(-12deg)" }} />
+        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 34, height: 34, top: 58, left: -44 }} />
+        <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, top: -18, left: -34, transform: "rotate(-12deg)" }} />
         <Prop src={GHOST} className="hw-m-ghost" style={{ width: 44, height: 44, top: 10, right: -14, transform: "scaleX(-1)" }} />
         <Prop src={BAT} className="hw-m-bat" style={{ width: 26, height: 13, top: 2, right: 36, transform: "rotate(14deg)" }} />
 
