@@ -169,23 +169,24 @@ export default function PricingPage() {
                         {plan.name}
                       </h2>
                       {price.sale && <SalePill />}
-                      <div className="flex items-baseline gap-1.5">
+                      <div className={`flex items-baseline gap-1.5${price.sale ? " flex-wrap" : ""}`}>
                         {plan.price === 0 ? (
                           <span className="font-serif text-5xl text-[#3B2027]">Free</span>
+                        ) : price.sale ? (
+                          <SaleAmount
+                            regular={price.regular}
+                            sale={price.sale}
+                            sizeClassName="font-serif text-5xl"
+                            regularClassName={`font-serif text-5xl ${isFeatured ? "text-[#B0607A]" : "text-[#3B2027]"}`}
+                            suffix="/mo"
+                            suffixClassName="text-sm text-[#9A7280]"
+                            gapClassName="gap-1.5"
+                          />
                         ) : (
                           <>
-                            {price.sale ? (
-                              <SaleAmount
-                                regular={price.regular}
-                                sale={price.sale}
-                                sizeClassName="font-serif text-5xl"
-                                regularClassName={`font-serif text-5xl ${isFeatured ? "text-[#B0607A]" : "text-[#3B2027]"}`}
-                              />
-                            ) : (
-                              <span className={`font-serif text-5xl ${isFeatured ? "text-[#B0607A]" : "text-[#3B2027]"}`}>
-                                ${plan.price}
-                              </span>
-                            )}
+                            <span className={`font-serif text-5xl ${isFeatured ? "text-[#B0607A]" : "text-[#3B2027]"}`}>
+                              ${plan.price}
+                            </span>
                             <span className="text-sm text-[#9A7280]">/mo</span>
                           </>
                         )}
