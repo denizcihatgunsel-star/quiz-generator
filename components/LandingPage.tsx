@@ -73,7 +73,7 @@ export default function LandingPage() {
       </FadeInSection>
 
       {/* How it works */}
-      <FadeInSection id="features" className="py-32 bg-card">
+      <FadeInSection className="py-32 bg-card">
         <div className="max-w-5xl mx-auto px-6">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">
             {t("landing.howItWorks")}

@@ -1,9 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
 import GlobeStudy from "@/components/GlobeStudy";
+import { isHalloweenActive } from "@/lib/seasonal";
+
+// Halloween decorations removed - using background image slot instead
 
 const ARROW = (
   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -24,9 +29,11 @@ interface Daily {
   reward: number;
 }
 
-export default function MobileHome() {
+function MobileHomeContent() {
   const { data: session } = useSession();
   const [daily, setDaily] = useState<Daily | null>(null);
+  const searchParams = useSearchParams();
+  const halloweenActive = isHalloweenActive(searchParams);
 
   useEffect(() => {
     if (!session?.user) return;
@@ -40,6 +47,9 @@ export default function MobileHome() {
 
   return (
     <div className="relative">
+      {/* Halloween decorations */}
+      {/* Halloween decorations removed - using background image slot */}
+      
       {/* Floating pastel orbs — pure CSS, animated on mobile */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="orb-drift h-40 w-40 rounded-full bg-[#E9A8B8]/70 blur-2xl" style={{ top: "-2rem", right: "-3rem" }} />
@@ -67,7 +77,7 @@ export default function MobileHome() {
           className="mx-auto mt-4 max-w-xs font-serif text-lg italic leading-relaxed text-[#8C5A68]"
           style={{ animation: "fade-up 0.6s ease-out 0.15s both" }}
         >
-          Turn your study notes into structured quizzes, instantly.
+          Turn your study notes into structured <span className={halloweenActive ? "word-glow" : ""}>quizzes</span>, instantly.
         </p>
 
         <div className="mt-8 flex flex-col items-center gap-3">
@@ -87,6 +97,8 @@ export default function MobileHome() {
             </Link>
           </div>
         </div>
+        
+        {/* Cauldron decoration removed */}
       </section>
 
       {/* Daily challenge banner */}
@@ -218,5 +230,13 @@ export default function MobileHome() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function MobileHome() {
+  return (
+    <Suspense fallback={<div className="min-h-screen" />}>
+      <MobileHomeContent />
+    </Suspense>
   );
 }

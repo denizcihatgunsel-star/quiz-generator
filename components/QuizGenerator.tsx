@@ -30,6 +30,10 @@ import MagneticText from "./MagneticText";
 import QuizStory from "./QuizStory";
 import { useTranslation } from "@/lib/i18n";
 
+// Halloween seasonal components
+import InteractiveHeadline from "./seasonal/halloween/InteractiveHeadline";
+const HalloweenHero = dynamic(() => import("./seasonal/halloween/HalloweenHero"), { ssr: false });
+const CursorGlow = dynamic(() => import("./seasonal/halloween/CursorGlow"), { ssr: false });
 
 // Below-fold marketing: client-only to keep homepage HTML lean for crawlers/CDN
 const UnseenLanding = dynamic(() => import("./UnseenLanding"), { ssr: false });
@@ -465,6 +469,15 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
 
   const [heroHover, setHeroHover] = useState(false);
   const [storyOpen, setStoryOpen] = useState(false);
+  const [halloweenActive, setHalloweenActive] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const { isHalloweenActive } = require("@/lib/seasonal");
+      const params = new URLSearchParams(window.location.search);
+      setHalloweenActive(isHalloweenActive(params));
+    }
+  }, []);
 
   const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
   const heroContainer: Variants = {
@@ -495,6 +508,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
     <div className="min-h-screen bg-background">
       {(isLoggedIn || quiz) && <AmbientBackground />}
       {!isLoggedIn && !quiz && !hideChrome && <SoundToggle />}
+      {halloweenActive && <CursorGlow />}
       {/* ========== NAVIGATION ========== */}
       {hideChrome ? null : sessionStatus === "loading" ? null : isLoggedIn || quiz ? (
       <motion.nav
@@ -582,13 +596,14 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
             {/* Hero */}
             <section
               ref={heroRef}
-              className={`relative overflow-hidden ${hideChrome ? "pt-6 pb-16" : "pb-32"} ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-gradient-to-b from-[#FDE8EC]/55 via-transparent to-transparent pt-40 sm:pt-48"}`}
+              className={`relative overflow-hidden overflow-x-clip ${hideChrome ? "pt-6 pb-16" : "pb-32"} ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-gradient-to-b from-[#FDE8EC]/55 via-transparent to-transparent pt-40 sm:pt-48"}`}
             >
-              {!isLoggedIn && !hideChrome && (
+              {!isLoggedIn && !hideChrome && !halloweenActive && (
                 <div className="pointer-events-none absolute inset-0 z-[1] overflow-hidden" aria-hidden>
                   <WaterCanvas className="pointer-events-none absolute inset-0 h-full w-full opacity-100" />
                 </div>
               )}
+              {/* Halloween decorations removed - using background image slot */}
               <motion.div
                 style={isLoggedIn ? undefined : { scale: diveScale, opacity: diveOpacity, y: diveY }}
                 className="relative z-10 max-w-5xl mx-auto px-6"
@@ -650,7 +665,31 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     {t("hero.subtitle")}
                   </motion.p>
                 </motion.div>
-                ) : hideChrome ? null : (
+                ) : hideChrome ? null : halloweenActive ? (
+                  /* Halloween two-column hero */
+                  <div className="mx-auto max-w-7xl px-5 sm:px-6 flex items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-[46%_54%] gap-6 sm:gap-8 lg:gap-12 items-start lg:items-center w-full pt-16 sm:pt-20 lg:pt-16">
+                      {/* Left column - Text (max 46% width on desktop) */}
+                      <div className="text-left space-y-4 sm:space-y-6 w-full">
+                        <InteractiveHeadline />
+                        <p className="halloween-subtitle text-base sm:text-lg max-w-lg">
+                          Turn your study notes into structured quizzes, instantly.
+                        </p>
+                        <a
+                          href="#generate"
+                          className="halloween-cta inline-block text-sm sm:text-base"
+                        >
+                          Generate Quiz
+                        </a>
+                      </div>
+                      
+                      {/* Right column - Art group */}
+                      <div className="flex justify-center w-full lg:pl-8">
+                        <HalloweenHero />
+                      </div>
+                    </div>
+                  </div>
+                ) : (
                 <div className="mx-auto max-w-5xl text-center">
                   <p className="text-[11px] uppercase tracking-[0.4em] text-[#A87680]">
                     A quiz generator
@@ -687,7 +726,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                       </span>
                     </a>
                     <a
-                      href="#selected"
+                      href="#features"
                       className="text-sm text-[#9A7280] underline underline-offset-4 transition-colors duration-200 hover:text-[#3B2027]"
                     >
                       How it works
@@ -751,6 +790,9 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
 
                 {/* Quiz Input */}
                 {(isLoggedIn || canGenerateDemo) && (
+                  <div className="relative">
+                    {/* Cauldron decoration removed */}
+                    
                   <motion.div variants={heroItem} id="generate" className={`relative max-w-2xl scroll-mt-28 ${isLoggedIn ? "" : "mx-auto"}`}>
                     <div aria-hidden className="pointer-events-none absolute -inset-12 -z-10">
                       <div className="orb-drift h-44 w-44 bg-[#E9A8B8]/70" style={{ animationDelay: "-3s", top: "-3rem", left: "-4rem" }} />
@@ -867,11 +909,12 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                         </div>
 
                         <motion.button
+                          id="generate-btn"
                           onClick={() => handleGenerate()}
                           disabled={!isReady || status === "loading" || atLimit}
                           whileHover={!isReady || status === "loading" || atLimit ? undefined : { scale: 1.02 }}
                           whileTap={!isReady || status === "loading" || atLimit ? undefined : { scale: 0.98 }}
-                          className={`btn-sheen px-5 py-2 bg-[linear-gradient(120deg,#3B2027,#6A3A4C,#3B2027)] gradient-shift text-[#F6E3E8] text-sm font-medium disabled:opacity-60 transition-opacity duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready-rose" : ""}`}
+                          className={`btn-sheen px-5 py-2 ${halloweenActive ? "bg-[#3B2027]" : "bg-[linear-gradient(120deg,#3B2027,#6A3A4C,#3B2027)] gradient-shift"} text-[#F6E3E8] text-sm font-medium disabled:opacity-60 transition-opacity duration-200 disabled:cursor-not-allowed ${isReady && status !== "loading" && !atLimit ? "btn-ready-rose" : ""}`}
                           aria-busy={status === "loading"}
                         >
                           {status === "loading" ? t("input.generating") : t("input.generate")}
@@ -929,6 +972,9 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                       </div>
                     )}
                   </motion.div>
+                  
+                  {/* Cauldron decoration removed */}
+                  </div>
                 )}
                 </motion.div>
                 </motion.div>
@@ -1164,6 +1210,11 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
           </div>
           <div className="mt-8 pt-8 border-t border-[#F3D5DC]">
             <p className="text-xs text-[#9A7280]">&copy; {new Date().getFullYear()} Examina</p>
+            {halloweenActive && (
+              <p className="text-xs text-[#9A7280]/60 mt-2">
+                Moon imagery: NASA&apos;s Scientific Visualization Studio. Emoji art: Microsoft Fluent Emoji (MIT).
+              </p>
+            )}
           </div>
         </div>
       </footer>

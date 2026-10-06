@@ -156,6 +156,32 @@ export default function SoundToggle() {
     };
   }, []);
 
+  // Hide on mobile when Halloween is active
+  const [shouldHide, setShouldHide] = useState(false);
+  useEffect(() => {
+    const checkHalloweenMobile = () => {
+      if (typeof window === "undefined") return;
+      const body = document.querySelector("body");
+      const isHalloween = body?.getAttribute("data-season") === "halloween";
+      const isMobile = window.innerWidth < 640;
+      setShouldHide(isHalloween && isMobile);
+    };
+    
+    checkHalloweenMobile();
+    const observer = new MutationObserver(checkHalloweenMobile);
+    if (document.body) {
+      observer.observe(document.body, { attributes: true, attributeFilter: ["data-season"] });
+    }
+    
+    window.addEventListener("resize", checkHalloweenMobile);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", checkHalloweenMobile);
+    };
+  }, []);
+
+  if (shouldHide) return null;
+
   return (
     <button
       onClick={toggle}

@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif, Space_Grotesk } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif, Space_Grotesk, Creepster, Poppins } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ReferralAttribution from "@/components/ReferralAttribution";
+import HalloweenLayout from "@/components/seasonal/halloween/HalloweenLayout";
 import { pageMetadata, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
@@ -15,6 +16,20 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const creepster = Creepster({
+  weight: "400",
+  variable: "--font-creepster",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const poppins = Poppins({
+  weight: ["400", "500", "600"],
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 const instrumentSerif = Instrument_Serif({
@@ -48,10 +63,26 @@ export const metadata: Metadata = {
   },
 };
 
+// Check if Halloween theme should be active server-side (by date, not query param)
+function getThemeColor(): string {
+  if (process.env.NEXT_PUBLIC_SEASONAL_THEME === 'halloween') {
+    try {
+      const now = new Date();
+      const cutoff = new Date('2026-11-01T00:00:00+03:00');
+      if (now < cutoff) {
+        return '#0A1614'; // Halloween dark teal
+      }
+    } catch {
+      // Fall through to default
+    }
+  }
+  return '#FDE8EC'; // Normal blush
+}
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#FDE8EC",
+  themeColor: getThemeColor(),
 };
 
 export const revalidate = 60;
@@ -65,7 +96,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${spaceGrotesk.variable} ${creepster.variable} ${poppins.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
@@ -136,8 +167,10 @@ export default function RootLayout({
         />
         <ThemeProvider>
           <SessionProviderWrapper>
-            {children}
-            <ReferralAttribution />
+            <HalloweenLayout>
+              {children}
+              <ReferralAttribution />
+            </HalloweenLayout>
           </SessionProviderWrapper>
         </ThemeProvider>
         <Analytics />

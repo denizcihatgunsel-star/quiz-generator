@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useInView, animate } from "framer-motion";
 import Link from "next/link";
 import GlobeStudy from "./GlobeStudy";
+import { isHalloweenActive } from "@/lib/seasonal";
 
 const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
 
@@ -120,12 +121,19 @@ function Marquee() {
 }
 
 export default function UnseenLanding() {
+  // Halloween theme only swaps the globe's canvas colours (CSS can't reach the
+  // canvas). Theme off keeps the original props exactly.
+  const [halloween, setHalloween] = useState(false);
+  useEffect(() => {
+    setHalloween(isHalloweenActive(new URLSearchParams(window.location.search)));
+  }, []);
+
   return (
     <div className="bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#F8E9ED]">
       <Marquee />
 
       {/* Selected — four ways to study */}
-      <Reveal id="selected" className="py-24 sm:py-32">
+      <Reveal className="py-24 sm:py-32">
         <div className="mx-auto max-w-5xl px-6">
           <div className="flex items-baseline justify-between border-b border-[#F3D5DC] pb-8">
             <Kicker>Selected</Kicker>
@@ -207,8 +215,8 @@ export default function UnseenLanding() {
         </div>
         <div className="mx-auto mt-10 h-[440px] w-full max-w-4xl overflow-hidden rounded-3xl border border-[#F3D5DC] sm:h-[600px]">
           <GlobeStudy
-            background="#3B2027"
-            baseColor="#F1D3DA"
+            background={halloween ? "#0F1F1C" : "#3B2027"}
+            baseColor={halloween ? "#BFEFE4" : "#F1D3DA"}
             phrase="studyanywhereanytimewithexamina"
             pointer={{ zoom: 0 }}
           />
