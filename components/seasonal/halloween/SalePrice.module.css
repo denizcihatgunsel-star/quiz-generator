@@ -6,8 +6,15 @@
  */
 .saleInline,
 .saleBlock,
-.salePill {
+.salePill,
+.saleGroup {
   display: none;
+}
+
+:global([data-season="halloween"]) .saleGroup:not(#hx-0) {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
 }
 
 :global([data-season="halloween"]) .saleInline:not(#hx-0) {
