@@ -62,9 +62,8 @@
 
 /* Body font switch to Poppins when Halloween active */
 [data-season="halloween"] body,
-[data-season="halloween"] p,
-[data-season="halloween"] li,
-[data-season="halloween"] span:not(.halloween-logo):not([class*="creepster"]) {
+[data-season="halloween"] p:not(.halloween-subtitle),
+[data-season="halloween"] li {
   font-family: var(--font-poppins), sans-serif;
 }
 
@@ -77,6 +76,15 @@
   background: transparent !important;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Target the inner pill wrapper in EditorialNav */
+[data-season="halloween"] nav > div {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   border: none !important;
   box-shadow: none !important;
 }
@@ -97,8 +105,11 @@
 
 /* Nav links - Creepster, cream text */
 [data-season="halloween"] nav a:not([href*="create"]):not([href*="register"]),
+[data-season="halloween"] nav a:not([href*="create"]):not([href*="register"]) *,
 [data-season="halloween"] nav button:not([href*="create"]):not([href*="register"]),
-[data-season="halloween"] nav span {
+[data-season="halloween"] nav button:not([href*="create"]):not([href*="register"]) *,
+[data-season="halloween"] nav span,
+[data-season="halloween"] nav span * {
   color: #FFF7EC !important;
   font-family: var(--font-creepster), cursive !important;
   font-size: 0.95rem;
@@ -170,7 +181,9 @@
 /* Hero headline - Creepster, white, fluid responsive */
 [data-season="halloween"] .halloween-headline,
 [data-season="halloween"] h1.halloween-headline,
-[data-season="halloween"] section h1 {
+[data-season="halloween"] h1.halloween-headline *,
+[data-season="halloween"] section h1,
+[data-season="halloween"] section h1 * {
   color: #FFFFFF !important;
   font-family: var(--font-creepster), cursive !important;
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
@@ -184,13 +197,20 @@
 /* Desktop sizing */
 @media (min-width: 1280px) {
   [data-season="halloween"] .halloween-headline {
-    font-size: 4.5rem !important; /* 72px */
+    font-size: 4.75rem !important; /* 76px */
   }
 }
 
 @media (min-width: 1024px) and (max-width: 1279px) {
   [data-season="halloween"] .halloween-headline {
     font-size: 4rem !important; /* 64px */
+  }
+}
+
+/* Mobile sizing - ensure no horizontal overflow */
+@media (max-width: 767px) {
+  [data-season="halloween"] .halloween-headline {
+    font-size: clamp(28px, 7.5vw, 42px) !important;
   }
 }
 
@@ -372,8 +392,11 @@
 
 /* Section headings - Creepster */
 [data-season="halloween"] section h2,
+[data-season="halloween"] section h2 *,
 [data-season="halloween"] section h3,
-[data-season="halloween"] .halloween-section-heading {
+[data-season="halloween"] section h3 *,
+[data-season="halloween"] .halloween-section-heading,
+[data-season="halloween"] .halloween-section-heading * {
   color: #FFFFFF !important;
   font-family: var(--font-creepster), cursive !important;
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
@@ -474,8 +497,8 @@
 /* Moon - NASA image, teal-tinted, with big soft glow */
 .halloween-moon {
   position: absolute;
-  width: 300px;
-  height: 300px;
+  width: 320px;
+  height: 320px;
   border-radius: 50%;
   background-image: url('/seasonal/halloween/moon-teal.webp');
   background-size: cover;
@@ -499,24 +522,6 @@
 .halloween-pumpkin {
   filter: drop-shadow(0 0 18px rgba(255, 140, 40, 0.8));
   animation: pumpkin-glow 3s ease-in-out infinite;
-}
-
-.halloween-pumpkin:nth-child(1),
-.halloween-pumpkin:nth-child(11) {
-  width: 60px;
-  height: 60px;
-}
-
-.halloween-pumpkin:nth-child(3),
-.halloween-pumpkin:nth-child(9) {
-  width: 80px;
-  height: 80px;
-}
-
-.halloween-pumpkin:nth-child(5),
-.halloween-pumpkin:nth-child(7) {
-  width: 100px;
-  height: 100px;
 }
 
 .halloween-pumpkin.center {
@@ -596,21 +601,15 @@
   }
   
   .halloween-pumpkin:nth-child(1),
-  .halloween-pumpkin:nth-child(11) {
-    width: 40px;
-    height: 40px;
+  .halloween-pumpkin:nth-child(7) {
+    width: 45px;
+    height: 45px;
   }
   
   .halloween-pumpkin:nth-child(3),
-  .halloween-pumpkin:nth-child(9) {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .halloween-pumpkin:nth-child(5),
-  .halloween-pumpkin:nth-child(7) {
-    width: 60px;
-    height: 60px;
+  .halloween-pumpkin:nth-child(5) {
+    width: 55px;
+    height: 55px;
   }
   
   .halloween-pumpkin.center {
@@ -619,8 +618,8 @@
   }
   
   .halloween-candle {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
   }
   
   .halloween-bat {

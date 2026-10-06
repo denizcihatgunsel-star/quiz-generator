@@ -664,41 +664,30 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                 </motion.div>
                 ) : hideChrome ? null : halloweenActive ? (
                   /* Halloween two-column hero */
-                  <div className="mx-auto max-w-7xl min-h-screen flex items-center">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
-                      {/* Left column - Text */}
-                      <div className="text-left space-y-8">
-                        <h1 className="halloween-headline text-5xl sm:text-6xl lg:text-7xl">
-                          <span className="block">
-                            <span style={{whiteSpace: 'nowrap'}}>AI</span> <span style={{whiteSpace: 'nowrap'}}>QUIZ</span> <span style={{whiteSpace: 'nowrap'}}>GENERAT<span className="halloween-pumpkin-o" aria-hidden="true">O</span>R</span>
-                          </span>
-                          <span className="block mt-2">
-                            <span style={{whiteSpace: 'nowrap'}}>THAT</span> <span style={{whiteSpace: 'nowrap'}}>TURNS</span> <span style={{whiteSpace: 'nowrap'}}>N<span className="halloween-pumpkin-o" aria-hidden="true">O</span>TES</span>
-                          </span>
-                          <span className="block mt-2 halloween-headline-teal">
-                            <span style={{whiteSpace: 'nowrap'}}>INT<span className="halloween-pumpkin-o" aria-hidden="true">O</span></span> <span style={{whiteSpace: 'nowrap'}}>QUIZZES</span>
-                          </span>
+                  <div className="mx-auto max-w-7xl px-5 sm:px-6 min-h-[800px] flex items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-[46%_54%] gap-6 sm:gap-8 lg:gap-12 items-start lg:items-center w-full pt-8 sm:pt-0">
+                      {/* Left column - Text (max 46% width on desktop) */}
+                      <div className="text-left space-y-4 sm:space-y-6 w-full">
+                        <h1 className="halloween-headline" style={{ fontSize: 'clamp(32px, 8vw, 76px)', lineHeight: '1.1' }}>
+                          <span className="block">AI QUIZ GENERATOR</span>
+                          <span className="block">THAT TURNS N<span className="halloween-pumpkin-o" aria-hidden="true">O</span>TES</span>
+                          <span className="block halloween-headline-teal">INT<span className="halloween-pumpkin-o" aria-hidden="true">O</span> QUIZZES</span>
                         </h1>
-                        <p className="halloween-subtitle text-lg max-w-lg">
+                        <p className="halloween-subtitle text-base sm:text-lg max-w-lg">
                           Turn your study notes into structured quizzes, instantly.
                         </p>
                         <a
                           href="#generate"
-                          className="halloween-cta inline-block"
+                          className="halloween-cta inline-block text-sm sm:text-base"
                         >
                           Generate Quiz
                         </a>
                       </div>
                       
                       {/* Right column - Art group */}
-                      <div className="hidden lg:block">
+                      <div className="flex justify-center w-full">
                         <HalloweenHero />
                       </div>
-                    </div>
-                    
-                    {/* Mobile art group */}
-                    <div className="lg:hidden mt-12">
-                      <HalloweenHero />
                     </div>
                   </div>
                 ) : (
