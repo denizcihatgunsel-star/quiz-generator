@@ -3,12 +3,12 @@
 import { useHalloweenActive } from "./HalloweenLayout";
 
 /**
- * Mobile Halloween decorations (phone /m app shell, marketing quiz gaps,
+ * Mobile Halloween decorations (phone /m app shell, marketing quiz soft accents,
  * /m/pricing). Visual-only: pointer-events none, z behind controls.
  * Renders nothing when the season is off or after the Nov 1 TRT cutoff.
  */
 
-type Variant = "app-hero" | "jump" | "quiz-dense" | "pricing" | "nav-strip";
+type Variant = "app-hero" | "jump" | "quiz-soft" | "pricing" | "nav-strip";
 
 const PUMPKIN = "/seasonal/halloween/pumpkin.webp";
 const CANDLE = "/seasonal/halloween/candle.webp";
@@ -108,42 +108,46 @@ export default function MobileHalloweenDecor({
     );
   }
 
-  if (variant === "quiz-dense") {
+  if (variant === "quiz-soft") {
+    /* Option A · Soft: pumpkins/candle above card, ghosts+bats in gutters only.
+       No dense moon glow behind the quiz card. */
     return (
       <div
         className={`pointer-events-none absolute inset-0 z-0 overflow-visible hidden max-[767px]:block ${className}`}
         aria-hidden="true"
-        data-hw-mobile="quiz-dense"
+        data-hw-mobile="quiz-soft"
       >
-        {/* Faint moon glow BEHIND the quiz card (not a second full hero) */}
+        {/* Compact moon peek top-right (not behind the card) */}
         <MoonGlow
-          className="hw-m-moon--behind-card"
+          className="hw-m-moon--soft"
           style={{
-            top: "4%",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: 280,
-            height: 280,
+            top: -28,
+            right: -40,
+            width: 120,
+            height: 120,
           }}
         />
 
-        {/* Left gutter */}
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 44, height: 44, top: "6%", left: -18 }} />
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 26, height: 13, top: "18%", left: -12, transform: "rotate(-14deg)" }} />
-        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 34, height: 34, top: "32%", left: -14 }} />
-        <Prop src={CANDLE} className="hw-m-candle" style={{ width: 26, height: 26, top: "48%", left: -10 }} />
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, top: "62%", left: -8, transform: "rotate(10deg) scaleX(-1)" }} />
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 40, height: 40, top: "78%", left: -16 }} />
-        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 30, height: 30, bottom: "2%", left: -10 }} />
+        {/* Thin band ABOVE the quiz card: 2 pumpkins + candle (+ tiny pumpkin) */}
+        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 28, height: 28, top: -18, left: "18%" }} />
+        <Prop src={CANDLE} className="hw-m-candle" style={{ width: 24, height: 24, top: -20, left: "46%" }} />
+        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 26, height: 26, top: -16, left: "68%" }} />
 
-        {/* Right gutter */}
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 28, height: 14, top: "4%", right: -12, transform: "rotate(16deg)" }} />
-        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 38, height: 38, top: "16%", right: -16 }} />
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 46, height: 46, top: "34%", right: -18, transform: "scaleX(-1)" }} />
-        <Prop src={CANDLE} className="hw-m-candle" style={{ width: 28, height: 28, top: "52%", right: -10 }} />
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 24, height: 12, top: "66%", right: -10, transform: "rotate(-10deg)" }} />
-        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 32, height: 32, top: "80%", right: -14 }} />
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 36, height: 36, bottom: "0%", right: -14, transform: "scaleX(-1)" }} />
+        {/* Upper gutter ghosts */}
+        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 40, height: 40, top: "4%", left: -16 }} />
+        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 40, height: 40, top: "4%", right: -16, transform: "scaleX(-1)" }} />
+
+        {/* Side gutter bats only */}
+        <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, top: "22%", left: -10, transform: "rotate(-12deg)" }} />
+        <Prop src={BAT} className="hw-m-bat" style={{ width: 20, height: 10, top: "40%", left: -8, transform: "rotate(8deg) scaleX(-1)" }} />
+        <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, top: "58%", left: -10, transform: "rotate(-6deg)" }} />
+        <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, top: "24%", right: -10, transform: "rotate(14deg)" }} />
+        <Prop src={BAT} className="hw-m-bat" style={{ width: 20, height: 10, top: "42%", right: -8, transform: "rotate(-10deg)" }} />
+        <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, top: "60%", right: -10, transform: "rotate(6deg) scaleX(-1)" }} />
+
+        {/* Peeking ghost bottom-left + tiny pumpkin bottom-right */}
+        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 36, height: 36, bottom: -4, left: -14 }} />
+        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 24, height: 24, bottom: 0, right: -8 }} />
       </div>
     );
   }

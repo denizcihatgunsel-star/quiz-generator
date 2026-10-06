@@ -787,7 +787,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                 {(isLoggedIn || canGenerateDemo) && (
                   <div className="relative">
                   <motion.div variants={heroItem} id="generate" className={`relative max-w-2xl scroll-mt-28 ${isLoggedIn ? "" : "mx-auto"}`}>
-                    {halloweenActive && <MobileHalloweenDecor variant="quiz-dense" active />}
+                    {halloweenActive && <MobileHalloweenDecor variant="quiz-soft" active />}
                     <div aria-hidden data-hw-hide-orbs={halloweenActive ? "true" : undefined} className="pointer-events-none absolute -inset-12 -z-10">
                       <div className="orb-drift h-44 w-44 bg-[#E9A8B8]/70" style={{ animationDelay: "-3s", top: "-3rem", left: "-4rem" }} />
                       <div className="orb-drift h-36 w-36 bg-[#F6DCE5]/90" style={{ animationDelay: "-8s", bottom: "-2rem", right: "-3.5rem" }} />
