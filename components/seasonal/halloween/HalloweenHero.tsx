@@ -63,16 +63,19 @@ export default function HalloweenHero() {
   return (
     <div 
       ref={containerRef}
-      className="relative flex items-end justify-center w-full max-w-[340px] sm:max-w-[380px] mx-auto" 
-      style={{ minHeight: '380px', aspectRatio: 'auto' }}
+      className="relative flex items-center justify-center w-full max-w-[340px] sm:max-w-[380px] mx-auto" 
+      style={{ minHeight: '380px' }}
     >
+      {/* Parallax wrapper - only transforms, doesn't change layout */}
       <div
         style={{
           transform: `translate(${parallax.x}px, ${parallax.y}px)`,
-          transition: 'transform 150ms ease-out',
-          width: '100%',
-          height: '100%',
-          position: 'relative',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          pointerEvents: 'none',
         }}
       >
         {/* Moon - NASA teal-tinted with soft glow, no black rim */}

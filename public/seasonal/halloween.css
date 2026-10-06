@@ -1174,69 +1174,91 @@ html:has(body[data-season="halloween"]) {
 }
 
 /* ====================================================================
-   COMPREHENSIVE SIGNED-IN PAGE THEMING
+   SIGNED-IN PAGE THEMING (Scoped - does not break nav/buttons)
    ==================================================================== */
 
-/* Override background colors */
-[data-season="halloween"] .bg-background,
-[data-season="halloween"] .min-h-screen {
-  background-color: #0A1614 !important;
+/* Background for main signed-in areas */
+[data-season="halloween"] main.dashboard-container,
+[data-season="halloween"] main > .bg-background,
+[data-season="halloween"] .min-h-screen.bg-background {
+  background-color: #0A1614;
 }
 
-/* Override text colors for better contrast */
-[data-season="halloween"] .text-\[\#3B2027\],
-[data-season="halloween"] .text-\[\#7E3E55\],
-[data-season="halloween"] .text-\[\#9A7280\],
-[data-season="halloween"] .text-\[\#B0607A\] {
-  color: #FFF7EC !important;
+/* Dashboard/content text colors */
+[data-season="halloween"] main .text-\[\#3B2027\],
+[data-season="halloween"] main .text-\[\#7E3E55\],
+[data-season="halloween"] main .text-\[\#9A7280\],
+[data-season="halloween"] main .text-\[\#B0607A\] {
+  color: #FFF7EC;
 }
 
-/* Override heading colors */
-[data-season="halloween"] h1,
-[data-season="halloween"] h2,
-[data-season="halloween"] h3 {
-  font-family: 'Creepster', cursive !important;
-  color: #FFF7EC !important;
+/* Page title headings only (not nav) */
+[data-season="halloween"] main h1,
+[data-season="halloween"] main h2:not(nav h2),
+[data-season="halloween"] main h3:not(nav h3) {
+  font-family: 'Creepster', cursive;
+  color: #FFF7EC;
   text-shadow: 0 0 20px rgba(127, 227, 211, 0.3);
 }
 
-/* Override border and card colors */
-[data-season="halloween"] .border-\[\#E9B8C4\],
-[data-season="halloween"] .border-\[\#F3D5DC\] {
-  border-color: rgba(53, 208, 180, 0.25) !important;
-}
-
-[data-season="halloween"] .bg-gradient-to-r,
-[data-season="halloween"] .bg-gradient-to-br,
-[data-season="halloween"] [class*="from-\["],
-[data-season="halloween"] .bg-white\/70,
-[data-season="halloween"] .bg-\[rgba\(255\,255\,255\,0\.7\)\] {
+/* Login/Register card - fix grey background */
+[data-season="halloween"] .rounded-2xl.border.bg-white\/75,
+[data-season="halloween"] .rounded-2xl.bg-white\/75 {
   background: #0F1F1C !important;
   border: 1px solid rgba(53, 208, 180, 0.25) !important;
 }
 
-/* Primary buttons - keep orange for main actions */
-[data-season="halloween"] .bg-\[\#3B2027\],
-[data-season="halloween"] button[class*="bg-\["] {
-  background: #F28C38 !important;
-  color: #0A1614 !important;
-  font-weight: 600;
+[data-season="halloween"] .rounded-2xl.bg-white\/75 h1,
+[data-season="halloween"] .rounded-2xl.bg-white\/75 p,
+[data-season="halloween"] .rounded-2xl.bg-white\/75 label {
+  color: #FFF7EC !important;
 }
 
-/* Secondary/ghost buttons - teal outline */
-[data-season="halloween"] .border.rounded-full {
+/* Login Google button - keep teal outline */
+[data-season="halloween"] .rounded-2xl.bg-white\/75 button[class*="border-\[\#F3D5DC\]"].bg-white {
   background: transparent !important;
   border-color: #35D0B4 !important;
-  color: #35D0B4 !important;
+  color: #7FE3D3 !important;
 }
 
-/* Links and interactive elements */
-[data-season="halloween"] a {
+/* Login submit button - orange */
+[data-season="halloween"] .rounded-2xl.bg-white\/75 button.bg-\[\#3B2027\] {
+  background: #F28C38 !important;
+  color: #0A1614 !important;
+}
+
+/* Join page wordmark color fix */
+[data-season="halloween"] .font-serif.text-4xl {
+  color: #FFF7EC !important;
+}
+
+/* Dashboard card borders */
+[data-season="halloween"] main .border-\[\#E9B8C4\],
+[data-season="halloween"] main .border-\[\#F3D5DC\] {
+  border-color: rgba(53, 208, 180, 0.25);
+}
+
+/* Content links only (not nav) */
+[data-season="halloween"] main a:not(nav a):not(.btn):not([class*="rounded-full"]) {
   color: #7FE3D3;
 }
 
-[data-season="halloween"] a:hover {
+[data-season="halloween"] main a:not(nav a):not(.btn):not([class*="rounded-full"]):hover {
   color: #35D0B4;
+}
+
+/* Form inputs */
+[data-season="halloween"] input:not([type="checkbox"]):not([type="radio"]),
+[data-season="halloween"] textarea,
+[data-season="halloween"] select {
+  background: #0F1F1C;
+  border-color: rgba(53, 208, 180, 0.3);
+  color: #FFF7EC;
+}
+
+[data-season="halloween"] input::placeholder,
+[data-season="halloween"] textarea::placeholder {
+  color: rgba(255, 247, 236, 0.5);
 }
 
 /* Table styling */
@@ -1254,108 +1276,15 @@ html:has(body[data-season="halloween"]) {
   border-color: rgba(53, 208, 180, 0.15);
 }
 
-/* Modal/Dialog styling */
-[data-season="halloween"] [role="dialog"] {
-  background: #0F1F1C;
-  border: 1px solid rgba(53, 208, 180, 0.3);
-}
-
-[data-season="halloween"] .modal-header,
-[data-season="halloween"] .dialog-header {
-  border-bottom-color: rgba(53, 208, 180, 0.2);
-}
-
-/* Toast/notification styling */
-[data-season="halloween"] .toast,
-[data-season="halloween"] [role="alert"] {
-  background: #0F1F1C;
-  border: 1px solid rgba(53, 208, 180, 0.4);
-  color: #FFF7EC;
-}
-
-/* Checkbox and radio */
-[data-season="halloween"] input[type="checkbox"],
-[data-season="halloween"] input[type="radio"] {
-  accent-color: #35D0B4;
-}
-
-/* Progress bar */
-[data-season="halloween"] [role="progressbar"],
-[data-season="halloween"] .progress-bar {
-  background-color: rgba(53, 208, 180, 0.2);
-}
-
-[data-season="halloween"] [role="progressbar"] > div,
-[data-season="halloween"] .progress-fill {
-  background-color: #35D0B4;
-}
-
-/* Tabs */
-[data-season="halloween"] [role="tablist"] button {
-  color: rgba(255, 247, 236, 0.6);
-  border-color: rgba(53, 208, 180, 0.2);
-}
-
-[data-season="halloween"] [role="tablist"] button[aria-selected="true"] {
-  color: #35D0B4;
-  border-color: #35D0B4;
-  background: rgba(53, 208, 180, 0.1);
-}
-
-/* Badges and chips */
-[data-season="halloween"] .badge,
-[data-season="halloween"] .chip {
-  background: rgba(53, 208, 180, 0.15);
-  color: #7FE3D3;
-  border: 1px solid rgba(53, 208, 180, 0.3);
-}
-
-/* Keep Bloom taxonomy chips distinct */
-[data-season="halloween"] [data-bloom] {
-  opacity: 0.95;
-}
-
-/* Dropdown menus */
-[data-season="halloween"] [role="menu"],
-[data-season="halloween"] .dropdown-menu {
-  background: #0F1F1C;
-  border: 1px solid rgba(53, 208, 180, 0.3);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-}
-
-[data-season="halloween"] [role="menuitem"]:hover {
-  background: rgba(53, 208, 180, 0.15);
-  color: #7FE3D3;
-}
-
-/* Disabled states */
-[data-season="halloween"] button:disabled,
-[data-season="halloween"] input:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* Scrollbar styling for dark theme */
-[data-season="halloween"] ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
+/* Scrollbar for dark theme */
 [data-season="halloween"] ::-webkit-scrollbar-track {
   background: rgba(15, 31, 28, 0.3);
 }
 
 [data-season="halloween"] ::-webkit-scrollbar-thumb {
   background: rgba(53, 208, 180, 0.3);
-  border-radius: 4px;
 }
 
 [data-season="halloween"] ::-webkit-scrollbar-thumb:hover {
   background: rgba(53, 208, 180, 0.5);
-}
-
-/* Selection highlight */
-[data-season="halloween"] ::selection {
-  background: rgba(53, 208, 180, 0.3);
-  color: #FFF7EC;
 }
