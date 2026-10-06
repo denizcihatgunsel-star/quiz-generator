@@ -1,94 +1,88 @@
 "use client";
 
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import HalloweenGhost from './HalloweenGhost';
 
 /**
  * Halloween Hero - Art group with moon, pumpkins, candles, ghosts, bats
  * All assets: Microsoft Fluent Emoji (MIT), Openclipart (CC0), NASA (public domain)
  * Bat: hand-drawn filled SVG
- * Mouse parallax on the entire art group
+ *
+ * Layout is identical to the approved version: the outer box is a flex
+ * container (items-end) and the pumpkin row is an in-flow flex child.
+ * The parallax layer below is an absolutely positioned copy of that same
+ * box (inset 0, same flex alignment), so every child keeps its position.
+ * Parallax only writes the CSS `translate` property on that layer
+ * (desktop, fine pointer, no reduced motion), never touching children.
  */
 export default function HalloweenHero() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [parallax, setParallax] = useState({ x: 0, y: 0 });
-  const rafRef = useRef<number | undefined>(undefined);
+  const layerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+    const layer = layerRef.current;
+    if (!layer) return;
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
+    const target = { x: 0, y: 0 };
+    const current = { x: 0, y: 0 };
+    let raf = 0;
 
-    let isActive = true;
-    const targetRef = { x: 0, y: 0 };
-    const currentRef = { x: 0, y: 0 };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      
-      // Calculate distance from center, max 10px movement
-      const deltaX = (e.clientX - centerX) / (rect.width / 2);
-      const deltaY = (e.clientY - centerY) / (rect.height / 2);
-      
-      targetRef.x = Math.max(-10, Math.min(10, deltaX * 10));
-      targetRef.y = Math.max(-10, Math.min(10, deltaY * 10));
+    const tick = () => {
+      current.x += (target.x - current.x) * 0.1;
+      current.y += (target.y - current.y) * 0.1;
+      layer.style.setProperty('translate', `${current.x.toFixed(2)}px ${current.y.toFixed(2)}px`);
+      if (Math.abs(target.x - current.x) > 0.05 || Math.abs(target.y - current.y) > 0.05) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        raf = 0;
+      }
     };
 
-    const animate = () => {
-      if (!isActive) return;
-
-      // Smooth interpolation
-      currentRef.x += (targetRef.x - currentRef.x) * 0.1;
-      currentRef.y += (targetRef.y - currentRef.y) * 0.1;
-
-      setParallax({ x: currentRef.x, y: currentRef.y });
-      rafRef.current = requestAnimationFrame(animate);
+    const onMove = (e: MouseEvent) => {
+      const rect = layer.parentElement?.getBoundingClientRect();
+      if (!rect) return;
+      const dx = (e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
+      const dy = (e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
+      target.x = Math.max(-8, Math.min(8, dx * 8));
+      target.y = Math.max(-8, Math.min(8, dy * 8));
+      if (!raf) raf = requestAnimationFrame(tick);
     };
 
-    document.addEventListener('mousemove', handleMouseMove, { passive: true });
-    rafRef.current = requestAnimationFrame(animate);
-
+    document.addEventListener('mousemove', onMove, { passive: true });
     return () => {
-      isActive = false;
-      document.removeEventListener('mousemove', handleMouseMove);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      document.removeEventListener('mousemove', onMove);
+      if (raf) cancelAnimationFrame(raf);
+      layer.style.removeProperty('translate');
     };
   }, []);
 
   return (
-    <div 
-      ref={containerRef}
-      className="relative flex items-center justify-center w-full max-w-[340px] sm:max-w-[380px] mx-auto" 
-      style={{ minHeight: '380px' }}
-    >
-      {/* Parallax wrapper - only transforms, doesn't change layout */}
+    <div className="relative flex items-end justify-center w-full max-w-[340px] sm:max-w-[380px] mx-auto" style={{ minHeight: '380px', aspectRatio: 'auto' }}>
+      {/* Parallax layer: same box + same flex alignment as the outer container */}
       <div
+        ref={layerRef}
+        className="halloween-parallax-layer"
         style={{
-          transform: `translate(${parallax.x}px, ${parallax.y}px)`,
           position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          pointerEvents: 'none',
+          inset: 0,
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'center',
         }}
       >
-        {/* Moon - NASA teal-tinted with soft glow, no black rim */}
-        <div 
-          className="halloween-moon" 
-          aria-hidden="true"
-          style={{ 
-            position: 'absolute',
-            bottom: '10%',
-            left: '50%',
-            transform: 'translateX(-50%)'
-          }}
-        />
+      {/* Moon - NASA teal-tinted with soft glow, no black rim */}
+      <div 
+        className="halloween-moon" 
+        aria-hidden="true"
+        style={{ 
+          position: 'absolute',
+          bottom: '10%',
+          left: '50%',
+          transform: 'translateX(-50%)'
+        }}
+      />
       
       {/* 3 Filled bats around upper moon - solid teal silhouettes */}
       <div className="absolute" style={{ top: '6%', left: '8%', zIndex: 2, transform: 'rotate(-12deg)' }}>
@@ -132,10 +126,7 @@ export default function HalloweenHero() {
       </div>
       
       {/* Left ghost at mid-height */}
-      <HalloweenGhost 
-        className="absolute" 
-        style={{ top: '42%', left: '3%', zIndex: 2 }}
-      />
+      <HalloweenGhost className="absolute" style={{ top: '42%', left: '3%', zIndex: 2 }} />
       
       {/* Row of 5 pumpkins with 2 candles at LOWER THIRD (bottom 85-95% of moon) */}
       <div 
@@ -161,10 +152,7 @@ export default function HalloweenHero() {
       </div>
       
       {/* Right ghost bottom-right */}
-      <HalloweenGhost 
-        className="absolute" 
-        style={{ bottom: '12%', right: '6%', zIndex: 2, transform: 'scaleX(-1)' }}
-      />
+      <HalloweenGhost className="absolute" style={{ bottom: '12%', right: '6%', zIndex: 2, transform: 'scaleX(-1)' }} />
       </div>
     </div>
   );
