@@ -179,17 +179,19 @@ html:has(body[data-season="halloween"]) {
   background: #0A1614 !important;
   position: relative;
   overflow: visible;
-  padding-bottom: 5rem !important;
+  padding-top: 6rem !important;
+  padding-bottom: 6rem !important;
 }
 
 /* Reduce gap between hero and quiz generator */
 [data-season="halloween"] #generate {
-  margin-top: -8rem;
+  margin-top: 0;
 }
 
-@media (max-width: 1023px) {
-  [data-season="halloween"] #generate {
-    margin-top: -4rem;
+@media (min-width: 1024px) {
+  [data-season="halloween"] section.bg-gradient-to-b {
+    padding-top: 5rem !important;
+    padding-bottom: 4rem !important;
   }
 }
 
@@ -645,11 +647,6 @@ html:has(body[data-season="halloween"]) {
   .halloween-candle {
     width: 35px;
     height: 35px;
-  }
-  
-  .halloween-bat {
-    width: 32px;
-    height: 32px;
   }
   
   .halloween-ghost {

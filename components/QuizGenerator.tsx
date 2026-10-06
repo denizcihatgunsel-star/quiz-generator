@@ -664,8 +664,8 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                 </motion.div>
                 ) : hideChrome ? null : halloweenActive ? (
                   /* Halloween two-column hero */
-                  <div className="mx-auto max-w-7xl px-5 sm:px-6 min-h-[600px] lg:min-h-[0] flex items-center lg:pt-32">
-                    <div className="grid grid-cols-1 lg:grid-cols-[46%_54%] gap-6 sm:gap-8 lg:gap-12 items-start lg:items-center w-full pt-8 sm:pt-0">
+                  <div className="mx-auto max-w-7xl px-5 sm:px-6 flex items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-[46%_54%] gap-6 sm:gap-8 lg:gap-12 items-start lg:items-center w-full pt-16 sm:pt-20 lg:pt-16">
                       {/* Left column - Text (max 46% width on desktop) */}
                       <div className="text-left space-y-4 sm:space-y-6 w-full">
                         <h1 className="halloween-headline uppercase" style={{ fontSize: 'clamp(32px, 8vw, 76px)', lineHeight: '1.1', textTransform: 'uppercase' }}>
