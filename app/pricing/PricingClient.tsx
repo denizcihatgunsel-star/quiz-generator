@@ -14,7 +14,6 @@ import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
 import { PLANS, type Plan, type PlanId } from "@/lib/subscription";
-import { SaleLabel } from "@/components/seasonal/halloween/SalePrice";
 
 type Actions = {
   session: ReturnType<typeof useSession>["data"];
@@ -239,7 +238,7 @@ export function PlanCta({
       ) : plan.price === 0 ? (
         session ? "Downgrade to Free" : "Get started free"
       ) : salePrice ? (
-        <SaleLabel regular={`Get ${plan.name} — $${plan.price}/mo`} sale={`Get ${plan.name} — ${salePrice}/mo`} />
+        `Get ${plan.name} — ${salePrice}/mo`
       ) : (
         `Get ${plan.name} — $${plan.price}/mo`
       )}
