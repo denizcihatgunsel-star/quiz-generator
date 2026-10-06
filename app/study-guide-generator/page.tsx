@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
+import { copyText, saleCopy } from "@/lib/pricing";
+import { CopyText } from "@/components/seasonal/halloween/SalePrice";
+
+// Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
+export const revalidate = 60;
 import Link from "next/link";
 
 export const metadata: Metadata = pageMetadata({
@@ -37,13 +42,14 @@ const FAQ_ITEMS = [
 ];
 
 export default function StudyGuideGeneratorPage() {
+  const now = new Date();
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     mainEntity: FAQ_ITEMS.map((f) => ({
       "@type": "Question",
       name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
+      acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) },
     })),
   };
 
@@ -317,7 +323,7 @@ export default function StudyGuideGeneratorPage() {
             Pricing
           </h2>
           <p className="text-lg text-neutral-600 mb-8 max-w-3xl">
-            Start free with 5 quizzes a month. Starter $2/mo, Plus $5/mo, Pro $9/mo, Team $15/mo. Sharing and PDF download are included from Plus.{" "}
+            <CopyText value={saleCopy("Start free with 5 quizzes a month. Starter $2/mo, Plus $5/mo, Pro $9/mo, Team $15/mo. Sharing and PDF download are included from Plus.", now)} />{" "}
             <Link href="/pricing" className="text-violet-600 hover:underline">See plans</Link>.
           </p>
         </div>
@@ -361,7 +367,7 @@ export default function StudyGuideGeneratorPage() {
             {FAQ_ITEMS.map((item, i) => (
               <div key={i} className="pb-8 border-b border-neutral-200 last:border-0">
                 <h3 className="text-lg font-medium text-neutral-900 mb-3">{item.q}</h3>
-                <p className="text-neutral-600 leading-relaxed">{item.a}</p>
+                <p className="text-neutral-600 leading-relaxed"><CopyText value={saleCopy(item.a, now)} /></p>
               </div>
             ))}
           </div>
