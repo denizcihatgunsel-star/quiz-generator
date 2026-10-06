@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { copyText, saleCopy } from "@/lib/pricing";
 
 const TOOLS = [
   { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
@@ -10,14 +11,16 @@ const TOOLS = [
   { href: "/quiz-generator-from-pdf", label: "PDF to Quiz" },
 ];
 
+// Server component: rendered with its page (ISR, revalidate 60s), so the sale copy is per render.
 export default function ToolCrossLinks({ faqs }: { faqs: { q: string; a: string }[] }) {
+  const now = new Date();
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     mainEntity: faqs.map((f) => ({
       "@type": "Question",
       name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
+      acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) },
     })),
   };
 
