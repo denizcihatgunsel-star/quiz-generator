@@ -3,6 +3,9 @@ import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
 import ToolCrossLinks from "@/components/ToolCrossLinks";
 
+// Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
+export const revalidate = 60;
+
 export const metadata: Metadata = pageMetadata({
   title: "AI Multiple Choice Quiz Maker — Generate MCQs Instantly",
   description: "Create multiple choice quizzes from any text with AI. Get 5-6 MCQs with explanations, difficulty tags & Bloom's Taxonomy levels. Free to try.",
