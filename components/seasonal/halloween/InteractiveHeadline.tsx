@@ -7,7 +7,7 @@ import type { CSSProperties, ReactNode } from 'react';
  *
  * Same structure/box as the approved static headline: an h1.halloween-headline
  * with three block lines, the O's replaced by the flat pumpkin, the last line
- * white -> #7FE3D3. Each visible letter is an inline-block span so it can lift /
+ * fading white -> #7FE3D3 (per-letter gradient slices). Each visible letter is an inline-block span so it can lift /
  * tilt on hover and stagger in on load; all of that uses the CSS `translate`,
  * `rotate` and `scale` properties (see halloween.css), so nothing reflows.
  * Screen readers get the plain sentence once.
@@ -65,7 +65,16 @@ export default function InteractiveHeadline() {
           return;
         }
         const style: CSSProperties = { animationDelay: `${delayIndex++ * 25}ms` };
-        if (line.teal) style.WebkitTextFillColor = mixTeal(t);
+        if (line.teal) {
+          // Each letter carries its own slice of the line's white -> #7FE3D3
+          // fade (start..end of its glyph slot), clipped to the glyph, so the
+          // slices join into one continuous fade across the letter spans.
+          const t1 = glyphCount > 1 ? Math.min(1, (glyph) / (glyphCount - 1)) : 1;
+          style.backgroundImage = `linear-gradient(to right, ${mixTeal(t)}, ${mixTeal(t1)})`;
+          style.WebkitBackgroundClip = 'text';
+          style.backgroundClip = 'text';
+          style.WebkitTextFillColor = 'transparent';
+        }
         out.push(
           <span key={`${tokIdx}-${chIdx}`} className="halloween-letter" style={style}>
             {ch}
