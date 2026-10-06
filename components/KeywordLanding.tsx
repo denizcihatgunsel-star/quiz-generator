@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { copyText, type Copy } from "@/lib/pricing";
+import { CopyText } from "@/components/seasonal/halloween/SalePrice";
 
 const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
 
@@ -12,13 +14,14 @@ export interface KeywordLandingData {
   subtitle: string;
   cta: string;
   introTitle?: string;
-  intro?: string[];
+  /** Sale-aware copy: pass through saleLandingData() on the server page */
+  intro?: Copy[];
   featuresTitle: string;
-  features: { title: string; body: string }[];
+  features: { title: string; body: Copy }[];
   howTitle: string;
   steps: { n: string; title: string; body: string }[];
   faqTitle: string;
-  faq: { q: string; a: string }[];
+  faq: { q: string; a: Copy }[];
   relatedTitle: string;
   related: { href: string; label: string }[];
 }
@@ -39,7 +42,7 @@ export default function KeywordLanding({ data }: { data: KeywordLandingData }) {
     mainEntity: data.faq.map((f) => ({
       "@type": "Question",
       name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
+      acceptedAnswer: { "@type": "Answer", text: copyText(f.a) },
     })),
   };
 
@@ -141,7 +144,7 @@ export default function KeywordLanding({ data }: { data: KeywordLandingData }) {
                 transition={{ duration: 0.5, ease: EASE_OUT, delay: 0.08 }}
                 className="mt-4 text-sm leading-relaxed text-[#9A7280] sm:text-base"
               >
-                {p}
+                <CopyText value={p} />
               </motion.p>
             ))}
           </section>
@@ -160,7 +163,7 @@ export default function KeywordLanding({ data }: { data: KeywordLandingData }) {
                 className="hover-lift rounded-2xl border border-[#F3D5DC] bg-white/75 p-7 shadow-[0_20px_50px_-30px_rgba(176,96,122,0.5)] backdrop-blur-xl"
               >
                 <h2 className="font-serif text-lg italic text-[#3B2027]">{f.title}</h2>
-                <p className="mt-2.5 text-sm leading-relaxed text-[#9A7280]">{f.body}</p>
+                <p className="mt-2.5 text-sm leading-relaxed text-[#9A7280]"><CopyText value={f.body} /></p>
               </motion.div>
             ))}
           </div>
@@ -215,7 +218,7 @@ export default function KeywordLanding({ data }: { data: KeywordLandingData }) {
                   transition={{ duration: 0.45, ease: EASE_OUT, delay: i * 0.05 }}
                 >
                   <p className="text-sm font-medium text-[#3B2027]">{f.q}</p>
-                  <p className="mt-1 text-sm leading-relaxed text-[#9A7280]">{f.a}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-[#9A7280]"><CopyText value={f.a} /></p>
                 </motion.div>
               ))}
             </div>
