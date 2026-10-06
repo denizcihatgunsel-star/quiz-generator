@@ -533,6 +533,8 @@ html:has(body[data-season="halloween"]) {
   box-shadow: 0 0 120px 50px rgba(143, 217, 200, 0.4);
   z-index: 1;
   border: none;
+  border-radius: 50%;
+  background-color: transparent;
 }
 
 /* Pumpkin row - in front of moon, wider than moon */
