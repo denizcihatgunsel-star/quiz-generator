@@ -126,21 +126,21 @@ export default function MobileHalloweenDecor({
         <MoonGlow
           className="hw-m-moon--soft"
           style={{
-            top: -56,
-            right: -64,
-            width: 96,
-            height: 96,
+            top: -72,
+            right: -78,
+            width: 84,
+            height: 84,
           }}
         />
 
         {/* Thin band ABOVE the quiz card: 2 pumpkins + candle */}
         <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 28, height: 28, top: -22, left: "14%" }} />
         <Prop src={CANDLE} className="hw-m-candle" style={{ width: 24, height: 24, top: -24, left: "44%" }} />
-        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 26, height: 26, top: -20, left: "62%" }} />
+        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 26, height: 26, top: -22, left: "58%" }} />
 
         {/* Upper gutter ghosts — right ghost fully off the card edge */}
         <Prop src={GHOST} className="hw-m-ghost" style={{ width: 40, height: 40, top: "2%", left: -18 }} />
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 36, height: 36, top: -6, right: -28, transform: "scaleX(-1)" }} />
+        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 34, height: 34, top: -18, right: -34, transform: "scaleX(-1)" }} />
 
         {/* Side gutter bats only */}
         <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, top: "22%", left: -10, transform: "rotate(-12deg)" }} />

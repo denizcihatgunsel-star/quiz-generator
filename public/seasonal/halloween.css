@@ -1803,7 +1803,8 @@ body[data-season="halloween"] {
 
 /* Thin strip sitting just above the fixed bottom tab bar (~56px + safe area) */
 .hw-m-nav-strip {
-  bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+  /* Tab bar with Creepster labels is ~80px tall — sit fully above it */
+  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
   height: 36px;
   padding-bottom: 4px;
   opacity: 1;
@@ -1819,7 +1820,7 @@ body[data-season="halloween"] {
   position: fixed !important;
   left: 0;
   right: 0;
-  bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
   z-index: 34;
   height: 36px;
   padding-bottom: 4px;
@@ -1887,5 +1888,5 @@ body[data-season="halloween"] {
 }
 
 [data-season="halloween"] main.mx-auto {
-  padding-bottom: 8.5rem !important;
+  padding-bottom: 9.5rem !important;
 }
