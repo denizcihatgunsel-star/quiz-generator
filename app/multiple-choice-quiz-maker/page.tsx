@@ -2,19 +2,40 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
 import ToolCrossLinks from "@/components/ToolCrossLinks";
+import { planOffers } from "@/lib/pricing";
 
 // Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
 export const revalidate = 60;
 
 export const metadata: Metadata = pageMetadata({
-  title: "AI Multiple Choice Quiz Maker — Generate MCQs Instantly",
-  description: "Create multiple choice quizzes from any text with AI. Get 5-6 MCQs with explanations, difficulty tags & Bloom's Taxonomy levels. Free to try.",
+  title: "Multiple Choice Quiz Maker — AI MCQ Generator Free",
+  description: "Create multiple choice quizzes from any text with AI. Generate MCQs with explanations, difficulty tags & Bloom's Taxonomy levels. Free to try.",
   path: "/multiple-choice-quiz-maker",
 });
 
 export default function MultipleChoiceQuizMakerPage() {
+  const now = new Date();
+  const softwareAppSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": "https://www.examina.ink/#software",
+    name: "Examina",
+    url: "https://www.examina.ink",
+    applicationCategory: "EducationalApplication",
+    operatingSystem: "Web",
+    description:
+      "Multiple choice quiz maker that generates MCQ questions from text with AI. Includes plausible distractors, explanations, and Bloom's taxonomy tagging.",
+    offers: planOffers(now),
+    publisher: { "@id": "https://www.examina.ink/#organization" },
+  };
+
   return (
-    <LandingPageLayout>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppSchema) }}
+      />
+      <LandingPageLayout>
       {/* Hero */}
       <section className="py-24 sm:py-32">
         <div className="max-w-5xl mx-auto px-6">
@@ -167,5 +188,6 @@ export default function MultipleChoiceQuizMakerPage() {
         ]}
       />
     </LandingPageLayout>
+    </>
   );
 }

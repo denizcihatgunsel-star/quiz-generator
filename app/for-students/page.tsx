@@ -1,16 +1,64 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
+import { copyText, planOffers, saleCopy } from "@/lib/pricing";
 
 export const metadata: Metadata = pageMetadata({
-  title: "AI Study Tool for Students — Generate Quizzes from Notes",
-  description: "Turn your lecture notes into practice quizzes with AI. Flashcards, multiple choice, fill-in-the-blank — study smarter with Examina. Free to start.",
+  title: "AI Quiz Generator for Students — Turn Notes into Quizzes Free",
+  description: "AI quiz generator for students. Turn lecture notes into practice quizzes with AI. Flashcards, multiple choice, fill-in-the-blank. Free to start.",
   path: "/for-students",
 });
 
+const faqs = [
+  { q: "Is the AI quiz generator free for students?", a: "Yes. Students start with 5 free quiz generations per month. Paid plans start at $2/month." },
+  { q: "What types of questions can I generate?", a: "Multiple choice, true/false, fill-in-the-blank, and flashcards. All with explanations and Bloom's taxonomy tags." },
+  { q: "Can I use handwritten notes?", a: "Yes. Upload a photo of your handwritten notes and OCR extracts the text before generating questions." },
+  { q: "Does it work with PDFs?", a: "Yes. Upload lecture slides, textbook chapters, or study guides as PDF and turn them into quiz questions." },
+  { q: "Can I study with spaced repetition?", a: "Yes. Flashcard mode uses spaced repetition to schedule reviews based on what you know and don't know." },
+];
+
 export default function ForStudentsPage() {
+  const now = new Date();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.examina.ink/for-students#webpage",
+        url: "https://www.examina.ink/for-students",
+        name: "AI Quiz Generator for Students | Examina",
+        isPartOf: { "@id": "https://www.examina.ink/#website" },
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://www.examina.ink/#software",
+        name: "Examina",
+        url: "https://www.examina.ink",
+        applicationCategory: "EducationalApplication",
+        operatingSystem: "Web",
+        description:
+          "AI quiz generator for students that turns lecture notes into practice quizzes, flashcards, and study questions with active recall and spaced repetition.",
+        offers: planOffers(now),
+        publisher: { "@id": "https://www.examina.ink/#organization" },
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) },
+        })),
+      },
+    ],
+  };
+
   return (
-    <LandingPageLayout>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <LandingPageLayout>
       {/* Hero */}
       <section className="py-24 sm:py-32">
         <div className="max-w-5xl mx-auto px-6">
@@ -202,6 +250,22 @@ export default function ForStudentsPage() {
           </div>
         </div>
       </section>
+
+      {/* FAQ Section */}
+      <section className="border-t border-neutral-200 bg-white py-16">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-2xl font-medium text-neutral-900 mb-8">Frequently asked questions</h2>
+          <div className="space-y-8">
+            {faqs.map((faq, i) => (
+              <div key={i}>
+                <h3 className="text-lg font-medium text-neutral-900 mb-2">{faq.q}</h3>
+                <p className="text-neutral-600">{copyText(saleCopy(faq.a, now))}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </LandingPageLayout>
+    </>
   );
 }

@@ -80,6 +80,31 @@ export default function AiQuizGeneratorPage() {
         publisher: { "@id": "https://www.examina.ink/#organization" },
       },
       {
+        "@type": "HowTo",
+        name: "How to Generate a Quiz with AI",
+        description: "Generate quiz questions from any text using AI in three steps",
+        step: [
+          {
+            "@type": "HowToStep",
+            position: 1,
+            name: "Add your material",
+            text: "Paste text, upload a PDF, TXT or Markdown file, or take a photo of a printed or handwritten page. Examina extracts the text first.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 2,
+            name: "Pick a format and generate",
+            text: "Choose multiple choice, true/false, fill-in-the-blank or flashcards. Most quizzes are ready in under 30 seconds.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 3,
+            name: "Practice, review and share",
+            text: "Take the quiz, read the explanations for anything you missed, and come back to it later. Depending on your plan, you can also share a quiz by link or download it as a PDF.",
+          },
+        ],
+      },
+      {
         "@type": "FAQPage",
         mainEntity: faqs.map((f) => ({
           "@type": "Question",

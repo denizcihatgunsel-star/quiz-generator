@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
-import { copyText, saleCopy } from "@/lib/pricing";
+import { copyText, planOffers, saleCopy } from "@/lib/pricing";
 import { CopyText } from "@/components/seasonal/halloween/SalePrice";
 
 // Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
@@ -9,8 +9,8 @@ export const revalidate = 60;
 import Link from "next/link";
 
 export const metadata: Metadata = pageMetadata({
-  title: "AI Study Guide Generator — Notes to Quiz & Flashcards",
-  description: "Turn your notes or PDFs into an AI study set: quizzes and flashcards tagged by Bloom's taxonomy that work as your study guide. Free for 5 quizzes a month.",
+  title: "Study Guide Generator — AI Quiz & Flashcard Maker Free",
+  description: "Generate study guides from notes with AI. Turn notes or PDFs into quiz questions and flashcards tagged by Bloom's taxonomy. Free to start.",
   path: "/study-guide-generator",
 });
 
@@ -43,21 +43,62 @@ const FAQ_ITEMS = [
 
 export default function StudyGuideGeneratorPage() {
   const now = new Date();
-  const faqJsonLd = {
+  const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQ_ITEMS.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) },
-    })),
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://www.examina.ink/#software",
+        name: "Examina",
+        url: "https://www.examina.ink",
+        applicationCategory: "EducationalApplication",
+        operatingSystem: "Web",
+        description:
+          "Study guide generator that turns notes into quiz questions and flashcards with AI. Includes Bloom's taxonomy tagging and spaced repetition.",
+        offers: planOffers(now),
+        publisher: { "@id": "https://www.examina.ink/#organization" },
+      },
+      {
+        "@type": "HowTo",
+        name: "How to Generate a Study Guide",
+        description: "Create an AI study guide from your notes in three steps",
+        step: [
+          {
+            "@type": "HowToStep",
+            position: 1,
+            name: "Add your study material",
+            text: "Paste text, upload notes as PDF/TXT/Markdown, or photograph a printed page.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 2,
+            name: "Generate quiz and flashcards",
+            text: "AI extracts key concepts and creates questions tagged by Bloom's taxonomy level.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 3,
+            name: "Study and track progress",
+            text: "Practice with the generated questions, review explanations, and use spaced repetition for flashcards.",
+          },
+        ],
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: FAQ_ITEMS.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) },
+        })),
+      },
+    ],
   };
 
   return (
     <LandingPageLayout>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       {/* Hero */}
