@@ -1,61 +1,93 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
-
-interface InteractiveHeadlineProps {
-  text: string;
-  className?: string;
-}
+import type { CSSProperties, ReactNode } from 'react';
 
 /**
- * Halloween interactive headline with per-letter hover effects
- * Letters lift, tilt, stretch on hover; load-in stagger animation
+ * Halloween interactive hero headline.
+ *
+ * Same structure/box as the approved static headline: an h1.halloween-headline
+ * with three block lines, the O's replaced by the flat pumpkin, the last line
+ * white -> #7FE3D3. Each visible letter is an inline-block span so it can lift /
+ * tilt on hover and stagger in on load; all of that uses the CSS `translate`,
+ * `rotate` and `scale` properties (see halloween.css), so nothing reflows.
+ * Screen readers get the plain sentence once.
  */
-export default function InteractiveHeadline({ text, className = '' }: InteractiveHeadlineProps) {
-  const [mounted, setMounted] = useState(false);
-  const h1Ref = useRef<HTMLHeadingElement>(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+const LINES: { text: string; teal?: boolean }[] = [
+  { text: 'AI QUIZ GENERAT{O}R' },
+  { text: 'THAT TURNS N{O}TES' },
+  { text: 'INT{O} QUIZZES', teal: true },
+];
 
-  // Split text into words and letters, preserving spaces
-  const renderLetters = () => {
-    const words = text.split(' ');
-    let letterIndex = 0;
+const SR_TEXT = 'AI Quiz Generator that turns notes into quizzes';
 
-    return words.map((word, wordIdx) => (
-      <span key={wordIdx} className="inline-block" style={{ whiteSpace: 'nowrap' }}>
-        {word.split('').map((char, charIdx) => {
-          const delay = letterIndex * 25;
-          letterIndex++;
-          return (
-            <span
-              key={charIdx}
-              className="halloween-letter"
-              style={{ 
-                animationDelay: `${delay}ms`,
-                display: 'inline-block'
-              }}
-              aria-hidden="true"
-            >
-              {char}
-            </span>
-          );
-        })}
-        {wordIdx < words.length - 1 && <span style={{ display: 'inline-block', width: '0.3em' }}>&nbsp;</span>}
+const PUMPKIN_STYLE: CSSProperties = {
+  display: 'inline-block',
+  height: '0.74em',
+  width: '0.74em',
+  verticalAlign: '-0.04em',
+  margin: '0 0.02em',
+};
+
+function mixTeal(t: number): string {
+  // #FFFFFF -> #7FE3D3
+  const r = Math.round(255 + (127 - 255) * t);
+  const g = Math.round(255 + (227 - 255) * t);
+  const b = Math.round(255 + (211 - 255) * t);
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+export default function InteractiveHeadline() {
+  let delayIndex = 0;
+
+  const renderLine = (line: { text: string; teal?: boolean }, lineIdx: number) => {
+    const tokens = line.text.split(/(\{O\})/).filter(Boolean);
+    // count visible glyph slots for the teal colour ramp
+    const glyphCount = tokens.reduce((n, tok) => n + (tok === '{O}' ? 1 : tok.length), 0);
+    let glyph = 0;
+    const out: ReactNode[] = [];
+
+    tokens.forEach((tok, tokIdx) => {
+      if (tok === '{O}') {
+        glyph++;
+        out.push(
+          <span key={`p${tokIdx}`} className="pumpkin-o">
+            <img src="/seasonal/halloween/pumpkin-flat.svg" alt="" aria-hidden="true" style={PUMPKIN_STYLE} />
+          </span>
+        );
+        return;
+      }
+      tok.split('').forEach((ch, chIdx) => {
+        const t = glyphCount > 1 ? glyph / (glyphCount - 1) : 0;
+        glyph++;
+        if (ch === ' ') {
+          out.push(' ');
+          return;
+        }
+        const style: CSSProperties = { animationDelay: `${delayIndex++ * 25}ms` };
+        if (line.teal) style.WebkitTextFillColor = mixTeal(t);
+        out.push(
+          <span key={`${tokIdx}-${chIdx}`} className="halloween-letter" style={style}>
+            {ch}
+          </span>
+        );
+      });
+    });
+
+    return (
+      <span key={lineIdx} className={line.teal ? 'block halloween-headline-teal-letters' : 'block'} aria-hidden="true">
+        {out}
       </span>
-    ));
+    );
   };
 
   return (
-    <h1 
-      ref={h1Ref}
-      className={`halloween-headline ${className}`}
-      aria-label={text}
+    <h1
+      className="halloween-headline uppercase"
+      style={{ fontSize: 'clamp(32px, 8vw, 76px)', lineHeight: '1.1', textTransform: 'uppercase' }}
     >
-      {mounted && renderLetters()}
-      <span className="sr-only">{text}</span>
+      <span className="sr-only">{SR_TEXT}</span>
+      {LINES.map(renderLine)}
     </h1>
   );
 }
