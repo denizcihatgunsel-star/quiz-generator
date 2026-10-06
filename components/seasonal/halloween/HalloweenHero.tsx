@@ -13,7 +13,7 @@ import HalloweenGhost from './HalloweenGhost';
 export default function HalloweenHero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
-  const rafRef = useRef<number>();
+  const rafRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     const container = containerRef.current;
