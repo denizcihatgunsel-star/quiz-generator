@@ -595,7 +595,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
               ref={heroRef}
               className={`relative overflow-hidden overflow-x-clip ${hideChrome ? "pt-6 pb-16" : "pb-32"} ${isLoggedIn ? "pt-36 sm:pt-48" : "bg-gradient-to-b from-[#FDE8EC]/55 via-transparent to-transparent pt-40 sm:pt-48"}`}
             >
-              {!isLoggedIn && !hideChrome && (
+              {!isLoggedIn && !hideChrome && !halloweenActive && (
                 <div className="pointer-events-none absolute inset-0 z-[1] overflow-hidden" aria-hidden>
                   <WaterCanvas className="pointer-events-none absolute inset-0 h-full w-full opacity-100" />
                 </div>
@@ -664,14 +664,20 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                 </motion.div>
                 ) : hideChrome ? null : halloweenActive ? (
                   /* Halloween two-column hero */
-                  <div className="mx-auto max-w-7xl">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+                  <div className="mx-auto max-w-7xl min-h-screen flex items-center">
+                    <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
                       {/* Left column - Text */}
                       <div className="text-left space-y-8">
                         <h1 className="halloween-headline text-5xl sm:text-6xl lg:text-7xl">
-                          <span className="block">AI QUIZ GENERAT<span className="halloween-pumpkin-o" aria-hidden="true">O</span>R</span>
-                          <span className="block mt-2">THAT TURNS N<span className="halloween-pumpkin-o" aria-hidden="true">O</span>TES</span>
-                          <span className="block mt-2 halloween-headline-teal">INT<span className="halloween-pumpkin-o" aria-hidden="true">O</span> QUIZZES</span>
+                          <span className="block">
+                            <span style={{whiteSpace: 'nowrap'}}>AI</span> <span style={{whiteSpace: 'nowrap'}}>QUIZ</span> <span style={{whiteSpace: 'nowrap'}}>GENERAT<span className="halloween-pumpkin-o" aria-hidden="true">O</span>R</span>
+                          </span>
+                          <span className="block mt-2">
+                            <span style={{whiteSpace: 'nowrap'}}>THAT</span> <span style={{whiteSpace: 'nowrap'}}>TURNS</span> <span style={{whiteSpace: 'nowrap'}}>N<span className="halloween-pumpkin-o" aria-hidden="true">O</span>TES</span>
+                          </span>
+                          <span className="block mt-2 halloween-headline-teal">
+                            <span style={{whiteSpace: 'nowrap'}}>INT<span className="halloween-pumpkin-o" aria-hidden="true">O</span></span> <span style={{whiteSpace: 'nowrap'}}>QUIZZES</span>
+                          </span>
                         </h1>
                         <p className="halloween-subtitle text-lg max-w-lg">
                           Turn your study notes into structured quizzes, instantly.
@@ -1216,6 +1222,11 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
           </div>
           <div className="mt-8 pt-8 border-t border-[#F3D5DC]">
             <p className="text-xs text-[#9A7280]">&copy; {new Date().getFullYear()} Examina</p>
+            {halloweenActive && (
+              <p className="text-xs text-[#9A7280]/60 mt-2">
+                Moon imagery: NASA&apos;s Scientific Visualization Studio. Emoji art: Microsoft Fluent Emoji (MIT).
+              </p>
+            )}
           </div>
         </div>
       </footer>
