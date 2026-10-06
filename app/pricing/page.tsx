@@ -175,6 +175,7 @@ export default function PricingPage() {
                         ) : price.sale ? (
                           <SaleAmount
                             regular={price.regular}
+                            regularNode={<>${plan.price}</>}
                             sale={price.sale}
                             sizeClassName="font-serif text-5xl"
                             regularClassName={`font-serif text-5xl ${isFeatured ? "text-[#B0607A]" : "text-[#3B2027]"}`}
