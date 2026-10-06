@@ -3,14 +3,71 @@ import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
 
 export const metadata: Metadata = pageMetadata({
-  title: "AI Quiz Generator for Teachers — Create Assessments Fast",
-  description: "AI quiz generator built for teachers. Paste lesson content and generate classroom-ready quizzes with Bloom's Taxonomy mapping in seconds.",
+  title: "Quiz Maker for Teachers — AI Quiz Generator with Bloom's Taxonomy",
+  description: "AI quiz generator built for teachers. Generate classroom quizzes, formative assessments, and practice exams from lesson notes. Free to start.",
   path: "/for-teachers",
 });
 
+const faqs = [
+  {
+    q: "Is there a free plan for teachers?",
+    a: "Yes. Generate 5 quizzes per month free. For unlimited quizzes, Team plan is $15/month for up to 5 teachers with shared quiz libraries.",
+  },
+  {
+    q: "Can I use this for live classroom quizzes?",
+    a: "Yes. Students join with a code from their devices—no accounts needed. Real-time leaderboards and instant feedback included.",
+  },
+  {
+    q: "Are the questions tagged with Bloom's Taxonomy?",
+    a: "Yes. Every question is automatically tagged with its cognitive level: Remember, Understand, Apply, or Analyze.",
+  },
+  {
+    q: "Can I share quizzes with students?",
+    a: "Yes. Share by link, export as PDF, or run live classroom sessions with join codes.",
+  },
+  {
+    q: "What question types are included?",
+    a: "Multiple choice, true/false, fill-in-the-blank, and flashcards—all generated from your lesson content.",
+  },
+];
+
 export default function ForTeachersPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.examina.ink/for-teachers#webpage",
+        url: "https://www.examina.ink/for-teachers",
+        name: "Quiz Maker for Teachers — AI Quiz Generator | Examina",
+        isPartOf: { "@id": "https://www.examina.ink/#website" },
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://www.examina.ink/#software",
+        name: "Examina",
+        applicationCategory: "EducationalApplication",
+        description:
+          "AI quiz generator for teachers with Bloom's Taxonomy mapping, live classroom mode, and automated question generation from lesson notes.",
+      },
+    ],
+  };
+
   return (
-    <LandingPageLayout>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <LandingPageLayout>
       {/* Hero */}
       <section className="py-24 sm:py-32">
         <div className="max-w-5xl mx-auto px-6">
@@ -177,6 +234,24 @@ export default function ForTeachersPage() {
           </div>
         </div>
       </section>
+
+      {/* FAQ */}
+      <section className="py-32 border-t border-black/5">
+        <div className="max-w-3xl mx-auto px-6">
+          <h2 className="text-2xl sm:text-3xl font-medium text-neutral-900 mb-12">
+            Frequently asked questions
+          </h2>
+          <div className="space-y-8">
+            {faqs.map((f, i) => (
+              <div key={i}>
+                <p className="text-neutral-900 font-medium mb-2">{f.q}</p>
+                <p className="text-neutral-600 leading-relaxed text-sm">{f.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </LandingPageLayout>
+    </>
   );
 }

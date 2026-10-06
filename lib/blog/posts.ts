@@ -909,6 +909,315 @@ export const POSTS: BlogPost[] = [
       { href: "/quiz-generator-from-pdf", label: "Quiz from PDF" },
     ],
   },
+  {
+    slug: "kahoot-alternatives-2026",
+    title: "Best Kahoot Alternatives 2026 — Free & Paid Quiz Platforms Compared",
+    description:
+      "Looking for a Kahoot alternative? Compare the top quiz platforms for teachers—features, pricing, AI generation, and live classroom modes.",
+    tag: "For Educators",
+    date: "Oct 2026",
+    dateIso: "2026-10-06",
+    readTime: "8 min",
+    sections: [
+      {
+        h: "Why look for a Kahoot alternative?",
+        p: [
+          "Kahoot brought game-based learning to millions of classrooms, and it's still a solid choice. But it has limitations: creating quizzes is manual (you type every question), the free tier shows ads, and pricing jumps quickly for schools. If you're running daily formative assessments across multiple preps, those friction points add up.",
+          "The good news: there are now strong alternatives that solve Kahoot's pain points. Some offer AI question generation (no more typing every question by hand). Others focus on better free tiers, self-paced modes, or deeper analytics. This guide compares the top platforms for teachers in 2026.",
+        ],
+      },
+      {
+        h: "What to look for in a Kahoot alternative",
+        list: [
+          "Question creation speed — Can you import, generate, or reuse questions, or do you type everything from scratch?",
+          "Live vs. self-paced — Does it support synchronous classroom games, asynchronous homework, or both?",
+          "Pricing — What does the free tier include, and what do you give up if you don't pay?",
+          "Student experience — Do students need accounts? How many devices/platforms does it support?",
+          "Analytics — Can you see which questions tripped up the class, or just overall scores?",
+        ],
+      },
+      {
+        h: "Top Kahoot alternatives for 2026",
+        p: [
+          "**Examina** — AI-powered quiz generator with live classroom mode. Upload your lesson notes and Examina writes the questions for you (multiple choice, true/false, fill-in-the-blank). Students join with a code, no accounts needed. Free tier: 5 quizzes/month. Team plan: $15/month for unlimited quizzes and 5 teachers. Best for: teachers who want to skip manual question entry and run daily formative checks.",
+          "**Quizizz** — Self-paced and live quiz platform. Students work at their own speed even in live mode. Strong question bank and reports. Free tier has ads; paid plans start at $19/month per teacher. Best for: mixed live/homework workflows and classes that need differentiated pacing.",
+          "**Blooket** — Game-style quiz platform with multiple game modes (Tower Defense, Gold Quest, etc.). Very engaging for younger students. Free tier is generous. Paid ($36/year) adds question sets and more game modes. Best for: elementary/middle school engagement.",
+          "**Gimkit** — Live quiz platform where students earn in-game currency and buy upgrades. High engagement. Created by a high school student, now widely used. Free tier limited; paid is $60/year per teacher. Best for: high engagement in competitive classrooms.",
+          "**Quizlet Live** — Team-based quiz game from the flashcard platform. Students work in groups. Requires existing Quizlet sets. Free with Quizlet account. Best for: schools already using Quizlet for flashcards.",
+          "**Formative** — Real-time formative assessment platform. Not as game-like as Kahoot, but deeper analytics and question types (including drawing/audio). Free tier available; premium starts at $12/month. Best for: teachers who want detailed diagnostics over gamification.",
+        ],
+      },
+      {
+        h: "Feature comparison table",
+        p: [
+          "| Platform | AI Generation | Free Tier | Live Mode | Self-Paced | Starting Price |",
+          "|----------|--------------|-----------|-----------|------------|----------------|",
+          "| Examina | ✅ Yes | 5 quizzes/month | ✅ Yes | ✅ Yes | $2/mo (Starter) |",
+          "| Quizizz | ❌ No | Yes (with ads) | ✅ Yes | ✅ Yes | $19/mo/teacher |",
+          "| Blooket | ❌ No | Generous | ✅ Yes | ❌ Live only | $36/year |",
+          "| Gimkit | ❌ No | Limited | ✅ Yes | ❌ Live only | $60/year |",
+          "| Quizlet Live | ❌ No | Yes | ✅ Yes | ❌ Live only | Free |",
+          "| Formative | ❌ No | Yes | ✅ Yes | ✅ Yes | $12/mo |",
+        ],
+      },
+      {
+        h: "Which one should you choose?",
+        p: [
+          "If you're tired of typing questions: **Examina**. Upload lesson notes and AI writes the questions. Huge time saver for daily use.",
+          "If you need self-paced homework + live games: **Quizizz** or **Examina**. Both support async and sync modes.",
+          "If engagement is everything and budget is tight: **Blooket** or **Quizlet Live**. Both have strong free tiers and high student engagement.",
+          "If you want deep diagnostics: **Formative**. Best analytics of the group, but less game-like.",
+          "If you're all-in on Quizlet already: **Quizlet Live**. Natural extension if students are already using flashcard sets.",
+        ],
+      },
+      {
+        h: "How to switch from Kahoot",
+        p: [
+          "Export your Kahoot questions (download as spreadsheet). Most alternatives let you import or copy-paste from CSV/Excel. For platforms with AI generation like Examina, you can also just upload the source material (lesson notes, slides) and regenerate the questions—often faster than importing.",
+          "Run a trial game with a single class before rolling out school-wide. Students adapt quickly (join codes work the same way across platforms), but you'll want to confirm your workflow works.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Is there a completely free Kahoot alternative?",
+        a: "Quizlet Live and Blooket have strong free tiers. Examina offers 5 AI-generated quizzes per month free—enough for trying it out or occasional use.",
+      },
+      {
+        q: "Which alternative is closest to Kahoot?",
+        a: "Blooket and Gimkit have similar live game energy. Examina and Quizizz add self-paced modes on top of live.",
+      },
+      {
+        q: "Do students need accounts?",
+        a: "For live games: no accounts needed on Examina, Kahoot, Quizizz, Blooket, or Gimkit. Students just enter a join code.",
+      },
+    ],
+    tools: [
+      { href: "/alternatives/kahoot", label: "Kahoot Alternative" },
+      { href: "/alternatives/quizizz", label: "Quizizz Alternative" },
+      { href: "/for-teachers", label: "For Teachers" },
+      { href: "/features/live-classroom-quiz", label: "Live Classroom Quiz" },
+      { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
+    ],
+  },
+  {
+    slug: "pdf-to-quiz-guide",
+    title: "How to Convert PDF to Quiz — Complete Guide with AI (2026)",
+    description:
+      "Turn any PDF into a quiz in minutes. Step-by-step guide to converting lecture notes, textbook chapters, and study guides into practice questions.",
+    tag: "Study Tips",
+    date: "Oct 2026",
+    dateIso: "2026-10-06",
+    readTime: "7 min",
+    sections: [
+      {
+        h: "Why convert PDFs to quizzes?",
+        p: [
+          "You have lecture slides as PDFs, textbook chapters saved as PDFs, scanned notes as PDFs. Reading them prepares you, sure—but testing yourself on them is what makes the material stick. Turning a PDF into a quiz forces active recall, the single most effective study technique.",
+          "The old way: read the PDF, write questions by hand, make an answer key. The new way: upload the PDF and let AI generate the questions. This guide shows you how.",
+        ],
+      },
+      {
+        h: "Method 1: AI PDF to quiz generators (fastest)",
+        p: [
+          "AI quiz generators read your PDF and write questions automatically. Upload a file, pick question types, and get a complete quiz with answer key in under 30 seconds.",
+          "**How to use Examina for PDF to quiz:**",
+        ],
+        list: [
+          "Go to Examina and create a free account (5 quizzes/month, no credit card).",
+          "Click 'Upload' and select your PDF (up to 15,000 characters, roughly 5-10 pages).",
+          "Choose question types: multiple choice, true/false, fill-in-the-blank, or flashcards.",
+          "Click 'Generate.' In 20-30 seconds, you get questions with answers and explanations.",
+          "Review the quiz. Edit any question if needed. Take it online, share by link, or export as PDF.",
+        ],
+        p: [
+          "**Pros:** Fastest method by far. Automatically generates plausible distractors for multiple choice. Includes Bloom's taxonomy tagging.",
+          "**Cons:** Requires a tool subscription after free tier (but cheap—starts at $2/month). Questions should be reviewed for accuracy (like any AI output).",
+        ],
+      },
+      {
+        h: "Method 2: Copy-paste from PDF into quiz tools",
+        p: [
+          "If your PDF is text-selectable (not a scanned image), you can copy the content and paste it into quiz platforms like Google Forms, Quizlet, or Kahoot. Then type questions manually based on the content.",
+          "This works, but it's slow—you're still writing every question by hand. Only worth it if you need a very small quiz (3-5 questions) or your PDF is short.",
+        ],
+      },
+      {
+        h: "Method 3: OCR for scanned PDFs",
+        p: [
+          "If your PDF is a scanned image (like a photographed textbook page), you need OCR (optical character recognition) to extract the text first.",
+          "**Steps:**",
+        ],
+        list: [
+          "Use a free OCR tool like Adobe Acrobat, Google Drive (upload and 'Open with Google Docs'), or an online OCR service.",
+          "Copy the extracted text.",
+          "Paste it into an AI quiz generator (like Examina) or a quiz platform.",
+        ],
+        p: [
+          "Examina also has built-in OCR—just upload a photo of notes and it extracts text automatically before generating questions.",
+        ],
+      },
+      {
+        h: "Best practices for PDF to quiz conversion",
+        list: [
+          "Use focused PDFs — one chapter or topic per quiz. A 50-page textbook PDF will hit character limits and produce scattered questions.",
+          "Check question accuracy — AI gets most things right, but always skim the output. Look for questions where the 'correct' answer is ambiguous.",
+          "Mix question types — Multiple choice tests recognition; fill-in-the-blank tests recall. Use both for stronger practice.",
+          "Add your own questions — AI generates from content it sees. If you know a concept students struggle with, add a manual question for it.",
+        ],
+      },
+      {
+        h: "Tools comparison: PDF to quiz",
+        p: [
+          "| Tool | AI Generation | PDF Support | Free Tier | Price |",
+          "|------|--------------|-------------|-----------|-------|",
+          "| **Examina** | ✅ Yes | ✅ Native upload | 5/month | $2/mo for 20 |",
+          "| **Quizlet** | ❌ No | Copy-paste only | ✅ Yes | $8/mo Plus |",
+          "| **Google Forms** | ❌ No | Copy-paste only | ✅ Yes | Free |",
+          "| **Kahoot** | ❌ No | Copy-paste only | ✅ Limited | $10/mo+ |",
+          "| **PDF to Text tools** | N/A (OCR only) | ✅ Yes | Varies | Free-$5/mo |",
+        ],
+      },
+      {
+        h: "Common issues and fixes",
+        p: [
+          "**Issue:** PDF is scanned and text won't copy. **Fix:** Use OCR (Google Drive, Adobe, or a tool with built-in OCR like Examina).",
+          "**Issue:** Questions are too easy or too hard. **Fix:** Adjust difficulty setting in the AI tool, or manually edit questions after generation.",
+          "**Issue:** Quiz only covers first few pages of PDF. **Fix:** Most tools have character limits (Examina: 15,000 chars). Break long PDFs into chunks.",
+          "**Issue:** AI-generated questions seem off-topic. **Fix:** Make sure the PDF has clear, structured text. Heavily formatted or image-heavy PDFs confuse extraction.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Can I convert a 100-page PDF to quiz?",
+        a: "Not all at once. Most tools process 5-15 pages per generation. Break the PDF into chapters and generate a quiz per chapter.",
+      },
+      {
+        q: "Is PDF to quiz free?",
+        a: "Examina offers 5 free quizzes/month. Google Forms is free but requires manual question writing. Quizlet is free with ads.",
+      },
+      {
+        q: "Does it work with scanned PDFs?",
+        a: "Yes, if you use OCR to extract text first. Examina has built-in OCR for photos, which works for scanned PDFs too.",
+      },
+      {
+        q: "How accurate are AI-generated questions?",
+        a: "Usually 85-95% accurate on well-structured content. Always review questions before using them for grades.",
+      },
+    ],
+    tools: [
+      { href: "/quiz-generator-from-pdf", label: "PDF to Quiz Generator" },
+      { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
+      { href: "/notes-to-quiz", label: "Notes to Quiz" },
+      { href: "/es/generador-quiz-pdf", label: "Generador PDF (ES)" },
+      { href: "/study-guide-generator", label: "Study Guide Generator" },
+    ],
+  },
+  {
+    slug: "quizlet-alternatives",
+    title: "Best Free Quizlet Alternatives 2026 — AI Flashcards & Study Tools Compared",
+    description:
+      "Looking for a free Quizlet alternative? Compare AI flashcard generators, quiz tools, and study platforms—features, pricing, and which one to choose.",
+    tag: "Study Tips",
+    date: "Oct 2026",
+    dateIso: "2026-10-06",
+    readTime: "8 min",
+    sections: [
+      {
+        h: "Why look for a Quizlet alternative?",
+        p: [
+          "Quizlet is the most popular flashcard platform for a reason: it's easy to use, has a huge library of user-generated sets, and the free tier is real. But it has pain points. Creating sets is still manual (you type every card by hand). The free tier shows ads. Quizlet Plus is $8/month, which adds up for students. And searching user-generated content is hit-or-miss—sometimes you find a perfect set, often you find one with errors or missing content.",
+          "In 2026, there are now strong alternatives. Some offer AI flashcard generation (upload notes, get cards automatically). Others focus on better free tiers or features Quizlet locks behind Plus. This guide compares the top options.",
+        ],
+      },
+      {
+        h: "What to look for in a Quizlet alternative",
+        list: [
+          "Flashcard creation speed — Can you generate cards from notes, or do you type them all by hand?",
+          "Study modes — Does it offer spaced repetition, matching games, tests, or just flip-through?",
+          "Free tier — What do you get for free, and what's locked behind a paywall?",
+          "Multi-format support — Can you turn the same content into quizzes, too, or just flashcards?",
+          "Quality control — Are you making your own sets (higher quality) or searching user-generated ones (hit or miss)?",
+        ],
+      },
+      {
+        h: "Top Quizlet alternatives for 2026",
+        p: [
+          "**Examina** — AI flashcard and quiz generator. Upload notes or a PDF and get flashcards + multiple choice + true/false questions from the same source. Study mode uses spaced repetition. Free: 5 generations/month. Paid: $2/month for 20. Best for: students who want to skip typing cards and need quizzes + flashcards together.",
+          "**Anki** — The gold standard for spaced repetition. Powerful, customizable, free on desktop (iOS is $25 one-time). Steep learning curve. You type cards manually or import from CSV. Best for: serious students willing to invest time in setup for maximum retention.",
+          "**Knowt** — Free flashcard platform with AI generation from notes and quizzes. Also converts Quizlet sets. Very generous free tier. Best for: students who want AI flashcards but don't need advanced analytics.",
+          "**Brainscape** — Confidence-based spaced repetition. You rate how well you know each card. Huge marketplace of pre-made decks. Free tier limited; Pro is $10/month or $40/year. Best for: students using popular exam prep (MCAT, NCLEX, bar exam) with existing Brainscape decks.",
+          "**RemNote** — Combines note-taking and flashcard generation. Turn any note into a flashcard by highlighting. Free for students. Best for: students who want flashcards embedded in their note-taking workflow.",
+          "**Mochi** — Markdown-based flashcards with spaced repetition. Free and open-source. Very customizable. Best for: students comfortable with Markdown who want a lightweight, offline-first tool.",
+        ],
+      },
+      {
+        h: "Feature comparison table",
+        p: [
+          "| Platform | AI Generation | Spaced Repetition | Free Tier | Also Does Quizzes | Price |",
+          "|----------|--------------|-------------------|-----------|-------------------|-------|",
+          "| Examina | ✅ Yes | ✅ Yes | 5/month | ✅ Yes | $2/mo |",
+          "| Anki | ❌ No | ✅ Yes (best) | ✅ Yes (desktop) | ❌ No | Free (desktop) |",
+          "| Knowt | ✅ Yes | ✅ Yes | ✅ Generous | ✅ Yes | Free |",
+          "| Brainscape | ❌ No | ✅ Yes | ✅ Limited | ❌ No | $10/mo |",
+          "| RemNote | Partial | ✅ Yes | ✅ Yes | ❌ No | Free for students |",
+          "| Mochi | ❌ No | ✅ Yes | ✅ Yes | ❌ No | Free |",
+        ],
+      },
+      {
+        h: "Which Quizlet alternative should you choose?",
+        p: [
+          "**If you want to skip typing cards:** Examina or Knowt. Both have AI generation from notes.",
+          "**If you're studying for a big standardized test (MCAT, NCLEX, bar exam):** Brainscape. Pre-made decks exist and are highly rated.",
+          "**If you want the most powerful spaced repetition:** Anki. It's free, works offline, and has decades of research behind it. But the learning curve is real.",
+          "**If you want flashcards + quizzes together:** Examina. One upload gets you both, which is faster than managing separate tools.",
+          "**If you're budget-conscious:** Knowt (generous free tier), Anki (free on desktop), or Mochi (open-source, free forever).",
+          "**If you take notes in Markdown or Notion:** RemNote or Mochi. Flashcards live alongside your notes.",
+        ],
+      },
+      {
+        h: "How to migrate from Quizlet",
+        p: [
+          "Most alternatives let you import Quizlet sets. Here's how:",
+        ],
+        list: [
+          "**To Examina:** Export your Quizlet set as text or CSV. Paste it into Examina or just upload new notes and regenerate with AI.",
+          "**To Anki:** Use the AnkiWeb add-on 'Quizlet to Anki Importer' or export Quizlet as CSV and import to Anki.",
+          "**To Knowt:** Knowt has a built-in Quizlet importer. Paste the Quizlet URL and it converts the set.",
+          "**To Brainscape:** Brainscape can import from spreadsheet. Export Quizlet, upload CSV.",
+        ],
+        p: [
+          "Alternatively, if your Quizlet sets are old or have errors, regenerating fresh flashcards from your current notes (using an AI tool) often beats importing.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Is there a completely free Quizlet alternative?",
+        a: "Yes. Anki (desktop), Mochi, and Knowt all have strong free tiers. Examina offers 5 free AI generations per month.",
+      },
+      {
+        q: "Which alternative is most like Quizlet?",
+        a: "Knowt is the closest—AI generation, free tier, and quiz modes. Examina is similar but focuses more on quizzes + flashcards together.",
+      },
+      {
+        q: "Can I import my Quizlet sets?",
+        a: "Yes. Most alternatives support CSV import. Knowt can import directly from a Quizlet URL.",
+      },
+      {
+        q: "Is Anki really better than Quizlet?",
+        a: "For spaced repetition and long-term retention, yes. But the UI is less polished and setup takes time.",
+      },
+    ],
+    tools: [
+      { href: "/alternatives/quizlet", label: "Quizlet Alternative" },
+      { href: "/ai-flashcards", label: "AI Flashcards" },
+      { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
+      { href: "/study-guide-generator", label: "Study Guide Generator" },
+      { href: "/for-students", label: "For Students" },
+    ],
+  },
 ];
 
 export function getPost(slug: string): BlogPost | undefined {
