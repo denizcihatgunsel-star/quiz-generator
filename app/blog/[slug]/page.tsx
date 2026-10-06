@@ -4,6 +4,11 @@ import Link from "next/link";
 import { POSTS, getPost } from "@/lib/blog/posts";
 import LandingPageLayout from "@/components/LandingPageLayout";
 import { OG_IMAGE, SITE_URL } from "@/lib/seo";
+import { copyText, saleCopy } from "@/lib/pricing";
+import { CopyText } from "@/components/seasonal/halloween/SalePrice";
+
+// Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
+export const revalidate = 60;
 
 export function generateStaticParams() {
   return POSTS.map((p) => ({ slug: p.slug }));
@@ -74,13 +79,14 @@ export default async function BlogPostPage({
     mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
   };
 
+  const now = new Date();
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     mainEntity: post.faq.map((f) => ({
       "@type": "Question",
       name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
+      acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) },
     })),
   };
 
@@ -163,7 +169,7 @@ export default async function BlogPostPage({
             {post.faq.map((f, i) => (
               <div key={i}>
                 <p className="mb-1.5 font-medium text-neutral-900">{f.q}</p>
-                <p className="leading-relaxed text-neutral-600">{f.a}</p>
+                <p className="leading-relaxed text-neutral-600"><CopyText value={saleCopy(f.a, now)} /></p>
               </div>
             ))}
           </div>

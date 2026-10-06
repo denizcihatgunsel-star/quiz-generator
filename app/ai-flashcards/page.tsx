@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { pageMetadata, LANGUAGE_COUNT } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
+import { copyText, saleCopy, saleLandingData } from "@/lib/pricing";
 
 export const dynamic = "force-static";
+
+// Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
+export const revalidate = 60;
 
 export const metadata: Metadata = pageMetadata({
   title: "AI Flashcards — Generate Flashcards from Notes",
@@ -50,6 +54,7 @@ const faqs = [
 ];
 
 export default function AiFlashcardsPage() {
+  const now = new Date();
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -67,7 +72,7 @@ export default function AiFlashcardsPage() {
         mainEntity: faqs.map((f) => ({
           "@type": "Question",
           name: f.q,
-          acceptedAnswer: { "@type": "Answer", text: f.a },
+          acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) },
         })),
       },
     ],
@@ -80,7 +85,7 @@ export default function AiFlashcardsPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <KeywordLanding
-        data={{
+        data={saleLandingData({
           kicker: "AI Flashcards",
           h1: "AI flashcards from your own",
           h1Accent: "notes",
@@ -133,7 +138,7 @@ export default function AiFlashcardsPage() {
             { href: "/quiz-generator-from-pdf", label: "PDF to Quiz" },
             { href: "/study-quiz", label: "Study Quiz" },
           ],
-        }}
+        }, now)}
       />
     </>
   );

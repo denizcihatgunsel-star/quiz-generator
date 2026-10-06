@@ -3,6 +3,9 @@ import { pageMetadata } from "@/lib/seo";
 import LandingPageLayout from "@/components/LandingPageLayout";
 import ToolCrossLinks from "@/components/ToolCrossLinks";
 
+// Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
+export const revalidate = 60;
+
 export const metadata: Metadata = pageMetadata({
   title: "AI Flashcard Generator — Create Flashcards from Notes",
   description: "Generate flashcards from any text instantly with AI. Paste your notes, get interactive study cards with 3D flip. Free AI flashcard generator.",

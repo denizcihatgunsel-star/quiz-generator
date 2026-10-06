@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import QuizGenerator from "@/components/QuizGenerator";
 import { StructuredData } from "@/components/StructuredData";
-import { PLANS } from "@/lib/subscription";
-import { withSaleOffer } from "@/lib/pricing";
+import { planOffers } from "@/lib/pricing";
 
 export const revalidate = 60;
 
@@ -74,64 +73,7 @@ function getSoftwareAppSchema(now: Date) {
       "Quiz sharing via link or PDF export",
     ],
     publisher: { "@type": "Organization", "@id": "https://www.examina.ink/#organization" },
-    offers: [
-      {
-        "@type": "Offer",
-        name: "Free",
-        price: "0",
-        priceCurrency: "USD",
-        description: "5 quizzes per month, no credit card required",
-        url: "https://www.examina.ink/pricing",
-      },
-      withSaleOffer(
-        {
-          "@type": "Offer" as const,
-          name: "Starter",
-          price: "2",
-          priceCurrency: "USD",
-          description: "20 quizzes per month",
-          url: "https://www.examina.ink/pricing",
-        },
-        PLANS.starter,
-        now
-      ),
-      withSaleOffer(
-        {
-          "@type": "Offer" as const,
-          name: "Plus",
-          price: "5",
-          priceCurrency: "USD",
-          description: "60 quizzes per month",
-          url: "https://www.examina.ink/pricing",
-        },
-        PLANS.plus,
-        now
-      ),
-      withSaleOffer(
-        {
-          "@type": "Offer" as const,
-          name: "Pro",
-          price: "9",
-          priceCurrency: "USD",
-          description: "200 quizzes per month",
-          url: "https://www.examina.ink/pricing",
-        },
-        PLANS.pro,
-        now
-      ),
-      withSaleOffer(
-        {
-          "@type": "Offer" as const,
-          name: "Team",
-          price: "15",
-          priceCurrency: "USD",
-          description: "Unlimited quizzes for up to 5 members",
-          url: "https://www.examina.ink/pricing",
-        },
-        PLANS.team,
-        now
-      ),
-    ],
+    offers: planOffers(now),
   };
 }
 

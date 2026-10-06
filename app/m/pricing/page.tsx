@@ -65,7 +65,7 @@ export default function MobilePricingPage() {
                   {price.sale ? (
                     <div className="flex flex-col items-end">
                       <SalePill />
-                      <div className="flex flex-wrap items-baseline justify-end gap-1">
+                      <div className="flex flex-nowrap items-baseline justify-end gap-1 whitespace-nowrap">
                         <SaleAmount
                           regular={price.regular}
                           regularNode={<>${plan.price}</>}
@@ -95,7 +95,7 @@ export default function MobilePricingPage() {
                   )}
                 </div>
 
-                <ul className="mt-4 space-y-2">
+                <ul className="mt-4 space-y-2" data-plan-features={isFeatured ? "featured" : ""}>
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-start gap-2 text-xs text-[#5D4450]">
                       <span

@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { pageMetadata, LANGUAGE_COUNT } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
+import { copyText, planOffers, saleCopy, saleLandingData } from "@/lib/pricing";
 
 export const dynamic = "force-static";
+
+// Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
+export const revalidate = 60;
 
 export const metadata: Metadata = pageMetadata({
   title: "AI Quiz Generator — Quizzes from Any Material",
@@ -50,6 +54,7 @@ const faqs = [
 ];
 
 export default function AiQuizGeneratorPage() {
+  const now = new Date();
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -71,43 +76,7 @@ export default function AiQuizGeneratorPage() {
         operatingSystem: "Web",
         description:
           "AI quiz and flashcard generator that turns notes, PDFs or pasted text into multiple choice, true/false, fill-in-the-blank questions and flashcards tagged by Bloom's taxonomy level.",
-        offers: [
-          {
-            "@type": "Offer",
-            name: "Free",
-            price: "0",
-            priceCurrency: "USD",
-            url: "https://www.examina.ink/pricing",
-          },
-          {
-            "@type": "Offer",
-            name: "Starter",
-            price: "2",
-            priceCurrency: "USD",
-            url: "https://www.examina.ink/pricing",
-          },
-          {
-            "@type": "Offer",
-            name: "Plus",
-            price: "5",
-            priceCurrency: "USD",
-            url: "https://www.examina.ink/pricing",
-          },
-          {
-            "@type": "Offer",
-            name: "Pro",
-            price: "9",
-            priceCurrency: "USD",
-            url: "https://www.examina.ink/pricing",
-          },
-          {
-            "@type": "Offer",
-            name: "Team",
-            price: "15",
-            priceCurrency: "USD",
-            url: "https://www.examina.ink/pricing",
-          },
-        ],
+        offers: planOffers(now),
         publisher: { "@id": "https://www.examina.ink/#organization" },
       },
       {
@@ -115,7 +84,7 @@ export default function AiQuizGeneratorPage() {
         mainEntity: faqs.map((f) => ({
           "@type": "Question",
           name: f.q,
-          acceptedAnswer: { "@type": "Answer", text: f.a },
+          acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) },
         })),
       },
     ],
@@ -128,7 +97,7 @@ export default function AiQuizGeneratorPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <KeywordLanding
-        data={{
+        data={saleLandingData({
           kicker: "AI Quiz Generator",
           h1: "AI quiz generator for your own study",
           h1Accent: "material",
@@ -185,7 +154,7 @@ export default function AiQuizGeneratorPage() {
             { href: "/quiz-generator-from-text", label: "Quiz Generator from Text" },
             { href: "/quiz-generator-from-pdf", label: "PDF to Quiz" },
           ],
-        }}
+        }, now)}
       />
     </>
   );

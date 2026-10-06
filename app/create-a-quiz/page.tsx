@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
+import { saleLandingData } from "@/lib/pricing";
+
+// Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
+export const revalidate = 60;
 
 export const metadata: Metadata = pageMetadata({
   title: "Create a Quiz Online — AI, Free & Shareable",
@@ -11,7 +15,7 @@ export const metadata: Metadata = pageMetadata({
 export default function CreateQuizPage() {
   return (
     <KeywordLanding
-      data={{
+      data={saleLandingData({
         kicker: "Create a Quiz",
         h1: "Create a quiz in",
         h1Accent: "minutes",
@@ -59,7 +63,7 @@ export default function CreateQuizPage() {
           { href: "/quiz-generator-from-pdf", label: "PDF to Quiz" },
           { href: "/daily-quiz", label: "Daily Quiz" },
         ],
-      }}
+      }, new Date())}
     />
   );
 }

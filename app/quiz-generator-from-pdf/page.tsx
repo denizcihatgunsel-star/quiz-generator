@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
+import { saleLandingData } from "@/lib/pricing";
+
+// Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
+export const revalidate = 60;
 
 export const metadata: Metadata = pageMetadata({
   title: "PDF to Quiz Generator — Convert Documents",
@@ -11,7 +15,7 @@ export const metadata: Metadata = pageMetadata({
 export default function PdfQuizPage() {
   return (
     <KeywordLanding
-      data={{
+      data={saleLandingData({
         kicker: "Quiz Generator from PDF",
         h1: "Turn a PDF into a",
         h1Accent: "quiz",
@@ -61,7 +65,7 @@ export default function PdfQuizPage() {
           { href: "/study-quiz", label: "Study Quiz" },
           { href: "/multiple-choice-quiz-maker", label: "Multiple Choice Maker" },
         ],
-      }}
+      }, new Date())}
     />
   );
 }
