@@ -1,18 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { isHalloweenActive } from "@/lib/seasonal";
+
+const HalloweenContext = createContext(false);
+
+/** True when the Halloween theme is active. Starts from the server's decision
+ *  (so SSR and hydration render the themed markup), then follows the client
+ *  check (?halloween=1/0, cookie, cutoff). */
+export function useHalloweenActive(): boolean {
+  return useContext(HalloweenContext);
+}
 
 /**
  * HalloweenLayout: seasonal reskin wrapper (root layout)
  *
- * - Sets data-season="halloween" on body when active (?halloween=1, cookie, or env)
- * - Injects the scoped /seasonal/halloween.css stylesheet
- * - Swaps the theme-color meta tag
- * - Renders a small pumpkin + bat cluster in the page header area
+ * - The server already renders body[data-season] + /seasonal/halloween.css when
+ *   the theme is on (env + date); inline scripts in app/layout.tsx handle the
+ *   ?halloween=1 / cookie preview path and ?halloween=0 before first paint.
+ * - After hydration this keeps body[data-season], the stylesheet and the
+ *   theme-color meta in sync with the client decision. It never removes the
+ *   server-rendered stylesheet node (React owns it); it disables it instead.
+ * - Renders a small pumpkin + bat cluster in the page header area.
  */
-export default function HalloweenLayout({ children }: { children: React.ReactNode }) {
-  const [active, setActive] = useState(false);
+export default function HalloweenLayout({
+  children,
+  serverActive = false,
+}: {
+  children: React.ReactNode;
+  serverActive?: boolean;
+}) {
+  const [active, setActive] = useState(serverActive);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -20,6 +38,7 @@ export default function HalloweenLayout({ children }: { children: React.ReactNod
     setActive(isActive);
 
     let metaTheme = document.querySelector('meta[name="theme-color"]');
+    const link = document.getElementById("halloween-theme-css") as HTMLLinkElement | null;
 
     if (isActive) {
       document.body.setAttribute("data-season", "halloween");
@@ -31,26 +50,24 @@ export default function HalloweenLayout({ children }: { children: React.ReactNod
       }
       metaTheme.setAttribute("content", "#0A1614");
 
-      if (!document.getElementById("halloween-theme-css")) {
-        const link = document.createElement("link");
-        link.id = "halloween-theme-css";
-        link.rel = "stylesheet";
-        link.href = "/seasonal/halloween.css";
-        document.head.appendChild(link);
+      if (!link) {
+        const el = document.createElement("link");
+        el.id = "halloween-theme-css";
+        el.rel = "stylesheet";
+        el.href = "/seasonal/halloween.css";
+        document.head.appendChild(el);
+      } else if (link.disabled) {
+        link.disabled = false;
       }
     } else {
       document.body.removeAttribute("data-season");
       if (metaTheme) metaTheme.setAttribute("content", "#FDE8EC");
-      document.getElementById("halloween-theme-css")?.remove();
+      if (link) link.disabled = true;
     }
-
-    return () => {
-      if (isActive) document.body.removeAttribute("data-season");
-    };
   }, []);
 
   return (
-    <>
+    <HalloweenContext.Provider value={active}>
       {active && (
         <div
           className="halloween-header-cluster fixed top-20 right-8 z-10 pointer-events-none hidden md:flex items-center gap-2"
@@ -61,6 +78,6 @@ export default function HalloweenLayout({ children }: { children: React.ReactNod
         </div>
       )}
       {children}
-    </>
+    </HalloweenContext.Provider>
   );
 }
