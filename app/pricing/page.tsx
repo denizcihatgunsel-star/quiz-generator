@@ -15,9 +15,9 @@ import {
   isHalloweenSaleActive,
   planPriceCents,
   planPriceDisplay,
-  withSaleOffer,
+  planOffers,
 } from "@/lib/pricing";
-import { SaleAmount, SaleEnds, SalePill, SaleText } from "@/components/seasonal/halloween/SalePrice";
+import { SaleAmount, SaleEnds, SalePill, SaleText, saleRowClassName } from "@/components/seasonal/halloween/SalePrice";
 
 // Evaluated per render (ISR revalidates every 60s), so the sale copy drops after the cutoff.
 export function generateMetadata(): Metadata {
@@ -99,22 +99,7 @@ function getProductSchema(now: Date) {
     description:
       "AI-powered quiz generator with free and paid plans. Turns any text into multiple choice, flashcard, fill-in-the-blank, and true/false questions.",
     brand: { "@type": "Brand", name: "Examina" },
-    offers: Object.values(PLANS).map((plan) =>
-      withSaleOffer(
-        {
-          "@type": "Offer" as const,
-          name: plan.name,
-          price: String(plan.price),
-          priceCurrency: "USD",
-          description:
-            plan.quizzesPerMonth === Infinity
-              ? "Unlimited quizzes per month"
-              : `${plan.quizzesPerMonth} quizzes per month`,
-        },
-        plan,
-        now
-      )
-    ),
+    offers: planOffers(now),
   };
 }
 
@@ -168,8 +153,8 @@ export default function PricingPage() {
                       <h2 className={`mb-3 font-serif text-lg italic ${isFeatured ? "text-[#9A4F68]" : "text-[#3B2027]"}`}>
                         {plan.name}
                       </h2>
-                      {price.sale && <SalePill />}
-                      <div className={`flex items-baseline gap-1.5${price.sale ? " flex-wrap" : ""}`}>
+                      {price.sale ? <SalePill /> : saleActive && <SalePill placeholder />}
+                      <div className={`flex items-baseline gap-1.5${price.sale ? ` ${saleRowClassName}` : ""}`}>
                         {plan.price === 0 ? (
                           <span className="font-serif text-5xl text-[#3B2027]">Free</span>
                         ) : price.sale ? (
@@ -192,7 +177,7 @@ export default function PricingPage() {
                           </>
                         )}
                       </div>
-                      {price.sale && <SaleEnds />}
+                      {price.sale ? <SaleEnds /> : saleActive && <SaleEnds placeholder />}
                       <p className="mt-2 text-sm text-[#9A7280]">
                         {plan.quizzesPerMonth === Infinity
                           ? "Unlimited quizzes"
@@ -200,7 +185,7 @@ export default function PricingPage() {
                       </p>
                     </div>
 
-                    <ul className="mb-7 flex-1 space-y-3">
+                    <ul className="mb-7 flex-1 space-y-3" data-plan-features={isFeatured ? "featured" : ""}>
                       {plan.features.map((f) => (
                         <li key={f} className="flex items-start gap-2.5 text-sm text-[#5D4450]">
                           <span
