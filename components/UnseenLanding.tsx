@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useInView, animate } from "framer-motion";
 import Link from "next/link";
 import GlobeStudy from "./GlobeStudy";
-import { isHalloweenActive } from "@/lib/seasonal";
+import { useHalloweenActive } from "./seasonal/halloween/HalloweenLayout";
 
 const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
 
@@ -123,10 +123,7 @@ function Marquee() {
 export default function UnseenLanding() {
   // Halloween theme only swaps the globe's canvas colours (CSS can't reach the
   // canvas). Theme off keeps the original props exactly.
-  const [halloween, setHalloween] = useState(false);
-  useEffect(() => {
-    setHalloween(isHalloweenActive(new URLSearchParams(window.location.search)));
-  }, []);
+  const halloween = useHalloweenActive();
 
   return (
     <div className="bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#F8E9ED]">
