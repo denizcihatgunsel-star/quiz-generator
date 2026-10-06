@@ -57,7 +57,7 @@ function MobileHomeContent() {
       </div>
 
       {/* Hero — big visible wordmark */}
-      <section className="relative pt-6 text-center">
+      <section className="relative pt-6 text-center" data-hw-home-hero>
         <MobileHalloweenDecor variant="app-hero" />
         <p className="relative z-10 animate-[fade-up_0.6s_ease-out_both] text-[11px] uppercase tracking-[0.4em] text-[#A87680]">
           A quiz generator
@@ -126,12 +126,12 @@ function MobileHomeContent() {
       )}
 
       {/* Quick actions */}
-      <section className="relative mt-10">
+      <section className="relative mt-10" data-hw-jump>
         <MobileHalloweenDecor variant="jump" />
         <h2 className="relative z-10 mb-4 font-serif text-xl italic text-[#3B2027]">
           {firstName ? `Good to see you, ${firstName}` : "Jump back in"}
         </h2>
-        <div className="relative z-10 grid grid-cols-2 gap-3">
+        <div className="relative z-10 grid grid-cols-2 gap-3" data-hw-jump-grid>
           <Link
             href={session?.user ? "/m/dashboard" : "/m/auth/register"}
             className="rounded-2xl border border-[#F3D5DC] bg-white/75 p-5 shadow-[0_14px_40px_-26px_rgba(176,96,122,0.5)] backdrop-blur-xl transition-all hover:border-[#E9B8C4] active:scale-[0.98]"

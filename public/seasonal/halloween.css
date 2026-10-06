@@ -1834,7 +1834,7 @@ body[data-season="halloween"] {
 }
 
 [data-season="halloween"] [data-hw-mobile="nav-strip"] {
-  z-index: 35 !important;
+  z-index: 15 !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -1888,7 +1888,45 @@ body[data-season="halloween"] {
 }
 
 [data-season="halloween"] main.mx-auto {
-  padding-bottom: 9.5rem !important;
+  padding-bottom: 10.5rem !important;
+}
+
+/* Soft A: Jump Back In must end ABOVE the fixed strip; strip lives in the gap only */
+[data-season="halloween"] [data-hw-home-hero] {
+  padding-top: 0.75rem !important;
+}
+[data-season="halloween"] [data-hw-home-hero] > p:first-child {
+  /* "A quiz generator" */
+}
+[data-season="halloween"] [data-hw-home-hero] h1 {
+  margin-top: 0.75rem !important;
+  font-size: 3.25rem !important;
+  line-height: 0.95 !important;
+}
+[data-season="halloween"] [data-hw-home-hero] h1 + p {
+  margin-top: 0.5rem !important;
+}
+[data-season="halloween"] [data-hw-home-hero] .mt-8 {
+  margin-top: 1.25rem !important;
+}
+[data-season="halloween"] [data-hw-jump] {
+  margin-top: 1.5rem !important;
+  /* Real gap under the card grid for the bat/pumpkin strip */
+  padding-bottom: 3.5rem !important;
+}
+[data-season="halloween"] [data-hw-jump-grid] > a {
+  padding: 0.9rem !important;
+}
+[data-season="halloween"] [data-hw-jump-grid] .mb-3 {
+  margin-bottom: 0.5rem !important;
+}
+/* Strip below card stacking context — only visible in the padded gap under the grid */
+[data-season="halloween"] [data-hw-mobile="nav-strip"] {
+  z-index: 15 !important;
+}
+[data-season="halloween"] [data-hw-jump-grid] {
+  position: relative;
+  z-index: 20;
 }
 
 [data-season="halloween"] .hw-m-pricing-footer-fixed .hw-m-prop {
