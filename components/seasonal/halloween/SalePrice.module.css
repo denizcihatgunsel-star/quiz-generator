@@ -84,5 +84,34 @@
 }
 
 :global([data-season="halloween"]) .ends:not(#hx-0) {
-  color: rgba(245, 238, 220, 0.6) !important;
+  color: rgba(245, 238, 220, 0.7) !important;
+}
+
+/* Keeps the Free card's feature list level with the paid cards (same height, never visible) */
+.placeholder {
+  visibility: hidden;
+}
+
+/*
+ * Desktop price row: old + new price always on one row. In the narrow 5-column cards the
+ * whole sale price scales down just enough to fit instead of wrapping or overflowing; the
+ * row keeps the regular price height so feature lists stay aligned across cards.
+ * Numbers: "/mo" + two gaps = 40px; widest pair ("$9 $7.20") is ~3.5x the new-price size.
+ */
+:global([data-season="halloween"]) .saleRowFluid:not(#hx-0) {
+  container-type: inline-size;
+  flex-wrap: nowrap;
+  min-height: 3rem;
+  white-space: nowrap;
+}
+
+@container (max-width: 214.98px) {
+  :global([data-season="halloween"]) .newPrice:not(#hx-0),
+  :global([data-season="halloween"]) .wasWrap:not(#hx-0) {
+    font-size: calc((100cqi - 40px) / 3.5) !important;
+  }
+
+  :global([data-season="halloween"]) .oldPrice:not(#hx-0) {
+    font-size: 0.62em;
+  }
 }
