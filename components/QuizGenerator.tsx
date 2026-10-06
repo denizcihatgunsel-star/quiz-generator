@@ -31,8 +31,8 @@ import QuizStory from "./QuizStory";
 import { useTranslation } from "@/lib/i18n";
 
 // Halloween seasonal components
+import InteractiveHeadline from "./seasonal/halloween/InteractiveHeadline";
 const HalloweenHero = dynamic(() => import("./seasonal/halloween/HalloweenHero"), { ssr: false });
-const InteractiveHeadline = dynamic(() => import("./seasonal/halloween/InteractiveHeadline"), { ssr: false });
 const CursorGlow = dynamic(() => import("./seasonal/halloween/CursorGlow"), { ssr: false });
 
 // Below-fold marketing: client-only to keep homepage HTML lean for crawlers/CDN
@@ -671,11 +671,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     <div className="grid grid-cols-1 lg:grid-cols-[46%_54%] gap-6 sm:gap-8 lg:gap-12 items-start lg:items-center w-full pt-16 sm:pt-20 lg:pt-16">
                       {/* Left column - Text (max 46% width on desktop) */}
                       <div className="text-left space-y-4 sm:space-y-6 w-full">
-                        <h1 className="halloween-headline uppercase" style={{ fontSize: 'clamp(32px, 8vw, 76px)', lineHeight: '1.1', textTransform: 'uppercase' }}>
-                          <span className="block">AI QUIZ GENERAT<span className="pumpkin-o"><span className="sr-only">O</span><img src="/seasonal/halloween/pumpkin-flat.svg" alt="" aria-hidden="true" style={{ display: 'inline-block', height: '0.74em', width: '0.74em', verticalAlign: '-0.04em', margin: '0 0.02em' }} /></span>R</span>
-                          <span className="block">THAT TURNS N<span className="pumpkin-o"><span className="sr-only">O</span><img src="/seasonal/halloween/pumpkin-flat.svg" alt="" aria-hidden="true" style={{ display: 'inline-block', height: '0.74em', width: '0.74em', verticalAlign: '-0.04em', margin: '0 0.02em' }} /></span>TES</span>
-                          <span className="block halloween-headline-teal">INT<span className="pumpkin-o"><span className="sr-only">O</span><img src="/seasonal/halloween/pumpkin-flat.svg" alt="" aria-hidden="true" style={{ display: 'inline-block', height: '0.74em', width: '0.74em', verticalAlign: '-0.04em', margin: '0 0.02em' }} /></span> QUIZZES</span>
-                        </h1>
+                        <InteractiveHeadline />
                         <p className="halloween-subtitle text-base sm:text-lg max-w-lg">
                           Turn your study notes into structured quizzes, instantly.
                         </p>
