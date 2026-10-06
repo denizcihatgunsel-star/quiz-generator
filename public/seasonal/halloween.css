@@ -325,7 +325,8 @@ html:has(body[data-season="halloween"]) {
 
 /* Hide sound button on mobile Halloween to avoid nav crowding */
 @media (max-width: 639px) {
-  [data-season="halloween"] .fixed.top-20 {
+  [data-season="halloween"] ~ * button[aria-pressed],
+  body[data-season="halloween"] button[aria-pressed] {
     display: none !important;
   }
 }

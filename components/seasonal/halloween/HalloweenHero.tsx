@@ -9,16 +9,16 @@ import Image from 'next/image';
  */
 export default function HalloweenHero() {
   return (
-    <div className="relative flex items-center justify-center w-full max-w-[340px] sm:max-w-[380px] mx-auto" style={{ minHeight: '340px', aspectRatio: '1' }}>
+    <div className="relative flex items-end justify-center w-full max-w-[340px] sm:max-w-[380px] mx-auto" style={{ minHeight: '380px', aspectRatio: 'auto' }}>
       {/* Moon - NASA teal-tinted with soft glow, no black rim */}
       <div 
         className="halloween-moon" 
         aria-hidden="true"
         style={{ 
           position: 'absolute',
-          top: '50%',
+          bottom: '10%',
           left: '50%',
-          transform: 'translate(-50%, -50%)'
+          transform: 'translateX(-50%)'
         }}
       />
       
@@ -79,7 +79,7 @@ export default function HalloweenHero() {
       <div 
         className="halloween-pumpkin-row absolute" 
         style={{ 
-          bottom: '4%', 
+          bottom: '8%', 
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 3,
