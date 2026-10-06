@@ -1,67 +1,69 @@
 "use client";
 
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 /**
- * Halloween Ghost with hover-away effect
- * Drifts away from cursor on hover, fades to 70%
+ * Halloween Ghost with a gentle hover-away effect.
+ *
+ * Renders exactly the same box as before (a positioned wrapper div holding
+ * the 72x72 ghost image). The drift is written to the wrapper's CSS
+ * `translate` property, which composes with any positioning `transform`
+ * passed in via `style` (e.g. scaleX(-1)), so layout is never changed.
+ * Disabled for coarse pointers and prefers-reduced-motion.
  */
-export default function HalloweenGhost({ 
-  style, 
-  className = '' 
-}: { 
-  style?: React.CSSProperties; 
-  className?: string 
+export default function HalloweenGhost({
+  style,
+  className = '',
+}: {
+  style?: React.CSSProperties;
+  className?: string;
 }) {
   const ghostRef = useRef<HTMLDivElement>(null);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const ghost = ghostRef.current;
     if (!ghost) return;
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
+    let pushed = false;
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = ghost.getBoundingClientRect();
-      const ghostCenterX = rect.left + rect.width / 2;
-      const ghostCenterY = rect.top + rect.height / 2;
-      
-      const dx = e.clientX - ghostCenterX;
-      const dy = e.clientY - ghostCenterY;
+      const dx = e.clientX - (rect.left + rect.width / 2);
+      const dy = e.clientY - (rect.top + rect.height / 2);
       const distance = Math.sqrt(dx * dx + dy * dy);
-      
-      // If cursor within 150px, drift away
+
       if (distance < 150) {
         const angle = Math.atan2(dy, dx);
-        const pushDistance = Math.min(20, (150 - distance) / 150 * 20);
-        setOffset({
-          x: -Math.cos(angle) * pushDistance,
-          y: -Math.sin(angle) * pushDistance
-        });
-      } else {
-        setOffset({ x: 0, y: 0 });
+        const push = Math.min(20, ((150 - distance) / 150) * 20);
+        ghost.style.setProperty(
+          'translate',
+          `${(-Math.cos(angle) * push).toFixed(1)}px ${(-Math.sin(angle) * push).toFixed(1)}px`
+        );
+        ghost.style.opacity = '0.7';
+        pushed = true;
+      } else if (pushed) {
+        ghost.style.removeProperty('translate');
+        ghost.style.opacity = '';
+        pushed = false;
       }
     };
 
     document.addEventListener('mousemove', handleMouseMove, { passive: true });
-
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
+      ghost.style.removeProperty('translate');
+      ghost.style.opacity = '';
     };
   }, []);
 
   return (
-    <div 
+    <div
       ref={ghostRef}
       className={className}
-      style={{
-        ...style,
-        transform: `${style?.transform || ''} translate(${offset.x}px, ${offset.y}px)`,
-        transition: 'transform 400ms ease, opacity 400ms ease',
-      }}
+      style={{ ...style, transition: 'translate 400ms ease, opacity 400ms ease' }}
     >
       <Image
         src="/seasonal/halloween/ghost.webp"
@@ -70,10 +72,6 @@ export default function HalloweenGhost({
         height={72}
         className="halloween-ghost"
         aria-hidden="true"
-        style={{
-          opacity: offset.x !== 0 || offset.y !== 0 ? 0.7 : 1,
-          transition: 'opacity 400ms ease'
-        }}
       />
     </div>
   );
