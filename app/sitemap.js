@@ -48,6 +48,19 @@ export default function sitemap() {
     { url: `${SITE}/terms`, changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE}/contact`, changeFrequency: "yearly", priority: 0.4 },
     { url: `${SITE}/blog`, changeFrequency: "weekly", priority: 0.8 },
+    // Wave 1 NEW pages
+    { url: `${SITE}/online-quiz-maker`, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${SITE}/ai-question-generator`, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${SITE}/exam-generator`, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${SITE}/alternatives/quizlet`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/alternatives/kahoot`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/alternatives/quizizz`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/integrations/google-forms`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/features/blooms-taxonomy`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/features/live-classroom-quiz`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/features/worksheet-generator`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/es/generador-de-quizzes`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/es/generador-quiz-pdf`, changeFrequency: "monthly", priority: 0.8 },
   ].map((p) => ({ ...p, lastModified: now }));
 
   // Intentionally omit thin client shells /explore, /daily-challenge, and /study (noindex instead)

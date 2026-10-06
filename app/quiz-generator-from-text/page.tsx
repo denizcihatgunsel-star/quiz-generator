@@ -1,20 +1,61 @@
 import type { Metadata } from "next";
 import { pageMetadata, LANGUAGE_COUNT } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
-import { saleLandingData } from "@/lib/pricing";
+import { copyText, saleCopy, saleLandingData } from "@/lib/pricing";
 
 // Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
 export const revalidate = 60;
 
 export const metadata: Metadata = pageMetadata({
-  title: "Quiz Generator from Text — Paste & Generate",
+  title: "Quiz Generator from Text — Paste & Generate Questions",
   description: `Paste any notes and generate multiple choice, flashcards & true/false questions instantly. Works in ${LANGUAGE_COUNT} languages. Free to try.`,
   path: "/quiz-generator-from-text",
 });
 
+const faqs = [
+  { q: "What formats can I paste?", a: "Plain text, Markdown, and TXT all work. You can paste anything from a few lines to 15,000 characters." },
+  { q: "Does it work in languages other than English?", a: `Yes — ${LANGUAGE_COUNT} languages are supported, making it ideal for language learning.` },
+  { q: "How long does generation take?", a: "Most quizzes are ready in under 30 seconds." },
+  { q: "Is the text generator free?", a: "Free accounts get 5 generations per month. Paid plans start at $2/month." },
+];
+
 export default function TextQuizPage() {
+  const now = new Date();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.examina.ink/quiz-generator-from-text#webpage",
+        url: "https://www.examina.ink/quiz-generator-from-text",
+        name: "Quiz Generator from Text — Paste & Generate | Examina",
+        isPartOf: { "@id": "https://www.examina.ink/#website" },
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://www.examina.ink/#software",
+        name: "Examina",
+        applicationCategory: "EducationalApplication",
+        description: "Quiz generator that creates questions from pasted text. Supports multiple choice, flashcards, fill-in-the-blank, and true/false.",
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) },
+        })),
+      },
+    ],
+  };
+
   return (
-    <KeywordLanding
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <KeywordLanding
       data={saleLandingData({
         kicker: "Quiz Generator from Text",
         h1: "Turn any text into a",
@@ -49,21 +90,18 @@ export default function TextQuizPage() {
           { n: "03", title: "Study immediately", body: "Take the quiz in the app, share a link, or export it as a PDF." },
         ],
         faqTitle: "Frequently asked questions",
-        faq: [
-          { q: "What formats can I paste?", a: "Plain text, Markdown, and TXT all work. You can paste anything from a few lines to 15,000 characters." },
-          { q: "Does it work in languages other than English?", a: `Yes — ${LANGUAGE_COUNT} languages are supported, making it ideal for language learning.` },
-          { q: "How long does generation take?", a: "Most quizzes are ready in under 30 seconds." },
-          { q: "Is the text generator free?", a: "Free accounts get 5 generations per month. Paid plans start at $2/month." },
-        ],
+        faq: faqs,
         relatedTitle: "Explore more ways to study",
         related: [
           { href: "/ai-quiz-generator", label: "AI Quiz Generator" },
           { href: "/notes-to-quiz", label: "Notes to Quiz" },
           { href: "/quiz-generator-from-pdf", label: "PDF to Quiz" },
           { href: "/create-a-quiz", label: "Create a Quiz" },
+          { href: "/ai-question-generator", label: "AI Question Generator" },
           { href: "/study-quiz", label: "Study Quiz" },
         ],
-      }, new Date())}
-    />
+      }, now)}
+      />
+    </>
   );
 }
