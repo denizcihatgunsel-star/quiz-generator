@@ -1,17 +1,25 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
+import { copyText, saleCopy, saleLandingData } from "@/lib/pricing";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Free Quiz Generator — 5 Quizzes a Month",
-  description: "Make quizzes online for free with AI. No credit card. Generate up to 5 quizzes a month, or unlock more from $2/month.",
-  path: "/free-quiz-generator",
-});
+// Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
+export const revalidate = 60;
+
+export function generateMetadata(): Metadata {
+  return pageMetadata({
+    title: "Free Quiz Generator — 5 Quizzes a Month",
+    description: copyText(
+      saleCopy("Make quizzes online for free with AI. No credit card. Generate up to 5 quizzes a month, or unlock more from $2/month.")
+    ),
+    path: "/free-quiz-generator",
+  });
+}
 
 export default function FreeQuizPage() {
   return (
     <KeywordLanding
-      data={{
+      data={saleLandingData({
         kicker: "Free Quiz Generator",
         h1: "Make free quizzes",
         h1Accent: "online",
@@ -59,7 +67,7 @@ export default function FreeQuizPage() {
           { href: "/study-quiz", label: "Study Quiz" },
           { href: "/pricing", label: "View Pricing" },
         ],
-      }}
+      }, new Date())}
     />
   );
 }
