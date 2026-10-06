@@ -1,6 +1,6 @@
 "use client";
 
-import { useHalloweenActive } from "./HalloweenLayout";
+import { isHalloweenSeason } from "@/lib/seasonal";
 
 /**
  * Mobile Halloween decorations (phone /m app shell, marketing quiz soft accents,
@@ -53,24 +53,28 @@ function MoonGlow({ className, style }: { className?: string; style?: React.CSSP
   );
 }
 
+/**
+ * Always emits decoration markup while the Halloween calendar window is open.
+ * Visibility is CSS-only: `[data-season="halloween"] .hw-m-layer`.
+ * That keeps Soft A / Pricing A / app-shell props in SSR HTML for anonymous
+ * hard-reload checks, while ?halloween=0 (drops data-season) still hides them.
+ */
 export default function MobileHalloweenDecor({
   variant,
-  active: activeProp,
+  active: _activeProp,
   className = "",
 }: {
   variant: Variant;
-  /** Override; defaults to HalloweenLayout context. */
+  /** Ignored — kept for call-site compat. Visibility is data-season CSS. */
   active?: boolean;
   className?: string;
 }) {
-  const ctx = useHalloweenActive();
-  const active = activeProp ?? ctx;
-  if (!active) return null;
+  if (!isHalloweenSeason()) return null;
 
   if (variant === "app-hero") {
     return (
       <div
-        className={`pointer-events-none absolute inset-0 z-0 overflow-hidden ${className}`}
+        className={`hw-m-layer hw-m-layer--app-hero pointer-events-none absolute inset-0 z-0 overflow-hidden ${className}`}
         aria-hidden="true"
         data-hw-mobile="app-hero"
       >
@@ -91,7 +95,7 @@ export default function MobileHalloweenDecor({
   if (variant === "jump") {
     return (
       <div
-        className={`pointer-events-none absolute inset-0 z-0 overflow-visible ${className}`}
+        className={`hw-m-layer hw-m-layer--jump pointer-events-none absolute inset-0 z-0 overflow-visible ${className}`}
         aria-hidden="true"
         data-hw-mobile="jump"
       >
@@ -113,7 +117,7 @@ export default function MobileHalloweenDecor({
        No dense moon glow behind the quiz card. */
     return (
       <div
-        className={`pointer-events-none absolute inset-0 z-0 overflow-visible hidden max-[767px]:block ${className}`}
+        className={`hw-m-layer hw-m-layer--quiz-soft pointer-events-none absolute inset-0 z-0 overflow-visible ${className}`}
         aria-hidden="true"
         data-hw-mobile="quiz-soft"
       >
@@ -155,7 +159,7 @@ export default function MobileHalloweenDecor({
   if (variant === "pricing") {
     return (
       <div
-        className={`pointer-events-none absolute inset-0 z-0 overflow-visible ${className}`}
+        className={`hw-m-layer hw-m-layer--pricing pointer-events-none absolute inset-0 z-0 overflow-visible ${className}`}
         aria-hidden="true"
         data-hw-mobile="pricing"
       >
@@ -202,7 +206,7 @@ export default function MobileHalloweenDecor({
   // nav-strip — thin row ABOVE the bottom tab bar, never on the icons
   return (
     <div
-      className={`hw-m-nav-strip pointer-events-none fixed inset-x-0 z-30 flex items-end justify-center gap-2.5 ${className}`}
+      className={`hw-m-layer hw-m-layer--nav-strip hw-m-nav-strip pointer-events-none fixed inset-x-0 z-30 flex items-end justify-center gap-2.5 ${className}`}
       aria-hidden="true"
       data-hw-mobile="nav-strip"
     >

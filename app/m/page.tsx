@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import GlobeStudy from "@/components/GlobeStudy";
-import { isHalloweenActive } from "@/lib/seasonal";
 import MobileHalloweenDecor from "@/components/seasonal/halloween/MobileHalloweenDecor";
+import { useHalloweenActive } from "@/components/seasonal/halloween/HalloweenLayout";
 
 const ARROW = (
   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -31,8 +30,7 @@ interface Daily {
 function MobileHomeContent() {
   const { data: session } = useSession();
   const [daily, setDaily] = useState<Daily | null>(null);
-  const searchParams = useSearchParams();
-  const halloweenActive = isHalloweenActive(searchParams);
+  const halloweenActive = useHalloweenActive();
 
   useEffect(() => {
     if (!session?.user) return;
@@ -60,7 +58,7 @@ function MobileHomeContent() {
 
       {/* Hero — big visible wordmark */}
       <section className="relative pt-6 text-center">
-        {halloweenActive && <MobileHalloweenDecor variant="app-hero" active />}
+        <MobileHalloweenDecor variant="app-hero" />
         <p className="relative z-10 animate-[fade-up_0.6s_ease-out_both] text-[11px] uppercase tracking-[0.4em] text-[#A87680]">
           A quiz generator
         </p>
@@ -129,7 +127,7 @@ function MobileHomeContent() {
 
       {/* Quick actions */}
       <section className="relative mt-10">
-        {halloweenActive && <MobileHalloweenDecor variant="jump" active />}
+        <MobileHalloweenDecor variant="jump" />
         <h2 className="relative z-10 mb-4 font-serif text-xl italic text-[#3B2027]">
           {firstName ? `Good to see you, ${firstName}` : "Jump back in"}
         </h2>
@@ -231,9 +229,5 @@ function MobileHomeContent() {
 }
 
 export default function MobileHome() {
-  return (
-    <Suspense fallback={<div className="min-h-screen" />}>
-      <MobileHomeContent />
-    </Suspense>
-  );
+  return <MobileHomeContent />;
 }

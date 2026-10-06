@@ -1831,3 +1831,30 @@ body[data-season="halloween"] {
 [data-season="halloween"] [data-hw-hide-orbs="true"] {
   display: none !important;
 }
+
+
+/* ==========================================================================
+   Mobile Soft A / Pricing A / app-shell layers — SSR markup always present
+   while the Halloween calendar window is open; shown only under data-season.
+   ========================================================================== */
+.hw-m-layer {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+[data-season="halloween"] .hw-m-layer--app-hero,
+[data-season="halloween"] .hw-m-layer--jump,
+[data-season="halloween"] .hw-m-layer--pricing {
+  display: block !important;
+}
+
+[data-season="halloween"] .hw-m-layer--nav-strip {
+  display: flex !important;
+}
+
+/* Quiz Soft A: phone widths only (marketing / and /m/create) */
+@media (max-width: 767px) {
+  [data-season="halloween"] .hw-m-layer--quiz-soft {
+    display: block !important;
+  }
+}
