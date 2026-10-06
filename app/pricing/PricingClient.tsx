@@ -14,6 +14,7 @@ import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
 import { PLANS, type Plan, type PlanId } from "@/lib/subscription";
+import { SaleLabel } from "@/components/seasonal/halloween/SalePrice";
 
 type Actions = {
   session: ReturnType<typeof useSession>["data"];
@@ -207,7 +208,16 @@ export function CardShell({
   );
 }
 
-export function PlanCta({ plan, isFeatured }: { plan: Plan; isFeatured: boolean }) {
+export function PlanCta({
+  plan,
+  isFeatured,
+  salePrice = null,
+}: {
+  plan: Plan;
+  isFeatured: boolean;
+  /** Halloween sale price (e.g. "$1.60"), computed by the server page; null when no sale */
+  salePrice?: string | null;
+}) {
   const { session, upgrading, handleSelect } = usePricingActions();
   const isBusy = upgrading === plan.id;
 
@@ -228,6 +238,8 @@ export function PlanCta({ plan, isFeatured }: { plan: Plan; isFeatured: boolean 
         </>
       ) : plan.price === 0 ? (
         session ? "Downgrade to Free" : "Get started free"
+      ) : salePrice ? (
+        <SaleLabel regular={`Get ${plan.name} — $${plan.price}/mo`} sale={`Get ${plan.name} — ${salePrice}/mo`} />
       ) : (
         `Get ${plan.name} — $${plan.price}/mo`
       )}
