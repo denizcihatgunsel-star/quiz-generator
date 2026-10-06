@@ -1575,3 +1575,44 @@ body[data-season="halloween"] {
 [data-season="halloween"] #features .grid > div > .pointer-events-none.absolute {
   background: rgba(53, 208, 180, 0.35) !important;
 }
+
+/* ---------- Design QA (v31) ---------- */
+
+/* Quiz-box Generate while empty/disabled: full orange, cream label at 60% */
+[data-season="halloween"] #generate button#generate-btn:disabled {
+  opacity: 1 !important;
+  background: #F28C38 !important;
+  color: rgba(255, 247, 236, 0.6) !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+}
+
+/* Anchor jumps land below the fixed nav */
+[data-season="halloween"] main section[id],
+[data-season="halloween"] div:has(> section#features) > section[id],
+[data-season="halloween"] main section h2,
+[data-season="halloween"] div:has(> section#features) h2,
+[data-season="halloween"] div:has(> .marquee-pause) h2 {
+  scroll-margin-top: 96px;
+}
+
+/* Footer: wordmark no longer shrinks under the launch badges (24px gap kept) */
+[data-season="halloween"] footer div.flex.items-center:has(> img[alt="Examina"]) {
+  flex-shrink: 0;
+}
+
+/* FAQ chevrons: cream on teal tile */
+[data-season="halloween"] div:has(> section#features) #faq .bg-\[\#FDE8EC\] {
+  background: rgba(53, 208, 180, 0.15) !important;
+  color: #FFF7EC !important;
+}
+
+/* Counter, language label, footer credit lines: cream 70% */
+[data-season="halloween"] #generate #char-count:not(.text-amber-500),
+[data-season="halloween"] #generate select {
+  color: rgba(255, 247, 236, 0.7) !important;
+}
+
+[data-season="halloween"] footer p.text-xs {
+  color: rgba(255, 247, 236, 0.7) !important;
+}
