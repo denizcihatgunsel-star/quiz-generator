@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { QuizData } from "@/types/quiz";
+import ExaminaAvatar from "./ExaminaAvatar";
 
 interface Message {
   role: "user" | "assistant";
@@ -177,9 +178,7 @@ export default function ChatBot({ onQuizGenerated }: ChatBotProps) {
     <div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-[#F3D5DC] overflow-hidden">
       {/* Header */}
       <div className="px-4 py-3 border-b border-[#F6E4EA] flex items-center gap-2">
-        <div className="w-7 h-7 rounded-lg bg-[#3B2027] flex items-center justify-center text-[#F6E3E8] text-xs font-bold">
-          E
-        </div>
+        <ExaminaAvatar size={28} typing={loading} />
         <div>
           <p className="text-sm font-semibold text-[#4A3038]">Examina AI</p>
           <p className="text-[10px] text-emerald-500">Online</p>

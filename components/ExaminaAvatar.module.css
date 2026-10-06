@@ -1,0 +1,141 @@
+/* Examina assistant avatar. Only transform-family (rotate/translate/scale) and
+   opacity are animated. Everything decorative is absolutely positioned, so the
+   box stays exactly the size passed in. */
+
+.avatar {
+  --ea-ring: conic-gradient(from 0deg, #7c5cff, #b0607a, #e9b8c4, #a855f7, #7c5cff);
+  --ea-glow: rgba(124, 92, 255, 0.55);
+  --ea-dot: #22c55e;
+  --ea-dot-edge: #ffffff;
+  --ea-ring-speed: 8s;
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  transition: rotate 220ms ease, scale 220ms ease;
+}
+
+:global([data-season="halloween"]) .avatar {
+  --ea-ring: conic-gradient(from 0deg, #35d0b4, #f28c38, #7fe3d3, #f28c38, #35d0b4);
+  --ea-glow: rgba(53, 208, 180, 0.55);
+  --ea-dot: #35d0b4;
+  --ea-dot-edge: #0f1f1c;
+}
+
+.avatar:hover {
+  rotate: -8deg;
+  scale: 1.06;
+}
+
+.glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 10px 2px var(--ea-glow);
+  opacity: 0.45;
+  animation: ea-breathe 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--ea-ring);
+  animation: ea-spin var(--ea-ring-speed) linear infinite;
+  pointer-events: none;
+}
+
+.tile {
+  position: absolute;
+  inset: 2px;
+  border-radius: inherit;
+  overflow: hidden;
+  background: #0e0b14;
+}
+
+.logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  scale: 1.35; /* trims the dark padding baked into logo.png so the E reads larger */
+}
+
+.dot {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 9px;
+  height: 9px;
+  border-radius: 9999px;
+  background: var(--ea-dot);
+  box-shadow: 0 0 0 1.5px var(--ea-dot-edge);
+}
+
+.dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--ea-dot);
+  opacity: 0.6;
+  animation: ea-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.pumpkin {
+  position: absolute;
+  top: -4px;
+  right: -5px;
+  width: 12px;
+  height: 12px;
+  rotate: 12deg;
+  filter: drop-shadow(0 0 3px rgba(242, 140, 56, 0.7));
+  pointer-events: none;
+}
+
+/* Typing / generating: faster ring + gentle bounce */
+.avatar[data-typing="true"] {
+  --ea-ring-speed: 1.6s;
+  animation: ea-bounce 0.9s ease-in-out infinite;
+}
+
+.avatar[data-typing="true"] .glow {
+  animation-duration: 1.2s;
+}
+
+@keyframes ea-spin {
+  to { rotate: 360deg; }
+}
+
+@keyframes ea-breathe {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.95; }
+}
+
+@keyframes ea-ping {
+  0% { scale: 1; opacity: 0.6; }
+  80%, 100% { scale: 2.2; opacity: 0; }
+}
+
+@keyframes ea-bounce {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -3px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar,
+  .avatar[data-typing="true"],
+  .glow,
+  .ring,
+  .dot::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .avatar:hover {
+    rotate: none;
+    scale: none;
+  }
+  .glow { opacity: 0.6; }
+  .dot::after { opacity: 0; }
+}
