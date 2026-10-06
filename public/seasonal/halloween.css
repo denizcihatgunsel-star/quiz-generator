@@ -1803,19 +1803,38 @@ body[data-season="halloween"] {
 
 /* Thin strip sitting just above the fixed bottom tab bar (~56px + safe area) */
 .hw-m-nav-strip {
-  bottom: calc(56px + env(safe-area-inset-bottom, 0px));
-  height: 28px;
-  padding-bottom: 2px;
-  opacity: 0.9;
+  /* Tab bar with Creepster labels is ~80px tall — sit fully above it */
+  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  height: 36px;
+  padding-bottom: 4px;
+  opacity: 1;
+  background: linear-gradient(to top, rgba(10, 22, 20, 0.55), transparent);
 }
 
 .hw-m-footer-strip {
   opacity: 0.95;
 }
 
-/* Keep interactive shell layers above props */
-[data-season="halloween"] [data-hw-mobile] {
+/* Pricing Option A footer — visible on the first screen above the tab bar */
+.hw-m-pricing-footer-fixed {
+  position: fixed !important;
+  left: 0;
+  right: 0;
+  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  z-index: 34;
+  height: 36px;
+  padding-bottom: 4px;
+  pointer-events: none !important;
+  background: linear-gradient(to top, rgba(10, 22, 20, 0.45), transparent);
+}
+
+/* Keep page props behind controls; nav-strip sits above content, under tabs (z-40) */
+[data-season="halloween"] [data-hw-mobile]:not([data-hw-mobile="nav-strip"]) {
   z-index: 0;
+}
+
+[data-season="halloween"] [data-hw-mobile="nav-strip"] {
+  z-index: 35 !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -1857,4 +1876,24 @@ body[data-season="halloween"] {
   [data-season="halloween"] .hw-m-layer--quiz-soft {
     display: block !important;
   }
+}
+
+/* On /m/pricing the Pricing A footer strip owns the band above the tabs */
+[data-season="halloween"]:has([data-hw-mobile="pricing"]) [data-hw-mobile="nav-strip"] {
+  display: none !important;
+}
+
+[data-season="halloween"] .hw-m-pricing-footer-fixed {
+  display: flex !important;
+}
+
+[data-season="halloween"] main.mx-auto {
+  padding-bottom: 9.5rem !important;
+}
+
+[data-season="halloween"] .hw-m-pricing-footer-fixed .hw-m-prop {
+  filter: drop-shadow(0 0 8px rgba(255, 160, 60, 0.85)) brightness(1.15);
+}
+[data-season="halloween"] .hw-m-pricing-footer-fixed .hw-m-bat {
+  filter: drop-shadow(0 0 10px rgba(53, 208, 180, 0.95)) brightness(1.2);
 }
