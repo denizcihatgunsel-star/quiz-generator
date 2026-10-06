@@ -1890,3 +1890,10 @@ body[data-season="halloween"] {
 [data-season="halloween"] main.mx-auto {
   padding-bottom: 9.5rem !important;
 }
+
+[data-season="halloween"] .hw-m-pricing-footer-fixed .hw-m-prop {
+  filter: drop-shadow(0 0 8px rgba(255, 160, 60, 0.85)) brightness(1.15);
+}
+[data-season="halloween"] .hw-m-pricing-footer-fixed .hw-m-bat {
+  filter: drop-shadow(0 0 10px rgba(53, 208, 180, 0.95)) brightness(1.2);
+}

@@ -126,21 +126,21 @@ export default function MobileHalloweenDecor({
         <MoonGlow
           className="hw-m-moon--soft"
           style={{
-            top: -72,
-            right: -78,
-            width: 84,
-            height: 84,
+            top: -100,
+            right: -100,
+            width: 72,
+            height: 72,
           }}
         />
 
         {/* Thin band ABOVE the quiz card: 2 pumpkins + candle */}
-        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 28, height: 28, top: -22, left: "14%" }} />
-        <Prop src={CANDLE} className="hw-m-candle" style={{ width: 24, height: 24, top: -24, left: "44%" }} />
-        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 26, height: 26, top: -22, left: "58%" }} />
+        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 28, height: 28, top: -36, left: "14%" }} />
+        <Prop src={CANDLE} className="hw-m-candle" style={{ width: 24, height: 24, top: -38, left: "42%" }} />
+        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 26, height: 26, top: -36, left: "56%" }} />
 
         {/* Upper gutter ghosts — right ghost fully off the card edge */}
         <Prop src={GHOST} className="hw-m-ghost" style={{ width: 40, height: 40, top: "2%", left: -18 }} />
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 34, height: 34, top: -18, right: -34, transform: "scaleX(-1)" }} />
+        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 32, height: 32, top: -28, right: -40, transform: "scaleX(-1)" }} />
 
         {/* Side gutter bats only */}
         <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, top: "22%", left: -10, transform: "rotate(-12deg)" }} />
@@ -175,8 +175,8 @@ export default function MobileHalloweenDecor({
           }}
         />
         {/* Side ghosts / bats — left pair tucked beside/behind label, not over "Pricing" */}
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 40, height: 40, top: 28, left: -22 }} />
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 26, height: 13, top: -6, left: -8, transform: "rotate(-12deg)" }} />
+        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 38, height: 38, top: 44, left: -26 }} />
+        <Prop src={BAT} className="hw-m-bat" style={{ width: 24, height: 12, top: -14, left: -20, transform: "rotate(-12deg)" }} />
         <Prop src={GHOST} className="hw-m-ghost" style={{ width: 44, height: 44, top: 10, right: -14, transform: "scaleX(-1)" }} />
         <Prop src={BAT} className="hw-m-bat" style={{ width: 26, height: 13, top: 2, right: 36, transform: "rotate(14deg)" }} />
 
@@ -191,14 +191,14 @@ export default function MobileHalloweenDecor({
         <Prop src={GHOST} className="hw-m-ghost" style={{ width: 40, height: 40, top: 720, right: -14, transform: "scaleX(-1)" }} />
 
         {/* Footer strip — fixed in the first viewport above the tab bar (Option A) */}
-        <div className="hw-m-footer-strip hw-m-pricing-footer-fixed flex items-end justify-center gap-2.5">
-          <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 26, height: 26, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-          <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-          <Prop src={CANDLE} className="hw-m-candle" style={{ width: 22, height: 22, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-          <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 28, height: 28, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-          <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, position: "relative", top: "auto", left: "auto", right: "auto", transform: "scaleX(-1)" }} />
-          <Prop src={CANDLE} className="hw-m-candle" style={{ width: 22, height: 22, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-          <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 26, height: 26, position: "relative", top: "auto", left: "auto", right: "auto" }} />
+        <div className="hw-m-footer-strip hw-m-pricing-footer-fixed flex items-end justify-center gap-3">
+          <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 32, height: 32, position: "relative", top: "auto", left: "auto", right: "auto" }} />
+          <Prop src={BAT} className="hw-m-bat" style={{ width: 28, height: 14, position: "relative", top: "auto", left: "auto", right: "auto" }} />
+          <Prop src={CANDLE} className="hw-m-candle" style={{ width: 28, height: 28, position: "relative", top: "auto", left: "auto", right: "auto" }} />
+          <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 34, height: 34, position: "relative", top: "auto", left: "auto", right: "auto" }} />
+          <Prop src={BAT} className="hw-m-bat" style={{ width: 28, height: 14, position: "relative", top: "auto", left: "auto", right: "auto", transform: "scaleX(-1)" }} />
+          <Prop src={CANDLE} className="hw-m-candle" style={{ width: 28, height: 28, position: "relative", top: "auto", left: "auto", right: "auto" }} />
+          <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 32, height: 32, position: "relative", top: "auto", left: "auto", right: "auto" }} />
         </div>
       </div>
     );
