@@ -66,7 +66,7 @@ export default function HomeSections() {
           <p className="mb-4 text-xs uppercase tracking-[0.2em] text-[#A87680]" data-halloween-hide="true">What you get</p>
           <h2 className="mb-12 max-w-xl text-3xl font-medium tracking-tight text-[#3B2027] sm:text-4xl" data-halloween-heading="true">
             <span data-halloween-hide="true">Four question types.</span>
-            <span className="halloween-section-heading hidden" data-halloween-show="true">H<span className="halloween-pumpkin-o" aria-hidden="true">O</span>W IT W<span className="halloween-pumpkin-o" aria-hidden="true">O</span>RKS</span>
+            <span className="halloween-section-heading hidden" data-halloween-show="true">H<span className="pumpkin-o"><span className="sr-only">O</span><img src="/seasonal/halloween/pumpkin-flat.svg" alt="" aria-hidden="true" style={{ display: 'inline-block', height: '0.74em', width: '0.74em', verticalAlign: '-0.04em', margin: '0 0.02em' }} /></span>W IT W<span className="pumpkin-o"><span className="sr-only">O</span><img src="/seasonal/halloween/pumpkin-flat.svg" alt="" aria-hidden="true" style={{ display: 'inline-block', height: '0.74em', width: '0.74em', verticalAlign: '-0.04em', margin: '0 0.02em' }} /></span>RKS</span>
             <br data-halloween-hide="true" />
             <span className="font-serif italic text-[#B0607A]" data-halloween-hide="true">One click.</span>
           </h2>

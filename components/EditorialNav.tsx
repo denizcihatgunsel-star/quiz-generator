@@ -2,16 +2,29 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
 
 export default function EditorialNav() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <motion.nav
       initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.1 }}
       className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4"
+      data-scrolled={scrolled}
     >
       <div className="flex w-full max-w-3xl items-center justify-between gap-4 rounded-full border border-[#F3D5DC] bg-white/85 px-4 py-2.5 shadow-sm backdrop-blur-md sm:px-5">
         <Link href="/" className="flex items-center gap-2.5">
