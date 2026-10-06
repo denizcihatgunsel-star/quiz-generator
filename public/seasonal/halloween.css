@@ -1261,3 +1261,288 @@ body[data-season="halloween"] {
 [data-season="halloween"] .ambient-blob {
   background: radial-gradient(circle, rgba(53, 208, 180, 0.10) 0%, transparent 70%) !important;
 }
+
+/* ====================================================================
+   HOMEPAGE BELOW THE HERO (v30) - colour/border only, narrow scopes
+   Q = quiz box column (#generate)
+   U = UnseenLanding (div that directly holds the marquee)
+   H = HomeSections (div that directly holds section#features)
+   F = page footer
+   ==================================================================== */
+
+/* ---------- Glow blobs / sparkles around the quiz box: teal ---------- */
+[data-season="halloween"] #generate .orb-drift {
+  background-color: rgba(53, 208, 180, 0.10) !important;
+}
+
+[data-season="halloween"] #generate .twinkle {
+  background-color: rgba(127, 227, 211, 0.55) !important;
+}
+
+[data-season="halloween"] #generate .float-glyph {
+  color: rgba(127, 227, 211, 0.55) !important;
+}
+
+/* ---------- Quiz box (colours only) ---------- */
+[data-season="halloween"] #generate {
+  --accent: #35D0B4; /* focus ring sweep + particles inside the quiz column */
+}
+
+[data-season="halloween"] #generate [style*="233, 168, 184"],
+[data-season="halloween"] #generate [style*="233,168,184"] {
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), rgba(53, 208, 180, 0.12), transparent 70%) !important;
+}
+
+/* Divider lines + progress track */
+[data-season="halloween"] #generate .border-\[\#F6E4EA\] {
+  border-color: rgba(53, 208, 180, 0.18) !important;
+}
+
+[data-season="halloween"] #generate .bg-\[\#F6E4EA\] {
+  background-color: rgba(53, 208, 180, 0.18) !important;
+}
+
+[data-season="halloween"] #generate .from-\[\#E9A8B8\] {
+  background-image: linear-gradient(to right, #35D0B4, #7FE3D3) !important;
+}
+
+[data-season="halloween"] #generate .text-\[\#E9B8C4\] {
+  color: rgba(255, 247, 236, 0.7) !important;
+}
+
+[data-season="halloween"] #generate button.text-\[\#B0607A\] {
+  color: #7FE3D3 !important;
+}
+
+/* Generate button: solid orange, dark text; 50% when not ready (never grey) */
+[data-season="halloween"] #generate button#generate-btn {
+  background: #F28C38 !important;
+  background-image: none !important;
+  border-color: #F28C38 !important;
+  color: #0A1614 !important;
+  animation: none !important;
+}
+
+[data-season="halloween"] #generate button#generate-btn * {
+  color: #0A1614 !important;
+}
+
+[data-season="halloween"] #generate button#generate-btn:hover:not(:disabled) {
+  background: #F59D52 !important;
+  box-shadow: 0 0 18px rgba(242, 140, 56, 0.45) !important;
+}
+
+[data-season="halloween"] #generate button#generate-btn:disabled {
+  opacity: 0.5 !important;
+  box-shadow: none !important;
+}
+
+/* "Fetch & generate" (link mode) matches */
+[data-season="halloween"] #generate button.bg-\[\#3B2027\] {
+  background: #F28C38 !important;
+  color: #0A1614 !important;
+}
+
+/* "Or ask Examina" icon square */
+[data-season="halloween"] #generate .bg-\[\#F6DCE5\] {
+  background-color: rgba(53, 208, 180, 0.15) !important;
+  color: #FFF7EC !important;
+}
+
+/* ---------- U: editorial landing (marquee, selected, numbers, globe, CTA, footer) ---------- */
+[data-season="halloween"] div.bg-gradient-to-b:has(> .marquee-pause) {
+  background: #0A1614 !important;
+}
+
+/* Marquee strip */
+[data-season="halloween"] div:has(> .marquee-pause) > .marquee-pause {
+  background: #0F1F1C !important;
+  border-top: 1px solid rgba(53, 208, 180, 0.25) !important;
+  border-bottom: 1px solid rgba(53, 208, 180, 0.25) !important;
+}
+
+[data-season="halloween"] .marquee-pause .font-serif {
+  font-family: var(--font-poppins), sans-serif !important;
+  font-style: normal !important;
+  color: #FFF7EC !important;
+}
+
+[data-season="halloween"] .marquee-pause .text-\[\#E9B8C4\] {
+  color: #35D0B4 !important;
+}
+
+/* Hairlines */
+[data-season="halloween"] div:has(> .marquee-pause) :is(.border-\[\#F3D5DC\], .border-\[\#E9B8C4\]) {
+  border-color: rgba(53, 208, 180, 0.2) !important;
+}
+
+/* Kickers / small meta text */
+[data-season="halloween"] div:has(> .marquee-pause) .text-\[\#C98A98\] {
+  color: #8FC9BD !important;
+}
+
+/* "Selected" list */
+[data-season="halloween"] div:has(> .marquee-pause) a.group .font-mono {
+  color: #35D0B4 !important;
+}
+
+[data-season="halloween"] div:has(> .marquee-pause) a.group:hover .font-mono {
+  color: #7FE3D3 !important;
+}
+
+[data-season="halloween"] div:has(> .marquee-pause) a.group .text-\[\#4A3038\] {
+  color: #FFF7EC !important;
+  font-family: var(--font-poppins), sans-serif !important;
+  font-weight: 500;
+}
+
+[data-season="halloween"] div:has(> .marquee-pause) a.group .text-\[\#B0607A\] {
+  color: #F28C38 !important;
+}
+
+[data-season="halloween"] div:has(> .marquee-pause) a.group .text-\[\#9A7280\] {
+  color: rgba(255, 247, 236, 0.75) !important;
+}
+
+[data-season="halloween"] div:has(> .marquee-pause) a.group:not(.rounded-full) {
+  transition: border-color 300ms ease;
+}
+
+[data-season="halloween"] div:has(> .marquee-pause) a.group:not(.rounded-full):hover {
+  border-color: rgba(53, 208, 180, 0.55) !important;
+}
+
+/* Numbers (count-up) */
+[data-season="halloween"] div:has(> .marquee-pause) .font-serif.text-\[\#B0607A\] {
+  color: #7FE3D3 !important;
+  font-family: var(--font-poppins), sans-serif !important;
+  font-weight: 500;
+}
+
+[data-season="halloween"] div:has(> .marquee-pause) p.text-\[\#9A7280\] {
+  color: rgba(255, 247, 236, 0.8) !important;
+}
+
+/* Bottom CTA: primary orange, arrow chip dark */
+[data-season="halloween"] div:has(> .marquee-pause) a.bg-\[\#3B2027\] {
+  background: #F28C38 !important;
+  color: #0A1614 !important;
+  transition: background-color 200ms ease, box-shadow 200ms ease, translate 180ms ease;
+}
+
+[data-season="halloween"] div:has(> .marquee-pause) a.bg-\[\#3B2027\] span {
+  color: #0A1614 !important;
+}
+
+[data-season="halloween"] div:has(> .marquee-pause) a.bg-\[\#3B2027\] .bg-\[\#F6E3E8\] {
+  background: #0A1614 !important;
+  color: #F28C38 !important;
+}
+
+[data-season="halloween"] div:has(> .marquee-pause) a.bg-\[\#3B2027\]:hover {
+  background: #F59D52 !important;
+  box-shadow: 0 0 18px rgba(242, 140, 56, 0.45);
+}
+
+/* Footer inside U */
+[data-season="halloween"] div:has(> .marquee-pause) > footer {
+  background: #0A1614 !important;
+  border-top: 1px solid rgba(53, 208, 180, 0.2);
+}
+
+[data-season="halloween"] div:has(> .marquee-pause) > footer .font-serif {
+  color: #FFF7EC !important;
+}
+
+/* ---------- H: How it works, numbers, who it's for, FAQ ---------- */
+[data-season="halloween"] div.border-t:has(> section#features) {
+  border-color: rgba(53, 208, 180, 0.2) !important;
+}
+
+[data-season="halloween"] div:has(> section#features) :is(.border-\[\#F3D5DC\], .border-\[\#E9B8C4\]) {
+  border-color: rgba(53, 208, 180, 0.25) !important;
+}
+
+/* Cards */
+[data-season="halloween"] div:has(> section#features) :is(.bg-white\/60, .bg-white\/70, .bg-white\/80, .bg-white\/90) {
+  background: #0F1F1C !important;
+  border: 1px solid rgba(53, 208, 180, 0.25) !important;
+  box-shadow: none !important;
+}
+
+/* Card titles: Poppins (Creepster stays on section headings only) */
+[data-season="halloween"] div:has(> section#features) h3,
+[data-season="halloween"] div:has(> section#features) h3 * {
+  font-family: var(--font-poppins), sans-serif !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  text-shadow: none !important;
+  color: #FFF7EC !important;
+}
+
+/* Heading accent spans ("and live quizzes.", "answered.") */
+[data-season="halloween"] div:has(> section#features) h2 .text-\[\#B0607A\] {
+  color: #7FE3D3 !important;
+  font-style: normal !important;
+}
+
+[data-season="halloween"] div:has(> section#features) p.text-\[\#9A7280\] {
+  color: rgba(255, 247, 236, 0.8) !important;
+}
+
+[data-season="halloween"] div:has(> section#features) a span.text-\[\#B0607A\] {
+  color: #7FE3D3 !important;
+}
+
+/* Numbers band */
+[data-season="halloween"] div:has(> section#features) .bg-\[\#FDF4F5\]\/60 {
+  background: #0F1F1C !important;
+}
+
+[data-season="halloween"] div:has(> section#features) p.font-serif {
+  color: #7FE3D3 !important;
+  font-family: var(--font-poppins), sans-serif !important;
+  font-weight: 500;
+}
+
+/* Who it's for: link cards lift 2px with teal glow (translate only) */
+[data-season="halloween"] div:has(> section#features) a.group.rounded-2xl {
+  transition: border-color 200ms ease, box-shadow 200ms ease, translate 200ms ease;
+}
+
+[data-season="halloween"] div:has(> section#features) a.group.rounded-2xl:hover {
+  border-color: rgba(53, 208, 180, 0.6) !important;
+  box-shadow: 0 0 20px rgba(53, 208, 180, 0.25) !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-season="halloween"] div:has(> section#features) a.group.rounded-2xl:hover {
+    translate: 0 -2px;
+  }
+}
+
+/* FAQ */
+[data-season="halloween"] div:has(> section#features) #faq button span.text-\[\#3B2027\] {
+  color: #FFF7EC !important;
+  font-family: var(--font-poppins), sans-serif;
+}
+
+[data-season="halloween"] div:has(> section#features) #faq .bg-\[\#FDE8EC\] {
+  background: rgba(53, 208, 180, 0.15) !important;
+  color: #7FE3D3 !important;
+}
+
+[data-season="halloween"] div:has(> section#features) #faq .rounded-2xl:hover {
+  border-color: rgba(53, 208, 180, 0.5) !important;
+}
+
+/* ---------- F: page footer ---------- */
+[data-season="halloween"] footer .border-\[\#F3D5DC\] {
+  border-color: rgba(53, 208, 180, 0.2) !important;
+}
+
+[data-season="halloween"] footer .text-\[\#9A7280\]\/60 {
+  color: rgba(255, 247, 236, 0.6) !important;
+}
