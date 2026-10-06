@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import ReferralAttribution from "@/components/ReferralAttribution";
+import MobileHalloweenDecor from "@/components/seasonal/halloween/MobileHalloweenDecor";
+import { useHalloweenActive } from "@/components/seasonal/halloween/HalloweenLayout";
 
 const HOME = (
   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -46,9 +48,10 @@ const TABS = [
 export default function MobileShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const halloweenActive = useHalloweenActive();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#FDE8EC]">
+    <div className="relative min-h-screen bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#FDE8EC]">
       <header className="sticky top-0 z-40 border-b border-[#F3D5DC] bg-[#FBF1EE]/85 backdrop-blur-xl">
         <div className="flex items-center justify-between px-5 py-3.5">
           <Link href="/m" className="flex items-center gap-2.5">
@@ -75,6 +78,7 @@ export default function MobileShell({ children }: { children: React.ReactNode })
 
       <main className="mx-auto w-full max-w-lg px-4 pb-28 pt-6">{children}</main>
 
+      {halloweenActive && <MobileHalloweenDecor variant="nav-strip" active />}
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-[#F3D5DC] bg-white/85 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl">
         <div className="mx-auto flex max-w-lg items-stretch justify-around px-2">
           {TABS.map((tab) => {
