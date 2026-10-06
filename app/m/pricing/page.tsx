@@ -1,5 +1,10 @@
 import { PLANS, type PlanId } from "@/lib/subscription";
 import { PlanCta, PricingActionsProvider } from "./PricingClient";
+import { planPriceDisplay } from "@/lib/pricing";
+import { SaleAmount, SaleEnds, SalePill } from "@/components/seasonal/halloween/SalePrice";
+
+// Re-render at least every 60s so the Halloween sale prices drop on their own after the cutoff.
+export const revalidate = 60;
 
 const CHECK = (
   <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -10,6 +15,7 @@ const CHECK = (
 const featuredId: PlanId = "plus";
 
 export default function MobilePricingPage() {
+  const now = new Date();
   return (
     <div>
       <p className="font-serif text-sm italic text-[#B0607A]">Pricing</p>
@@ -22,6 +28,7 @@ export default function MobilePricingPage() {
         <div className="mt-7 space-y-4">
           {Object.values(PLANS).map((plan) => {
             const isFeatured = plan.id === featuredId;
+            const price = planPriceDisplay(plan, now);
 
             return (
               <div
@@ -55,6 +62,24 @@ export default function MobilePricingPage() {
                         : `${plan.quizzesPerMonth} quizzes / month`}
                     </p>
                   </div>
+                  {price.sale ? (
+                    <div className="flex flex-col items-end">
+                      <SalePill />
+                      <div className="flex flex-wrap items-baseline justify-end gap-1">
+                        <SaleAmount
+                          regular={price.regular}
+                          regularNode={<>${plan.price}</>}
+                          sale={price.sale}
+                          sizeClassName="font-serif text-3xl"
+                          regularClassName={`font-serif text-3xl ${isFeatured ? "text-[#B0607A]" : "text-[#3B2027]"}`}
+                          suffix="/mo"
+                          suffixClassName="text-xs text-[#9A7280]"
+                          gapClassName="gap-1"
+                        />
+                      </div>
+                      <SaleEnds />
+                    </div>
+                  ) : (
                   <div className="flex items-baseline gap-1">
                     {plan.price === 0 ? (
                       <span className="font-serif text-3xl text-[#3B2027]">Free</span>
@@ -67,6 +92,7 @@ export default function MobilePricingPage() {
                       </>
                     )}
                   </div>
+                  )}
                 </div>
 
                 <ul className="mt-4 space-y-2">
@@ -84,7 +110,7 @@ export default function MobilePricingPage() {
                   ))}
                 </ul>
 
-                <PlanCta plan={plan} isFeatured={isFeatured} />
+                <PlanCta plan={plan} isFeatured={isFeatured} salePrice={price.sale} />
               </div>
             );
           })}

@@ -1,0 +1,88 @@
+/*
+ * Halloween sale price UI. Rendered by the server only before the cutoff, and only
+ * shown while the Halloween theme is active on <body data-season="halloween">.
+ * Theme off (incl. ?halloween=0) or a stale page after the cutoff: the regular
+ * price markup is what shows, unchanged.
+ */
+.saleInline,
+.saleBlock,
+.salePill,
+.saleGroup {
+  display: none;
+}
+
+:global([data-season="halloween"]) .saleGroup:not(#hx-0) {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+}
+
+:global([data-season="halloween"]) .saleInline:not(#hx-0) {
+  display: inline;
+}
+
+:global([data-season="halloween"]) .saleBlock:not(#hx-0) {
+  display: block;
+}
+
+:global([data-season="halloween"]) .salePill:not(#hx-0) {
+  display: inline-flex;
+}
+
+:global([data-season="halloween"]) .regularOnly:not(#hx-0) {
+  display: none !important;
+}
+
+/* 🎃 Halloween 20% off — sits above the price */
+.salePill {
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+  margin-bottom: 8px;
+  padding: 3px 10px;
+  border: 1px solid #35d0b4;
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-poppins), sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+:global([data-season="halloween"]) .salePill:not(#hx-0) {
+  color: #f5eedc !important;
+}
+
+/* Old price: <del> with visually hidden "was" */
+.oldPrice {
+  font-size: 0.8em;
+  text-decoration-line: line-through;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: currentColor;
+}
+
+:global([data-season="halloween"]) .oldPrice:not(#hx-0) {
+  color: rgba(245, 238, 220, 0.5) !important;
+  -webkit-text-fill-color: rgba(245, 238, 220, 0.5) !important;
+}
+
+/* New price: same size/weight as the regular price, solid orange */
+:global([data-season="halloween"]) .newPrice:not(#hx-0) {
+  color: #f28c38 !important;
+  -webkit-text-fill-color: #f28c38 !important;
+  text-shadow: none !important;
+  background: none !important;
+}
+
+/* "Ends Oct 31" under the price */
+.ends {
+  margin-top: 4px;
+  font-family: var(--font-poppins), sans-serif;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+:global([data-season="halloween"]) .ends:not(#hx-0) {
+  color: rgba(245, 238, 220, 0.6) !important;
+}

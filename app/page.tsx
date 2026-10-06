@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import QuizGenerator from "@/components/QuizGenerator";
 import { StructuredData } from "@/components/StructuredData";
+import { PLANS } from "@/lib/subscription";
+import { withSaleOffer } from "@/lib/pricing";
 
 export const revalidate = 60;
 
@@ -49,70 +51,89 @@ const faqSchema = {
   })),
 };
 
-const softwareAppSchema = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "Examina",
-  url: "https://www.examina.ink",
-  applicationCategory: "EducationalApplication",
-  operatingSystem: "Web",
-  description:
-    "AI-powered quiz generator that turns any lesson into multiple choice, flashcard, fill-in-the-blank, and true/false questions. Supports 29 languages and maps questions to Bloom's Taxonomy.",
-  screenshot: "https://www.examina.ink/og-image.png",
-  featureList: [
-    "Multiple choice question generation",
-    "Interactive flashcards with 3D flip",
-    "Fill-in-the-blank questions",
-    "True/false questions with explanations",
-    "PDF, TXT, and Markdown upload",
-    "29 language support",
-    "Bloom's Taxonomy mapping",
-    "Quiz sharing via link or PDF export",
-  ],
-  publisher: { "@type": "Organization", "@id": "https://www.examina.ink/#organization" },
-  offers: [
-    {
-      "@type": "Offer",
-      name: "Free",
-      price: "0",
-      priceCurrency: "USD",
-      description: "5 quizzes per month, no credit card required",
-      url: "https://www.examina.ink/pricing",
-    },
-    {
-      "@type": "Offer",
-      name: "Starter",
-      price: "2",
-      priceCurrency: "USD",
-      description: "20 quizzes per month",
-      url: "https://www.examina.ink/pricing",
-    },
-    {
-      "@type": "Offer",
-      name: "Plus",
-      price: "5",
-      priceCurrency: "USD",
-      description: "60 quizzes per month",
-      url: "https://www.examina.ink/pricing",
-    },
-    {
-      "@type": "Offer",
-      name: "Pro",
-      price: "9",
-      priceCurrency: "USD",
-      description: "200 quizzes per month",
-      url: "https://www.examina.ink/pricing",
-    },
-    {
-      "@type": "Offer",
-      name: "Team",
-      price: "15",
-      priceCurrency: "USD",
-      description: "Unlimited quizzes for up to 5 members",
-      url: "https://www.examina.ink/pricing",
-    },
-  ],
-};
+// Built per render (ISR, revalidate 60s) so the Halloween sale offer data reverts after the cutoff.
+function getSoftwareAppSchema(now: Date) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Examina",
+    url: "https://www.examina.ink",
+    applicationCategory: "EducationalApplication",
+    operatingSystem: "Web",
+    description:
+      "AI-powered quiz generator that turns any lesson into multiple choice, flashcard, fill-in-the-blank, and true/false questions. Supports 29 languages and maps questions to Bloom's Taxonomy.",
+    screenshot: "https://www.examina.ink/og-image.png",
+    featureList: [
+      "Multiple choice question generation",
+      "Interactive flashcards with 3D flip",
+      "Fill-in-the-blank questions",
+      "True/false questions with explanations",
+      "PDF, TXT, and Markdown upload",
+      "29 language support",
+      "Bloom's Taxonomy mapping",
+      "Quiz sharing via link or PDF export",
+    ],
+    publisher: { "@type": "Organization", "@id": "https://www.examina.ink/#organization" },
+    offers: [
+      {
+        "@type": "Offer",
+        name: "Free",
+        price: "0",
+        priceCurrency: "USD",
+        description: "5 quizzes per month, no credit card required",
+        url: "https://www.examina.ink/pricing",
+      },
+      withSaleOffer(
+        {
+          "@type": "Offer" as const,
+          name: "Starter",
+          price: "2",
+          priceCurrency: "USD",
+          description: "20 quizzes per month",
+          url: "https://www.examina.ink/pricing",
+        },
+        PLANS.starter,
+        now
+      ),
+      withSaleOffer(
+        {
+          "@type": "Offer" as const,
+          name: "Plus",
+          price: "5",
+          priceCurrency: "USD",
+          description: "60 quizzes per month",
+          url: "https://www.examina.ink/pricing",
+        },
+        PLANS.plus,
+        now
+      ),
+      withSaleOffer(
+        {
+          "@type": "Offer" as const,
+          name: "Pro",
+          price: "9",
+          priceCurrency: "USD",
+          description: "200 quizzes per month",
+          url: "https://www.examina.ink/pricing",
+        },
+        PLANS.pro,
+        now
+      ),
+      withSaleOffer(
+        {
+          "@type": "Offer" as const,
+          name: "Team",
+          price: "15",
+          priceCurrency: "USD",
+          description: "Unlimited quizzes for up to 5 members",
+          url: "https://www.examina.ink/pricing",
+        },
+        PLANS.team,
+        now
+      ),
+    ],
+  };
+}
 
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -126,6 +147,7 @@ const organizationSchema = {
 };
 
 export default function Home() {
+  const softwareAppSchema = getSoftwareAppSchema(new Date());
     return (
     <>
       <QuizGenerator />

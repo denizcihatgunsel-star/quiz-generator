@@ -1707,3 +1707,13 @@ body[data-season="halloween"] {
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(53, 208, 180, 0.18) !important;
 }
+
+/* ==========================================================================
+   Pricing: Starter card (bg-[#FDF4F5]/80) stayed light under the theme, which
+   left its cream price unreadable. Match the other plan cards.
+   ========================================================================== */
+[data-season="halloween"] :is(main, .min-h-screen):not(:has(.halloween-headline)) .bg-\[\#FDF4F5\]\/80:not(#hx-0) {
+  background: #0F1F1C !important;
+  border-color: rgba(53, 208, 180, 0.25) !important;
+  color: #FFF7EC;
+}
