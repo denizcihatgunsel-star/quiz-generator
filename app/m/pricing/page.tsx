@@ -68,6 +68,7 @@ export default function MobilePricingPage() {
                       <div className="flex flex-wrap items-baseline justify-end gap-1">
                         <SaleAmount
                           regular={price.regular}
+                          regularNode={<>${plan.price}</>}
                           sale={price.sale}
                           sizeClassName="font-serif text-3xl"
                           regularClassName={`font-serif text-3xl ${isFeatured ? "text-[#B0607A]" : "text-[#3B2027]"}`}
