@@ -662,3 +662,513 @@ html:has(body[data-season="halloween"]) {
     height: 150px;
   }
 }
+
+/* ====================================================================
+   INTERACTIVE FEATURES - Halloween Theme
+   ==================================================================== */
+
+/* Cursor Glow - Desktop only, follows pointer with lag */
+.halloween-cursor-glow {
+  position: fixed;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(53, 208, 180, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  z-index: 9999;
+  will-change: transform;
+}
+
+@media (pointer: coarse) {
+  .halloween-cursor-glow {
+    display: none;
+  }
+}
+
+/* Headline Letter Animations */
+.halloween-headline {
+  position: relative;
+}
+
+.halloween-letter {
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), 
+              filter 220ms ease;
+  transform-origin: top center;
+  cursor: default;
+  animation: halloween-letter-enter 600ms cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+
+@keyframes halloween-letter-enter {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.halloween-letter:hover {
+  transform: translateY(-4px) rotate(var(--tilt, 3deg)) scaleY(1.15);
+  filter: drop-shadow(0 0 8px #7FE3D3);
+}
+
+.halloween-letter:nth-child(even) {
+  --tilt: -3deg;
+}
+
+/* Pumpkin O Interactive */
+.pumpkin-o {
+  display: inline-block;
+  transition: transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.pumpkin-o:hover img,
+.pumpkin-o:active img {
+  filter: drop-shadow(0 0 12px rgba(242, 140, 56, 1)) brightness(1.2);
+  animation: pumpkin-wobble 400ms ease-in-out;
+}
+
+.pumpkin-o:active {
+  animation: pumpkin-squash 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pumpkin-wobble {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-6deg); }
+  75% { transform: rotate(6deg); }
+}
+
+@keyframes pumpkin-squash {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* Button Interactive States */
+[data-season="halloween"] button,
+[data-season="halloween"] .btn,
+[data-season="halloween"] a.btn {
+  position: relative;
+  transition: transform 180ms ease, box-shadow 220ms ease, filter 220ms ease;
+  overflow: hidden;
+}
+
+[data-season="halloween"] button:hover,
+[data-season="halloween"] .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 12px rgba(53, 208, 180, 0.6),
+              0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-season="halloween"] button:hover::before,
+[data-season="halloween"] .btn:hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(127, 227, 211, 0.3), transparent);
+  animation: button-sheen 500ms ease-out;
+}
+
+@keyframes button-sheen {
+  to {
+    left: 100%;
+  }
+}
+
+[data-season="halloween"] button:active,
+[data-season="halloween"] .btn:active {
+  transform: translateY(-2px) scale(0.97);
+  transition-duration: 80ms;
+}
+
+[data-season="halloween"] button:focus-visible,
+[data-season="halloween"] .btn:focus-visible {
+  outline: 2px solid #7FE3D3;
+  outline-offset: 3px;
+}
+
+/* Nav Link Hover Effects */
+[data-season="halloween"] nav a {
+  position: relative;
+  display: inline-block;
+}
+
+[data-season="halloween"] nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: #35D0B4;
+  transition: left 180ms ease, right 180ms ease;
+}
+
+[data-season="halloween"] nav a:hover::after,
+[data-season="halloween"] nav a[aria-current="page"]::after {
+  left: 0;
+  right: 0;
+}
+
+/* Current page pumpkin indicator */
+[data-season="halloween"] nav a[aria-current="page"]::before {
+  content: '🎃';
+  font-size: 10px;
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Scene Element Interactions */
+
+/* Pumpkins */
+.halloween-pumpkin {
+  transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              filter 300ms ease;
+  cursor: pointer;
+}
+
+.halloween-pumpkin:hover {
+  transform: translateY(-6px);
+  filter: drop-shadow(0 0 16px rgba(242, 140, 56, 1)) brightness(1.3);
+}
+
+.halloween-pumpkin:active {
+  animation: pumpkin-bounce 300ms ease-out;
+}
+
+@keyframes pumpkin-bounce {
+  0%, 100% { transform: translateY(-6px); }
+  50% { transform: translateY(-12px); }
+}
+
+/* Candles */
+.halloween-candle {
+  animation: candle-flicker-base 2s ease-in-out infinite;
+  transition: animation-duration 200ms;
+}
+
+.halloween-candle:hover {
+  animation-duration: 0.6s;
+  filter: brightness(1.4);
+}
+
+@keyframes candle-flicker-base {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  50% { opacity: 0.92; filter: brightness(1.15); }
+}
+
+/* Ghosts */
+.halloween-ghost {
+  animation: ghost-float 4s ease-in-out infinite;
+  transition: transform 400ms ease, opacity 400ms ease;
+  will-change: transform;
+}
+
+.halloween-ghost:nth-of-type(1) {
+  animation-delay: 0s;
+}
+
+.halloween-ghost:nth-of-type(2) {
+  animation-delay: -2s;
+}
+
+@keyframes ghost-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.halloween-ghost:hover {
+  opacity: 0.7;
+  animation-play-state: paused;
+}
+
+/* Bats */
+.halloween-bat {
+  animation: bat-flap 1.2s ease-in-out infinite;
+  transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+}
+
+@keyframes bat-flap {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.85); }
+}
+
+.halloween-bat:hover {
+  animation: bat-dart 600ms ease-in-out;
+}
+
+@keyframes bat-dart {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-30px, -10px); }
+}
+
+/* Moon Parallax & Glow Breathing */
+.halloween-moon {
+  animation: moon-breathe 6s ease-in-out infinite;
+  transition: transform 150ms ease-out;
+  will-change: transform, box-shadow;
+}
+
+@keyframes moon-breathe {
+  0%, 100% { box-shadow: 0 0 120px 50px rgba(143, 217, 200, 0.4); }
+  50% { box-shadow: 0 0 140px 60px rgba(143, 217, 200, 0.5); }
+}
+
+/* Card Hover Effects */
+[data-season="halloween"] .card,
+[data-season="halloween"] section > div {
+  transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+}
+
+[data-season="halloween"] .card:hover,
+[data-season="halloween"] section > div:hover {
+  transform: translateY(-4px);
+  border-color: rgba(53, 208, 180, 0.6);
+  box-shadow: 0 0 20px rgba(53, 208, 180, 0.3),
+              0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* ====================================================================
+   SIGNED-IN PAGES THEME
+   ==================================================================== */
+
+/* Global signed-in theme */
+[data-season="halloween"] .dashboard-container,
+[data-season="halloween"] .generator-container,
+[data-season="halloween"] .quiz-editor {
+  background: #0A1614;
+  color: #FFF7EC;
+}
+
+/* Cards and panels */
+[data-season="halloween"] .dashboard-card,
+[data-season="halloween"] .quiz-card,
+[data-season="halloween"] .result-card {
+  background: #0F1F1C;
+  border: 1px solid rgba(53, 208, 180, 0.25);
+  color: #FFF7EC;
+}
+
+/* Form fields */
+[data-season="halloween"] input,
+[data-season="halloween"] textarea,
+[data-season="halloween"] select {
+  background: #0F1F1C;
+  border: 1px solid rgba(53, 208, 180, 0.3);
+  color: #FFF7EC;
+}
+
+[data-season="halloween"] input::placeholder,
+[data-season="halloween"] textarea::placeholder {
+  color: rgba(255, 247, 236, 0.5);
+}
+
+[data-season="halloween"] input:focus,
+[data-season="halloween"] textarea:focus,
+[data-season="halloween"] select:focus {
+  border-color: #35D0B4;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(53, 208, 180, 0.2);
+}
+
+/* Page titles - Creepster */
+[data-season="halloween"] .page-title,
+[data-season="halloween"] h1 {
+  font-family: 'Creepster', cursive;
+  color: #FFF7EC;
+  text-shadow: 0 0 20px rgba(127, 227, 211, 0.3);
+}
+
+/* Main action buttons - solid orange */
+[data-season="halloween"] .btn-primary,
+[data-season="halloween"] button[type="submit"],
+[data-season="halloween"] .generate-btn {
+  background: #F28C38;
+  color: #0A1614;
+  border: none;
+  font-weight: 600;
+}
+
+/* Secondary buttons - outlined teal */
+[data-season="halloween"] .btn-secondary,
+[data-season="halloween"] .btn-outline {
+  background: transparent;
+  border: 1px solid #35D0B4;
+  color: #35D0B4;
+}
+
+/* Cobweb corners (faint, corners only) */
+[data-season="halloween"]::before,
+[data-season="halloween"]::after {
+  content: '';
+  position: fixed;
+  width: 200px;
+  height: 200px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath d='M0 0 L100 50 L0 100 M0 0 L50 100 L100 0 M0 0 L100 100' stroke='rgba(255,255,255,0.08)' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+[data-season="halloween"]::before {
+  top: 0;
+  left: 0;
+}
+
+[data-season="halloween"]::after {
+  top: 0;
+  right: 0;
+  transform: scaleX(-1);
+}
+
+/* Quiz-taking page - lightest touch */
+[data-season="halloween"] .quiz-taking,
+[data-season="halloween"] .quiz-play {
+  background: #0A1614;
+}
+
+[data-season="halloween"] .quiz-taking .halloween-bat,
+[data-season="halloween"] .quiz-taking .halloween-ghost,
+[data-season="halloween"] .quiz-taking .halloween-cursor-glow,
+[data-season="halloween"] .quiz-play .halloween-bat,
+[data-season="halloween"] .quiz-play .halloween-ghost,
+[data-season="halloween"] .quiz-play .halloween-cursor-glow {
+  display: none;
+}
+
+[data-season="halloween"] .question-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  color: #FFF7EC;
+}
+
+[data-season="halloween"] .answer-option {
+  background: #0F1F1C;
+  border: 1px solid rgba(53, 208, 180, 0.25);
+  color: #FFF7EC;
+  transition: border-color 200ms ease, transform 150ms ease;
+}
+
+[data-season="halloween"] .answer-option:hover {
+  border-color: rgba(53, 208, 180, 0.5);
+  transform: translateX(4px);
+}
+
+[data-season="halloween"] .answer-option.selected {
+  border-color: #35D0B4;
+  background: rgba(53, 208, 180, 0.1);
+}
+
+[data-season="halloween"] .answer-option.correct {
+  border-color: #5FD39A;
+  background: rgba(95, 211, 154, 0.15);
+}
+
+[data-season="halloween"] .answer-option.incorrect {
+  border-color: #F07A7A;
+  background: rgba(240, 122, 122, 0.15);
+}
+
+/* Results pumpkin pop animation */
+[data-season="halloween"] .result-score {
+  position: relative;
+}
+
+[data-season="halloween"] .result-score::before {
+  content: '🎃';
+  position: absolute;
+  font-size: 80px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  animation: pumpkin-pop 800ms cubic-bezier(0.34, 1.56, 0.64, 1) 300ms forwards;
+  pointer-events: none;
+}
+
+@keyframes pumpkin-pop {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.3) rotate(10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 0;
+  }
+}
+
+/* ====================================================================
+   REDUCED MOTION OVERRIDES
+   ==================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .halloween-cursor-glow,
+  .halloween-letter,
+  .halloween-ghost,
+  .halloween-bat,
+  .halloween-candle {
+    animation: none !important;
+  }
+  
+  .halloween-letter:hover {
+    transform: none;
+  }
+  
+  .halloween-pumpkin:hover,
+  .halloween-ghost:hover,
+  .halloween-bat:hover {
+    transform: none;
+  }
+  
+  [data-season="halloween"] .card:hover,
+  [data-season="halloween"] section > div:hover {
+    transform: none;
+  }
+  
+  [data-season="halloween"] button:hover,
+  [data-season="halloween"] .btn:hover {
+    transform: none;
+  }
+  
+  /* Keep color/glow changes only */
+  .pumpkin-o:hover img,
+  .halloween-pumpkin:hover {
+    filter: drop-shadow(0 0 16px rgba(242, 140, 56, 1)) brightness(1.3);
+  }
+  
+  .halloween-letter:hover {
+    filter: drop-shadow(0 0 8px #7FE3D3);
+  }
+  
+  [data-season="halloween"] .result-score::before {
+    animation: none !important;
+    display: none;
+  }
+}
+
+/* Touch device adjustments */
+@media (pointer: coarse) {
+  .halloween-ghost {
+    animation-duration: 8s; /* Half intensity */
+  }
+  
+  .halloween-bat {
+    animation-duration: 2.4s; /* Half intensity */
+  }
+  
+  .halloween-candle {
+    animation-duration: 4s; /* Half intensity */
+  }
+}

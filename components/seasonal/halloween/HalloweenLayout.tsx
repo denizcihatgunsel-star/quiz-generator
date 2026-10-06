@@ -1,66 +1,61 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { isHalloweenActive } from "@/lib/seasonal";
+import { useEffect, useState } from 'react';
 
 /**
- * HalloweenLayout: Full seasonal reskin wrapper
- * 
- * Sets data-season="halloween" on body when active
- * Injects halloween.css scoped stylesheet
- * Swaps theme-color meta tag
+ * Halloween Layout wrapper for signed-in pages
+ * Applies data-season="halloween" and adds themed styling
  */
-
 export default function HalloweenLayout({ children }: { children: React.ReactNode }) {
-  const [active, setActive] = useState(false);
+  const [halloweenActive, setHalloweenActive] = useState(false);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const isActive = isHalloweenActive(params);
-    setActive(isActive);
-
-    if (isActive) {
-      document.body.setAttribute('data-season', 'halloween');
+    if (typeof window !== "undefined") {
+      const { isHalloweenActive } = require("@/lib/seasonal");
+      const params = new URLSearchParams(window.location.search);
+      const cookies = document.cookie;
       
-      // Swap theme-color meta tag
-      let metaTheme = document.querySelector('meta[name="theme-color"]');
-      if (!metaTheme) {
-        metaTheme = document.createElement('meta');
-        metaTheme.setAttribute('name', 'theme-color');
-        document.head.appendChild(metaTheme);
-      }
-      metaTheme.setAttribute('content', '#0A1614');
+      // Check if Halloween is active (query param or cookie)
+      const active = isHalloweenActive(params) || cookies.includes('seasonal=halloween');
+      setHalloweenActive(active);
       
-      // Inject CSS if not already present
-      if (!document.getElementById('halloween-theme-css')) {
-        const link = document.createElement('link');
-        link.id = 'halloween-theme-css';
-        link.rel = 'stylesheet';
-        link.href = '/seasonal/halloween.css';
-        document.head.appendChild(link);
-      }
-    } else {
-      document.body.removeAttribute('data-season');
-      
-      // Restore original theme color
-      const metaTheme = document.querySelector('meta[name="theme-color"]');
-      if (metaTheme) {
-        metaTheme.setAttribute('content', '#FDE8EC');
-      }
-      
-      // Remove Halloween CSS
-      const link = document.getElementById('halloween-theme-css');
-      if (link) {
-        link.remove();
+      if (active) {
+        document.body.setAttribute('data-season', 'halloween');
+      } else {
+        document.body.removeAttribute('data-season');
       }
     }
 
     return () => {
-      if (isActive) {
+      if (typeof window !== "undefined") {
         document.body.removeAttribute('data-season');
       }
     };
   }, []);
 
-  return <>{children}</>;
+  return (
+    <>
+      {halloweenActive && (
+        <>
+          {/* Small pumpkin+bat cluster in header */}
+          <div 
+            className="fixed top-20 right-8 z-10 pointer-events-none hidden md:flex items-center gap-2"
+            aria-hidden="true"
+          >
+            <img 
+              src="/seasonal/halloween/pumpkin-flat.svg" 
+              alt="" 
+              className="w-8 h-8 opacity-60"
+            />
+            <img 
+              src="/seasonal/halloween/bat-filled.svg" 
+              alt="" 
+              className="w-6 h-3 opacity-40"
+            />
+          </div>
+        </>
+      )}
+      {children}
+    </>
+  );
 }

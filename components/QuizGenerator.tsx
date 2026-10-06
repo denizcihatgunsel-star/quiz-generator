@@ -32,6 +32,8 @@ import { useTranslation } from "@/lib/i18n";
 
 // Halloween seasonal components
 const HalloweenHero = dynamic(() => import("./seasonal/halloween/HalloweenHero"), { ssr: false });
+const InteractiveHeadline = dynamic(() => import("./seasonal/halloween/InteractiveHeadline"), { ssr: false });
+const CursorGlow = dynamic(() => import("./seasonal/halloween/CursorGlow"), { ssr: false });
 
 // Below-fold marketing: client-only to keep homepage HTML lean for crawlers/CDN
 const UnseenLanding = dynamic(() => import("./UnseenLanding"), { ssr: false });
@@ -506,6 +508,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
     <div className="min-h-screen bg-background">
       {(isLoggedIn || quiz) && <AmbientBackground />}
       {!isLoggedIn && !quiz && !hideChrome && <SoundToggle />}
+      {halloweenActive && <CursorGlow />}
       {/* ========== NAVIGATION ========== */}
       {hideChrome ? null : sessionStatus === "loading" ? null : isLoggedIn || quiz ? (
       <motion.nav
