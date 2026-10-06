@@ -1717,3 +1717,21 @@ body[data-season="halloween"] {
   border-color: rgba(53, 208, 180, 0.25) !important;
   color: #FFF7EC;
 }
+
+/* ==========================================================================
+   Pricing feature lists: #5D4450 text was left unmapped (dark on dark), worst
+   on the highlighted Plus card. Cream ~88% on every plan card (>= 4.5:1), and
+   readable check icons: teal disc + dark tick on Plus, teal tick elsewhere.
+   ========================================================================== */
+[data-season="halloween"] [data-plan-features] li > span:last-child:not(#hx-0) {
+  color: rgba(245, 238, 220, 0.88) !important;
+}
+
+[data-season="halloween"] [data-plan-features] li > span:first-child:not(#hx-0) {
+  color: #35D0B4 !important;
+}
+
+[data-season="halloween"] [data-plan-features="featured"] li > span:first-child:not(#hx-0) {
+  background: #35D0B4 !important;
+  color: #0A1614 !important;
+}
