@@ -32,7 +32,8 @@ import { useTranslation } from "@/lib/i18n";
 
 // Halloween seasonal components
 import InteractiveHeadline from "./seasonal/halloween/InteractiveHeadline";
-const HalloweenHero = dynamic(() => import("./seasonal/halloween/HalloweenHero"), { ssr: false });
+import HalloweenHero from "./seasonal/halloween/HalloweenHero";
+import { useHalloweenActive } from "./seasonal/halloween/HalloweenLayout";
 const CursorGlow = dynamic(() => import("./seasonal/halloween/CursorGlow"), { ssr: false });
 
 // Below-fold marketing: client-only to keep homepage HTML lean for crawlers/CDN
@@ -469,15 +470,8 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
 
   const [heroHover, setHeroHover] = useState(false);
   const [storyOpen, setStoryOpen] = useState(false);
-  const [halloweenActive, setHalloweenActive] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const { isHalloweenActive } = require("@/lib/seasonal");
-      const params = new URLSearchParams(window.location.search);
-      setHalloweenActive(isHalloweenActive(params));
-    }
-  }, []);
+  // Server-decided on first render (SSR = hydration), then follows the client check.
+  const halloweenActive = useHalloweenActive();
 
   const EASE_OUT = [0.2, 0.65, 0.3, 0.9] as const;
   const heroContainer: Variants = {
