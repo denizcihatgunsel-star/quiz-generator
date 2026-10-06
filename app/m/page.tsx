@@ -7,8 +7,7 @@ import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import GlobeStudy from "@/components/GlobeStudy";
 import { isHalloweenActive } from "@/lib/seasonal";
-
-// Halloween decorations removed - using background image slot instead
+import MobileHalloweenDecor from "@/components/seasonal/halloween/MobileHalloweenDecor";
 
 const ARROW = (
   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -47,11 +46,8 @@ function MobileHomeContent() {
 
   return (
     <div className="relative">
-      {/* Halloween decorations */}
-      {/* Halloween decorations removed - using background image slot */}
-      
-      {/* Floating pastel orbs — pure CSS, animated on mobile */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+      {/* Floating pastel orbs — hidden under Halloween (props take over) */}
+      <div aria-hidden data-hw-hide-orbs="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="orb-drift h-40 w-40 rounded-full bg-[#E9A8B8]/70 blur-2xl" style={{ top: "-2rem", right: "-3rem" }} />
         <div className="orb-drift h-32 w-32 rounded-full bg-[#F6DCE5]/90 blur-2xl" style={{ animationDelay: "-5s", top: "16rem", left: "-3rem" }} />
         <div className="orb-drift h-28 w-28 rounded-full bg-[#C98A98]/50 blur-2xl" style={{ animationDelay: "-9s", top: "30rem", right: "-2rem" }} />
@@ -63,24 +59,25 @@ function MobileHomeContent() {
       </div>
 
       {/* Hero — big visible wordmark */}
-      <section className="pt-6 text-center">
-        <p className="animate-[fade-up_0.6s_ease-out_both] text-[11px] uppercase tracking-[0.4em] text-[#A87680]">
+      <section className="relative pt-6 text-center">
+        {halloweenActive && <MobileHalloweenDecor variant="app-hero" active />}
+        <p className="relative z-10 animate-[fade-up_0.6s_ease-out_both] text-[11px] uppercase tracking-[0.4em] text-[#A87680]">
           A quiz generator
         </p>
         <h1
-          className="mt-5 font-serif text-[64px] font-medium leading-[0.95] tracking-tight text-[#3B2027] sm:text-7xl"
+          className="relative z-10 mt-5 font-serif text-[64px] font-medium leading-[0.95] tracking-tight text-[#3B2027] sm:text-7xl"
           style={{ textShadow: "0 8px 30px rgba(176,96,122,0.25)" }}
         >
           Examina
         </h1>
         <p
-          className="mx-auto mt-4 max-w-xs font-serif text-lg italic leading-relaxed text-[#8C5A68]"
+          className="relative z-10 mx-auto mt-4 max-w-xs font-serif text-lg italic leading-relaxed text-[#8C5A68]"
           style={{ animation: "fade-up 0.6s ease-out 0.15s both" }}
         >
           Turn your study notes into structured <span className={halloweenActive ? "word-glow" : ""}>quizzes</span>, instantly.
         </p>
 
-        <div className="mt-8 flex flex-col items-center gap-3">
+        <div className="relative z-10 mt-8 flex flex-col items-center gap-3">
           <Link
             href="/m/create"
             className="flex w-full max-w-xs items-center justify-center gap-3 rounded-full bg-[#3B2027] py-4 pl-6 pr-4 text-sm font-medium text-[#F6E3E8] shadow-[0_14px_34px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98]"
@@ -98,7 +95,6 @@ function MobileHomeContent() {
           </div>
         </div>
         
-        {/* Cauldron decoration removed */}
       </section>
 
       {/* Daily challenge banner */}
@@ -132,11 +128,12 @@ function MobileHomeContent() {
       )}
 
       {/* Quick actions */}
-      <section className="mt-10">
-        <h2 className="mb-4 font-serif text-xl italic text-[#3B2027]">
+      <section className="relative mt-10">
+        {halloweenActive && <MobileHalloweenDecor variant="jump" active />}
+        <h2 className="relative z-10 mb-4 font-serif text-xl italic text-[#3B2027]">
           {firstName ? `Good to see you, ${firstName}` : "Jump back in"}
         </h2>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="relative z-10 grid grid-cols-2 gap-3">
           <Link
             href={session?.user ? "/m/dashboard" : "/m/auth/register"}
             className="rounded-2xl border border-[#F3D5DC] bg-white/75 p-5 shadow-[0_14px_40px_-26px_rgba(176,96,122,0.5)] backdrop-blur-xl transition-all hover:border-[#E9B8C4] active:scale-[0.98]"

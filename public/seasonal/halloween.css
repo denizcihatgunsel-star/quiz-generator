@@ -1735,3 +1735,99 @@ body[data-season="halloween"] {
   background: #35D0B4 !important;
   color: #0A1614 !important;
 }
+
+/* ==========================================================================
+   Mobile Halloween dense decorations (app /m shell, quiz gaps, /m/pricing)
+   Visual-only. pointer-events none. Hidden when theme is off.
+   ========================================================================== */
+.hw-m-prop {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none !important;
+  user-select: none;
+  -webkit-user-select: none;
+  max-width: none;
+  display: block;
+}
+
+.hw-m-pumpkin {
+  filter: drop-shadow(0 0 10px rgba(255, 140, 40, 0.7));
+}
+
+.hw-m-candle {
+  filter: drop-shadow(0 0 8px rgba(255, 200, 100, 0.55));
+}
+
+.hw-m-ghost {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.35));
+}
+
+.hw-m-bat {
+  filter: drop-shadow(0 0 10px rgba(43, 168, 154, 0.85)) brightness(1.05);
+}
+
+.hw-m-moon {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none !important;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hw-m-moon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  opacity: 0.55;
+}
+
+.hw-m-moon--soft {
+  box-shadow: 0 0 70px 28px rgba(143, 217, 200, 0.28);
+}
+
+.hw-m-moon--soft .hw-m-moon-img {
+  opacity: 0.4;
+}
+
+.hw-m-moon--behind-card {
+  box-shadow: 0 0 90px 40px rgba(143, 217, 200, 0.32);
+}
+
+.hw-m-moon--behind-card .hw-m-moon-img {
+  opacity: 0.35;
+}
+
+/* Thin strip sitting just above the fixed bottom tab bar (~56px + safe area) */
+.hw-m-nav-strip {
+  bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+  height: 28px;
+  padding-bottom: 2px;
+  opacity: 0.9;
+}
+
+.hw-m-footer-strip {
+  opacity: 0.95;
+}
+
+/* Keep interactive shell layers above props */
+[data-season="halloween"] [data-hw-mobile] {
+  z-index: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-season="halloween"] .hw-m-ghost {
+    animation: ghost-float 4s ease-in-out infinite;
+  }
+  [data-season="halloween"] .hw-m-bat {
+    animation: bat-float 3.5s ease-in-out infinite;
+  }
+}
+
+/* Hide default pastel orbs on /m home when Halloween is on */
+[data-season="halloween"] [data-hw-hide-orbs="true"] {
+  display: none !important;
+}

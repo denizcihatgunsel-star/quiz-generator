@@ -2,6 +2,7 @@ import { PLANS, type PlanId } from "@/lib/subscription";
 import { PlanCta, PricingActionsProvider } from "./PricingClient";
 import { planPriceDisplay } from "@/lib/pricing";
 import { SaleAmount, SaleEnds, SalePill } from "@/components/seasonal/halloween/SalePrice";
+import MobileHalloweenDecor from "@/components/seasonal/halloween/MobileHalloweenDecor";
 
 // Re-render at least every 60s so the Halloween sale prices drop on their own after the cutoff.
 export const revalidate = 60;
@@ -17,15 +18,16 @@ const featuredId: PlanId = "plus";
 export default function MobilePricingPage() {
   const now = new Date();
   return (
-    <div>
-      <p className="font-serif text-sm italic text-[#B0607A]">Pricing</p>
-      <h1 className="mt-1 text-3xl font-medium tracking-tight text-[#3B2027]">
+    <div className="relative pb-10">
+      <MobileHalloweenDecor variant="pricing" />
+      <p className="relative z-10 font-serif text-sm italic text-[#B0607A]">Pricing</p>
+      <h1 className="relative z-10 mt-1 text-3xl font-medium tracking-tight text-[#3B2027]">
         Simple, student-friendly <span className="font-serif italic text-[#B0607A]">pricing</span>
       </h1>
-      <p className="mt-2 text-sm text-[#9A7280]">Start free. Upgrade when you need more. Cancel anytime.</p>
+      <p className="relative z-10 mt-2 text-sm text-[#9A7280]">Start free. Upgrade when you need more. Cancel anytime.</p>
 
       <PricingActionsProvider>
-        <div className="mt-7 space-y-4">
+        <div className="relative z-10 mt-7 space-y-4">
           {Object.values(PLANS).map((plan) => {
             const isFeatured = plan.id === featuredId;
             const price = planPriceDisplay(plan, now);
@@ -117,7 +119,7 @@ export default function MobilePricingPage() {
         </div>
       </PricingActionsProvider>
 
-      <p className="mt-8 text-center text-xs text-[#B4939F]">
+      <p className="relative z-10 mt-8 text-center text-xs text-[#B4939F]">
         Secure payments via Stripe. Cancel anytime.
       </p>
     </div>

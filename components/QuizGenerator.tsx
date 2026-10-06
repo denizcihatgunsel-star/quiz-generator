@@ -33,6 +33,7 @@ import { useTranslation } from "@/lib/i18n";
 // Halloween seasonal components
 import InteractiveHeadline from "./seasonal/halloween/InteractiveHeadline";
 import HalloweenHero from "./seasonal/halloween/HalloweenHero";
+import MobileHalloweenDecor from "./seasonal/halloween/MobileHalloweenDecor";
 import { useHalloweenActive } from "./seasonal/halloween/HalloweenLayout";
 const CursorGlow = dynamic(() => import("./seasonal/halloween/CursorGlow"), { ssr: false });
 
@@ -785,10 +786,9 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                 {/* Quiz Input */}
                 {(isLoggedIn || canGenerateDemo) && (
                   <div className="relative">
-                    {/* Cauldron decoration removed */}
-                    
                   <motion.div variants={heroItem} id="generate" className={`relative max-w-2xl scroll-mt-28 ${isLoggedIn ? "" : "mx-auto"}`}>
-                    <div aria-hidden className="pointer-events-none absolute -inset-12 -z-10">
+                    {halloweenActive && <MobileHalloweenDecor variant="quiz-dense" active />}
+                    <div aria-hidden data-hw-hide-orbs={halloweenActive ? "true" : undefined} className="pointer-events-none absolute -inset-12 -z-10">
                       <div className="orb-drift h-44 w-44 bg-[#E9A8B8]/70" style={{ animationDelay: "-3s", top: "-3rem", left: "-4rem" }} />
                       <div className="orb-drift h-36 w-36 bg-[#F6DCE5]/90" style={{ animationDelay: "-8s", bottom: "-2rem", right: "-3.5rem" }} />
                       <div className="orb-drift h-28 w-28 bg-[#C98A98]/50" style={{ animationDelay: "-12s", top: "40%", right: "-6rem" }} />
@@ -806,7 +806,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                       onMouseLeave={onTiltLeave}
                       className="relative will-change-transform"
                     >
-                    <div className="animate-border rounded-3xl">
+                    <div className="relative z-10 animate-border rounded-3xl">
                     <div className="rounded-3xl border border-[#F3D5DC] bg-white/70 backdrop-blur-xl card-breathe overflow-hidden transition-all duration-300 hover:border-[#E9B8C4] focus-within:border-[#E9B8C4]">
                       <div
                         aria-hidden
@@ -949,7 +949,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     )}
 
                     {status === "idle" && (
-                      <div className="mt-12">
+                      <div className="relative z-10 mt-12">
                         <p className="text-xs text-[#A87680] uppercase tracking-[0.2em] mb-4">{t("input.orAsk")}</p>
                         <div className="relative">
                           <ChatBot onQuizGenerated={handleChatQuiz} />
@@ -967,7 +967,6 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                     )}
                   </motion.div>
                   
-                  {/* Cauldron decoration removed */}
                   </div>
                 )}
                 </motion.div>
