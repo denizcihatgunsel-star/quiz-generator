@@ -4,16 +4,34 @@ import { pageMetadata } from "@/lib/seo";
 export const dynamic = "force-static";
 export const revalidate = 60;
 
-export const metadata: Metadata = pageMetadata({
-  title: "Pricing — Quiz Generator Plans",
-  description: "Free plan: 5 quizzes/month. Paid plans from $2/month with more quizzes, PDF downloads, and team features. No credit card required to start.",
-  path: "/pricing",
-});
-
 import { PLANS, type PlanId } from "@/lib/subscription";
 import SiteHeader from "@/components/SiteHeader";
 import { StructuredData } from "@/components/StructuredData";
 import { CardShell, ManageBilling, PlanCta, PricingActionsProvider } from "./PricingClient";
+import {
+  HALLOWEEN_DISCOUNT_PERCENT,
+  formatUsd,
+  discountedCents,
+  isHalloweenSaleActive,
+  planPriceCents,
+  planPriceDisplay,
+  withSaleOffer,
+} from "@/lib/pricing";
+import { SaleAmount, SaleEnds, SalePill, SaleText } from "@/components/seasonal/halloween/SalePrice";
+
+// Evaluated per render (ISR revalidates every 60s), so the sale copy drops after the cutoff.
+export function generateMetadata(): Metadata {
+  const now = new Date();
+  const starter = planPriceCents(PLANS.starter);
+  const description = isHalloweenSaleActive(now)
+    ? `Halloween sale: ${HALLOWEEN_DISCOUNT_PERCENT}% off every paid plan until Oct 31, from ${formatUsd(discountedCents(starter))}/month (regularly ${formatUsd(starter)}). Free plan: 5 quizzes/month. No credit card required to start.`
+    : "Free plan: 5 quizzes/month. Paid plans from $2/month with more quizzes, PDF downloads, and team features. No credit card required to start.";
+  return pageMetadata({
+    title: "Pricing — Quiz Generator Plans",
+    description,
+    path: "/pricing",
+  });
+}
 
 const CHECK = (
   <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -22,57 +40,91 @@ const CHECK = (
 );
 
 
-const pricingFaqs = [
-  {
-    q: "Is Examina free to try?",
-    a: "Yes. The Free plan includes 5 quizzes per month with multiple choice, flashcards, and score tracking — no credit card required.",
-  },
-  {
-    q: "What do the paid plans cost?",
-    a: "Starter is $2/mo (20 quizzes), Plus is $5/mo (60 quizzes), Pro is $9/mo (200 quizzes), and Team is $15/mo for unlimited quizzes for up to 5 members.",
-  },
-  {
-    q: "Can I cancel anytime?",
-    a: "Yes. Cancel from the billing portal anytime. You keep access through the end of the billing period.",
-  },
-  {
-    q: "Do you offer student discounts?",
-    a: "Our Starter plan at $2/mo is priced for students. Free always stays available if you only need a few quizzes a month.",
-  },
-];
+type PricingFaq = { q: string; a: string; sale?: string };
+
+function getPricingFaqs(saleActive: boolean): PricingFaq[] {
+  const p = (id: Exclude<PlanId, "free">) => {
+    const base = planPriceCents(PLANS[id]);
+    return { regular: formatUsd(base), sale: formatUsd(discountedCents(base)) };
+  };
+  const starter = p("starter");
+  const plus = p("plus");
+  const pro = p("pro");
+  const team = p("team");
+  return [
+    {
+      q: "Is Examina free to try?",
+      a: "Yes. The Free plan includes 5 quizzes per month with multiple choice, flashcards, and score tracking — no credit card required.",
+    },
+    {
+      q: "What do the paid plans cost?",
+      a: "Starter is $2/mo (20 quizzes), Plus is $5/mo (60 quizzes), Pro is $9/mo (200 quizzes), and Team is $15/mo for unlimited quizzes for up to 5 members.",
+      ...(saleActive && {
+        sale: `For Halloween, every paid plan is ${HALLOWEEN_DISCOUNT_PERCENT}% off until Oct 31: Starter is ${starter.sale}/mo (regularly ${starter.regular}, 20 quizzes), Plus is ${plus.sale}/mo (regularly ${plus.regular}, 60 quizzes), Pro is ${pro.sale}/mo (regularly ${pro.regular}, 200 quizzes), and Team is ${team.sale}/mo (regularly ${team.regular}) for unlimited quizzes for up to 5 members.`,
+      }),
+    },
+    {
+      q: "Can I cancel anytime?",
+      a: "Yes. Cancel from the billing portal anytime. You keep access through the end of the billing period.",
+    },
+    {
+      q: "Do you offer student discounts?",
+      a: "Our Starter plan at $2/mo is priced for students. Free always stays available if you only need a few quizzes a month.",
+      ...(saleActive && {
+        sale: `Our Starter plan is priced for students, and until Oct 31 it's ${starter.sale}/mo (${HALLOWEEN_DISCOUNT_PERCENT}% off the regular ${starter.regular}/mo) for Halloween. Free always stays available if you only need a few quizzes a month.`,
+      }),
+    },
+  ];
+}
 
 const featuredId: PlanId = "plus";
 
-const pricingFaqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: pricingFaqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-};
+function getPricingFaqSchema(faqs: PricingFaq[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.sale ?? f.a },
+    })),
+  };
+}
 
-const productSchema = {
-  "@context": "https://schema.org",
-  "@type": "Product",
-  name: "Examina Quiz Generator",
-  description:
-    "AI-powered quiz generator with free and paid plans. Turns any text into multiple choice, flashcard, fill-in-the-blank, and true/false questions.",
-  brand: { "@type": "Brand", name: "Examina" },
-  offers: Object.values(PLANS).map((plan) => ({
-    "@type": "Offer",
-    name: plan.name,
-    price: String(plan.price),
-    priceCurrency: "USD",
+function getProductSchema(now: Date) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: "Examina Quiz Generator",
     description:
-      plan.quizzesPerMonth === Infinity
-        ? "Unlimited quizzes per month"
-        : `${plan.quizzesPerMonth} quizzes per month`,
-  })),
-};
+      "AI-powered quiz generator with free and paid plans. Turns any text into multiple choice, flashcard, fill-in-the-blank, and true/false questions.",
+    brand: { "@type": "Brand", name: "Examina" },
+    offers: Object.values(PLANS).map((plan) =>
+      withSaleOffer(
+        {
+          "@type": "Offer" as const,
+          name: plan.name,
+          price: String(plan.price),
+          priceCurrency: "USD",
+          description:
+            plan.quizzesPerMonth === Infinity
+              ? "Unlimited quizzes per month"
+              : `${plan.quizzesPerMonth} quizzes per month`,
+        },
+        plan,
+        now
+      )
+    ),
+  };
+}
 
 export default function PricingPage() {
+  // Per render, never at build time: ISR re-renders this page every 60s.
+  const now = new Date();
+  const saleActive = isHalloweenSaleActive(now);
+  const pricingFaqs = getPricingFaqs(saleActive);
+  const pricingFaqSchema = getPricingFaqSchema(pricingFaqs);
+  const productSchema = getProductSchema(now);
   return (
     <div className="min-h-screen bg-background">
       <StructuredData data={pricingFaqSchema} />
@@ -94,6 +146,7 @@ export default function PricingPage() {
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             {Object.values(PLANS).map((plan) => {
               const isFeatured = plan.id === featuredId;
+              const price = planPriceDisplay(plan, now);
               return (
                 <div key={plan.id} className={isFeatured ? "xl:-translate-y-3 xl:scale-[1.02]" : ""}>
                   <CardShell isFeatured={isFeatured} planId={plan.id}>
@@ -115,18 +168,29 @@ export default function PricingPage() {
                       <h2 className={`mb-3 font-serif text-lg italic ${isFeatured ? "text-[#9A4F68]" : "text-[#3B2027]"}`}>
                         {plan.name}
                       </h2>
+                      {price.sale && <SalePill />}
                       <div className="flex items-baseline gap-1.5">
                         {plan.price === 0 ? (
                           <span className="font-serif text-5xl text-[#3B2027]">Free</span>
                         ) : (
                           <>
-                            <span className={`font-serif text-5xl ${isFeatured ? "text-[#B0607A]" : "text-[#3B2027]"}`}>
-                              ${plan.price}
-                            </span>
+                            {price.sale ? (
+                              <SaleAmount
+                                regular={price.regular}
+                                sale={price.sale}
+                                sizeClassName="font-serif text-5xl"
+                                regularClassName={`font-serif text-5xl ${isFeatured ? "text-[#B0607A]" : "text-[#3B2027]"}`}
+                              />
+                            ) : (
+                              <span className={`font-serif text-5xl ${isFeatured ? "text-[#B0607A]" : "text-[#3B2027]"}`}>
+                                ${plan.price}
+                              </span>
+                            )}
                             <span className="text-sm text-[#9A7280]">/mo</span>
                           </>
                         )}
                       </div>
+                      {price.sale && <SaleEnds />}
                       <p className="mt-2 text-sm text-[#9A7280]">
                         {plan.quizzesPerMonth === Infinity
                           ? "Unlimited quizzes"
@@ -149,7 +213,7 @@ export default function PricingPage() {
                       ))}
                     </ul>
 
-                    <PlanCta plan={plan} isFeatured={isFeatured} />
+                    <PlanCta plan={plan} isFeatured={isFeatured} salePrice={price.sale} />
                   </CardShell>
                 </div>
               );
@@ -168,7 +232,9 @@ export default function PricingPage() {
             {pricingFaqs.map((f) => (
               <div key={f.q} className="rounded-2xl border border-[#F3D5DC] bg-white/70 px-6 py-5">
                 <h3 className="text-sm font-medium text-[#3B2027] sm:text-base">{f.q}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#9A7280]">{f.a}</p>
+                <p className="mt-2 text-sm leading-relaxed text-[#9A7280]">
+                  {f.sale ? <SaleText regular={f.a} sale={f.sale} /> : f.a}
+                </p>
               </div>
             ))}
           </div>
