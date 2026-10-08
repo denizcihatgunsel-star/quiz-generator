@@ -8,7 +8,10 @@ export interface Subject {
   name: string;
   description: string;
   icon?: string;
+  topicsList?: string[];
   sampleQuestions: { q: string; a: string; explanation: string }[];
+  questionTypesAdvice?: string;
+  studyTips?: string[];
   faq: { q: string; a: string }[];
   relatedTools: string[];
   relatedExams?: string[];
@@ -20,6 +23,16 @@ export const SUBJECTS: Subject[] = [
     name: "Biology",
     description:
       "Generate biology quiz questions on cells, genetics, evolution, ecology, and human body systems.",
+    topicsList: [
+      "Cell Biology: cell structure, organelles, membrane transport, cell cycle, mitosis and meiosis",
+      "Genetics: DNA structure, replication, transcription, translation, Mendelian genetics, gene expression",
+      "Evolution: natural selection, speciation, phylogenetics, evidence for evolution",
+      "Ecology: populations, communities, ecosystems, energy flow, nutrient cycles",
+      "Human Body Systems: circulatory, respiratory, digestive, nervous, immune, endocrine systems",
+      "Molecular Biology: enzymes, metabolism, cellular respiration, photosynthesis",
+      "Microbiology: bacteria, viruses, fungi, disease transmission",
+      "Botany: plant structure, photosynthesis, plant reproduction",
+    ],
     sampleQuestions: [
       {
         q: "What is the primary function of mitochondria?",
@@ -39,6 +52,21 @@ export const SUBJECTS: Subject[] = [
         explanation:
           "During metaphase, chromosomes line up along the metaphase plate (cell equator) before sister chromatids separate.",
       },
+      {
+        q: "What is the role of the Calvin cycle in photosynthesis?",
+        a: "Convert CO₂ into glucose using ATP and NADPH",
+        explanation:
+          "The Calvin cycle (light-independent reactions) uses energy from ATP and NADPH produced in light reactions to fix carbon dioxide into glucose.",
+      },
+    ],
+    questionTypesAdvice:
+      "Multiple choice questions work best for testing understanding of processes (e.g., photosynthesis steps, cell cycle phases). Fill-in-the-blank is ideal for memorizing terminology (organelles, taxonomic names, anatomical structures) since it forces recall without answer hints. Flashcards help with definitions, diagrams, and matching structures to functions. True/false questions are effective for identifying common misconceptions (e.g., 'Plants only respire at night' is false).",
+    studyTips: [
+      "Draw diagrams from memory. Biology is visual—being able to sketch a cell, label a nephron, or diagram a food web proves deeper understanding than recognizing a pre-made image.",
+      "Study processes in order. Don't memorize glycolysis steps in isolation; understand how it connects to the Krebs cycle and electron transport chain. Context improves retention.",
+      "Use analogies to connect abstract concepts to everyday experience. For example, the cell membrane as a gated community, enzymes as locks and keys, or DNA replication as unzipping a jacket.",
+      "Practice writing out explanations in your own words. If you can explain mitosis to someone who has never heard of it, you understand it well enough for the exam.",
+      "Focus on high-yield topics: cellular respiration, photosynthesis, DNA replication, and cell signaling appear on nearly every biology exam.",
     ],
     faq: [
       {
@@ -70,6 +98,18 @@ export const SUBJECTS: Subject[] = [
     name: "Chemistry",
     description:
       "Create chemistry practice questions on atomic structure, bonding, reactions, stoichiometry, and thermodynamics.",
+    topicsList: [
+      "Atomic Structure: electron configuration, periodic trends, quantum numbers",
+      "Chemical Bonding: ionic, covalent, metallic bonds, Lewis structures, molecular geometry",
+      "Stoichiometry: mole calculations, limiting reactants, percent yield",
+      "Chemical Reactions: types of reactions, balancing equations, oxidation-reduction",
+      "Thermodynamics: enthalpy, entropy, Gibbs free energy, calorimetry",
+      "Kinetics: reaction rates, rate laws, activation energy, catalysts",
+      "Equilibrium: Le Chatelier's principle, equilibrium constants, solubility",
+      "Acids and Bases: pH, buffers, titrations, acid-base theories",
+      "Electrochemistry: galvanic cells, electrolysis, standard reduction potentials",
+      "Organic Chemistry: functional groups, nomenclature, reaction mechanisms",
+    ],
     sampleQuestions: [
       {
         q: "What is the electron configuration of oxygen (atomic number 8)?",
@@ -89,6 +129,22 @@ export const SUBJECTS: Subject[] = [
         explanation:
           "The balanced equation 2H₂ + O₂ → 2H₂O shows that 2 moles of water are produced from 2 moles of hydrogen and 1 mole of oxygen.",
       },
+      {
+        q: "What happens to the equilibrium position when temperature increases for an exothermic reaction?",
+        a: "Shifts to the left (toward reactants)",
+        explanation:
+          "Le Chatelier's principle: increasing temperature adds heat. For exothermic reactions (which release heat), the equilibrium shifts to consume the added heat by favoring the reverse reaction.",
+      },
+    ],
+    questionTypesAdvice:
+      "Multiple choice questions are excellent for testing conceptual understanding (periodic trends, Le Chatelier's principle, types of reactions). Fill-in-the-blank works well for nomenclature and chemical formulas—you must know the exact formula for sulfuric acid (H₂SO₄), not just recognize it. Flashcards are essential for memorizing polyatomic ions, functional groups, and reaction types. True/false questions help identify common misconceptions (e.g., 'A catalyst lowers the activation energy of a reaction' is true).",
+    studyTips: [
+      "Memorize polyatomic ions and their charges. These appear constantly in stoichiometry and nomenclature problems, and textbooks assume you know them.",
+      "Practice balancing equations daily until it's automatic. This fundamental skill is required for stoichiometry, thermodynamics, and electrochemistry.",
+      "Understand the periodic table trends (atomic radius, ionization energy, electronegativity). These patterns explain most of general chemistry's behavior.",
+      "Draw Lewis structures and predict molecular geometry. VSEPR theory connects structure to properties and appears on nearly every chemistry exam.",
+      "Focus on high-yield topics: stoichiometry, thermodynamics, kinetics, and equilibrium. These four areas cover the majority of general chemistry content.",
+      "For organic chemistry, practice drawing mechanisms step-by-step. Understanding electron movement is more important than memorizing individual reactions.",
     ],
     faq: [
       {
@@ -170,6 +226,14 @@ export const SUBJECTS: Subject[] = [
     name: "Mathematics",
     description:
       "Create math practice questions for algebra, geometry, trigonometry, calculus, and statistics.",
+    topicsList: [
+      "Algebra: linear equations, quadratic equations, systems of equations, polynomials, rational expressions",
+      "Geometry: angles, triangles, circles, polygons, area, volume, coordinate geometry",
+      "Trigonometry: unit circle, trig identities, sine/cosine laws, graphing trig functions",
+      "Precalculus: functions, logarithms, exponential functions, conic sections",
+      "Calculus: limits, derivatives, integrals, applications of calculus, differential equations",
+      "Statistics: descriptive statistics, probability, distributions, hypothesis testing, regression",
+    ],
     sampleQuestions: [
       {
         q: "Solve for x: 3x + 7 = 22",
@@ -189,6 +253,22 @@ export const SUBJECTS: Subject[] = [
         explanation:
           "Apply the power rule: derivative of x³ is 3x², derivative of 2x is 2. Combined: f'(x) = 3x² + 2.",
       },
+      {
+        q: "What is the value of sin(π/6)?",
+        a: "1/2",
+        explanation:
+          "π/6 radians equals 30 degrees. The sine of 30 degrees is 1/2, a standard unit circle value.",
+      },
+    ],
+    questionTypesAdvice:
+      "Multiple choice questions work well for conceptual understanding (identifying function types, choosing the correct formula) and for problems where the final answer is a specific number. Fill-in-the-blank is excellent for practicing formula recall and ensuring you arrive at exact answers without hints. Flashcards help memorize formulas, trig identities, and derivative rules. True/false questions identify common algebraic mistakes (e.g., 'x² + x² = x⁴' is false).",
+    studyTips: [
+      "Memorize core formulas and identities: quadratic formula, distance formula, trig identities, derivative and integral rules. These save time on exams and reduce errors.",
+      "Show your work even when practicing alone. Writing out steps catches calculation errors and builds the habit for partial credit on tests.",
+      "Check answers by substituting back into the original equation. If you solved for x = 5, plug it back in to verify. This catches sign errors and dropped terms.",
+      "Practice mental estimation before calculating. For example, √50 is between 7 and 8 because 7² = 49 and 8² = 64. This catches input errors on calculators.",
+      "Focus on problem types that appear frequently: quadratic equations, right triangle trigonometry, basic derivatives and integrals, mean and standard deviation.",
+      "For word problems, draw diagrams or write out what you know vs. what you're solving for. Visual representation clarifies the setup and reveals which formula to use.",
     ],
     faq: [
       {
@@ -320,6 +400,14 @@ export const SUBJECTS: Subject[] = [
     name: "Vocabulary",
     description:
       "Generate vocabulary quiz questions and flashcards for SAT, GRE, TOEFL prep or any word list.",
+    topicsList: [
+      "SAT vocabulary: high-frequency academic words tested on college entrance exams",
+      "GRE vocabulary: advanced academic and literary terms for graduate school admissions",
+      "TOEFL/IELTS vocabulary: English proficiency words for non-native speakers",
+      "Academic vocabulary: discipline-specific terms for college coursework",
+      "Word roots and affixes: Greek and Latin roots, prefixes, suffixes for decoding new words",
+      "Context clues: using sentence context to determine meaning",
+    ],
     sampleQuestions: [
       {
         q: "Which word means 'using very few words'?",
@@ -339,6 +427,22 @@ export const SUBJECTS: Subject[] = [
         explanation:
           "Ephemeral describes something that is fleeting or transitory, existing briefly.",
       },
+      {
+        q: "The root 'bene' means 'good.' What does 'benevolent' mean?",
+        a: "Kind, charitable, wishing well for others",
+        explanation:
+          "Benevolent combines 'bene' (good) with 'volent' (wishing), meaning having good intentions toward others.",
+      },
+    ],
+    questionTypesAdvice:
+      "Flashcards are the most effective format for vocabulary study—they force active recall of definitions without hints. Multiple choice questions work well for practicing synonym selection and context-based meaning, which appear on SAT and GRE. Fill-in-the-blank tests whether you can supply the exact word from context clues, a deeper skill than recognition. True/false questions help identify common usage errors and misunderstood connotations.",
+    studyTips: [
+      "Learn words in context, not in isolation. Memorizing 'laconic = brief' is weaker than reading 'Her laconic reply—just 'Fine'—ended the conversation.' Context makes words stick.",
+      "Study word roots, prefixes, and suffixes. Knowing 'bene' means good lets you decode benevolent, benefactor, and beneficent without memorizing each separately.",
+      "Create example sentences using new words. Writing 'The ephemeral beauty of cherry blossoms makes them more precious' cements the meaning better than rereading a definition.",
+      "Group words by theme or root family. Study all words related to 'time' together (ephemeral, contemporary, chronic) or all words with 'mal' (bad): malevolent, malign, malady.",
+      "Review spaced intervals: 1 day, 3 days, 1 week, 2 weeks. Spaced repetition moves words from short-term to long-term memory more efficiently than cramming.",
+      "For SAT/GRE, focus on high-frequency words that appear repeatedly. A 500-word core vocabulary list covers 80% of challenging words on these tests.",
     ],
     faq: [
       {
@@ -420,6 +524,18 @@ export const SUBJECTS: Subject[] = [
     name: "Anatomy",
     description:
       "Generate anatomy and physiology quiz questions on body systems, organs, tissues, and medical terminology.",
+    topicsList: [
+      "Skeletal System: bones, bone structure, joints, articulations",
+      "Muscular System: muscle types, major muscles, muscle actions, attachments",
+      "Cardiovascular System: heart anatomy, blood vessels, circulation pathways",
+      "Respiratory System: lungs, airways, gas exchange, respiratory mechanics",
+      "Nervous System: brain, spinal cord, cranial nerves, peripheral nerves, neuron structure",
+      "Digestive System: GI tract organs, accessory organs, digestion and absorption",
+      "Urinary System: kidneys, nephron, filtration, bladder",
+      "Reproductive System: male and female reproductive organs",
+      "Endocrine System: glands, hormones, feedback loops",
+      "Integumentary System: skin layers, appendages, wound healing",
+    ],
     sampleQuestions: [
       {
         q: "Which chamber of the heart receives oxygenated blood from the lungs?",
@@ -439,6 +555,22 @@ export const SUBJECTS: Subject[] = [
         explanation:
           "The optic nerve (cranial nerve II) carries visual information from the retina to the brain.",
       },
+      {
+        q: "What structure connects muscle to bone?",
+        a: "Tendon",
+        explanation:
+          "Tendons are dense connective tissue that attach muscle to bone, transmitting force from muscle contraction to produce movement.",
+      },
+    ],
+    questionTypesAdvice:
+      "Multiple choice questions work well for identifying structures, functions, and pathways. Fill-in-the-blank is excellent for learning anatomical terminology—you must know the exact spelling of 'phalanges' or 'sternocleidomastoid.' Flashcards are essential for memorizing bones, muscles, nerves, and vessels—anatomy has hundreds of named structures. True/false questions help identify common anatomical misconceptions (e.g., 'The trachea is posterior to the esophagus' is false).",
+    studyTips: [
+      "Learn anatomy in context of function. Don't just memorize that the left ventricle is thick-walled; understand it's thick because it pumps blood to the entire body, requiring more force than the right ventricle.",
+      "Use anatomical position and directional terms consistently. Always orient yourself: superior means toward the head, anterior means toward the front. This prevents confusion when describing locations.",
+      "Study systems together that interact. Learn the cardiovascular and respiratory systems simultaneously because they work together for gas exchange. Learn the nervous and muscular systems together because nerves control muscles.",
+      "Create labeled diagrams from memory. Being able to draw and label a cross-section of the heart or the layers of skin tests deeper understanding than recognizing a pre-made diagram.",
+      "Focus on high-yield structures: major bones (femur, humerus, vertebrae), major muscles (biceps, quadriceps, deltoid), cranial nerves (especially I, II, V, VII, X), and major vessels (aorta, vena cava, pulmonary arteries/veins).",
+      "For clinical programs, learn blood supply and innervation of organs. Knowing which nerve controls a muscle or which artery supplies an organ is critical for understanding pathology.",
     ],
     faq: [
       {
@@ -470,6 +602,16 @@ export const SUBJECTS: Subject[] = [
     name: "Nursing",
     description:
       "Create nursing quiz questions on patient care, pharmacology, pathophysiology, and NCLEX-style practice.",
+    topicsList: [
+      "Fundamentals: vital signs, physical assessment, basic nursing skills, documentation",
+      "Pharmacology: drug classifications, mechanisms, side effects, nursing considerations, dosage calculations",
+      "Medical-Surgical Nursing: cardiac, respiratory, GI, neuro, renal disorders and interventions",
+      "Maternal-Newborn (OB): prenatal care, labor and delivery, postpartum, newborn assessment",
+      "Pediatric Nursing: growth and development, pediatric assessments, common childhood illnesses",
+      "Mental Health Nursing: psychiatric disorders, therapeutic communication, psychotropic medications",
+      "Critical Care: hemodynamic monitoring, ventilator management, code management",
+      "Priority Setting: ABC (airway, breathing, circulation), Maslow's hierarchy, delegation, scope of practice",
+    ],
     sampleQuestions: [
       {
         q: "A patient with heart failure is prescribed furosemide. Which electrolyte should the nurse monitor?",
@@ -489,6 +631,22 @@ export const SUBJECTS: Subject[] = [
         explanation:
           "Decreased cardiac output reduces perfusion to extremities, causing cool skin, weak pulses, and compensatory vasoconstriction.",
       },
+      {
+        q: "A nurse is teaching a diabetic patient about insulin injection sites. Which site has the fastest absorption?",
+        a: "Abdomen",
+        explanation:
+          "The abdomen has the fastest insulin absorption rate, followed by arms, then thighs. This matters for timing insulin with meals.",
+      },
+    ],
+    questionTypesAdvice:
+      "Multiple choice questions are essential for NCLEX-style priority-setting ('What should the nurse do first?') and require choosing the best answer among several correct-sounding options. Fill-in-the-blank is critical for dosage calculation practice where you must arrive at an exact number without answer hints. Flashcards help memorize drug classifications, lab values, and disease processes. True/false questions identify common nursing misconceptions (e.g., 'A nurse can delegate assessment to a UAP' is false).",
+    studyTips: [
+      "Always apply ABC (airway, breathing, circulation) and Maslow's hierarchy when prioritizing. Physiological needs come before safety, which comes before psychosocial needs.",
+      "Memorize normal lab values and therapeutic drug ranges. NCLEX assumes you know these and won't provide reference ranges. Critical values include potassium (3.5-5.0), sodium (135-145), glucose (70-100), INR (2-3 on warfarin).",
+      "Study pharmacology by drug class, not individual drugs. Learn ACE inhibitors as a group: they all end in '-pril,' lower blood pressure by blocking angiotensin, cause hyperkalemia, and have a common side effect of dry cough.",
+      "Practice dosage calculations daily. Use dimensional analysis or the formula method consistently. Common calculations: IV drip rates, mg/kg dosing, unit conversions.",
+      "Understand delegation and scope of practice. RNs assess, plan, and evaluate. LPNs implement care and give medications. UAPs do basic care and ADLs. NCLEX tests whether you delegate appropriately.",
+      "For priority questions, choose the patient who is unstable, has an airway problem, or shows signs of physiological deterioration. Psychosocial concerns and teaching come after acute physiological issues are resolved.",
     ],
     faq: [
       {

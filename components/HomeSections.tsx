@@ -33,6 +33,79 @@ const FEATURES = [
   },
 ];
 
+const HOW_IT_WORKS_STEPS = [
+  {
+    num: "01",
+    title: "Paste or Upload Your Notes",
+    desc: "Copy lecture notes, textbook sections, or study materials directly into Examina. Supports PDF, TXT, and Markdown files, or just paste text from anywhere.",
+  },
+  {
+    num: "02",
+    title: "Generate Questions in Seconds",
+    desc: "AI reads your content and creates multiple choice, true/false, fill-in-the-blank, and flashcard questions automatically. Takes under 30 seconds per quiz.",
+  },
+  {
+    num: "03",
+    title: "Review and Customize",
+    desc: "Check the generated questions. Edit any question or answer, adjust difficulty tags, or regenerate specific questions you want to improve.",
+  },
+  {
+    num: "04",
+    title: "Study, Share, or Export",
+    desc: "Take the quiz yourself for practice, share a link with classmates or students, or export to PDF for offline study and printing.",
+  },
+];
+
+const USE_CASES = [
+  {
+    icon: "M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M12.5 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0z",
+    title: "Students",
+    desc: "Turn lecture notes and textbook chapters into practice quizzes. Study with active recall instead of passive re-reading. Identify weak areas before exams.",
+    link: "/for-students",
+  },
+  {
+    icon: "M22 10v6M2 10l10-5 10 5-10 5z M2 10v6c0 1-1 2 0 3l10 5 10-5c1-1 0-2 0-3v-6",
+    title: "Teachers",
+    desc: "Create formative assessments, exit tickets, and review quizzes from lesson content in minutes. Generate questions that test understanding, not just memorization.",
+    link: "/for-teachers",
+  },
+  {
+    icon: "M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z",
+    title: "Tutors",
+    desc: "Build custom practice sets for each student based on their specific course material. Save hours creating worksheets and assessments manually.",
+    link: "/",
+  },
+  {
+    icon: "M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z",
+    title: "Corporate Training",
+    desc: "Create compliance training quizzes and knowledge checks from policy documents, training manuals, and onboarding materials quickly.",
+    link: "/",
+  },
+];
+
+const QUESTION_TYPES_DETAIL = [
+  {
+    type: "Multiple Choice",
+    ideal: "Testing recall, understanding, and application of concepts.",
+    example: "What is the primary function of mitochondria? (4-6 answer choices with explanations)",
+  },
+  {
+    type: "True/False",
+    ideal: "Quick concept verification and identifying misconceptions.",
+    example: "True or False: Photosynthesis only occurs during daylight. (Includes detailed explanation of why it's true or false)",
+  },
+  {
+    type: "Fill-in-the-Blank",
+    ideal: "Testing terminology recall and ensuring real understanding.",
+    example: "The process by which plants convert sunlight into energy is called ___. (Tests if you actually know it, not just recognize it)",
+  },
+  {
+    type: "Flashcards",
+    ideal: "Active recall practice and spaced repetition study sessions.",
+    example: "Front: DNA replication | Back: Semi-conservative process where each strand serves as template for a new complementary strand.",
+  },
+];
+
 const FAQ_ITEMS = [
   { q: "What file types can I upload?", a: "PDF, TXT, and Markdown files. Or just paste text directly into the editor." },
   { q: "How many quizzes can I generate?", a: "Free accounts get 5 quizzes per month. Paid plans go up to unlimited quiz generation." },
@@ -53,6 +126,142 @@ export default function HomeSections() {
 
   return (
     <div className="border-t border-[#F3D5DC]">
+      {/* What Examina Does */}
+      <motion.section
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.6, ease: EASE_OUT }}
+        className="py-20 sm:py-28"
+      >
+        <div className="mx-auto max-w-4xl px-6">
+          <h2 className="mb-6 text-center text-3xl font-medium tracking-tight text-[#3B2027] sm:text-4xl">
+            What <span className="font-serif italic text-[#B0607A]">Examina</span> does
+          </h2>
+          <div className="space-y-4 text-base leading-relaxed text-[#5D4450]">
+            <p>
+              Examina is an AI-powered quiz generator that transforms any text into interactive practice questions. Instead of spending hours manually writing quiz questions, flashcards, and study materials, you upload your content and AI creates a complete quiz in under 30 seconds.
+            </p>
+            <p>
+              The platform supports multiple question formats: multiple choice questions with 4-6 answer options and detailed explanations, true/false statements with reasoning, fill-in-the-blank questions that test actual recall, and interactive flashcards with 3D flip animations. Every question is tagged with difficulty levels and mapped to Bloom's Taxonomy cognitive levels—so you know whether you're testing simple recall or higher-order thinking like analysis and application.
+            </p>
+            <p>
+              Examina works in 29 languages, accepts PDF files (on paid plans), plain text, and Markdown, and handles content from 50 to 15,000 characters per generation. Students use it to turn lecture notes into practice tests. Teachers use it to create formative assessments and review materials in minutes instead of hours. The free plan includes 5 quiz generations per month with no credit card required—enough to try it properly before deciding if you need more.
+            </p>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* How It Works */}
+      <motion.section
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.6, ease: EASE_OUT }}
+        className="border-y border-[#F3D5DC] bg-[#FDF4F5]/60 py-20 sm:py-28"
+      >
+        <div className="mx-auto max-w-6xl px-6">
+          <h2 className="mb-12 text-center text-3xl font-medium tracking-tight text-[#3B2027] sm:text-4xl">
+            How it <span className="font-serif italic text-[#B0607A]">works</span>
+          </h2>
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {HOW_IT_WORKS_STEPS.map((step, i) => (
+              <motion.div
+                key={step.num}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, ease: EASE_OUT, delay: i * 0.1 }}
+              >
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#B0607A] font-mono text-sm font-medium text-white">
+                  {step.num}
+                </div>
+                <h3 className="mb-2 font-medium text-[#3B2027]">{step.title}</h3>
+                <p className="text-sm leading-relaxed text-[#9A7280]">{step.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Use Cases */}
+      <motion.section
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.6, ease: EASE_OUT }}
+        className="py-20 sm:py-28"
+      >
+        <div className="mx-auto max-w-6xl px-6">
+          <h2 className="mb-4 text-center text-3xl font-medium tracking-tight text-[#3B2027] sm:text-4xl">
+            Who uses <span className="font-serif italic text-[#B0607A]">Examina</span>
+          </h2>
+          <p className="mx-auto mb-12 max-w-2xl text-center text-base leading-relaxed text-[#9A7280]">
+            Students, teachers, tutors, and training professionals use Examina to create practice questions that test real understanding.
+          </p>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {USE_CASES.map((useCase, i) => (
+              <motion.div
+                key={useCase.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, ease: EASE_OUT, delay: i * 0.08 }}
+              >
+                <Link
+                  href={useCase.link}
+                  className="group block h-full rounded-2xl border border-[#F3D5DC] bg-white/70 p-6 backdrop-blur-xl transition-colors hover:border-[#E9B8C4] hover:bg-white/90"
+                >
+                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-[#FDE8EC]">
+                    <svg className="h-5 w-5 text-[#B0607A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d={useCase.icon} />
+                    </svg>
+                  </div>
+                  <h3 className="mb-2 font-medium text-[#3B2027]">{useCase.title}</h3>
+                  <p className="text-sm leading-relaxed text-[#9A7280]">{useCase.desc}</p>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Question Types Detail */}
+      <motion.section
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.6, ease: EASE_OUT }}
+        className="border-y border-[#F3D5DC] bg-[#FDF4F5]/60 py-20 sm:py-28"
+      >
+        <div className="mx-auto max-w-4xl px-6">
+          <h2 className="mb-4 text-center text-3xl font-medium tracking-tight text-[#3B2027] sm:text-4xl">
+            Four <span className="font-serif italic text-[#B0607A]">question types</span>
+          </h2>
+          <p className="mx-auto mb-12 max-w-2xl text-center text-base leading-relaxed text-[#9A7280]">
+            Each question format serves a specific learning purpose. Examina generates all four types from the same source material.
+          </p>
+          <div className="space-y-6">
+            {QUESTION_TYPES_DETAIL.map((qt, i) => (
+              <motion.div
+                key={qt.type}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, ease: EASE_OUT, delay: i * 0.08 }}
+                className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6 backdrop-blur-xl"
+              >
+                <h3 className="mb-2 font-medium text-[#3B2027]">{qt.type}</h3>
+                <p className="mb-2 text-sm text-[#9A7280]">
+                  <span className="font-medium text-[#5D4450]">Ideal for:</span> {qt.ideal}
+                </p>
+                <p className="text-sm italic text-[#B4939F]">{qt.example}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
       {/* What you get */}
       <motion.section
         id="features"

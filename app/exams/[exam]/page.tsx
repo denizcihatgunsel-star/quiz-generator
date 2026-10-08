@@ -101,6 +101,11 @@ export default async function ExamPage({ params }: { params: Promise<{ exam: str
             intro: [
               `Preparing for the ${exam.name} requires hours of practice with realistic questions. Creating those questions by hand is time-consuming and hard to do well—you need questions at the right difficulty, covering the right topics, with plausible wrong answers that expose real gaps in knowledge.`,
               `Examina generates ${exam.name}-style practice questions from your study material automatically. Upload your ${exam.name} prep book chapter, course notes, or review outline, and get multiple choice questions with explanations and Bloom's taxonomy tagging. Questions test the same skills as the real ${exam.name}, helping you identify weak areas before test day.`,
+              ...(exam.topicsList
+                ? [
+                    `The ${exam.name} covers these content areas: ${exam.topicsList.join("; ")}. Upload notes from any of these topics to generate practice questions specific to what you're studying.`,
+                  ]
+                : []),
               `**Disclaimer:** ${exam.disclaimer}`,
             ],
             featuresTitle: "Built for effective practice",
@@ -121,9 +126,13 @@ export default async function ExamPage({ params }: { params: Promise<{ exam: str
             howTitle: `Sample ${exam.name} questions`,
             intro2: [
               `Here are examples of questions Examina can generate for ${exam.name} practice. Actual questions are based on your uploaded study material.`,
+              ...(exam.questionTypesAdvice ? [`**Which question types work best:** ${exam.questionTypesAdvice}`] : []),
+              ...(exam.studyTips
+                ? [`**Study tips for ${exam.name} prep:** ${exam.studyTips.join(" ")}`]
+                : []),
               exam.disclaimer,
             ],
-            steps: exam.sampleQuestions.slice(0, 3).map((sq, i) => ({
+            steps: exam.sampleQuestions.map((sq, i) => ({
               n: `0${i + 1}`,
               title: sq.q,
               body: `Answer: ${sq.a}. Explanation: ${sq.explanation}`,

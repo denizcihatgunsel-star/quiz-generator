@@ -211,6 +211,74 @@ export default function PricingPage() {
         </PricingActionsProvider>
 
 
+        <section className="mx-auto mt-20 max-w-5xl">
+          <h2 className="mb-6 text-center text-2xl font-medium tracking-tight text-[#3B2027] sm:text-3xl">
+            What's included in <span className="font-serif italic text-[#B0607A]">every plan</span>
+          </h2>
+          <div className="mx-auto mb-16 max-w-3xl space-y-3 text-base leading-relaxed text-[#5D4450]">
+            <p>
+              Every Examina plan—including the free tier—gives you access to all four question types: multiple choice with detailed explanations, interactive flashcards with 3D flip, fill-in-the-blank questions, and true/false with reasoning. All questions are tagged with Bloom's Taxonomy cognitive levels so you know whether you're testing recall, understanding, or application.
+            </p>
+            <p>
+              The platform generates quizzes in 29 languages, handles content from 50 to 15,000 characters, and creates each quiz in under 30 seconds. Every quiz gets a unique shareable link, score tracking shows your progress over time, and you can export your quizzes to PDF for offline study or printing.
+            </p>
+            <p>
+              The difference between plans is how many quizzes you can generate per month and whether you can upload PDF files. PDF upload requires optical character recognition, which costs more to process, so it's available on paid plans starting with Starter. Free plan users can paste text directly or upload TXT and Markdown files.
+            </p>
+          </div>
+
+          <h2 className="mb-6 text-center text-2xl font-medium tracking-tight text-[#3B2027] sm:text-3xl">
+            Choosing the <span className="font-serif italic text-[#B0607A]">right plan</span>
+          </h2>
+          <div className="mx-auto mb-16 max-w-3xl space-y-6">
+            <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6">
+              <h3 className="mb-2 font-medium text-[#3B2027]">Free Plan (5 quizzes/month)</h3>
+              <p className="text-sm leading-relaxed text-[#9A7280]">
+                Good for students who need occasional practice quizzes before midterms and finals, or anyone trying Examina to see if it fits their study workflow. Five quizzes is enough to test one subject per month or create a few practice tests throughout the semester. No credit card required to start.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6">
+              <h3 className="mb-2 font-medium text-[#3B2027]">Starter Plan (20 quizzes/month)</h3>
+              <p className="text-sm leading-relaxed text-[#9A7280]">
+                Most popular for individual students taking 4-6 classes. Twenty quizzes covers one practice quiz per subject per week, plus extras for exam prep. PDF upload is included, so you can generate questions directly from textbook pages and lecture slide PDFs without manual copying.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6">
+              <h3 className="mb-2 font-medium text-[#3B2027]">Plus Plan (60 quizzes/month)</h3>
+              <p className="text-sm leading-relaxed text-[#9A7280]">
+                For active students who create multiple practice sets per subject, or tutors working with several students. Sixty quizzes means 2-3 practice quizzes per subject per week, with room for extra review quizzes before exams. Also works well for teachers who assign weekly quizzes to one or two classes.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6">
+              <h3 className="mb-2 font-medium text-[#3B2027]">Pro Plan (200 quizzes/month)</h3>
+              <p className="text-sm leading-relaxed text-[#9A7280]">
+                Built for teachers who assign quizzes to multiple classes or create frequent formative assessments. Two hundred quizzes covers daily exit tickets, weekly review quizzes, and unit tests across 4-5 classes. Also suits tutoring centers or study groups with heavy usage.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6">
+              <h3 className="mb-2 font-medium text-[#3B2027]">Team Plan (unlimited quizzes, up to 5 members)</h3>
+              <p className="text-sm leading-relaxed text-[#9A7280]">
+                For departments, tutoring teams, or teacher groups who need to share quiz generation capacity. Each team member gets their own account, and the team shares unlimited quiz generation. Perfect for schools, tutoring centers, or corporate training teams where multiple people create assessments.
+              </p>
+            </div>
+          </div>
+
+          <h2 className="mb-6 text-center text-2xl font-medium tracking-tight text-[#3B2027] sm:text-3xl">
+            Compare Examina to <span className="font-serif italic text-[#B0607A]">manual quiz creation</span>
+          </h2>
+          <div className="mx-auto mb-16 max-w-3xl space-y-3 text-base leading-relaxed text-[#5D4450]">
+            <p>
+              Writing a good 10-question multiple choice quiz manually takes 30-45 minutes: you have to write each question, come up with plausible wrong answers that expose real misunderstandings, write explanations, and make sure questions test different cognitive levels. Examina does this in under 30 seconds by reading your source material and automatically generating questions with proper distractors and explanations.
+            </p>
+            <p>
+              Creating flashcards by hand requires typing every term and definition, formatting them, and then either printing physical cards or manually entering them into a digital flashcard app. Examina generates interactive flashcards with 3D flip animations directly from your notes, already in a shareable digital format. For a 50-term vocabulary list, that's 20 minutes saved.
+            </p>
+            <p>
+              The pedagogical advantage is consistency: Examina maps every question to Bloom's Taxonomy and generates a mix of recall, understanding, and application questions automatically. When you write questions manually, it's easy to default to simple recall questions because they're faster to write. Examina's AI varies question complexity intentionally, giving you better practice material without extra effort.
+            </p>
+          </div>
+        </section>
+
         <section className="mx-auto mt-20 max-w-3xl">
           <h2 className="mb-8 text-center text-2xl font-medium tracking-tight text-[#3B2027] sm:text-3xl">
             Pricing <span className="font-serif italic text-[#B0607A]">FAQ</span>

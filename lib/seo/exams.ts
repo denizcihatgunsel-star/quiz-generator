@@ -10,7 +10,10 @@ export interface ExamType {
   description: string;
   owner?: string;
   disclaimer: string;
+  topicsList?: string[];
   sampleQuestions: { q: string; a: string; explanation: string }[];
+  questionTypesAdvice?: string;
+  studyTips?: string[];
   faq: { q: string; a: string }[];
   relatedTools: string[];
   relatedSubjects?: string[];
@@ -26,6 +29,12 @@ export const EXAMS: ExamType[] = [
     owner: "College Board",
     disclaimer:
       "Examina is not affiliated with, endorsed by, or sponsored by the College Board. These are original practice questions created by AI for study purposes only, not official SAT questions.",
+    topicsList: [
+      "Reading: Command of Evidence, Words in Context, Analysis in History/Social Studies and Science",
+      "Writing and Language: Standard English Conventions, Expression of Ideas, sentence structure",
+      "Math: Heart of Algebra, Problem Solving and Data Analysis, Passport to Advanced Math, Additional Topics (geometry, trigonometry)",
+      "Essay (optional): reading comprehension, analysis, writing",
+    ],
     sampleQuestions: [
       {
         q: "Which word best completes the sentence? The scientist's discovery was _____, challenging decades of established theory.",
@@ -44,6 +53,21 @@ export const EXAMS: ExamType[] = [
         explanation:
           "The author acknowledges progress will continue while emphasizing the need for ethical frameworks.",
       },
+      {
+        q: "In the passage, the word 'pedestrian' most nearly means:",
+        a: "ordinary or unimaginative",
+        explanation:
+          "In context, 'pedestrian' is used figuratively to mean lacking inspiration or originality, not literally referring to someone walking.",
+      },
+    ],
+    questionTypesAdvice:
+      "For SAT prep, multiple choice questions work best because they match the exam format exactly. Use fill-in-the-blank to practice recalling vocabulary and math formulas without answer choices as hints. Flashcards help memorize vocabulary for the reading section and formulas for math. True/false questions are less useful for SAT practice since the actual exam rarely uses this format.",
+    studyTips: [
+      "Focus on understanding why wrong answers are wrong. SAT distractors are designed to catch common mistakes—reviewing explanations for incorrect choices teaches you to spot these traps on test day.",
+      "Practice reading passages from history, social studies, and science sources. The SAT draws from these domains heavily, so familiarity with academic writing styles improves speed and comprehension.",
+      "Memorize the most common math formulas (quadratic formula, circle equations, basic trig) and vocabulary roots. These come up repeatedly and save time if you have them in long-term memory.",
+      "Take full-length practice tests under timed conditions. Endurance matters—the SAT is over 3 hours long, and mental fatigue impacts scores in later sections.",
+      "Review one content area at a time. Don't jump between reading, writing, and math randomly. Master one section, then move to the next.",
     ],
     faq: [
       {
@@ -129,6 +153,16 @@ export const EXAMS: ExamType[] = [
     owner: "College Board",
     disclaimer:
       "Examina is not affiliated with or endorsed by the College Board. These are original practice questions for study purposes, not official AP exam materials.",
+    topicsList: [
+      "AP Biology: cellular biology, genetics, evolution, ecology, systems biology",
+      "AP Chemistry: atomic structure, bonding, reactions, kinetics, thermodynamics, equilibrium",
+      "AP US History: period-specific themes from pre-Columbian to present, causation and continuity",
+      "AP Calculus AB/BC: limits, derivatives, integrals, differential equations, series (BC only)",
+      "AP English Language: rhetorical analysis, argumentation, synthesis",
+      "AP English Literature: poetry analysis, prose fiction analysis, literary argumentation",
+      "AP Physics 1/2/C: mechanics, electricity and magnetism, thermodynamics, modern physics",
+      "AP Psychology: biological bases, cognition, development, social psychology, abnormal psychology",
+    ],
     sampleQuestions: [
       {
         q: "Which process directly requires ATP in cellular respiration?",
@@ -148,6 +182,21 @@ export const EXAMS: ExamType[] = [
         explanation:
           "Apply the power rule: derivative of x² is 2x, derivative of x is 1, derivative of a constant is 0.",
       },
+      {
+        q: "In AP English Language, which rhetorical appeal relies on the credibility of the speaker?",
+        a: "Ethos",
+        explanation:
+          "Ethos establishes trust through the speaker's authority, expertise, or character. Pathos uses emotion, logos uses logic.",
+      },
+    ],
+    questionTypesAdvice:
+      "AP exams emphasize higher-order thinking, so use multiple choice questions that test analysis and application, not just recall. Fill-in-the-blank works well for terminology that must be spelled correctly (scientific terms, historical figures). Flashcards help memorize definitions for dense subjects like AP Psychology or AP Biology. True/false questions are less common on actual AP exams but useful for checking understanding of common misconceptions.",
+    studyTips: [
+      "Upload your textbook chapter summaries, not full chapters. AP questions test understanding of key concepts, not minor details. Focused notes produce better practice questions.",
+      "Practice writing out answers even for multiple choice. AP exams require you to justify reasoning on FRQs, so explaining why an answer is correct (not just selecting it) builds the skill.",
+      "Review College Board's FRQ scoring guidelines for your subject. They reveal exactly what graders look for: specific terminology, complete explanations, and logical structure.",
+      "Study historical causation and continuity (for history APs) or experimental design (for science APs). These cross-cutting themes appear on every exam and many students underprepare them.",
+      "Take practice tests at 8 AM on a weekday if your exam is scheduled for morning. Mental performance varies by time of day—practicing when tired doesn't reflect actual test conditions.",
     ],
     faq: [
       {
@@ -183,6 +232,12 @@ export const EXAMS: ExamType[] = [
     owner: "AAMC (Association of American Medical Colleges)",
     disclaimer:
       "Examina is not affiliated with or endorsed by the AAMC. These are original practice questions for study purposes only, not official MCAT materials.",
+    topicsList: [
+      "Biological and Biochemical Foundations: biochemistry, molecular biology, cell biology, organ systems",
+      "Chemical and Physical Foundations: general chemistry, organic chemistry, physics (mechanics, electricity, waves)",
+      "Psychological, Social, and Biological Foundations of Behavior: psychology, sociology, biology of behavior",
+      "Critical Analysis and Reasoning Skills (CARS): reading comprehension, analysis, evaluation of passages from humanities and social sciences",
+    ],
     sampleQuestions: [
       {
         q: "Which amino acid is most likely to be found in the hydrophobic core of a protein?",
@@ -202,6 +257,22 @@ export const EXAMS: ExamType[] = [
         explanation:
           "Self-efficacy (belief in one's ability to succeed) is central to social cognitive theory and strongly predicts behavior change.",
       },
+      {
+        q: "Which organ system is primarily affected by antidiuretic hormone (ADH)?",
+        a: "Renal system (kidneys)",
+        explanation:
+          "ADH increases water reabsorption in kidney collecting ducts, concentrating urine and conserving body water.",
+      },
+    ],
+    questionTypesAdvice:
+      "MCAT questions are passage-based and test application, not just recall. Multiple choice questions work best when they require you to apply concepts to new scenarios. Flashcards are essential for memorizing amino acids, functional groups, brain structures, and psychological theories—these foundational facts appear in every section. Fill-in-the-blank helps practice spelling scientific terms correctly, which matters for free recall in upper-level coursework. True/false questions are less common on the MCAT itself but useful for checking conceptual understanding.",
+    studyTips: [
+      "Practice with passage-based questions, not standalone recall. The MCAT rarely asks pure memorization—it gives you a scenario or data and asks you to apply principles.",
+      "Review biochemistry pathways (glycolysis, Krebs cycle, ETC) and organic chemistry reactions until you can draw them from memory. These appear constantly and save time if you don't have to look them up.",
+      "For CARS (critical analysis), practice reading dense humanities passages daily. Speed matters—most test-takers run out of time on CARS because they read too slowly or re-read excessively.",
+      "Memorize all 20 amino acids (structures, properties, pKa values). Biochemistry questions assume this knowledge and don't provide it on the exam.",
+      "Do full-length practice exams under timed conditions. The MCAT is 7.5 hours with breaks—mental endurance is as important as content knowledge.",
+      "Focus on high-yield topics: enzyme kinetics, electrochemistry, optics, sensation and perception, social stratification. These appear frequently and carry more weight than low-yield memorization topics.",
     ],
     faq: [
       {
@@ -237,6 +308,12 @@ export const EXAMS: ExamType[] = [
     owner: "NCSBN (National Council of State Boards of Nursing)",
     disclaimer:
       "Examina is not affiliated with or endorsed by the NCSBN. These are original practice questions for nursing study, not official NCLEX test items.",
+    topicsList: [
+      "Safe and Effective Care Environment: management of care, safety and infection control",
+      "Health Promotion and Maintenance: growth and development, health promotion, disease prevention",
+      "Psychosocial Integrity: coping mechanisms, mental health concepts, abuse and neglect",
+      "Physiological Integrity: basic care and comfort, pharmacological therapies, reduction of risk potential, physiological adaptation",
+    ],
     sampleQuestions: [
       {
         q: "A client receiving warfarin has an INR of 4.5. Which action should the nurse take first?",
@@ -256,6 +333,22 @@ export const EXAMS: ExamType[] = [
         explanation:
           "Levothyroxine absorption is best on an empty stomach, and morning dosing helps prevent insomnia from increased metabolism.",
       },
+      {
+        q: "A nurse is caring for a client with a chest tube. Which observation requires immediate intervention?",
+        a: "Continuous bubbling in the water seal chamber",
+        explanation:
+          "Continuous bubbling in the water seal chamber indicates an air leak in the system, which prevents lung re-expansion and requires immediate attention.",
+      },
+    ],
+    questionTypesAdvice:
+      "NCLEX questions test clinical judgment and priority-setting, not just memorization. Multiple choice questions work best when they force you to choose the 'most important' or 'first action' among several correct-sounding options—this mirrors NCLEX format. Flashcards are essential for memorizing drug classes, lab values, and disease processes. Fill-in-the-blank helps practice dosage calculations where you must arrive at an exact number. True/false questions are less common on NCLEX but useful for checking understanding of nursing procedures.",
+    studyTips: [
+      "Practice priority-setting using ABC (airway, breathing, circulation) and Maslow's hierarchy. NCLEX questions often have multiple correct answers, and you must choose the most urgent action.",
+      "Memorize normal lab values and therapeutic drug ranges. NCLEX assumes this knowledge and doesn't provide reference ranges in questions.",
+      "Study pharmacology by drug class, not individual drugs. Know mechanisms of action, side effects, and nursing considerations for each class (e.g., ACE inhibitors, beta blockers, SSRIs).",
+      "Practice dosage calculations daily until they're automatic. NCLEX includes medication math, and mistakes here are costly.",
+      "Review delegation and scope of practice. Many NCLEX questions test whether the RN should delegate a task to an LPN or UAP, or handle it themselves.",
+      "Use the nursing process (assessment, diagnosis, planning, implementation, evaluation) to approach every question. NCLEX tests whether you follow systematic clinical reasoning, not just whether you know facts.",
     ],
     faq: [
       {
