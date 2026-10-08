@@ -1815,30 +1815,17 @@ body[data-season="halloween"] {
 
 /* Thin strip sitting just above the fixed bottom tab bar (~56px + safe area) */
 .hw-m-nav-strip {
-  /* Tab bar with Creepster labels is ~80px tall — sit fully above it */
-  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  /* In page flow at bottom of main, above fixed tab bar padding */
   height: 36px;
   padding-bottom: 4px;
-  opacity: 1;
-  background: linear-gradient(to top, rgba(10, 22, 20, 0.55), transparent);
+  margin-bottom: 1rem;
+  opacity: 0.95;
 }
 
 .hw-m-footer-strip {
   opacity: 0.95;
 }
 
-/* Pricing Option A footer — visible on the first screen above the tab bar */
-.hw-m-pricing-footer-fixed {
-  position: fixed !important;
-  left: 0;
-  right: 0;
-  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
-  z-index: 34;
-  height: 36px;
-  padding-bottom: 4px;
-  pointer-events: none !important;
-  background: linear-gradient(to top, rgba(10, 22, 20, 0.45), transparent);
-}
 
 /* Keep page props behind controls; nav-strip sits above content, under tabs (z-40) */
 [data-season="halloween"] [data-hw-mobile]:not([data-hw-mobile="nav-strip"]) {
@@ -1865,8 +1852,8 @@ body[data-season="halloween"] {
 
 
 /* ==========================================================================
-   Mobile Soft A / Pricing A / app-shell layers — SSR markup always present
-   while the Halloween calendar window is open; shown only under data-season.
+   Mobile Soft A / Pricing A / app-shell layers — SSR markup conditionally present
+   when Halloween is active; shown/hidden with data-season (defence-in-depth).
    ========================================================================== */
 .hw-m-layer {
   display: none !important;
@@ -1895,13 +1882,6 @@ body[data-season="halloween"] {
   display: none !important;
 }
 
-[data-season="halloween"] .hw-m-pricing-footer-fixed {
-  display: flex !important;
-}
-
-[data-season="halloween"] main.mx-auto {
-  padding-bottom: 10.5rem !important;
-}
 
 /* Soft A: Jump Back In must end ABOVE the fixed strip; strip lives in the gap only */
 [data-season="halloween"] [data-hw-home-hero] {
@@ -1941,9 +1921,39 @@ body[data-season="halloween"] {
   z-index: 20;
 }
 
-[data-season="halloween"] .hw-m-pricing-footer-fixed .hw-m-prop {
-  filter: drop-shadow(0 0 8px rgba(255, 160, 60, 0.85)) brightness(1.15);
+
+/* ==========================================================================
+   Mobile viewport guards: hide decorations that cannot maintain >= 8px clearance
+   from text / buttons / inputs at narrow mobile viewports.
+   ========================================================================== */
+@media (max-width: 379px) {
+  .hw-m-pricing-ghost-title {
+    display: none !important;
+  }
 }
-[data-season="halloween"] .hw-m-pricing-footer-fixed .hw-m-bat {
-  filter: drop-shadow(0 0 10px rgba(53, 208, 180, 0.95)) brightness(1.2);
+
+/* Quiz-soft side ghosts/bats hidden at all phone widths (they overlap card/textarea) */
+@media (max-width: 767px) {
+  .hw-m-quiz-ghost-hide-380,
+  .hw-m-quiz-bat-hide-380 {
+    display: none !important;
+  }
+}
+
+@media (min-width: 390px) and (max-width: 400px) {
+  .hw-m-pricing-pumpkin-left {
+    right: -32px !important;
+  }
+}
+
+/* ==========================================================================
+   Fix Generate button clipping at 360px on /m/create: ensure it fits inside
+   the card exactly like the non-Halloween version by not adding extra width.
+   ========================================================================== */
+@media (max-width: 360px) {
+  [data-season="halloween"] button#generate-btn {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    font-size: 0.8125rem !important;
+  }
 }

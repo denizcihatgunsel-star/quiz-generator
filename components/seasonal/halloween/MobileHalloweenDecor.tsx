@@ -1,11 +1,13 @@
 "use client";
 
-import { isHalloweenSeason } from "@/lib/seasonal";
+import { useState, useEffect } from "react";
+import { isHalloweenActive } from "@/lib/seasonal";
 
 /**
  * Mobile Halloween decorations (phone /m app shell, marketing quiz soft accents,
  * /m/pricing). Visual-only: pointer-events none, z behind controls.
- * Renders nothing when the season is off or after the Nov 1 TRT cutoff.
+ * Renders nothing until mounted, then decides client-side to avoid hydration mismatch.
+ * Decision via query param, cookie, or env var.
  */
 
 type Variant = "app-hero" | "jump" | "quiz-soft" | "pricing" | "nav-strip";
@@ -54,22 +56,28 @@ function MoonGlow({ className, style }: { className?: string; style?: React.CSSP
 }
 
 /**
- * Always emits decoration markup while the Halloween calendar window is open.
- * Visibility is CSS-only: `[data-season="halloween"] .hw-m-layer`.
- * That keeps Soft A / Pricing A / app-shell props in SSR HTML for anonymous
- * hard-reload checks, while ?halloween=0 (drops data-season) still hides them.
+ * Renders decoration markup ONLY when Halloween is active.
+ * Client-side decision via query param, cookie, or env var.
+ * Returns null when inactive (no hidden markup).
  */
 export default function MobileHalloweenDecor({
   variant,
-  active: _activeProp,
   className = "",
 }: {
   variant: Variant;
-  /** Ignored — kept for call-site compat. Visibility is data-season CSS. */
-  active?: boolean;
   className?: string;
 }) {
-  if (!isHalloweenSeason()) return null;
+  const [mounted, setMounted] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  
+  // Avoid hydration mismatch: render nothing on server, decide after mount
+  useEffect(() => {
+    setMounted(true);
+    const searchParams = new URLSearchParams(window.location.search);
+    setIsActive(isHalloweenActive(searchParams));
+  }, []);
+  
+  if (!mounted || !isActive) return null;
 
   if (variant === "app-hero") {
     return (
@@ -99,30 +107,29 @@ export default function MobileHalloweenDecor({
         aria-hidden="true"
         data-hw-mobile="jump"
       >
-        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 36, height: 36, top: -6, left: -10 }} />
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 28, height: 14, top: 18, left: -14, transform: "rotate(-18deg)" }} />
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 42, height: 42, top: 70, left: -18 }} />
-        <Prop src={CANDLE} className="hw-m-candle" style={{ width: 28, height: 28, bottom: 8, left: -8 }} />
-
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 30, height: 15, top: -4, right: -12, transform: "rotate(12deg)" }} />
-        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 40, height: 40, top: 48, right: -14 }} />
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 38, height: 38, bottom: 24, right: -16, transform: "scaleX(-1)" }} />
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 24, height: 12, bottom: 4, right: 4, transform: "rotate(-8deg) scaleX(-1)" }} />
+        {/* Pumpkin moved to RIGHT of 'IN' in 'JUMP BACK IN', vertically centered, 8px gap */}
+        <Prop src={PUMPKIN} className="hw-m-pumpkin hw-m-pumpkin-right" style={{ width: 36, height: 36, top: 2, right: -44 }} />
+        
+        {/* Gutter props moved further out to clear card grid and CTAs */}
+        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 42, height: 42, top: 70, left: -50 }} />
+        <Prop src={CANDLE} className="hw-m-candle" style={{ width: 28, height: 28, bottom: 8, left: -22 }} />
+        <Prop src={BAT} className="hw-m-bat" style={{ width: 30, height: 15, top: 48, right: -32, transform: "rotate(12deg)" }} />
+        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 40, height: 40, top: 90, right: -40 }} />
+        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 38, height: 38, bottom: 24, right: -40, transform: "scaleX(-1)" }} />
+        <Prop src={BAT} className="hw-m-bat" style={{ width: 24, height: 12, bottom: 4, right: -24, transform: "rotate(-8deg) scaleX(-1)" }} />
       </div>
     );
   }
 
   if (variant === "quiz-soft") {
-    /* Option A · Soft: pumpkins/candle above card, ghosts+bats in gutters only.
-       No dense moon glow behind the quiz card. */
+    /* Option A · Soft: pumpkins/candle in empty band above card, ghosts+bats in gutters clear of text */
     return (
       <div
         className={`hw-m-layer hw-m-layer--quiz-soft pointer-events-none absolute inset-0 z-0 overflow-visible ${className}`}
         aria-hidden="true"
         data-hw-mobile="quiz-soft"
       >
-        {/* Compact moon peek top-right (not behind the card) */}
-        {/* Compact moon peek — kept clear of the card / Example link */}
+        {/* Moon peek top-right */}
         <MoonGlow
           className="hw-m-moon--soft"
           style={{
@@ -133,26 +140,16 @@ export default function MobileHalloweenDecor({
           }}
         />
 
-        {/* Thin band ABOVE the quiz card: 2 pumpkins + candle */}
-        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 28, height: 28, top: -36, left: "14%" }} />
-        <Prop src={CANDLE} className="hw-m-candle" style={{ width: 24, height: 24, top: -38, left: "42%" }} />
-        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 26, height: 26, top: -36, left: "56%" }} />
+        {/* Pumpkins + candle moved up into empty ~100px band above "Try one quiz free" line */}
+        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 28, height: 28, top: -120, left: "14%" }} />
+        <Prop src={CANDLE} className="hw-m-candle" style={{ width: 24, height: 24, top: -122, left: "42%" }} />
+        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 26, height: 26, top: -120, left: "56%" }} />
 
-        {/* Upper gutter ghosts — right ghost fully off the card edge */}
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 40, height: 40, top: "2%", left: -18 }} />
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 32, height: 32, top: -28, right: -40, transform: "scaleX(-1)" }} />
+        {/* Removed side ghosts/bats - they overlap textarea/card at all mobile widths */}
 
-        {/* Side gutter bats only */}
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, top: "22%", left: -10, transform: "rotate(-12deg)" }} />
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 20, height: 10, top: "40%", left: -8, transform: "rotate(8deg) scaleX(-1)" }} />
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, top: "58%", left: -10, transform: "rotate(-6deg)" }} />
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, top: "24%", right: -10, transform: "rotate(14deg)" }} />
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 20, height: 10, top: "42%", right: -8, transform: "rotate(-10deg)" }} />
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, top: "60%", right: -10, transform: "rotate(6deg) scaleX(-1)" }} />
-
-        {/* Peeking ghost bottom-left + tiny pumpkin bottom-right */}
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 36, height: 36, bottom: -4, left: -14 }} />
-        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 24, height: 24, bottom: 0, right: -8 }} />
+        {/* Bottom props in gutters */}
+        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 36, height: 36, bottom: -8, left: -20 }} />
+        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 24, height: 24, bottom: -4, right: -14 }} />
       </div>
     );
   }
@@ -174,40 +171,28 @@ export default function MobileHalloweenDecor({
             height: 200,
           }}
         />
-        {/* Side ghosts / bats — left pair tucked beside/behind label, not over "Pricing" */}
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 34, height: 34, top: 58, left: -44 }} />
+        {/* Ghost in top-right gutter, clear of Sign in button */}
+        <Prop src={GHOST} className="hw-m-ghost hw-m-pricing-ghost-title" style={{ width: 44, height: 44, top: 60, right: -32, transform: "scaleX(-1)" }} />
         <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, top: -18, left: -34, transform: "rotate(-12deg)" }} />
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 44, height: 44, top: 10, right: -14, transform: "scaleX(-1)" }} />
         <Prop src={BAT} className="hw-m-bat" style={{ width: 26, height: 13, top: 2, right: 36, transform: "rotate(14deg)" }} />
 
-        {/* Gutter pumpkins / candles between card lanes (absolute along page) */}
-        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 34, height: 34, top: 210, left: -10 }} />
-        <Prop src={CANDLE} className="hw-m-candle" style={{ width: 26, height: 26, top: 250, right: -8 }} />
-        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 38, height: 38, top: 420, right: -12 }} />
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 42, height: 42, top: 400, left: -14 }} />
-        <Prop src={CANDLE} className="hw-m-candle" style={{ width: 28, height: 28, top: 560, left: -8 }} />
-        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 32, height: 32, top: 580, right: -10 }} />
-        <Prop src={BAT} className="hw-m-bat" style={{ width: 24, height: 12, top: 700, left: -6, transform: "rotate(-8deg)" }} />
-        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 40, height: 40, top: 720, right: -14, transform: "scaleX(-1)" }} />
-
-        {/* Footer strip — fixed in the first viewport above the tab bar (Option A) */}
-        <div className="hw-m-footer-strip hw-m-pricing-footer-fixed flex items-end justify-center gap-3">
-          <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 32, height: 32, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-          <Prop src={BAT} className="hw-m-bat" style={{ width: 28, height: 14, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-          <Prop src={CANDLE} className="hw-m-candle" style={{ width: 28, height: 28, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-          <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 34, height: 34, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-          <Prop src={BAT} className="hw-m-bat" style={{ width: 28, height: 14, position: "relative", top: "auto", left: "auto", right: "auto", transform: "scaleX(-1)" }} />
-          <Prop src={CANDLE} className="hw-m-candle" style={{ width: 28, height: 28, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-          <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 32, height: 32, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-        </div>
+        {/* Gutter pumpkins / candles clear of card content, moved out from "20 quizzes per month" bullets */}
+        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 34, height: 34, top: 280, left: -24 }} />
+        <Prop src={CANDLE} className="hw-m-candle" style={{ width: 26, height: 26, top: 320, right: -20 }} />
+        <Prop src={PUMPKIN} className="hw-m-pumpkin hw-m-pricing-pumpkin-left" style={{ width: 38, height: 38, top: 420, right: -22 }} />
+        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 42, height: 42, top: 400, left: -24 }} />
+        <Prop src={CANDLE} className="hw-m-candle" style={{ width: 28, height: 28, top: 560, left: -18 }} />
+        <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 32, height: 32, top: 580, right: -20 }} />
+        <Prop src={BAT} className="hw-m-bat" style={{ width: 24, height: 12, top: 700, left: -16, transform: "rotate(-8deg)" }} />
+        <Prop src={GHOST} className="hw-m-ghost" style={{ width: 40, height: 40, top: 720, right: -24, transform: "scaleX(-1)" }} />
       </div>
     );
   }
 
-  // nav-strip — thin row ABOVE the bottom tab bar, never on the icons
+  // nav-strip — in page flow at bottom of main, never on the icons
   return (
     <div
-      className={`hw-m-layer hw-m-layer--nav-strip hw-m-nav-strip pointer-events-none fixed inset-x-0 flex items-end justify-center gap-3 ${className}`}
+      className={`hw-m-layer hw-m-layer--nav-strip hw-m-nav-strip pointer-events-none flex items-end justify-center gap-3 ${className}`}
       aria-hidden="true"
       data-hw-mobile="nav-strip"
     >

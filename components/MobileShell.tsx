@@ -75,9 +75,11 @@ export default function MobileShell({ children }: { children: React.ReactNode })
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-lg px-4 pb-28 pt-6">{children}</main>
+      <main className={`mx-auto w-full max-w-lg px-4 pt-6 ${pathname === '/m/create' ? 'pb-44' : 'pb-28'}`}>
+        {children}
+        {!isAuthPage && <MobileHalloweenDecor variant="nav-strip" />}
+      </main>
 
-      {!isAuthPage && <MobileHalloweenDecor variant="nav-strip" />}
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-[#F3D5DC] bg-white/85 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl">
         <div className="mx-auto flex max-w-lg items-stretch justify-around px-2">
           {TABS.map((tab) => {
