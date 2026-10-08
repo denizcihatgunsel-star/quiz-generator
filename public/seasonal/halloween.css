@@ -1957,3 +1957,13 @@ body[data-season="halloween"] {
     font-size: 0.8125rem !important;
   }
 }
+
+/* Move quiz-soft bottom corner props 16px further out at 412px+ to clear card border */
+@media (min-width: 412px) {
+  .hw-m-layer--quiz-soft .hw-m-ghost {
+    left: -36px !important;
+  }
+  .hw-m-layer--quiz-soft .hw-m-pumpkin:last-child {
+    right: -30px !important;
+  }
+}
