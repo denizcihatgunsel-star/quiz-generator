@@ -47,6 +47,8 @@ const TABS = [
 export default function MobileShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const isAuthPage = pathname.startsWith("/m/auth/");
+  
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#FDE8EC]">
       <header className="sticky top-0 z-40 border-b border-[#F3D5DC] bg-[#FBF1EE]/85 backdrop-blur-xl">
@@ -64,10 +66,10 @@ export default function MobileShell({ children }: { children: React.ReactNode })
             </Link>
           ) : (
             <Link
-              href="/m/auth/login"
+              href={pathname === "/m/auth/login" ? "/m/auth/register" : "/m/auth/login"}
               className="rounded-full bg-[#3B2027] px-4 py-2 text-sm font-medium text-[#F6E3E8] transition-colors hover:bg-[#52303B]"
             >
-              Sign in
+              {pathname === "/m/auth/login" ? "Sign up" : "Sign in"}
             </Link>
           )}
         </div>
@@ -75,7 +77,7 @@ export default function MobileShell({ children }: { children: React.ReactNode })
 
       <main className="mx-auto w-full max-w-lg px-4 pb-28 pt-6">{children}</main>
 
-      <MobileHalloweenDecor variant="nav-strip" />
+      {!isAuthPage && <MobileHalloweenDecor variant="nav-strip" />}
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-[#F3D5DC] bg-white/85 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl">
         <div className="mx-auto flex max-w-lg items-stretch justify-around px-2">
           {TABS.map((tab) => {
