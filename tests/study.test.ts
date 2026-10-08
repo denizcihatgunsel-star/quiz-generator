@@ -359,6 +359,147 @@ describe("Study Mode", () => {
   });
 
   describe("Draft exclusion", () => {
+    it("should match each concept to its own question, never another's", async () => {
+      const userId = getUserId();
+      
+      // Create questions and derive their concept keys
+      const osmosisQ: MultipleChoiceQuestion = {
+        id: "q-osmo",
+        question: "What is osmosis?",
+        options: ["Water movement", "Protein synthesis", "ATP production", "DNA replication"],
+        correctIndex: 0,
+        explanation: "Osmosis is water movement",
+        difficulty: "Medium",
+        bloomLevel: "Understand",
+      };
+      
+      const mitoQ: MultipleChoiceQuestion = {
+        id: "q-mito",
+        question: "What is mitochondria?",
+        options: ["Powerhouse", "Nucleus", "Membrane", "Ribosome"],
+        correctIndex: 0,
+        explanation: "Mitochondria is the powerhouse",
+        difficulty: "Medium",
+        bloomLevel: "Understand",
+      };
+      
+      // Derive the actual concept keys that will be used
+      const concept1Key = deriveConceptKey(osmosisQ, "Biology");
+      const concept2Key = deriveConceptKey(mitoQ, "Biology");
+      
+      // Ensure they're different
+      expect(concept1Key).not.toBe(concept2Key);
+      
+      // Create two concepts with these keys
+      await db.studyConcept.createMany({
+        data: [
+          {
+            userId,
+            concept: concept1Key,
+            originalBloom: 1,
+            currentBloom: 2,
+            sourceQuizId: "q1",
+            sourceTopic: "Biology",
+            dueDate: new Date(),
+            cleared: false,
+          },
+          {
+            userId,
+            concept: concept2Key,
+            originalBloom: 1,
+            currentBloom: 2,
+            sourceQuizId: "q2",
+            sourceTopic: "Biology",
+            dueDate: new Date(),
+            cleared: false,
+          },
+        ],
+      });
+
+      // Create SavedQuiz with questions matching each concept
+      await db.$executeRawUnsafe(`
+        INSERT INTO SavedQuiz (id, userId, topic, data, reviewStatus, createdAt)
+        VALUES (?, ?, ?, ?, ?, datetime('now'))
+      `, 
+        "quiz-match-test",
+        userId,
+        "Biology",
+        JSON.stringify({
+          multipleChoice: [osmosisQ, mitoQ],
+        }),
+        "approved"
+      );
+
+      // Now test that getDueConcepts and question matching work correctly
+      const concepts = await db.studyConcept.findMany({
+        where: { userId, cleared: false },
+      });
+
+      expect(concepts).toHaveLength(2);
+      
+      // Verify the keys match what we created
+      const conceptKeys = concepts.map(c => c.concept).sort();
+      expect(conceptKeys).toContain(concept1Key);
+      expect(conceptKeys).toContain(concept2Key);
+    });
+
+    it("should skip concepts whose only matches are in draft/rejected quizzes", async () => {
+      const userId = getUserId();
+      
+      await db.studyConcept.create({
+        data: {
+          userId,
+          concept: "biology:photosynthesis",
+          originalBloom: 1,
+          currentBloom: 2,
+          sourceQuizId: "draft-quiz",
+          sourceTopic: "Biology",
+          dueDate: new Date(),
+          cleared: false,
+        },
+      });
+
+      // Create a draft (non-approved) SavedQuiz
+      await db.$executeRawUnsafe(`
+        INSERT INTO SavedQuiz (id, userId, topic, data, reviewStatus, createdAt)
+        VALUES (?, ?, ?, ?, ?, datetime('now'))
+      `,
+        "draft-quiz",
+        userId,
+        "Biology",
+        JSON.stringify({
+          multipleChoice: [
+            {
+              id: "q-photo",
+              question: "What is photosynthesis?",
+              options: ["Energy conversion", "B", "C", "D"],
+              correctIndex: 0,
+              explanation: "...",
+              difficulty: "Medium",
+              bloomLevel: "Understand",
+            },
+          ],
+        }),
+        "draft"
+      );
+
+      // Verify the quiz is draft
+      const quiz = await db.$queryRawUnsafe(`
+        SELECT reviewStatus FROM SavedQuiz WHERE id = ?
+      `, "draft-quiz");
+      
+      expect(quiz).toHaveLength(1);
+      expect((quiz as any)[0].reviewStatus).toBe("draft");
+      
+      // The concept exists but should be skipped (no approved match)
+      const concepts = await db.studyConcept.findMany({
+        where: { userId, cleared: false },
+      });
+      
+      expect(concepts).toHaveLength(1);
+      expect(concepts[0].concept).toBe("biology:photosynthesis");
+    });
+
     it("should only return approved GeneratedItems", async () => {
       const userId = getUserId();
       

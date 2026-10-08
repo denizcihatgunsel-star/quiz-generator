@@ -12,6 +12,7 @@ beforeAll(async () => {
     await db.$executeRawUnsafe(`DROP TABLE IF EXISTS "GeneratedItem"`);
     await db.$executeRawUnsafe(`DROP TABLE IF EXISTS "DraftQuizSet"`);
     await db.$executeRawUnsafe(`DROP TABLE IF EXISTS "StudyConcept"`);
+    await db.$executeRawUnsafe(`DROP TABLE IF EXISTS "SavedQuiz"`);
     
     await db.$executeRawUnsafe(`
       CREATE TABLE IF NOT EXISTS "StudyConcept" (
@@ -84,6 +85,24 @@ beforeAll(async () => {
     
     await db.$executeRawUnsafe(`
       CREATE INDEX IF NOT EXISTS "GeneratedItem_draftSetId_reviewStatus_idx" ON "GeneratedItem"("draftSetId", "reviewStatus")
+    `);
+    
+    // Create SavedQuiz table for question matching tests
+    await db.$executeRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "SavedQuiz" (
+        "id" TEXT PRIMARY KEY NOT NULL,
+        "userId" TEXT NOT NULL,
+        "topic" TEXT NOT NULL,
+        "data" TEXT NOT NULL,
+        "theme" TEXT NOT NULL DEFAULT 'rose',
+        "score" INTEGER,
+        "total" INTEGER,
+        "shareId" TEXT UNIQUE,
+        "isPublic" INTEGER NOT NULL DEFAULT 0,
+        "reviewStatus" TEXT NOT NULL DEFAULT 'approved',
+        "draftSetId" TEXT UNIQUE,
+        "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+      )
     `);
   } catch (err) {
     // Tables might already exist

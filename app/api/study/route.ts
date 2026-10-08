@@ -7,6 +7,7 @@ import {
   countDueConcepts,
   gradeStudyReview,
   bloomNumberToName,
+  deriveConceptKey,
 } from "@/lib/study";
 import { MultipleChoiceQuestion } from "@/types/quiz";
 
@@ -93,7 +94,7 @@ export async function GET(req: NextRequest) {
     // Default: return due concepts
     const concepts = await getDueConcepts(session.user.id, 10);
 
-    // For each concept, fetch an approved GeneratedItem matching the concept at target Bloom
+    // For each concept, find a matching question from approved sources
     const items: Array<{
       conceptId: string;
       concept: string;
@@ -107,13 +108,27 @@ export async function GET(req: NextRequest) {
       const targetBloom = bloomNumberToName(concept.currentBloom);
       const fallbackBloom = bloomNumberToName(concept.originalBloom);
 
-      // Find approved MCQ GeneratedItems at the target Bloom level
-      // Match by concept key (normalized from question text or concept tag)
-      const approvedItems = await db.generatedItem.findMany({
+      // Step 1: Get candidate pool from SavedQuiz
+      // First try the source quiz, then other approved quizzes with same topic
+      const savedQuizzes = await db.savedQuiz.findMany({
+        where: {
+          userId: session.user.id,
+          topic: concept.sourceTopic,
+          reviewStatus: "approved",
+        },
+        orderBy: [
+          // Prioritize source quiz
+          { id: concept.sourceQuizId },
+        ],
+        select: { id: true, data: true, draftSetId: true },
+        take: 10,
+      });
+
+      // Also get approved GeneratedItems for this user
+      const generatedItems = await db.generatedItem.findMany({
         where: {
           reviewStatus: "approved",
           itemType: "mcq",
-          bloomLevel: targetBloom,
           draftSet: {
             userId: session.user.id,
           },
@@ -124,77 +139,112 @@ export async function GET(req: NextRequest) {
         take: 20,
       });
 
-      let question: MultipleChoiceQuestion | null = null;
+      // Build candidate pool
+      const candidates: Array<{
+        question: MultipleChoiceQuestion;
+        bloomLevel: string;
+        source: "savedQuiz" | "generatedItem";
+      }> = [];
 
-      // Try to match by concept key in payload
-      for (const item of approvedItems) {
+      // Add questions from SavedQuiz.data
+      for (const quiz of savedQuizzes) {
         try {
-          const payload = JSON.parse(item.payload);
-          // Check if this item's normalized key matches the concept
-          // For now, we'll match by bloom level and let the first one be selected
-          // A better approach would normalize the question text and compare
-          if (payload.question && Array.isArray(payload.options)) {
-            question = {
-              id: payload.id || item.id,
-              question: payload.question,
-              options: payload.options,
-              correctIndex: payload.correctIndex ?? 0,
-              explanation: payload.explanation || "",
-              difficulty: payload.difficulty || "Medium",
-              bloomLevel: targetBloom as any,
-            };
-            break;
+          const data = JSON.parse(quiz.data);
+          const questions = data.multipleChoice || data.questions || [];
+          
+          for (const q of questions) {
+            if (!q.question || !Array.isArray(q.options)) continue;
+            
+            // If this quiz has a draftSetId, check if the question's GeneratedItem is approved
+            if (quiz.draftSetId) {
+              // For now, skip detailed GeneratedItem matching - if the SavedQuiz is approved, trust it
+              // A more robust implementation would match by question ID
+            }
+            
+            candidates.push({
+              question: q,
+              bloomLevel: q.bloomLevel || "Remember",
+              source: "savedQuiz",
+            });
           }
         } catch {
           // skip invalid JSON
         }
       }
 
-      // Fallback: try originalBloom if no match at currentBloom
-      if (!question && targetBloom !== fallbackBloom) {
-        const fallbackItems = await db.generatedItem.findMany({
-          where: {
-            reviewStatus: "approved",
-            itemType: "mcq",
-            bloomLevel: fallbackBloom,
-            draftSet: {
-              userId: session.user.id,
+      // Add approved GeneratedItems
+      for (const item of generatedItems) {
+        try {
+          const payload = JSON.parse(item.payload);
+          if (!payload.question || !Array.isArray(payload.options)) continue;
+          
+          candidates.push({
+            question: {
+              id: payload.id || item.id,
+              question: payload.question,
+              options: payload.options,
+              correctIndex: payload.correctIndex,
+              explanation: payload.explanation || "",
+              difficulty: payload.difficulty || "Medium",
+              bloomLevel: item.bloomLevel as any,
             },
-          },
-          include: {
-            draftSet: true,
-          },
-          take: 20,
-        });
+            bloomLevel: item.bloomLevel,
+            source: "generatedItem",
+          });
+        } catch {
+          // skip invalid JSON
+        }
+      }
 
-        for (const item of fallbackItems) {
-          try {
-            const payload = JSON.parse(item.payload);
-            if (payload.question && Array.isArray(payload.options)) {
-              question = {
-                id: payload.id || item.id,
-                question: payload.question,
-                options: payload.options,
-                correctIndex: payload.correctIndex ?? 0,
-                explanation: payload.explanation || "",
-                difficulty: payload.difficulty || "Medium",
-                bloomLevel: fallbackBloom as any,
-              };
-              break;
-            }
-          } catch {
-            // skip
+      // Step 2: Match strictly on concept key
+      const matchedCandidates = candidates.filter((c) => {
+        const candidateKey = deriveConceptKey(
+          c.question,
+          concept.sourceTopic,
+          undefined // concept tag would be in the question object if present
+        );
+        return candidateKey === concept.concept;
+      });
+
+      // Step 3: Prefer currentBloom, fall back to originalBloom
+      let selectedQuestion: MultipleChoiceQuestion | null = null;
+
+      // Try to find match at target bloom level
+      const atTargetBloom = matchedCandidates.filter((c) => c.bloomLevel === targetBloom);
+      if (atTargetBloom.length > 0) {
+        const candidate = atTargetBloom[0];
+        // Validate correctIndex
+        if (
+          typeof candidate.question.correctIndex === "number" &&
+          candidate.question.correctIndex >= 0 &&
+          candidate.question.correctIndex < candidate.question.options.length
+        ) {
+          selectedQuestion = candidate.question;
+        }
+      }
+
+      // Fall back to original bloom
+      if (!selectedQuestion && targetBloom !== fallbackBloom) {
+        const atFallbackBloom = matchedCandidates.filter((c) => c.bloomLevel === fallbackBloom);
+        if (atFallbackBloom.length > 0) {
+          const candidate = atFallbackBloom[0];
+          if (
+            typeof candidate.question.correctIndex === "number" &&
+            candidate.question.correctIndex >= 0 &&
+            candidate.question.correctIndex < candidate.question.options.length
+          ) {
+            selectedQuestion = candidate.question;
           }
         }
       }
 
-      // If still no approved question, skip this concept (don't serve fake content)
-      if (question) {
+      // Step 4: Add to results or skip
+      if (selectedQuestion) {
         items.push({
           conceptId: concept.id,
           concept: concept.concept,
           bloom: targetBloom,
-          question,
+          question: selectedQuestion,
         });
       } else {
         skippedConcepts.push(concept.concept);
