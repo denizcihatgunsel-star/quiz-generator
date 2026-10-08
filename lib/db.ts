@@ -189,37 +189,47 @@ export function ensureVerificationColumns(): Promise<void> {
       }
 
       // Exam mode columns on SavedQuiz
-      const quizExamAlters: [string, string][] = [
-        ["examModeEnabled", `ALTER TABLE "SavedQuiz" ADD COLUMN "examModeEnabled" INTEGER NOT NULL DEFAULT 0`],
-        ["examTimeLimit", `ALTER TABLE "SavedQuiz" ADD COLUMN "examTimeLimit" INTEGER`],
-      ];
-      for (const [column, stmt] of quizExamAlters) {
-        try {
-          await db.$executeRawUnsafe(`SELECT "${column}" FROM "SavedQuiz" LIMIT 1`);
-        } catch {
+      try {
+        await db.$executeRawUnsafe(`SELECT "id" FROM "SavedQuiz" LIMIT 1`);
+        const quizExamAlters: [string, string][] = [
+          ["examModeEnabled", `ALTER TABLE "SavedQuiz" ADD COLUMN "examModeEnabled" INTEGER NOT NULL DEFAULT 0`],
+          ["examTimeLimit", `ALTER TABLE "SavedQuiz" ADD COLUMN "examTimeLimit" INTEGER`],
+        ];
+        for (const [column, stmt] of quizExamAlters) {
           try {
-            await db.$executeRawUnsafe(stmt);
+            await db.$executeRawUnsafe(`SELECT "${column}" FROM "SavedQuiz" LIMIT 1`);
           } catch {
-            // column already added by another instance — ignore
+            try {
+              await db.$executeRawUnsafe(stmt);
+            } catch {
+              // column already added by another instance — ignore
+            }
           }
         }
+      } catch {
+        // SavedQuiz table doesn't exist yet (test setup) — skip
       }
 
       // Exam mode columns on QuizAttempt
-      const attemptExamAlters: [string, string][] = [
-        ["tabSwitchCount", `ALTER TABLE "QuizAttempt" ADD COLUMN "tabSwitchCount" INTEGER NOT NULL DEFAULT 0`],
-        ["answersJson", `ALTER TABLE "QuizAttempt" ADD COLUMN "answersJson" TEXT`],
-      ];
-      for (const [column, stmt] of attemptExamAlters) {
-        try {
-          await db.$executeRawUnsafe(`SELECT "${column}" FROM "QuizAttempt" LIMIT 1`);
-        } catch {
+      try {
+        await db.$executeRawUnsafe(`SELECT "id" FROM "QuizAttempt" LIMIT 1`);
+        const attemptExamAlters: [string, string][] = [
+          ["tabSwitchCount", `ALTER TABLE "QuizAttempt" ADD COLUMN "tabSwitchCount" INTEGER NOT NULL DEFAULT 0`],
+          ["answersJson", `ALTER TABLE "QuizAttempt" ADD COLUMN "answersJson" TEXT`],
+        ];
+        for (const [column, stmt] of attemptExamAlters) {
           try {
-            await db.$executeRawUnsafe(stmt);
+            await db.$executeRawUnsafe(`SELECT "${column}" FROM "QuizAttempt" LIMIT 1`);
           } catch {
-            // column already added by another instance — ignore
+            try {
+              await db.$executeRawUnsafe(stmt);
+            } catch {
+              // column already added by another instance — ignore
+            }
           }
         }
+      } catch {
+        // QuizAttempt table doesn't exist yet (test setup) — skip
       }
     })().catch((err) => {
       console.error("Verification column check failed:", err);
