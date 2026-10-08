@@ -852,6 +852,246 @@ export const EXAMS: ExamType[] = [
     ],
     relatedSubjects: ["psychology"],
   },
+  {
+    slug: "hesi",
+    name: "HESI",
+    fullName: "HESI A2 (Health Education Systems, Inc. Admission Assessment)",
+    description:
+      "Create HESI A2 practice questions for nursing school admissions covering anatomy and physiology, biology, chemistry, math, reading comprehension, vocabulary, and grammar.",
+    owner: "Elsevier",
+    disclaimer:
+      "Examina is not affiliated with, endorsed by, or sponsored by Elsevier. These are AI-generated study questions, not official HESI exam items.",
+    sampleQuestions: [
+      {
+        q: "Which structure prevents food from entering the trachea during swallowing?",
+        a: "Epiglottis",
+        explanation:
+          "The epiglottis is a cartilaginous flap that covers the tracheal opening during swallowing, directing food into the esophagus and preventing aspiration.",
+      },
+      {
+        q: "If a cell has 23 pairs of chromosomes, how many chromosomes will be in each daughter cell after mitosis?",
+        a: "46 (23 pairs)",
+        explanation:
+          "Mitosis produces two identical daughter cells with the same number of chromosomes as the parent cell. 23 pairs = 46 total chromosomes in each daughter cell.",
+      },
+      {
+        q: "What percentage of 80 is 20?",
+        a: "25%",
+        explanation:
+          "To find percentage: (20/80) × 100 = 0.25 × 100 = 25%.",
+      },
+      {
+        q: "Choose the word closest in meaning to 'meticulous':",
+        a: "Careful and precise",
+        explanation:
+          "Meticulous means showing great attention to detail, being very careful and precise in one's work.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official HESI questions?",
+        a: "No. These are AI-generated practice questions following HESI format and content areas. For official practice tests, visit Elsevier's HESI preparation resources.",
+      },
+      {
+        q: "What HESI sections can I practice?",
+        a: "Generate questions for anatomy and physiology, biology, chemistry, math, reading comprehension, vocabulary, and grammar by uploading your study materials for each section.",
+      },
+      {
+        q: "How do I prepare for the HESI A2?",
+        a: "Upload review materials for each tested subject and generate practice questions. Focus on areas where you score lowest, then retake quizzes to track improvement.",
+      },
+      {
+        q: "Is this suitable for all HESI versions?",
+        a: "Questions cover content common to HESI A2 nursing admissions exams. Some nursing programs require different HESI sections, so check your program's requirements.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedSubjects: ["biology", "anatomy", "chemistry", "math", "vocabulary", "nursing"],
+  },
+  {
+    slug: "real-estate-exam",
+    name: "Real Estate Exam",
+    fullName: "Real Estate Licensing Exam",
+    description:
+      "Generate real estate exam practice questions on property law, contracts, financing, fair housing, agency relationships, and real estate principles.",
+    owner: "State licensing exams (varies by state)",
+    disclaimer:
+      "Examina is not affiliated with Pearson VUE, PSI, or any state real estate commission. These are practice questions for general real estate concepts and should not replace official state exam preparation materials. Real estate licensing requirements and exam content vary by state.",
+    sampleQuestions: [
+      {
+        q: "Which type of ownership includes an automatic right of survivorship?",
+        a: "Joint tenancy",
+        explanation:
+          "Joint tenancy includes right of survivorship, meaning when one owner dies, their interest automatically transfers to surviving joint tenants. This is distinct from tenancy in common.",
+      },
+      {
+        q: "The Fair Housing Act prohibits discrimination based on:",
+        a: "Race, color, religion, national origin, sex, familial status, and disability",
+        explanation:
+          "The federal Fair Housing Act lists these seven protected classes. Some states and localities have additional protected classes beyond the federal standard.",
+      },
+      {
+        q: "What is the loan-to-value (LTV) ratio for a $200,000 property with a $160,000 loan?",
+        a: "80%",
+        explanation:
+          "LTV = (Loan Amount ÷ Property Value) × 100 = ($160,000 ÷ $200,000) × 100 = 80%.",
+      },
+      {
+        q: "An exclusive right-to-sell listing agreement means:",
+        a: "The listing broker earns commission regardless of who sells the property",
+        explanation:
+          "With exclusive right-to-sell, the listing broker receives commission even if the seller finds the buyer directly. This differs from exclusive agency where the seller can sell without paying commission.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official state exam questions?",
+        a: "No. These are AI-generated practice questions covering general real estate principles. For state-specific official practice exams, consult your state's real estate commission and approved education providers.",
+      },
+      {
+        q: "Do questions cover my specific state's laws?",
+        a: "Questions focus on national real estate concepts and federal law (Fair Housing, RESPA, TILA). You must also study your state's specific regulations, license law, and local practices.",
+      },
+      {
+        q: "What topics are covered?",
+        a: "Generate questions on property ownership, contracts, agency relationships, financing, fair housing, environmental issues, real estate calculations, and professional conduct.",
+      },
+      {
+        q: "Can I practice math calculations?",
+        a: "Yes. Upload real estate math notes (LTV, proration, commission, area calculations) to generate calculation practice problems with step-by-step solutions.",
+      },
+    ],
+    relatedTools: [
+      "/ai-quiz-generator",
+      "/notes-to-quiz",
+      "/multiple-choice-quiz-maker",
+    ],
+    relatedSubjects: ["math"],
+  },
+  {
+    slug: "emt",
+    name: "EMT",
+    fullName: "EMT (Emergency Medical Technician) National Registry Exam",
+    description:
+      "Create EMT practice questions on patient assessment, airway management, trauma care, medical emergencies, and EMS operations.",
+    owner: "NREMT (National Registry of Emergency Medical Technicians)",
+    disclaimer:
+      "Examina is not affiliated with, endorsed by, or sponsored by the NREMT. These are AI-generated study questions, not official NREMT exam items.",
+    sampleQuestions: [
+      {
+        q: "In the primary assessment, which step comes immediately after ensuring scene safety?",
+        a: "Form a general impression and assess level of consciousness",
+        explanation:
+          "After scene safety, the primary assessment follows: general impression and mental status, then airway, breathing, circulation, and priority/transport decision.",
+      },
+      {
+        q: "A patient with paradoxical chest wall movement likely has:",
+        a: "Flail chest",
+        explanation:
+          "Flail chest occurs when multiple adjacent ribs are fractured in multiple places, creating a free-floating segment that moves opposite to normal chest expansion (paradoxical movement).",
+      },
+      {
+        q: "Which position is appropriate for a conscious patient with difficulty breathing?",
+        a: "High Fowler's (sitting upright)",
+        explanation:
+          "High Fowler's position (sitting upright or semi-upright) uses gravity to ease breathing effort and maximize lung expansion. Never force a dyspneic patient to lie flat.",
+      },
+      {
+        q: "Normal capillary refill time in adults is:",
+        a: "Less than 2 seconds",
+        explanation:
+          "Capillary refill over 2 seconds suggests poor perfusion. Test by pressing a fingernail bed and observing how quickly color returns after releasing pressure.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official NREMT questions?",
+        a: "No. These are AI-generated practice questions following EMT scope of practice and NREMT content areas. For official practice exams, visit nremt.org.",
+      },
+      {
+        q: "What EMT topics can I practice?",
+        a: "Generate questions on airway management, patient assessment, trauma, medical emergencies, obstetrics, pediatrics, operations, and EMS protocols by uploading your course materials.",
+      },
+      {
+        q: "Do questions use NREMT format?",
+        a: "Yes. Questions follow multiple-choice format testing assessment, treatment decisions, and priority setting similar to the NREMT cognitive exam.",
+      },
+      {
+        q: "Is this enough to pass the NREMT?",
+        a: "This supplements EMT training and textbook study. Complete an accredited EMT course and use official NREMT practice exams alongside these questions.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedSubjects: ["anatomy", "medical-terminology"],
+  },
+  {
+    slug: "dat",
+    name: "DAT",
+    fullName: "DAT (Dental Admission Test)",
+    description:
+      "Create DAT practice questions on biology, general chemistry, organic chemistry, perceptual ability, reading comprehension, and quantitative reasoning.",
+    owner: "American Dental Association (ADA)",
+    disclaimer:
+      "Examina is not affiliated with, endorsed by, or sponsored by the American Dental Association. These are AI-generated study questions, not official DAT exam items.",
+    sampleQuestions: [
+      {
+        q: "Which salivary gland produces primarily serous secretions?",
+        a: "Parotid gland",
+        explanation:
+          "The parotid gland produces watery, enzyme-rich serous saliva high in amylase for carbohydrate digestion. Submandibular produces mixed, sublingual produces mostly mucous.",
+      },
+      {
+        q: "In SN2 reactions, the nucleophile attacks from:",
+        a: "The backside, causing inversion of configuration",
+        explanation:
+          "SN2 (bimolecular nucleophilic substitution) proceeds through backside attack, inverting stereochemistry at the reaction center. This is one-step with no carbocation intermediate.",
+      },
+      {
+        q: "How many ATP molecules are produced from one glucose molecule during aerobic cellular respiration?",
+        a: "Approximately 36-38 ATP",
+        explanation:
+          "Glycolysis produces 2 ATP, Krebs cycle produces 2 ATP, and the electron transport chain produces approximately 32-34 ATP, totaling 36-38 ATP per glucose.",
+      },
+      {
+        q: "The periodontal ligament connects:",
+        a: "Tooth root to alveolar bone",
+        explanation:
+          "The periodontal ligament is connective tissue anchoring the tooth root (cementum) to the surrounding alveolar bone, providing cushioning and sensory feedback.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official DAT questions?",
+        a: "No. These are AI-generated practice questions covering DAT content areas. For official practice tests, visit the ADA website at ada.org/dat.",
+      },
+      {
+        q: "What DAT sections can I practice?",
+        a: "Generate questions for biology, general chemistry, organic chemistry, perceptual ability concepts, reading comprehension, and quantitative reasoning by uploading relevant study materials.",
+      },
+      {
+        q: "Is dental-specific content included?",
+        a: "Yes. Upload dental anatomy, tooth morphology, and oral biology notes to generate questions on dental-specific topics tested on the DAT biology section.",
+      },
+      {
+        q: "Do questions include perceptual ability practice?",
+        a: "Text-based questions work best. For PAT (Perceptual Ability Test) spatial reasoning, use official DAT practice tests with visual stimuli.",
+      },
+    ],
+    relatedTools: [
+      "/quiz-generator-from-pdf",
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+    ],
+    relatedSubjects: ["biology", "chemistry", "anatomy"],
+  },
 ];
 
 export function getExam(slug: string): ExamType | undefined {

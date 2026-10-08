@@ -110,6 +110,7 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
                     `Common ${subject.name.toLowerCase()} topics you can generate questions for: ${subject.topicsList.join("; ")}.`,
                   ]
                 : []),
+              ...(subject.disclaimer ? [`**Important:** ${subject.disclaimer}`] : []),
             ],
             featuresTitle: `What makes good ${subject.name} questions`,
             features: [
