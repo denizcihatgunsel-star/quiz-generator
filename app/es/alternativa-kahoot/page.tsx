@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: "¿El plan gratis es suficiente para profesores?",
-    a: "El plan gratis te da 5 generaciones de quiz por mes. Para uso diario en clase, el plan Team ($15/mes) ofrece quizzes ilimitados para hasta 5 profesores.",
+    a: "El plan gratis te da 10 generaciones de quiz por mes. Para uso diario en clase, el plan Team ($15/mes) ofrece quizzes ilimitados para hasta 5 profesores.",
   },
   {
     q: "¿Las preguntas tienen explicaciones?",
@@ -146,7 +146,7 @@ export default function AlternativaKahootPage() {
               },
               {
                 title: "Planes de equipo asequibles",
-                body: "Plan gratis para 5 quizzes/mes. Plan Team ($15/mes para 5 profesores) incluye quizzes ilimitados y biblioteca de preguntas compartida.",
+                body: "Plan gratis para 10 quizzes/mes. Plan Team ($15/mes para 5 profesores) incluye quizzes ilimitados y biblioteca de preguntas compartida.",
               },
             ],
             howTitle: "Cómo ejecutar un quiz en vivo con Examina",
