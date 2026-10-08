@@ -238,44 +238,40 @@ export async function POST(req: NextRequest) {
           }
 
           // Grounding check: only when cleanupGaps is present and non-empty
-          if (validatedGaps && validatedGaps.length > 0) {
+          if (validatedGaps && validatedGaps.length > 0 && language === "English") {
             const originalMcqCount = quiz.multipleChoice.length;
-            const filteredMcq = [];
+            const keepIndices = [];
             
-            for (const q of quiz.multipleChoice) {
+            for (let i = 0; i < quiz.multipleChoice.length; i++) {
+              const q = quiz.multipleChoice[i];
               const correctAnswer = q.options[q.correctIndex];
-              const questionStem = q.question;
               
-              if (isAnswerGrounded(correctAnswer, lesson, questionStem)) {
-                filteredMcq.push(q);
+              if (isAnswerGrounded(correctAnswer, lesson)) {
+                keepIndices.push(i);
               }
             }
             
-            const droppedCount = originalMcqCount - filteredMcq.length;
-            const dropThreshold = Math.ceil(originalMcqCount / 3); // ~1/3
+            const droppedCount = originalMcqCount - keepIndices.length;
+            const shouldWarn = droppedCount * 3 > originalMcqCount; // Warn if >1/3
             
-            if (droppedCount > dropThreshold) {
+            if (shouldWarn) {
               // Too many drops, keep all and warn instead
-              quiz.grounding = {
+              const groundingResult = {
+                keep: Array.from({ length: originalMcqCount }, (_, i) => i),
                 dropped: 0,
                 warned: true
               };
+              controller.enqueue(encoder.encode(`\n__EXAMINA_GROUNDING__:${JSON.stringify(groundingResult)}`));
             } else if (droppedCount > 0) {
               // Drop the ungrounded questions
-              quiz.multipleChoice = filteredMcq;
-              quiz.grounding = {
+              const groundingResult = {
+                keep: keepIndices,
                 dropped: droppedCount,
                 warned: false
               };
+              controller.enqueue(encoder.encode(`\n__EXAMINA_GROUNDING__:${JSON.stringify(groundingResult)}`));
             }
-          }
-
-          // Re-encode the modified quiz as JSON and send final chunk
-          if (quiz.grounding) {
-            const finalJson = JSON.stringify(quiz);
-            // Clear previous stream and send the complete modified JSON
-            // (Client already has partial chunks, but will parse the complete fullText + this)
-            controller.enqueue(encoder.encode(`\n${finalJson}`));
+            // If droppedCount === 0, no marker needed (client parses normally)
           }
 
         } catch {

@@ -30,6 +30,7 @@ import MagneticText from "./MagneticText";
 import QuizStory from "./QuizStory";
 import NotesCleanup from "./NotesCleanup";
 import { useTranslation } from "@/lib/i18n";
+import { parseQuizWithGrounding } from "@/lib/grounding-client";
 
 // Halloween seasonal components
 import InteractiveHeadline from "./seasonal/halloween/InteractiveHeadline";
@@ -326,7 +327,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
       // Try to parse JSON, with recovery for truncated responses
       let data;
       try {
-        data = JSON.parse(fullText);
+        data = parseQuizWithGrounding(fullText);
       } catch {
         // Attempt to fix truncated JSON by closing open brackets
         let fixed = fullText.replace(/```json\s*/g, "").replace(/```\s*$/g, "").trim();

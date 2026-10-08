@@ -11,19 +11,30 @@
 /**
  * Check if an answer is grounded in the notes using word overlap.
  * 
- * Strategy: Extract content words from both the answer and notes, apply stemming,
+ * Strategy: Extract content words from the answer and notes, apply stemming,
  * and check if enough of the answer's words appear in the notes.
  * 
- * This is lenient to allow rephrased answers that use different words but similar concepts.
+ * Numbers (digits, years, percentages) must appear literally in the notes.
+ * Question stem is NOT used to avoid false passes.
  */
 export function isAnswerGrounded(
   answer: string,
-  notes: string,
-  questionStem?: string
+  notes: string
 ): boolean {
-  // Normalize: lowercase, remove punctuation except hyphens
+  // Normalize: lowercase, remove punctuation except hyphens and digits
   const normalize = (text: string) => 
     text.toLowerCase().replace(/[^\w\s-]/g, ' ').replace(/\s+/g, ' ').trim();
+  
+  // Extract numbers (including years, percentages) from answer
+  const answerNumbers = answer.match(/\b\d+(?:\.\d+)?%?\b/g) || [];
+  
+  // Check that all numbers in the answer appear literally in notes
+  const normalizedNotes = normalize(notes);
+  for (const num of answerNumbers) {
+    if (!normalizedNotes.includes(num.toLowerCase())) {
+      return false; // Number not in notes, must fail
+    }
+  }
   
   // Extract words, filter common stop words
   const stopWords = new Set([
@@ -40,7 +51,7 @@ export function isAnswerGrounded(
     const words = normalized.split(/\s+/);
     return new Set(
       words
-        .filter(w => w.length > 2 && !stopWords.has(w))
+        .filter(w => w.length > 2 && !stopWords.has(w) && !/^\d+$/.test(w)) // Exclude pure numbers
         .map(w => {
           // Simple stemming: remove common suffixes
           return w
@@ -53,12 +64,7 @@ export function isAnswerGrounded(
     );
   };
   
-  // Combine answer with question stem (if provided) for context
-  const combinedText = questionStem 
-    ? `${questionStem} ${answer}` 
-    : answer;
-  
-  const answerWords = extractContentWords(combinedText);
+  const answerWords = extractContentWords(answer);
   const notesWords = extractContentWords(notes);
   
   if (answerWords.size === 0) return true; // Empty answer, pass by default
