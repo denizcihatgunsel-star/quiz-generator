@@ -116,12 +116,15 @@ export async function GET(req: NextRequest) {
           topic: concept.sourceTopic,
           reviewStatus: "approved",
         },
-        orderBy: [
-          // Prioritize source quiz
-          { id: concept.sourceQuizId },
-        ],
         select: { id: true, data: true, draftSetId: true },
         take: 10,
+      });
+
+      // Sort to prioritize source quiz (client-side)
+      savedQuizzes.sort((a, b) => {
+        if (a.id === concept.sourceQuizId) return -1;
+        if (b.id === concept.sourceQuizId) return 1;
+        return 0;
       });
 
       // Also get approved GeneratedItems for this user
@@ -152,13 +155,43 @@ export async function GET(req: NextRequest) {
           const data = JSON.parse(quiz.data);
           const questions = data.multipleChoice || data.questions || [];
           
+          // If this quiz has a draftSetId, load GeneratedItems to verify reviewStatus
+          let draftSetItems: Array<{ payload: string; reviewStatus: string }> = [];
+          if (quiz.draftSetId) {
+            draftSetItems = await db.generatedItem.findMany({
+              where: { draftSetId: quiz.draftSetId },
+              select: { payload: true, reviewStatus: true },
+            });
+          }
+          
           for (const q of questions) {
             if (!q.question || !Array.isArray(q.options)) continue;
             
-            // If this quiz has a draftSetId, check if the question's GeneratedItem is approved
-            if (quiz.draftSetId) {
-              // For now, skip detailed GeneratedItem matching - if the SavedQuiz is approved, trust it
-              // A more robust implementation would match by question ID
+            // If this quiz has a draftSetId, verify the matching GeneratedItem is approved
+            if (quiz.draftSetId && draftSetItems.length > 0) {
+              // Normalize question text for matching
+              const normalizedQuestion = q.question.trim().toLowerCase().replace(/[^a-z0-9\s]/g, "");
+              
+              // Find matching GeneratedItem by normalized question text
+              const matchingItem = draftSetItems.find((item) => {
+                try {
+                  const itemPayload = JSON.parse(item.payload);
+                  const itemQuestion = (itemPayload.question || "").trim().toLowerCase().replace(/[^a-z0-9\s]/g, "");
+                  return itemQuestion === normalizedQuestion;
+                } catch {
+                  return false;
+                }
+              });
+              
+              // Skip this question if its matching item is not approved
+              if (matchingItem && matchingItem.reviewStatus !== "approved") {
+                continue;
+              }
+              
+              // Also skip if no matching item found (orphaned question)
+              if (!matchingItem) {
+                continue;
+              }
             }
             
             candidates.push({

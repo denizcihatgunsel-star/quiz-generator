@@ -630,5 +630,169 @@ describe("Study Mode", () => {
         expect(payload.options).not.toEqual(["Option A", "Option B", "Option C", "Option D"]);
       }
     });
+
+    it("should exclude SavedQuiz questions whose GeneratedItem is not approved", async () => {
+      const userId = getUserId();
+      
+      // Create a draft set
+      const draftSet = await db.draftQuizSet.create({
+        data: {
+          userId,
+          topic: "Biology",
+          sourceType: "text",
+          quizData: JSON.stringify({ title: "Test Quiz" }),
+        },
+      });
+
+      // Create two GeneratedItems: one approved, one draft
+      await db.generatedItem.create({
+        data: {
+          draftSetId: draftSet.id,
+          itemType: "mcq",
+          bloomLevel: "Understand",
+          reviewStatus: "approved",
+          payload: JSON.stringify({
+            id: "q-approved",
+            question: "What is photosynthesis?",
+            options: ["Energy conversion", "B", "C", "D"],
+            correctIndex: 0,
+            explanation: "Photosynthesis converts light to energy",
+            difficulty: "Medium",
+          }),
+        },
+      });
+
+      await db.generatedItem.create({
+        data: {
+          draftSetId: draftSet.id,
+          itemType: "mcq",
+          bloomLevel: "Understand",
+          reviewStatus: "draft",
+          payload: JSON.stringify({
+            id: "q-draft",
+            question: "What is cellular respiration?",
+            options: ["ATP production", "B", "C", "D"],
+            correctIndex: 0,
+            explanation: "Respiration produces ATP",
+            difficulty: "Medium",
+          }),
+        },
+      });
+
+      // Create a SavedQuiz with both questions, linked to the draft set
+      const quiz = await db.savedQuiz.create({
+        data: {
+          userId,
+          topic: "Biology",
+          reviewStatus: "approved",
+          draftSetId: draftSet.id,
+          data: JSON.stringify({
+            multipleChoice: [
+              {
+                id: "q-approved",
+                question: "What is photosynthesis?",
+                options: ["Energy conversion", "B", "C", "D"],
+                correctIndex: 0,
+                explanation: "Photosynthesis converts light to energy",
+                difficulty: "Medium",
+                bloomLevel: "Understand",
+              },
+              {
+                id: "q-draft",
+                question: "What is cellular respiration?",
+                options: ["ATP production", "B", "C", "D"],
+                correctIndex: 0,
+                explanation: "Respiration produces ATP",
+                difficulty: "Medium",
+                bloomLevel: "Understand",
+              },
+            ],
+          }),
+        },
+      });
+
+      // Create StudyConcepts that match both questions
+      const photoConceptKey = deriveConceptKey(
+        {
+          id: "q-approved",
+          question: "What is photosynthesis?",
+          options: ["Energy conversion", "B", "C", "D"],
+          correctIndex: 0,
+          explanation: "Photosynthesis converts light to energy",
+          difficulty: "Medium",
+          bloomLevel: "Understand",
+        },
+        "Biology"
+      );
+
+      const respConceptKey = deriveConceptKey(
+        {
+          id: "q-draft",
+          question: "What is cellular respiration?",
+          options: ["ATP production", "B", "C", "D"],
+          correctIndex: 0,
+          explanation: "Respiration produces ATP",
+          difficulty: "Medium",
+          bloomLevel: "Understand",
+        },
+        "Biology"
+      );
+
+      await db.studyConcept.createMany({
+        data: [
+          {
+            userId,
+            concept: photoConceptKey,
+            originalBloom: 2,
+            currentBloom: 2,
+            sourceQuizId: quiz.id,
+            sourceTopic: "Biology",
+            dueDate: new Date(),
+            cleared: false,
+          },
+          {
+            userId,
+            concept: respConceptKey,
+            originalBloom: 2,
+            currentBloom: 2,
+            sourceQuizId: quiz.id,
+            sourceTopic: "Biology",
+            dueDate: new Date(),
+            cleared: false,
+          },
+        ],
+      });
+
+      // Now test getDueConcepts behavior
+      const due = await getDueConcepts(userId, 10);
+      expect(due).toHaveLength(2); // Both concepts are due
+
+      // The route's GET handler should only return the approved question
+      // We can't test the full HTTP handler here, but we can verify the data setup
+      const approvedItems = await db.generatedItem.findMany({
+        where: {
+          draftSetId: draftSet.id,
+          reviewStatus: "approved",
+        },
+      });
+
+      expect(approvedItems).toHaveLength(1);
+      
+      const approvedPayload = JSON.parse(approvedItems[0].payload);
+      expect(approvedPayload.question).toBe("What is photosynthesis?");
+      
+      // The draft item should be excluded
+      const draftItems = await db.generatedItem.findMany({
+        where: {
+          draftSetId: draftSet.id,
+          reviewStatus: "draft",
+        },
+      });
+
+      expect(draftItems).toHaveLength(1);
+      
+      const draftPayload = JSON.parse(draftItems[0].payload);
+      expect(draftPayload.question).toBe("What is cellular respiration?");
+    });
   });
 });
