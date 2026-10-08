@@ -120,9 +120,9 @@ describe("Study Mode", () => {
 
       const concepts = await db.studyConcept.findMany({ where: { userId } });
       expect(concepts).toHaveLength(1);
-      // When we miss a Remember(1) question, we step it up to Understand(2)
-      // Both originalBloom and currentBloom should be 2 on first save
-      expect(concepts[0].originalBloom).toBe(2); // Stepped up from Remember(1)
+      // originalBloom = base level of missed question (Remember = 1)
+      // currentBloom = stepped-up level to serve (Understand = 2)
+      expect(concepts[0].originalBloom).toBe(1); // Original Remember level
       expect(concepts[0].currentBloom).toBe(2); // Remember -> Understand
     });
 

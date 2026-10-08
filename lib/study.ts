@@ -89,6 +89,10 @@ export async function recordMissesToStudy(
   const toSave = Array.from(concepts.entries()).slice(0, cap);
 
   for (const [conceptKey, { bloom, sourceQuizId, sourceTopic }] of toSave) {
+    // Get the baseBloom from the original question for originalBloom tracking
+    const originalMiss = missed.find(m => deriveConceptKey(m.question, quizTopic, m.concept) === conceptKey);
+    const baseBloom = originalMiss ? bloomNameToNumber(originalMiss.question.bloomLevel) : bloom;
+    
     await db.studyConcept.upsert({
       where: { userId_concept: { userId, concept: conceptKey } },
       update: {
@@ -99,8 +103,8 @@ export async function recordMissesToStudy(
       create: {
         userId,
         concept: conceptKey,
-        originalBloom: bloom,
-        currentBloom: bloom,
+        originalBloom: baseBloom,  // Original level of the missed question
+        currentBloom: bloom,        // Stepped-up level to serve
         sourceQuizId,
         sourceTopic,
         dueDate: new Date(),
