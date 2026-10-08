@@ -8,6 +8,11 @@ beforeAll(async () => {
 
   // Create StudyConcept table if it doesn't exist
   try {
+    // Drop and recreate tables to ensure schema is current
+    await db.$executeRawUnsafe(`DROP TABLE IF EXISTS "GeneratedItem"`);
+    await db.$executeRawUnsafe(`DROP TABLE IF EXISTS "DraftQuizSet"`);
+    await db.$executeRawUnsafe(`DROP TABLE IF EXISTS "StudyConcept"`);
+    
     await db.$executeRawUnsafe(`
       CREATE TABLE IF NOT EXISTS "StudyConcept" (
         "id" TEXT PRIMARY KEY NOT NULL,
