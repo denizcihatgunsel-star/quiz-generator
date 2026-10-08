@@ -39,6 +39,27 @@ Water molecules are split during the light-dependent reactions.
     expect(isAnswerGrounded('Chloroplasts contain 70% of the cell water', notes)).toBe(false);
   });
 
+  it('should accept numbers (including percentages and decimals) present in notes', () => {
+    const notesWithNumbers = `
+Photosynthesis efficiency is about 3.5% in most plants.
+The process converts 50% of captured light into chemical energy.
+The year 1945 marked major discoveries in photosynthesis research.
+    `.trim();
+    
+    // These should pass because numbers match exactly (% is stripped for comparison)
+    expect(isAnswerGrounded('Efficiency is 3.5%', notesWithNumbers)).toBe(true);
+    expect(isAnswerGrounded('The efficiency is about 3.5 percent', notesWithNumbers)).toBe(true);
+    expect(isAnswerGrounded('Converts 50% of light', notesWithNumbers)).toBe(true);
+    expect(isAnswerGrounded('The year 1945', notesWithNumbers)).toBe(true);
+  });
+
+  it('should reject partial number matches', () => {
+    const notesWithNumbers = `The cell contains 380 mitochondria.`;
+    
+    // 38 should NOT match 380 (not exact)
+    expect(isAnswerGrounded('About 38 mitochondria', notesWithNumbers)).toBe(false);
+  });
+
   it('should not use question stem (answers must stand alone)', () => {
     // Answer "Stroma" alone has no content words and should pass (empty check)
     const answer = 'Stroma';

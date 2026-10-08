@@ -25,13 +25,18 @@ export function isAnswerGrounded(
   const normalize = (text: string) => 
     text.toLowerCase().replace(/[^\w\s-]/g, ' ').replace(/\s+/g, ' ').trim();
   
-  // Extract numbers (including years, percentages) from answer
-  const answerNumbers = answer.match(/\b\d+(?:\.\d+)?%?\b/g) || [];
+  // Extract numbers from both answer and notes (without % for comparison)
+  const extractNumbers = (text: string): Set<string> => {
+    const nums = text.match(/\b\d+(?:\.\d+)?/g) || [];
+    return new Set(nums);
+  };
   
-  // Check that all numbers in the answer appear literally in notes
-  const normalizedNotes = normalize(notes);
+  const answerNumbers = extractNumbers(answer);
+  const notesNumbers = extractNumbers(notes);
+  
+  // Check that all numbers in the answer appear in notes
   for (const num of answerNumbers) {
-    if (!normalizedNotes.includes(num.toLowerCase())) {
+    if (!notesNumbers.has(num)) {
       return false; // Number not in notes, must fail
     }
   }
@@ -51,7 +56,7 @@ export function isAnswerGrounded(
     const words = normalized.split(/\s+/);
     return new Set(
       words
-        .filter(w => w.length > 2 && !stopWords.has(w) && !/^\d+$/.test(w)) // Exclude pure numbers
+        .filter(w => w.length > 2 && !stopWords.has(w) && !/^\d+(?:\.\d+)?$/.test(w)) // Exclude numbers (int and decimal)
         .map(w => {
           // Simple stemming: remove common suffixes
           return w

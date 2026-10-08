@@ -238,40 +238,59 @@ export async function POST(req: NextRequest) {
           }
 
           // Grounding check: only when cleanupGaps is present and non-empty
-          if (validatedGaps && validatedGaps.length > 0 && language === "English") {
-            const originalMcqCount = quiz.multipleChoice.length;
-            const keepIndices = [];
-            
-            for (let i = 0; i < quiz.multipleChoice.length; i++) {
-              const q = quiz.multipleChoice[i];
-              const correctAnswer = q.options[q.correctIndex];
+          // Wrapped in try/catch to fail open and never break generation
+          if (validatedGaps && validatedGaps.length > 0 && language === "English" && Array.isArray(quiz.multipleChoice)) {
+            try {
+              const originalMcqCount = quiz.multipleChoice.length;
+              const keepIndices = [];
               
-              if (isAnswerGrounded(correctAnswer, lesson)) {
-                keepIndices.push(i);
+              for (let i = 0; i < quiz.multipleChoice.length; i++) {
+                const q = quiz.multipleChoice[i];
+                
+                // Guard: treat items without valid correctAnswer as kept
+                if (!q.options || typeof q.correctIndex !== 'number' || !q.options[q.correctIndex]) {
+                  keepIndices.push(i);
+                  continue;
+                }
+                
+                const correctAnswer = q.options[q.correctIndex];
+                
+                // Guard: treat non-string answers as kept
+                if (typeof correctAnswer !== 'string') {
+                  keepIndices.push(i);
+                  continue;
+                }
+                
+                if (isAnswerGrounded(correctAnswer, lesson)) {
+                  keepIndices.push(i);
+                }
               }
+              
+              const droppedCount = originalMcqCount - keepIndices.length;
+              const shouldWarn = droppedCount * 3 > originalMcqCount; // Warn if >1/3
+              
+              if (shouldWarn) {
+                // Too many drops, keep all and warn instead
+                const groundingResult = {
+                  keep: Array.from({ length: originalMcqCount }, (_, i) => i),
+                  dropped: 0,
+                  warned: true
+                };
+                controller.enqueue(encoder.encode(`\n__EXAMINA_GROUNDING__:${JSON.stringify(groundingResult)}`));
+              } else if (droppedCount > 0) {
+                // Drop the ungrounded questions
+                const groundingResult = {
+                  keep: keepIndices,
+                  dropped: droppedCount,
+                  warned: false
+                };
+                controller.enqueue(encoder.encode(`\n__EXAMINA_GROUNDING__:${JSON.stringify(groundingResult)}`));
+              }
+              // If droppedCount === 0, no marker needed (client parses normally)
+            } catch {
+              // Grounding check failed, fail open: no marker gets appended
+              // Generation continues normally without filtering
             }
-            
-            const droppedCount = originalMcqCount - keepIndices.length;
-            const shouldWarn = droppedCount * 3 > originalMcqCount; // Warn if >1/3
-            
-            if (shouldWarn) {
-              // Too many drops, keep all and warn instead
-              const groundingResult = {
-                keep: Array.from({ length: originalMcqCount }, (_, i) => i),
-                dropped: 0,
-                warned: true
-              };
-              controller.enqueue(encoder.encode(`\n__EXAMINA_GROUNDING__:${JSON.stringify(groundingResult)}`));
-            } else if (droppedCount > 0) {
-              // Drop the ungrounded questions
-              const groundingResult = {
-                keep: keepIndices,
-                dropped: droppedCount,
-                warned: false
-              };
-              controller.enqueue(encoder.encode(`\n__EXAMINA_GROUNDING__:${JSON.stringify(groundingResult)}`));
-            }
-            // If droppedCount === 0, no marker needed (client parses normally)
           }
 
         } catch {
