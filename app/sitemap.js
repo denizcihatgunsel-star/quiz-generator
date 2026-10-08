@@ -155,6 +155,36 @@ export default function sitemap() {
     { url: `${SITE}/for-corporate-training`, changeFrequency: "monthly", priority: 0.7 },
     // Wave 2: Spanish alternative
     { url: `${SITE}/es/alternativa-kahoot`, changeFrequency: "monthly", priority: 0.7 },
+    // Batch 4A: New AP Exam Hubs
+    { url: `${SITE}/exams/ap-human-geography`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/exams/ap-world-history`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/exams/ap-calculus-ab`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/exams/ap-environmental-science`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/exams/ap-statistics`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/exams/ap-precalculus`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/exams/ap-government`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/exams/ap-macroeconomics`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/exams/ap-economics`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/exams/ap-computer-science`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/exams/ap-physics-1`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/exams/ged`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/exams/clep`, changeFrequency: "monthly", priority: 0.8 },
+    // Batch 4A: New Subject Hubs
+    { url: `${SITE}/subjects/precalculus`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/subjects/trigonometry`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/subjects/algebra-2`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/subjects/human-geography`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/subjects/probability`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/subjects/astronomy`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/subjects/biochemistry`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE}/subjects/general-chemistry`, changeFrequency: "monthly", priority: 0.8 },
+    // Batch 4A: Combo pages (Low/Medium risk only)
+    { url: `${SITE}/exams/ap-human-geography/practice-questions`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE}/exams/ap-human-geography/study-guide`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE}/exams/ap-world-history/practice-questions`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE}/exams/ap-world-history/study-guide`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE}/exams/act/study-guide`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE}/exams/ap-us-history/study-guide`, changeFrequency: "monthly", priority: 0.7 },
   ].map((p) => ({ ...p, lastModified: now }));
 
   // Intentionally omit thin client shells /explore, /daily-challenge, and /study (noindex instead)

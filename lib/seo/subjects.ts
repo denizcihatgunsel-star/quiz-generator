@@ -1075,6 +1075,406 @@ export const SUBJECTS: Subject[] = [
     ],
     relatedExams: ["ap"],
   },
+  {
+    slug: "precalculus",
+    name: "Precalculus",
+    description:
+      "Generate precalculus quiz questions on polynomial, rational, exponential, logarithmic, and trigonometric functions. Perfect for high school precalculus, college algebra and trigonometry, SAT Math Level 2, or AP Precalculus preparation.",
+    sampleQuestions: [
+      {
+        q: "What is the domain of f(x) = 1/(x - 3)?",
+        a: "All real numbers except x = 3",
+        explanation:
+          "The function is undefined when the denominator equals zero. x - 3 = 0 when x = 3, so the domain is all reals except 3.",
+      },
+      {
+        q: "Simplify: log₅(125)",
+        a: "3",
+        explanation:
+          "log₅(125) asks '5 to what power equals 125?' Since 5³ = 125, the answer is 3.",
+      },
+      {
+        q: "What is the amplitude of f(x) = 4sin(2x)?",
+        a: "4",
+        explanation:
+          "The amplitude of Asin(bx) is |A|. Here A = 4, so amplitude = 4. The period is 2π/b = 2π/2 = π.",
+      },
+    ],
+    faq: [
+      {
+        q: "What precalculus topics can I practice?",
+        a: "Generate questions on functions (polynomial, rational, exponential, logarithmic), trigonometry (identities, equations, graphs), conic sections, sequences and series, and vectors.",
+      },
+      {
+        q: "Is precalculus required before calculus?",
+        a: "Yes. Precalculus builds essential function analysis and trigonometry skills needed for calculus success. Master these foundations first.",
+      },
+      {
+        q: "Can I practice for AP Precalculus?",
+        a: "Yes. Upload AP Precalculus course material to generate questions matching AP exam format and difficulty.",
+      },
+      {
+        q: "Is this free?",
+        a: "Free accounts get 10 quiz generations per month. Paid plans start at $2/month.",
+      },
+    ],
+    relatedTools: [
+      "/ai-quiz-generator",
+      "/notes-to-quiz",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedExams: ["sat", "act", "ap-precalculus"],
+  },
+  {
+    slug: "trigonometry",
+    name: "Trigonometry",
+    description:
+      "Create trigonometry quiz questions on angles, right triangles, unit circle, trig identities, equations, and graphs. Practice for high school trigonometry, precalculus, SAT/ACT, or AP exams.",
+    sampleQuestions: [
+      {
+        q: "What is sin(30°)?",
+        a: "1/2",
+        explanation:
+          "sin(30°) = 1/2. This is a memorized value from the unit circle and 30-60-90 special right triangle.",
+      },
+      {
+        q: "Simplify: sin²(x) + cos²(x)",
+        a: "1",
+        explanation:
+          "The Pythagorean identity states sin²(x) + cos²(x) = 1 for all x. This is one of the most important trig identities.",
+      },
+      {
+        q: "In a right triangle, if opposite = 3 and hypotenuse = 5, what is sin(θ)?",
+        a: "3/5 or 0.6",
+        explanation:
+          "sin(θ) = opposite/hypotenuse = 3/5 = 0.6. This is the definition of sine in right triangle trigonometry (SOH-CAH-TOA).",
+      },
+    ],
+    faq: [
+      {
+        q: "What trigonometry topics can I practice?",
+        a: "Generate questions on angles and radians, right triangle trig (SOH-CAH-TOA), unit circle, trig functions and graphs, identities, equations, and inverse trig functions.",
+      },
+      {
+        q: "Do I need to memorize the unit circle?",
+        a: "Yes. Knowing exact values for sin, cos, and tan at key angles (0°, 30°, 45°, 60°, 90°, and their multiples) is essential for trigonometry success.",
+      },
+      {
+        q: "Can I practice for SAT/ACT?",
+        a: "Yes. Upload trigonometry review material or generate questions covering trig topics that appear on standardized tests.",
+      },
+      {
+        q: "Is this suitable for beginners?",
+        a: "Yes. Generate questions at any level from basic angle measurement and right triangle trig to advanced identities and equations.",
+      },
+    ],
+    relatedTools: [
+      "/ai-quiz-generator",
+      "/notes-to-quiz",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedExams: ["sat", "act", "ap-calculus-ab", "ap-precalculus"],
+  },
+  {
+    slug: "algebra-2",
+    name: "Algebra 2",
+    description:
+      "Generate Algebra 2 quiz questions on quadratic equations, polynomials, rational expressions, exponential and logarithmic functions, and sequences. Perfect for high school Algebra 2 or SAT/ACT math prep.",
+    sampleQuestions: [
+      {
+        q: "Solve for x: x² - 5x + 6 = 0",
+        a: "x = 2 or x = 3",
+        explanation:
+          "Factor: (x - 2)(x - 3) = 0. Set each factor to zero: x - 2 = 0 → x = 2, or x - 3 = 0 → x = 3.",
+      },
+      {
+        q: "Simplify: (2x³)²",
+        a: "4x⁶",
+        explanation:
+          "Apply power rule: (ab)ⁿ = aⁿbⁿ, so (2x³)² = 2²(x³)² = 4x⁶.",
+      },
+      {
+        q: "What is the next term in the arithmetic sequence: 3, 7, 11, 15, ...?",
+        a: "19",
+        explanation:
+          "The common difference is 4 (7 - 3 = 4). Add 4 to the last term: 15 + 4 = 19.",
+      },
+    ],
+    faq: [
+      {
+        q: "What Algebra 2 topics can I practice?",
+        a: "Generate questions on quadratic equations, polynomials, rational expressions, exponential and logarithmic functions, sequences and series, and probability.",
+      },
+      {
+        q: "Is Algebra 2 harder than Algebra 1?",
+        a: "Algebra 2 builds on Algebra 1 foundations with more complex functions, systems, and abstract concepts. Strong Algebra 1 skills are essential.",
+      },
+      {
+        q: "Can I practice for SAT/ACT?",
+        a: "Yes. Many Algebra 2 topics appear on SAT/ACT math sections. Upload test prep material to generate relevant practice questions.",
+      },
+      {
+        q: "Is this free?",
+        a: "Free accounts get 10 quiz generations per month. Paid plans start at $2/month.",
+      },
+    ],
+    relatedTools: [
+      "/ai-quiz-generator",
+      "/notes-to-quiz",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedExams: ["sat", "act"],
+  },
+  {
+    slug: "human-geography",
+    name: "Human Geography",
+    description:
+      "Create human geography quiz questions on cultural patterns, population, migration, urbanization, political geography, agriculture, and economic development. Study for AP Human Geography or college human geography courses.",
+    sampleQuestions: [
+      {
+        q: "What is urban sprawl?",
+        a: "Uncontrolled expansion of urban areas into surrounding rural land",
+        explanation:
+          "Urban sprawl is low-density, automobile-dependent development spreading outward from city centers, often resulting in environmental and infrastructure challenges.",
+      },
+      {
+        q: "Which demographic transition stage has high birth and death rates?",
+        a: "Stage 1",
+        explanation:
+          "Stage 1 of the demographic transition model has high birth and death rates, resulting in slow population growth. Most developed countries have passed this stage.",
+      },
+      {
+        q: "What does a high dependency ratio indicate?",
+        a: "Large proportion of young and/or elderly compared to working-age population",
+        explanation:
+          "The dependency ratio measures non-working-age population (under 15 and over 64) relative to working-age population (15-64). High ratios strain economic resources.",
+      },
+    ],
+    faq: [
+      {
+        q: "What human geography topics can I practice?",
+        a: "Generate questions on population dynamics, migration patterns, cultural landscapes, political boundaries, agricultural systems, urban planning, and economic development.",
+      },
+      {
+        q: "Is human geography different from physical geography?",
+        a: "Yes. Human geography studies human activities and their spatial patterns (cities, cultures, economies), while physical geography studies natural features (climate, landforms, ecosystems).",
+      },
+      {
+        q: "Can I practice for AP Human Geography?",
+        a: "Yes. Upload AP Human Geography course material to generate questions matching exam format and content.",
+      },
+      {
+        q: "Is this free?",
+        a: "Free accounts get 10 quiz generations per month. Paid plans start at $2/month.",
+      },
+    ],
+    relatedTools: [
+      "/ai-quiz-generator",
+      "/notes-to-quiz",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedExams: ["ap-human-geography"],
+  },
+  {
+    slug: "probability",
+    name: "Probability",
+    description:
+      "Generate probability quiz questions on sample spaces, counting principles, independent and dependent events, conditional probability, and probability distributions. Study for statistics, precalculus, or SAT/ACT math.",
+    sampleQuestions: [
+      {
+        q: "What is the probability of rolling a 4 on a standard six-sided die?",
+        a: "1/6",
+        explanation:
+          "There is one favorable outcome (4) out of six possible outcomes (1, 2, 3, 4, 5, 6), so P(4) = 1/6 ≈ 0.167 or 16.7%.",
+      },
+      {
+        q: "If P(A) = 0.3 and P(B) = 0.4, and A and B are independent, what is P(A and B)?",
+        a: "0.12",
+        explanation:
+          "For independent events, P(A and B) = P(A) × P(B) = 0.3 × 0.4 = 0.12 or 12%.",
+      },
+      {
+        q: "How many ways can you arrange 5 books on a shelf?",
+        a: "120",
+        explanation:
+          "Use factorial: 5! = 5 × 4 × 3 × 2 × 1 = 120. This is a permutation where order matters.",
+      },
+    ],
+    faq: [
+      {
+        q: "What probability topics can I practice?",
+        a: "Generate questions on sample spaces, counting (permutations and combinations), independent and dependent events, conditional probability, expected value, and probability distributions.",
+      },
+      {
+        q: "Is probability part of statistics?",
+        a: "Yes. Probability is the foundation for inferential statistics. Understanding probability is essential before studying hypothesis testing and confidence intervals.",
+      },
+      {
+        q: "Can I practice for AP Statistics?",
+        a: "Yes. Upload AP Statistics probability unit notes to generate questions matching the exam's probability content.",
+      },
+      {
+        q: "Is this free?",
+        a: "Free accounts get 10 quiz generations per month. Paid plans start at $2/month.",
+      },
+    ],
+    relatedTools: [
+      "/ai-quiz-generator",
+      "/notes-to-quiz",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedExams: ["sat", "act", "ap-statistics"],
+  },
+  {
+    slug: "astronomy",
+    name: "Astronomy",
+    description:
+      "Create astronomy quiz questions on the solar system, stars, galaxies, cosmology, and observational astronomy. Perfect for high school astronomy, college introductory astronomy, or Science Olympiad preparation.",
+    sampleQuestions: [
+      {
+        q: "What is the largest planet in our solar system?",
+        a: "Jupiter",
+        explanation:
+          "Jupiter is the largest planet with a diameter of about 143,000 km, more than 11 times Earth's diameter. It's a gas giant composed primarily of hydrogen and helium.",
+      },
+      {
+        q: "What causes the phases of the Moon?",
+        a: "The changing angle between Earth, Moon, and Sun",
+        explanation:
+          "Moon phases result from our viewing angle as the Moon orbits Earth. Different portions of the sunlit half become visible, creating phases from new moon to full moon.",
+      },
+      {
+        q: "What is a light-year?",
+        a: "The distance light travels in one year",
+        explanation:
+          "A light-year is approximately 9.46 trillion kilometers. It's a unit of distance, not time, used to measure vast astronomical distances between stars and galaxies.",
+      },
+    ],
+    faq: [
+      {
+        q: "What astronomy topics can I practice?",
+        a: "Generate questions on the solar system, planets, moons, stars and stellar evolution, galaxies, cosmology, astronomical instruments, and space exploration.",
+      },
+      {
+        q: "Do I need math for astronomy?",
+        a: "Basic astronomy requires math for distance calculations, orbital periods, and light-year conversions. Advanced astronomy uses calculus and physics.",
+      },
+      {
+        q: "Can I practice for Science Olympiad?",
+        a: "Yes. Upload your Science Olympiad astronomy resources to generate practice questions matching competition topics.",
+      },
+      {
+        q: "Is this free?",
+        a: "Free accounts get 10 quiz generations per month. Paid plans start at $2/month.",
+      },
+    ],
+    relatedTools: [
+      "/ai-quiz-generator",
+      "/notes-to-quiz",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedExams: [],
+  },
+  {
+    slug: "biochemistry",
+    name: "Biochemistry",
+    description:
+      "Generate biochemistry quiz questions on amino acids, proteins, enzymes, metabolism, nucleic acids, and cellular energetics. Study for college biochemistry, MCAT, DAT, or AP Biology advanced topics.",
+    sampleQuestions: [
+      {
+        q: "Which amino acid is achiral (has no stereoisomer)?",
+        a: "Glycine",
+        explanation:
+          "Glycine has two hydrogen atoms on its alpha carbon (R group = H), making it achiral. All other standard amino acids have four different groups attached to the alpha carbon.",
+      },
+      {
+        q: "What is the primary function of the Krebs cycle?",
+        a: "Generate NADH and FADH₂ for the electron transport chain",
+        explanation:
+          "The Krebs cycle (citric acid cycle) oxidizes acetyl-CoA to produce high-energy electron carriers (NADH and FADH₂) that power ATP synthesis in the electron transport chain.",
+      },
+      {
+        q: "Which enzyme class catalyzes the transfer of phosphate groups?",
+        a: "Kinases",
+        explanation:
+          "Kinases are transferase enzymes that catalyze phosphorylation reactions, typically transferring phosphate from ATP to a substrate molecule.",
+      },
+    ],
+    faq: [
+      {
+        q: "What biochemistry topics can I practice?",
+        a: "Generate questions on amino acids and proteins, enzyme kinetics, carbohydrate metabolism, lipid metabolism, nucleic acid structure and replication, and bioenergetics.",
+      },
+      {
+        q: "Is biochemistry required for medical school?",
+        a: "Yes. Biochemistry is typically required for medical school admission and is heavily tested on the MCAT. It's also essential for understanding physiology and pharmacology.",
+      },
+      {
+        q: "Can I practice for the MCAT?",
+        a: "Yes. Upload your MCAT biochemistry review material to generate questions matching MCAT content and format.",
+      },
+      {
+        q: "Is this free?",
+        a: "Free accounts get 10 quiz generations per month. Paid plans start at $2/month.",
+      },
+    ],
+    relatedTools: [
+      "/ai-quiz-generator",
+      "/notes-to-quiz",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedExams: ["mcat"],
+  },
+  {
+    slug: "general-chemistry",
+    name: "General Chemistry",
+    description:
+      "Create general chemistry quiz questions on atomic structure, bonding, stoichiometry, thermodynamics, kinetics, equilibrium, and acids/bases. Perfect for college general chemistry, AP Chemistry, or MCAT preparation.",
+    sampleQuestions: [
+      {
+        q: "What is the electron configuration of oxygen (atomic number 8)?",
+        a: "1s² 2s² 2p⁴",
+        explanation:
+          "Oxygen has 8 electrons. Fill orbitals in order: 1s² (2), 2s² (2), 2p⁴ (4), totaling 8 electrons.",
+      },
+      {
+        q: "If the pH of a solution is 3, what is its [H⁺] concentration?",
+        a: "1 × 10⁻³ M or 0.001 M",
+        explanation:
+          "pH = -log[H⁺]. If pH = 3, then [H⁺] = 10⁻pH = 10⁻³ = 0.001 M. This is an acidic solution.",
+      },
+      {
+        q: "What does Le Chatelier's principle predict when pressure increases on a gaseous equilibrium?",
+        a: "The equilibrium shifts toward the side with fewer moles of gas",
+        explanation:
+          "Increasing pressure stresses the system. The equilibrium shifts to reduce pressure by favoring the side with fewer gas molecules.",
+      },
+    ],
+    faq: [
+      {
+        q: "What general chemistry topics can I practice?",
+        a: "Generate questions on atomic structure, periodic trends, bonding, stoichiometry, gas laws, thermodynamics, kinetics, equilibrium, acids and bases, and electrochemistry.",
+      },
+      {
+        q: "Is general chemistry required for pre-med?",
+        a: "Yes. Two semesters of general chemistry with lab are typically required for medical school admission and are tested on the MCAT.",
+      },
+      {
+        q: "Can I practice for AP Chemistry?",
+        a: "Yes. Upload AP Chemistry course material to generate questions matching AP exam format and difficulty.",
+      },
+      {
+        q: "Is this free?",
+        a: "Free accounts get 10 quiz generations per month. Paid plans start at $2/month.",
+      },
+    ],
+    relatedTools: [
+      "/ai-quiz-generator",
+      "/notes-to-quiz",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedExams: ["mcat", "ap-chemistry"],
+  },
 ];
 
 export function getSubject(slug: string): Subject | undefined {

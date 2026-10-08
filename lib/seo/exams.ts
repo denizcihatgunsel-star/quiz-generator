@@ -852,6 +852,716 @@ export const EXAMS: ExamType[] = [
     ],
     relatedSubjects: ["psychology"],
   },
+  {
+    slug: "ap-human-geography",
+    name: "AP Human Geography",
+    fullName: "AP Human Geography",
+    description:
+      "Generate AP Human Geography practice questions on cultural patterns, population, migration, political geography, agriculture, industrialization, and cities.",
+    owner: "College Board",
+    disclaimer:
+      "Examina is not affiliated with or endorsed by the College Board. These are original practice questions created by AI for study purposes only, not official AP exam materials.",
+    sampleQuestions: [
+      {
+        q: "Which model describes the spatial distribution of cities by size and number?",
+        a: "Rank-size rule",
+        explanation:
+          "The rank-size rule states that the nth largest city in a country has 1/n the population of the largest city, creating a predictable urban hierarchy.",
+      },
+      {
+        q: "What is the primary cause of stage 5 in the demographic transition model?",
+        a: "Very low birth rates leading to population decline",
+        explanation:
+          "Stage 5 occurs when death rates remain low but birth rates fall below replacement level, resulting in natural decrease and aging populations.",
+      },
+      {
+        q: "Von Thünen's model explains agricultural land use based on which factor?",
+        a: "Distance from market",
+        explanation:
+          "Von Thünen's model shows how land rent and transportation costs determine which crops are grown at varying distances from the central market.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official AP Human Geography questions?",
+        a: "No. These are AI-generated practice questions following AP format and content. For official practice, visit the College Board AP Central website.",
+      },
+      {
+        q: "What topics are covered?",
+        a: "All seven units: Thinking Geographically, Population and Migration, Cultural Patterns, Political Geography, Agriculture and Rural Land Use, Cities and Urban Land Use, and Industrial and Economic Development.",
+      },
+      {
+        q: "Do questions require map analysis?",
+        a: "Questions focus on conceptual understanding of spatial patterns and geographic models. For map-based questions, pair with your textbook's map exercises.",
+      },
+      {
+        q: "Is this enough for AP exam prep?",
+        a: "This supplements your AP course. Use alongside official College Board practice exams and your textbook for comprehensive preparation.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedSubjects: ["geography", "world-history", "human-geography"],
+  },
+  {
+    slug: "ap-world-history",
+    name: "AP World History",
+    fullName: "AP World History: Modern",
+    description:
+      "Create AP World History practice questions covering 1200 CE to present, including empires, trade networks, revolutions, globalization, and cultural exchange.",
+    owner: "College Board",
+    disclaimer:
+      "Examina is not affiliated with or endorsed by the College Board. These are original practice questions created by AI for study purposes only, not official AP exam materials.",
+    sampleQuestions: [
+      {
+        q: "Which trade network connected East Africa, the Middle East, India, and Southeast Asia between 1200-1450?",
+        a: "Indian Ocean trade network",
+        explanation:
+          "The Indian Ocean trade network linked regions through monsoon winds, facilitating exchange of goods (spices, textiles, precious metals) and ideas (Islam, Buddhism).",
+      },
+      {
+        q: "The Columbian Exchange primarily resulted in:",
+        a: "Transfer of crops, animals, and diseases between hemispheres",
+        explanation:
+          "The Columbian Exchange transformed global agriculture and demography through transfer of maize, potatoes, horses, cattle, and diseases like smallpox between Old and New Worlds.",
+      },
+      {
+        q: "Which ideology justified European imperialism in the 19th century?",
+        a: "Social Darwinism and the civilizing mission",
+        explanation:
+          "Social Darwinism applied evolutionary concepts to justify racial hierarchies, while the civilizing mission claimed Europeans had a duty to spread 'superior' culture and technology.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official AP World History questions?",
+        a: "No. These are AI-generated practice questions following AP format and content. For official practice, visit the College Board AP Central website.",
+      },
+      {
+        q: "What time period is covered?",
+        a: "AP World History: Modern covers 1200 CE to present across six units: The Global Tapestry, Networks of Exchange, Land-Based Empires, Transoceanic Interconnections, Revolutions, and the Modern Era.",
+      },
+      {
+        q: "Do questions test historical thinking skills?",
+        a: "Yes. Questions require contextualization, causation, comparison, and continuity and change over time—the same skills tested on the AP exam.",
+      },
+      {
+        q: "Can I practice DBQs and LEQs?",
+        a: "Examina specializes in multiple choice questions. For document-based and long essay questions, use our study guide generator to organize evidence and arguments.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+      "/study-guide-generator",
+    ],
+    relatedSubjects: ["history", "world-history"],
+  },
+  {
+    slug: "ap-calculus-ab",
+    name: "AP Calculus AB",
+    fullName: "AP Calculus AB",
+    description:
+      "Generate AP Calculus AB practice questions on limits, derivatives, integrals, and the Fundamental Theorem of Calculus.",
+    owner: "College Board",
+    disclaimer:
+      "Examina is not affiliated with or endorsed by the College Board. These are original practice questions created by AI for study purposes only, not official AP exam materials.",
+    sampleQuestions: [
+      {
+        q: "Find the derivative of f(x) = 3x⁴ - 2x² + 5.",
+        a: "f'(x) = 12x³ - 4x",
+        explanation:
+          "Apply the power rule: d/dx[xⁿ] = nxⁿ⁻¹. So d/dx[3x⁴] = 12x³, d/dx[-2x²] = -4x, and d/dx[5] = 0.",
+      },
+      {
+        q: "Evaluate the definite integral ∫₀² (2x + 1) dx.",
+        a: "6",
+        explanation:
+          "The antiderivative is x² + x. Evaluate at bounds: (2² + 2) - (0² + 0) = 4 + 2 = 6.",
+      },
+      {
+        q: "If f'(x) > 0 for all x in an interval, what does this tell you about f(x)?",
+        a: "f(x) is increasing on that interval",
+        explanation:
+          "A positive derivative means the function is increasing. This is a key connection between derivatives and function behavior.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official AP Calculus AB questions?",
+        a: "No. These are AI-generated practice questions following AP format and difficulty. For official practice, visit the College Board AP Central website.",
+      },
+      {
+        q: "What topics are covered?",
+        a: "All AP Calculus AB topics: limits and continuity, derivatives and their applications (optimization, related rates, motion), definite and indefinite integrals, Fundamental Theorem of Calculus, and applications of integration.",
+      },
+      {
+        q: "Do I need a graphing calculator?",
+        a: "The AP exam has calculator and non-calculator sections. Practice both types by generating questions with and without complex calculations.",
+      },
+      {
+        q: "Can I practice free response questions?",
+        a: "Examina focuses on multiple choice and computation practice. For full FRQ practice with justification, use our study guide generator and official College Board FRQs.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedSubjects: ["math", "precalculus"],
+  },
+  {
+    slug: "ap-environmental-science",
+    name: "AP Environmental Science",
+    fullName: "AP Environmental Science",
+    description:
+      "Create AP Environmental Science practice questions on ecosystems, biodiversity, population dynamics, pollution, climate change, and sustainability.",
+    owner: "College Board",
+    disclaimer:
+      "Examina is not affiliated with or endorsed by the College Board. These are original practice questions created by AI for study purposes only, not official AP exam materials.",
+    sampleQuestions: [
+      {
+        q: "Which biogeochemical cycle does NOT have a significant atmospheric component?",
+        a: "Phosphorus cycle",
+        explanation:
+          "Unlike carbon, nitrogen, and water cycles, phosphorus moves primarily through rocks, soil, and aquatic systems with minimal atmospheric presence.",
+      },
+      {
+        q: "The rule of 70 is used to calculate:",
+        a: "Doubling time of a population",
+        explanation:
+          "Doubling time ≈ 70 / growth rate (%). If a population grows at 2% per year, it doubles in approximately 70/2 = 35 years.",
+      },
+      {
+        q: "Which pollutant is the primary component of photochemical smog?",
+        a: "Ground-level ozone (O₃)",
+        explanation:
+          "Ground-level ozone forms when nitrogen oxides and volatile organic compounds react in sunlight, creating the hazy, harmful smog visible in cities.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official AP Environmental Science questions?",
+        a: "No. These are AI-generated practice questions following AP format and content. For official practice, visit the College Board AP Central website.",
+      },
+      {
+        q: "What topics are covered?",
+        a: "All nine units: The Living World, Ecosystems, Biodiversity, Earth Systems, Land and Water Use, Energy, Atmospheric Pollution, Aquatic and Terrestrial Pollution, and Global Change.",
+      },
+      {
+        q: "Do questions require calculations?",
+        a: "Yes. The AP exam includes quantitative questions on population growth, energy conversions, and pollutant concentrations. Practice dimensional analysis and formula application.",
+      },
+      {
+        q: "Is this enough for the AP exam?",
+        a: "This supplements your coursework. Combine with labs, field studies, official College Board practice exams, and FRQ practice for comprehensive preparation.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+      "/study-guide-generator",
+    ],
+    relatedSubjects: ["biology", "chemistry", "ecology"],
+  },
+  {
+    slug: "ap-statistics",
+    name: "AP Statistics",
+    fullName: "AP Statistics",
+    description:
+      "Generate AP Statistics practice questions on data analysis, probability, sampling distributions, inference, and regression.",
+    owner: "College Board",
+    disclaimer:
+      "Examina is not affiliated with or endorsed by the College Board. These are original practice questions created by AI for study purposes only, not official AP exam materials.",
+    sampleQuestions: [
+      {
+        q: "What does a p-value of 0.03 mean in hypothesis testing?",
+        a: "There is a 3% probability of observing results this extreme if the null hypothesis is true",
+        explanation:
+          "The p-value measures the probability of obtaining test results at least as extreme as observed, assuming the null hypothesis is correct. A p-value of 0.03 suggests evidence against the null hypothesis.",
+      },
+      {
+        q: "Which type of study can establish causation?",
+        a: "Randomized controlled experiment",
+        explanation:
+          "Only experiments with random assignment can establish cause-and-effect relationships. Observational studies can only identify associations or correlations.",
+      },
+      {
+        q: "The mean is 50 and standard deviation is 10. What percentage of data falls between 40 and 60 in a normal distribution?",
+        a: "Approximately 68%",
+        explanation:
+          "The empirical rule states that in a normal distribution, approximately 68% of data falls within one standard deviation of the mean (50 ± 10).",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official AP Statistics questions?",
+        a: "No. These are AI-generated practice questions following AP format and difficulty. For official practice, visit the College Board AP Central website.",
+      },
+      {
+        q: "What topics are covered?",
+        a: "All four units: Exploring One-Variable Data, Exploring Two-Variable Data, Collecting Data, and Probability and Sampling Distributions plus Inference.",
+      },
+      {
+        q: "Do I need a graphing calculator?",
+        a: "Yes. The AP Statistics exam allows graphing calculators for the entire test. Practice using statistical functions (normalcdf, invNorm, t-tests, etc.) on your calculator.",
+      },
+      {
+        q: "Can I practice free response questions?",
+        a: "Examina focuses on multiple choice. For FRQ practice requiring interpretation and communication of statistical reasoning, use our study guide generator and official College Board FRQs.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedSubjects: ["math", "probability"],
+  },
+  {
+    slug: "ap-precalculus",
+    name: "AP Precalculus",
+    fullName: "AP Precalculus",
+    description:
+      "Create AP Precalculus practice questions on polynomial and rational functions, exponential and logarithmic functions, trigonometry, and polar coordinates.",
+    owner: "College Board",
+    disclaimer:
+      "Examina is not affiliated with or endorsed by the College Board. These are original practice questions created by AI for study purposes only, not official AP exam materials.",
+    sampleQuestions: [
+      {
+        q: "What is the period of the function f(x) = 3sin(2x)?",
+        a: "π",
+        explanation:
+          "The period of sin(bx) is 2π/b. Here b = 2, so period = 2π/2 = π. The amplitude 3 does not affect the period.",
+      },
+      {
+        q: "Solve for x: log₂(x) = 5",
+        a: "x = 32",
+        explanation:
+          "Rewrite in exponential form: x = 2⁵ = 32. This demonstrates the logarithm-exponential relationship: if log_b(x) = y, then b^y = x.",
+      },
+      {
+        q: "Which function has a vertical asymptote at x = 3?",
+        a: "f(x) = 1/(x - 3)",
+        explanation:
+          "Vertical asymptotes occur where the denominator equals zero and the numerator does not. Here, x - 3 = 0 when x = 3.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official AP Precalculus questions?",
+        a: "No. These are AI-generated practice questions following AP format and difficulty. For official practice, visit the College Board AP Central website.",
+      },
+      {
+        q: "What topics are covered?",
+        a: "All four units: Polynomial and Rational Functions, Exponential and Logarithmic Functions, Trigonometric and Polar Functions, and Functions Involving Parameters, Vectors, and Matrices.",
+      },
+      {
+        q: "Is AP Precalculus required before AP Calculus?",
+        a: "Not required but recommended. AP Precalculus builds foundational skills in function analysis and trigonometry essential for calculus success.",
+      },
+      {
+        q: "Do I need a graphing calculator?",
+        a: "Yes. The AP Precalculus exam includes calculator and non-calculator sections. Practice with your graphing calculator on appropriate problems.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedSubjects: ["math", "algebra", "trigonometry"],
+  },
+  {
+    slug: "ap-government",
+    name: "AP Government",
+    fullName: "AP United States Government and Politics",
+    description:
+      "Generate AP Government practice questions on the Constitution, federalism, civil liberties, political parties, and the branches of government.",
+    owner: "College Board",
+    disclaimer:
+      "Examina is not affiliated with or endorsed by the College Board. These are original practice questions created by AI for study purposes only, not official AP exam materials.",
+    sampleQuestions: [
+      {
+        q: "Which principle of the Constitution divides power between national and state governments?",
+        a: "Federalism",
+        explanation:
+          "Federalism is the system where sovereignty is shared between a central government and constituent political units (states), as outlined in the 10th Amendment.",
+      },
+      {
+        q: "The exclusionary rule established in Mapp v. Ohio prevents:",
+        a: "Illegally obtained evidence from being used in court",
+        explanation:
+          "The exclusionary rule protects Fourth Amendment rights by prohibiting prosecutors from using evidence obtained through illegal searches and seizures.",
+      },
+      {
+        q: "What is the primary role of the House Rules Committee?",
+        a: "Determine the terms of debate for legislation",
+        explanation:
+          "The House Rules Committee sets the rules for floor debate, including time limits and whether amendments can be offered, giving it significant power over the legislative process.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official AP Government questions?",
+        a: "No. These are AI-generated practice questions following AP format and content. For official practice, visit the College Board AP Central website.",
+      },
+      {
+        q: "What topics are covered?",
+        a: "All five units: Foundations of American Democracy, Interactions Among Branches of Government, Civil Liberties and Civil Rights, American Political Ideologies and Beliefs, and Political Participation.",
+      },
+      {
+        q: "Do questions include required Supreme Court cases?",
+        a: "Yes. Questions incorporate the 15 required Supreme Court cases and their constitutional principles, though you should also study full case details separately.",
+      },
+      {
+        q: "Can I practice FRQs?",
+        a: "Examina focuses on multiple choice. For FRQ practice (Concept Application, SCOTUS Comparison, Argument Essay, Quantitative Analysis), use our study guide generator and official College Board FRQs.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+      "/study-guide-generator",
+    ],
+    relatedSubjects: ["government", "history"],
+  },
+  {
+    slug: "ap-macroeconomics",
+    name: "AP Macroeconomics",
+    fullName: "AP Macroeconomics",
+    description:
+      "Create AP Macroeconomics practice questions on GDP, unemployment, inflation, fiscal and monetary policy, and international trade.",
+    owner: "College Board",
+    disclaimer:
+      "Examina is not affiliated with or endorsed by the College Board. These are original practice questions created by AI for study purposes only, not official AP exam materials.",
+    sampleQuestions: [
+      {
+        q: "If the Federal Reserve buys government bonds, what is the immediate effect?",
+        a: "Increase in money supply and decrease in interest rates",
+        explanation:
+          "Open market purchases inject money into the banking system, increasing reserves and lowering interest rates through expansionary monetary policy.",
+      },
+      {
+        q: "What is included in the calculation of GDP?",
+        a: "Consumption, investment, government spending, and net exports (C + I + G + NX)",
+        explanation:
+          "GDP measures the total value of all final goods and services produced in an economy using the expenditure approach: GDP = C + I + G + (X - M).",
+      },
+      {
+        q: "Stagflation is characterized by:",
+        a: "High unemployment and high inflation simultaneously",
+        explanation:
+          "Stagflation is the rare condition where inflation and unemployment rise together, challenging traditional policy responses that typically address one at the expense of the other.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official AP Macroeconomics questions?",
+        a: "No. These are AI-generated practice questions following AP format and content. For official practice, visit the College Board AP Central website.",
+      },
+      {
+        q: "What topics are covered?",
+        a: "All six units: Basic Economic Concepts, Economic Indicators and the Business Cycle, National Income and Price Determination, Financial Sector, Long-Run Consequences of Stabilization Policies, and Open Economy.",
+      },
+      {
+        q: "Do I need to draw graphs?",
+        a: "Yes. AP Macroeconomics heavily emphasizes graph analysis (AD-AS, money market, loanable funds, Phillips curve, foreign exchange). Practice sketching and labeling graphs from memory.",
+      },
+      {
+        q: "Can I practice FRQs?",
+        a: "Examina focuses on multiple choice. For FRQ practice requiring graph drawing and policy analysis, use our study guide generator and official College Board FRQs.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+      "/study-guide-generator",
+    ],
+    relatedSubjects: ["economics", "macroeconomics"],
+  },
+  {
+    slug: "ap-economics",
+    name: "AP Economics",
+    fullName: "AP Economics (Macro & Micro)",
+    description:
+      "Generate AP Economics practice questions covering both macroeconomics and microeconomics principles. Note: College Board offers separate AP Macroeconomics and AP Microeconomics exams.",
+    owner: "College Board",
+    disclaimer:
+      "Examina is not affiliated with or endorsed by the College Board. These are original practice questions created by AI for study purposes only, not official AP exam materials. College Board administers separate AP Macroeconomics and AP Microeconomics exams, not a combined Economics exam.",
+    sampleQuestions: [
+      {
+        q: "If demand is elastic, a price decrease will result in:",
+        a: "An increase in total revenue",
+        explanation:
+          "When demand is elastic (Ed > 1), the percentage change in quantity demanded exceeds the percentage change in price, so lowering price increases total revenue.",
+      },
+      {
+        q: "A negative externality causes:",
+        a: "Market overproduction relative to the socially optimal quantity",
+        explanation:
+          "Negative externalities (pollution, noise) impose costs on third parties not reflected in market price, leading producers to supply more than is socially efficient.",
+      },
+      {
+        q: "In the long run, perfectly competitive firms earn:",
+        a: "Zero economic profit",
+        explanation:
+          "Free entry and exit drive economic profit to zero in perfect competition. Firms earn normal profit (covering opportunity costs) but no excess economic profit.",
+      },
+    ],
+    faq: [
+      {
+        q: "Is there one AP Economics exam?",
+        a: "No. College Board offers two separate exams: AP Macroeconomics and AP Microeconomics. Most students take them as separate courses and exams, though some schools combine both in one course.",
+      },
+      {
+        q: "Should I study macro or micro first?",
+        a: "Either order works. Macro focuses on aggregate economy (GDP, inflation, unemployment), while micro focuses on individual markets (supply/demand, firms, market structures). Many students find micro more intuitive to start.",
+      },
+      {
+        q: "What's the difference between macro and micro?",
+        a: "Macroeconomics studies the economy as a whole (national income, monetary policy, trade), while microeconomics studies individual decision-making (consumer choice, firm production, market equilibrium).",
+      },
+      {
+        q: "Can I take both AP exams?",
+        a: "Yes. Students often take both AP Macroeconomics and AP Microeconomics exams, as they cover complementary content and many colleges grant credit for each separately.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+      "/study-guide-generator",
+    ],
+    relatedSubjects: ["economics", "macroeconomics", "microeconomics"],
+  },
+  {
+    slug: "ap-computer-science",
+    name: "AP Computer Science A",
+    fullName: "AP Computer Science A",
+    description:
+      "Generate AP Computer Science A practice questions on Java programming, object-oriented design, algorithms, and data structures.",
+    owner: "College Board",
+    disclaimer:
+      "Examina is not affiliated with or endorsed by the College Board. These are original practice questions created by AI for study purposes only, not official AP exam materials.",
+    sampleQuestions: [
+      {
+        q: "What is the output of: int x = 5; System.out.println(x++);",
+        a: "5",
+        explanation:
+          "The post-increment operator x++ prints the current value (5) then increments x to 6. Pre-increment (++x) would increment first and print 6.",
+      },
+      {
+        q: "Which data structure follows Last-In-First-Out (LIFO) order?",
+        a: "Stack",
+        explanation:
+          "Stacks use LIFO: the most recently added element is removed first (push/pop operations). Queues use FIFO (First-In-First-Out) order.",
+      },
+      {
+        q: "In object-oriented programming, which concept allows a subclass to provide specific implementation of a method defined in its superclass?",
+        a: "Method overriding",
+        explanation:
+          "Method overriding allows subclasses to provide their own implementation of inherited methods. This is different from overloading (same method name, different parameters).",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official AP Computer Science A questions?",
+        a: "No. These are AI-generated practice questions following AP format and content. For official practice, visit the College Board AP Central website.",
+      },
+      {
+        q: "What topics are covered?",
+        a: "All AP CSA topics: Primitive Types, Using Objects, Boolean Expressions and if Statements, Iteration, Writing Classes, Arrays, ArrayLists, 2D Arrays, Inheritance, and Recursion.",
+      },
+      {
+        q: "Do I need to write actual Java code?",
+        a: "The AP exam requires reading, analyzing, and writing Java code. Practice coding by hand without an IDE—trace code execution, identify errors, and write methods on paper.",
+      },
+      {
+        q: "Can I practice free response questions?",
+        a: "Examina focuses on multiple choice conceptual questions. For FRQ coding practice, use our study guide generator and official College Board FRQs that require writing complete methods and classes.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedSubjects: ["computer-science"],
+  },
+  {
+    slug: "ap-physics-1",
+    name: "AP Physics 1",
+    fullName: "AP Physics 1: Algebra-Based",
+    description:
+      "Create AP Physics 1 practice questions on kinematics, dynamics, energy, momentum, rotational motion, waves, and circuits.",
+    owner: "College Board",
+    disclaimer:
+      "Examina is not affiliated with or endorsed by the College Board. These are original practice questions created by AI for study purposes only, not official AP exam materials.",
+    sampleQuestions: [
+      {
+        q: "A ball is thrown upward. At its highest point, which statement is true?",
+        a: "Velocity is zero, acceleration is 9.8 m/s² downward",
+        explanation:
+          "At the highest point of projectile motion, vertical velocity momentarily equals zero, but acceleration due to gravity (9.8 m/s² downward) remains constant throughout the flight.",
+      },
+      {
+        q: "If you double the mass of an object while keeping force constant, how does acceleration change?",
+        a: "Acceleration is halved",
+        explanation:
+          "From Newton's second law F = ma, if F is constant and m doubles, a must halve to maintain equality: F = (2m)(a/2).",
+      },
+      {
+        q: "Two resistors (2Ω and 4Ω) are connected in parallel. What is the equivalent resistance?",
+        a: "1.33Ω",
+        explanation:
+          "For parallel resistors: 1/R_eq = 1/R₁ + 1/R₂ = 1/2 + 1/4 = 3/4, so R_eq = 4/3 ≈ 1.33Ω. Parallel resistance is always less than the smallest resistor.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official AP Physics 1 questions?",
+        a: "No. These are AI-generated practice questions following AP format and difficulty. For official practice, visit the College Board AP Central website.",
+      },
+      {
+        q: "What topics are covered?",
+        a: "All ten units: Kinematics, Dynamics, Circular Motion and Gravitation, Energy, Momentum, Simple Harmonic Motion, Torque and Rotational Motion, Electric Charge and Force, DC Circuits, and Mechanical Waves and Sound.",
+      },
+      {
+        q: "Is calculus required?",
+        a: "No. AP Physics 1 is algebra-based. You need algebra, trigonometry, and basic graphical analysis, but not calculus. For calculus-based physics, see AP Physics C.",
+      },
+      {
+        q: "Can I practice free response questions?",
+        a: "Examina focuses on multiple choice. For FRQ practice requiring experimental design, data analysis, and paragraph-length explanations, use our study guide generator and official College Board FRQs.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+      "/study-guide-generator",
+    ],
+    relatedSubjects: ["physics", "math"],
+  },
+  {
+    slug: "ged",
+    name: "GED",
+    fullName: "GED (General Educational Development)",
+    description:
+      "Create GED practice questions for reasoning through language arts, mathematical reasoning, science, and social studies high school equivalency preparation.",
+    owner: "GED Testing Service",
+    disclaimer:
+      "Examina is not affiliated with or endorsed by GED Testing Service. These are original practice questions for study purposes only, not official GED test items.",
+    sampleQuestions: [
+      {
+        q: "Which sentence is grammatically correct?",
+        a: "The team was excited about its victory.",
+        explanation:
+          "Use 'its' (possessive) not 'it's' (contraction of 'it is'). Collective nouns like 'team' take singular pronouns when referring to the group as a unit.",
+      },
+      {
+        q: "If 3x + 7 = 22, what is x?",
+        a: "5",
+        explanation:
+          "Subtract 7 from both sides: 3x = 15. Divide both sides by 3: x = 5. Always isolate the variable using inverse operations.",
+      },
+      {
+        q: "Photosynthesis in plants produces:",
+        a: "Glucose and oxygen",
+        explanation:
+          "Plants use light energy to convert carbon dioxide and water into glucose (C₆H₁₂O₆) and oxygen (O₂) through photosynthesis: 6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official GED questions?",
+        a: "No. These are AI-generated practice questions to help you prepare. For official GED practice tests, visit ged.com.",
+      },
+      {
+        q: "What subjects does the GED test?",
+        a: "The GED has four sections: Reasoning Through Language Arts (reading and writing), Mathematical Reasoning (algebra, geometry, data analysis), Science (life, physical, and Earth science), and Social Studies (civics, economics, geography, US history).",
+      },
+      {
+        q: "How long is the GED test?",
+        a: "Total testing time is about 7.5 hours across four subject tests. You can take them on separate days if needed.",
+      },
+      {
+        q: "Is this enough to pass the GED?",
+        a: "This helps you practice content and question types. Combine with official GED practice tests, study guides, and adult education classes for complete preparation.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+      "/study-guide-generator",
+    ],
+    relatedSubjects: ["math", "english", "science", "history"],
+  },
+  {
+    slug: "clep",
+    name: "CLEP",
+    fullName: "CLEP (College-Level Examination Program)",
+    description:
+      "Generate CLEP practice questions to earn college credit by examination in subjects like composition, history, math, science, and business.",
+    owner: "College Board",
+    disclaimer:
+      "Examina is not affiliated with or endorsed by the College Board. These are original practice questions for study purposes only, not official CLEP exam questions.",
+    sampleQuestions: [
+      {
+        q: "Which of the following is a power reserved to the states under the 10th Amendment?",
+        a: "Regulating education",
+        explanation:
+          "The 10th Amendment reserves powers not delegated to the federal government to the states. Education, marriage laws, and most criminal law are state powers under federalism.",
+      },
+      {
+        q: "In a free market economy, prices are primarily determined by:",
+        a: "Supply and demand",
+        explanation:
+          "In free markets, prices reach equilibrium where quantity supplied equals quantity demanded, without government price controls or central planning.",
+      },
+      {
+        q: "The Treaty of Versailles (1919) imposed harsh penalties on which nation?",
+        a: "Germany",
+        explanation:
+          "The Treaty of Versailles officially ended World War I and placed full war guilt and heavy reparations on Germany, contributing to economic hardship and political instability.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official CLEP questions?",
+        a: "No. These are AI-generated practice questions following CLEP format and difficulty. For official practice, visit the College Board CLEP website at clep.collegeboard.org.",
+      },
+      {
+        q: "What CLEP exams are available?",
+        a: "CLEP offers 34 exams in five categories: Composition and Literature, World Languages, History and Social Sciences, Science and Mathematics, and Business. Each exam awards college credit if you pass.",
+      },
+      {
+        q: "How much college credit can I earn?",
+        a: "Most CLEP exams award 3-6 college credits, equivalent to one semester course. Check with your college for accepted exams and minimum passing scores.",
+      },
+      {
+        q: "What score do I need to pass?",
+        a: "CLEP uses a scaled score of 20-80. Most colleges require 50 or higher to award credit, but requirements vary by institution and exam. Check your college's CLEP policy.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+      "/study-guide-generator",
+    ],
+    relatedSubjects: ["history", "english", "math", "science", "government"],
+  },
 ];
 
 export function getExam(slug: string): ExamType | undefined {

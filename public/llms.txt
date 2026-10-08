@@ -88,6 +88,7 @@ Next.js 16 (App Router), React, TypeScript, Tailwind CSS, Turso (libSQL), NextAu
 - [Browse All Exams](https://www.examina.ink/exams) — hub for all standardized tests
 - [SAT Practice Test Generator](https://www.examina.ink/exams/sat)
 - [ACT Practice Questions](https://www.examina.ink/exams/act)
+  - [ACT Study Guide](https://www.examina.ink/exams/act/study-guide)
 - [AP Exam Practice](https://www.examina.ink/exams/ap)
 - [MCAT Practice Questions](https://www.examina.ink/exams/mcat)
 - [NCLEX Practice Generator](https://www.examina.ink/exams/nclex)
@@ -95,10 +96,28 @@ Next.js 16 (App Router), React, TypeScript, Tailwind CSS, Turso (libSQL), NextAu
 - [LSAT Practice Test](https://www.examina.ink/exams/lsat)
 - [TOEFL Practice Quiz](https://www.examina.ink/exams/toefl)
 - [IELTS Practice Questions](https://www.examina.ink/exams/ielts)
+- [GED Study Guide](https://www.examina.ink/exams/ged)
+- [CLEP Practice Questions](https://www.examina.ink/exams/clep)
 - [AP US History Practice](https://www.examina.ink/exams/ap-us-history)
   - [APUSH Practice Questions](https://www.examina.ink/exams/ap-us-history/practice-questions)
+  - [AP US History Study Guide](https://www.examina.ink/exams/ap-us-history/study-guide)
 - [AP Psychology Practice](https://www.examina.ink/exams/ap-psychology)
   - [AP Psychology Flashcards](https://www.examina.ink/exams/ap-psychology/flashcards)
+- [AP Human Geography](https://www.examina.ink/exams/ap-human-geography)
+  - [AP Human Geography Practice Questions](https://www.examina.ink/exams/ap-human-geography/practice-questions)
+  - [AP Human Geography Study Guide](https://www.examina.ink/exams/ap-human-geography/study-guide)
+- [AP World History](https://www.examina.ink/exams/ap-world-history)
+  - [AP World History Practice Questions](https://www.examina.ink/exams/ap-world-history/practice-questions)
+  - [AP World History Study Guide](https://www.examina.ink/exams/ap-world-history/study-guide)
+- [AP Calculus AB](https://www.examina.ink/exams/ap-calculus-ab)
+- [AP Environmental Science](https://www.examina.ink/exams/ap-environmental-science)
+- [AP Statistics](https://www.examina.ink/exams/ap-statistics)
+- [AP Precalculus](https://www.examina.ink/exams/ap-precalculus)
+- [AP Government](https://www.examina.ink/exams/ap-government)
+- [AP Macroeconomics](https://www.examina.ink/exams/ap-macroeconomics)
+- [AP Economics](https://www.examina.ink/exams/ap-economics)
+- [AP Computer Science A](https://www.examina.ink/exams/ap-computer-science)
+- [AP Physics 1](https://www.examina.ink/exams/ap-physics-1)
 
 ### Subjects
 - [Browse All Subjects](https://www.examina.ink/subjects) — hub for all subjects
@@ -143,6 +162,14 @@ Next.js 16 (App Router), React, TypeScript, Tailwind CSS, Turso (libSQL), NextAu
   - [World History Quiz](https://www.examina.ink/subjects/world-history/quiz)
 - [French Flashcards](https://www.examina.ink/subjects/french)
   - [French Flashcards](https://www.examina.ink/subjects/french/flashcards)
+- [Precalculus Practice](https://www.examina.ink/subjects/precalculus)
+- [Trigonometry Practice](https://www.examina.ink/subjects/trigonometry)
+- [Algebra 2 Quiz](https://www.examina.ink/subjects/algebra-2)
+- [Human Geography](https://www.examina.ink/subjects/human-geography)
+- [Probability Practice](https://www.examina.ink/subjects/probability)
+- [Astronomy Quiz](https://www.examina.ink/subjects/astronomy)
+- [Biochemistry Practice](https://www.examina.ink/subjects/biochemistry)
+- [General Chemistry Study Guide](https://www.examina.ink/subjects/general-chemistry)
 
 ### Features
 - [Browse All Features](https://www.examina.ink/features) — hub for all features
