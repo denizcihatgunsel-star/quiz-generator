@@ -17,7 +17,7 @@ export default function MobileRegisterPage({
       <h1 className="mt-1 text-3xl font-medium tracking-tight text-[#3B2027]">
         Create your <span className="font-serif italic text-[#B0607A]">account</span>
       </h1>
-      <p className="mt-2 text-sm text-[#9A7280]">Start with 5 free quizzes per month.</p>
+      <p className="mt-2 text-sm text-[#9A7280]">Start with 10 free quizzes per month.</p>
 
       <div className="mt-7 rounded-2xl border border-[#F3D5DC] bg-white/75 p-6 shadow-[0_20px_60px_-30px_rgba(176,96,122,0.5)] backdrop-blur-xl">
         <RegisterFormClient refCode={searchParams.ref} />

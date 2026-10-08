@@ -1055,7 +1055,7 @@ export const POSTS: BlogPost[] = [
         p: [
           "| Tool | AI Generation | PDF Support | Free Tier | Price |",
           "|------|--------------|-------------|-----------|-------|",
-          "| **Examina** | ✅ Yes | ✅ Native upload | 5/month | $2/mo for 20 |",
+          "| **Examina** | ✅ Yes | ✅ Native upload | 10/month | $2/mo for 20 |",
           "| **Quizlet** | ❌ No | Copy-paste only | ✅ Yes | $8/mo Plus |",
           "| **Google Forms** | ❌ No | Copy-paste only | ✅ Yes | Free |",
           "| **Kahoot** | ❌ No | Copy-paste only | ✅ Limited | $10/mo+ |",
@@ -1141,7 +1141,7 @@ export const POSTS: BlogPost[] = [
         p: [
           "| Platform | AI Generation | Spaced Repetition | Free Tier | Also Does Quizzes | Price |",
           "|----------|--------------|-------------------|-----------|-------------------|-------|",
-          "| Examina | ✅ Yes | ✅ Yes | 5/month | ✅ Yes | $2/mo |",
+          "| Examina | ✅ Yes | ✅ Yes | 10/month | ✅ Yes | $2/mo |",
           "| Anki | ❌ No | ✅ Yes (best) | ✅ Yes (desktop) | ❌ No | Free (desktop) |",
           "| Knowt | ✅ Yes | ✅ Yes | ✅ Generous | ✅ Yes | Free |",
           "| Brainscape | ❌ No | ✅ Yes | ✅ Limited | ❌ No | $10/mo |",

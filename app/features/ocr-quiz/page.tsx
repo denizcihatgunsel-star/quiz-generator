@@ -16,7 +16,7 @@ const faqs = [
   { q: "How does OCR quiz generation work?", a: "Take a photo of handwritten or printed notes. Examina uses OCR to extract the text, then AI generates quiz questions from it." },
   { q: "Does it work with handwriting?", a: "Yes, but legible handwriting works best. Print or typed text gives the most accurate OCR results." },
   { q: "What image formats work?", a: "JPEG, PNG, and other common image formats. Photo quality affects OCR accuracy—good lighting and clear text help." },
-  { q: "Is OCR free?", a: "OCR processing is included. Free accounts get 5 quiz generations per month. Paid plans start at $2/month." },
+  { q: "Is OCR free?", a: "OCR processing is included. Free accounts get 10 quiz generations per month. Paid plans start at $2/month." },
 ];
 
 export default function OCRQuizPage() {

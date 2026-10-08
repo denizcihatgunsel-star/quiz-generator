@@ -43,7 +43,7 @@ export default function FreeQuizPage() {
         applicationCategory: "EducationalApplication",
         operatingSystem: "Web",
         description:
-          "Free quiz maker that generates quizzes from your notes with AI. No credit card required. 5 free quizzes per month.",
+          "Free quiz maker that generates quizzes from your notes with AI. No credit card required. 10 free quizzes per month.",
         offers: planOffers(now),
         publisher: { "@id": "https://www.examina.ink/#organization" },
       },
