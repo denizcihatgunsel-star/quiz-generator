@@ -105,6 +105,11 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
             intro: [
               `Studying ${subject.name.toLowerCase()} means understanding concepts, not just memorizing definitions. The best way to test understanding is through practice questions—but writing good questions takes time most students don't have.`,
               `Examina reads your ${subject.name.toLowerCase()} notes and generates quiz questions automatically. Upload a textbook chapter, paste lecture notes, or photograph study material, and get multiple choice, true/false, and fill-in-the-blank questions with explanations. Questions are tagged by difficulty and Bloom's taxonomy level so you know whether you're testing recall or real comprehension.`,
+              ...(subject.topicsList
+                ? [
+                    `Common ${subject.name.toLowerCase()} topics you can generate questions for: ${subject.topicsList.join("; ")}.`,
+                  ]
+                : []),
             ],
             featuresTitle: `What makes good ${subject.name} questions`,
             features: [
@@ -124,8 +129,12 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
             howTitle: `Sample ${subject.name} questions`,
             intro2: [
               `Here are examples of ${subject.name.toLowerCase()} questions Examina can generate. Actual questions come from your uploaded study material, so they match your course content exactly.`,
+              ...(subject.questionTypesAdvice ? [`**Which question types work best for ${subject.name.toLowerCase()}:** ${subject.questionTypesAdvice}`] : []),
+              ...(subject.studyTips
+                ? [`**Study tips for ${subject.name.toLowerCase()}:** ${subject.studyTips.join(" ")}`]
+                : []),
             ],
-            steps: subject.sampleQuestions.slice(0, 3).map((sq, i) => ({
+            steps: subject.sampleQuestions.map((sq, i) => ({
               n: `0${i + 1}`,
               title: sq.q,
               body: `Answer: ${sq.a}. Explanation: ${sq.explanation}`,

@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.15.9",
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/postcss": "^4",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
@@ -48,6 +49,7 @@
     "@vitest/ui": "^4.1.11",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
+    "playwright": "^1.64.0",
     "prisma": "^7.5.0",
     "tailwindcss": "^4",
     "topojson-client": "^3.1.0",

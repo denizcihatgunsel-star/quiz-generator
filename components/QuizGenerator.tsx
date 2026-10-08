@@ -37,9 +37,9 @@ import MobileHalloweenDecor from "./seasonal/halloween/MobileHalloweenDecor";
 import { useHalloweenActive } from "./seasonal/halloween/HalloweenLayout";
 const CursorGlow = dynamic(() => import("./seasonal/halloween/CursorGlow"), { ssr: false });
 
-// Below-fold marketing: client-only to keep homepage HTML lean for crawlers/CDN
+// Below-fold marketing sections - HomeSections must be SSR for SEO word count
 const UnseenLanding = dynamic(() => import("./UnseenLanding"), { ssr: false });
-const HomeSections = dynamic(() => import("./HomeSections"), { ssr: false });
+import HomeSections from "./HomeSections";
 
 const EXAMPLE_LESSON = `The water cycle, also known as the hydrological cycle, describes the continuous movement of water on, above, and below Earth's surface. The main stages are:
 
