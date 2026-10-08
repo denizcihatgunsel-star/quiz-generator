@@ -35,8 +35,53 @@ beforeAll(async () => {
     await db.$executeRawUnsafe(`
       CREATE INDEX IF NOT EXISTS "StudyConcept_userId_cleared_idx" ON "StudyConcept"("userId", "cleared")
     `);
+    
+    // Create DraftQuizSet table for draft exclusion tests
+    await db.$executeRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "DraftQuizSet" (
+        "id" TEXT PRIMARY KEY NOT NULL,
+        "userId" TEXT NOT NULL,
+        "topic" TEXT NOT NULL,
+        "sourceType" TEXT NOT NULL DEFAULT 'text',
+        "ocrUsed" INTEGER NOT NULL DEFAULT 0,
+        "sourceConfidence" REAL,
+        "reviewStatus" TEXT NOT NULL DEFAULT 'draft',
+        "reviewerNotes" TEXT,
+        "rejectionReason" TEXT,
+        "quizData" TEXT NOT NULL,
+        "savedQuizId" TEXT UNIQUE,
+        "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    
+    // Create GeneratedItem table
+    await db.$executeRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "GeneratedItem" (
+        "id" TEXT PRIMARY KEY NOT NULL,
+        "draftSetId" TEXT NOT NULL,
+        "itemType" TEXT NOT NULL,
+        "payload" TEXT NOT NULL,
+        "bloomLevel" TEXT NOT NULL,
+        "bloomRationale" TEXT,
+        "ocrUsed" INTEGER NOT NULL DEFAULT 0,
+        "sourceConfidence" REAL,
+        "distractorStrength" REAL,
+        "reviewStatus" TEXT NOT NULL DEFAULT 'draft',
+        "reviewerNotes" TEXT,
+        "rejectionReason" TEXT,
+        "sortOrder" INTEGER NOT NULL DEFAULT 0,
+        "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY ("draftSetId") REFERENCES "DraftQuizSet"("id") ON DELETE CASCADE
+      )
+    `);
+    
+    await db.$executeRawUnsafe(`
+      CREATE INDEX IF NOT EXISTS "GeneratedItem_draftSetId_reviewStatus_idx" ON "GeneratedItem"("draftSetId", "reviewStatus")
+    `);
   } catch (err) {
-    // Table might already exist
+    // Tables might already exist
   }
 });
 

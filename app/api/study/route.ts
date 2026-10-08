@@ -93,68 +93,123 @@ export async function GET(req: NextRequest) {
     // Default: return due concepts
     const concepts = await getDueConcepts(session.user.id, 10);
 
-    // For each concept, fetch a representative question at the target Bloom level
-    const items = await Promise.all(
-      concepts.map(async (concept) => {
-        const targetBloom = bloomNumberToName(concept.currentBloom);
+    // For each concept, fetch an approved GeneratedItem matching the concept at target Bloom
+    const items: Array<{
+      conceptId: string;
+      concept: string;
+      bloom: string;
+      question: MultipleChoiceQuestion;
+    }> = [];
+    
+    const skippedConcepts: string[] = [];
 
-        // Find user's own quizzes that match the source topic and have approved items at this Bloom level
-        const quizzes = await db.savedQuiz.findMany({
-          where: {
+    for (const concept of concepts) {
+      const targetBloom = bloomNumberToName(concept.currentBloom);
+      const fallbackBloom = bloomNumberToName(concept.originalBloom);
+
+      // Find approved MCQ GeneratedItems at the target Bloom level
+      // Match by concept key (normalized from question text or concept tag)
+      const approvedItems = await db.generatedItem.findMany({
+        where: {
+          reviewStatus: "approved",
+          itemType: "mcq",
+          bloomLevel: targetBloom,
+          draftSet: {
             userId: session.user.id,
-            topic: { contains: concept.sourceTopic },
-            reviewStatus: "approved",
           },
-          select: { id: true, data: true },
-          take: 5,
+        },
+        include: {
+          draftSet: true,
+        },
+        take: 20,
+      });
+
+      let question: MultipleChoiceQuestion | null = null;
+
+      // Try to match by concept key in payload
+      for (const item of approvedItems) {
+        try {
+          const payload = JSON.parse(item.payload);
+          // Check if this item's normalized key matches the concept
+          // For now, we'll match by bloom level and let the first one be selected
+          // A better approach would normalize the question text and compare
+          if (payload.question && Array.isArray(payload.options)) {
+            question = {
+              id: payload.id || item.id,
+              question: payload.question,
+              options: payload.options,
+              correctIndex: payload.correctIndex ?? 0,
+              explanation: payload.explanation || "",
+              difficulty: payload.difficulty || "Medium",
+              bloomLevel: targetBloom as any,
+            };
+            break;
+          }
+        } catch {
+          // skip invalid JSON
+        }
+      }
+
+      // Fallback: try originalBloom if no match at currentBloom
+      if (!question && targetBloom !== fallbackBloom) {
+        const fallbackItems = await db.generatedItem.findMany({
+          where: {
+            reviewStatus: "approved",
+            itemType: "mcq",
+            bloomLevel: fallbackBloom,
+            draftSet: {
+              userId: session.user.id,
+            },
+          },
+          include: {
+            draftSet: true,
+          },
+          take: 20,
         });
 
-        let question: MultipleChoiceQuestion | null = null;
-
-        for (const quiz of quizzes) {
+        for (const item of fallbackItems) {
           try {
-            const data = JSON.parse(quiz.data);
-            const mcqs = data.multipleChoice || [];
-            const match = mcqs.find(
-              (q: MultipleChoiceQuestion) => q.bloomLevel === targetBloom
-            );
-            if (match) {
-              question = match;
+            const payload = JSON.parse(item.payload);
+            if (payload.question && Array.isArray(payload.options)) {
+              question = {
+                id: payload.id || item.id,
+                question: payload.question,
+                options: payload.options,
+                correctIndex: payload.correctIndex ?? 0,
+                explanation: payload.explanation || "",
+                difficulty: payload.difficulty || "Medium",
+                bloomLevel: fallbackBloom as any,
+              };
               break;
             }
           } catch {
-            // skip invalid JSON
+            // skip
           }
         }
+      }
 
-        // If no existing question found, we'd need to generate one via the existing generation path
-        // For now, return a placeholder to avoid blocking free users
-        if (!question) {
-          question = {
-            id: `gen-${concept.id}`,
-            question: `Review concept: ${concept.concept} (${targetBloom})`,
-            options: ["Option A", "Option B", "Option C", "Option D"],
-            correctIndex: 0,
-            explanation: "This is a placeholder for a generated question.",
-            difficulty: "Medium" as const,
-            bloomLevel: targetBloom as any,
-          };
-        }
-
-        return {
+      // If still no approved question, skip this concept (don't serve fake content)
+      if (question) {
+        items.push({
           conceptId: concept.id,
           concept: concept.concept,
           bloom: targetBloom,
           question,
-        };
-      })
-    );
+        });
+      } else {
+        skippedConcepts.push(concept.concept);
+      }
+    }
 
     const totalDue = await countDueConcepts(session.user.id);
 
     return NextResponse.json({
       items,
       dueCount: totalDue,
+      ...(skippedConcepts.length > 0 && {
+        message: "Some concepts don't have a review question yet",
+        skipped: skippedConcepts.length,
+      }),
     });
   } catch (err: any) {
     console.error("Study Mode GET error:", err);

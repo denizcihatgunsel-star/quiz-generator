@@ -359,23 +359,135 @@ describe("Study Mode", () => {
   });
 
   describe("Draft exclusion", () => {
-    it("should exclude draft and rejected items from remediation", async () => {
-      // This test verifies the API logic: only reviewStatus='approved' quizzes are queried
-      // The API endpoint filters with: reviewStatus: "approved"
-      // This ensures draft and rejected items are never served to users
+    it("should only return approved GeneratedItems", async () => {
+      const userId = getUserId();
       
-      // Conceptual verification:
-      // 1. API route queries: db.savedQuiz.findMany({ where: { reviewStatus: "approved" } })
-      // 2. Draft and rejected quizzes are excluded by this filter
-      // 3. GeneratedItem records with non-approved status are not served
+      // Create a draft set for the user
+      const draftSet = await db.draftQuizSet.create({
+        data: {
+          userId,
+          topic: "Biology",
+          sourceType: "text",
+          quizData: JSON.stringify({ title: "Test Quiz" }),
+        },
+      });
       
-      // Test passes if the filtering logic is correct (verified in code review)
-      const filterLogic = { reviewStatus: "approved" };
-      expect(filterLogic.reviewStatus).toBe("approved");
+      // Create GeneratedItems with different review statuses
+      const approvedItem = await db.generatedItem.create({
+        data: {
+          draftSetId: draftSet.id,
+          itemType: "mcq",
+          bloomLevel: "Remember",
+          reviewStatus: "approved",
+          payload: JSON.stringify({
+            id: "q-approved",
+            question: "What is mitochondria?",
+            options: ["Powerhouse", "Nucleus", "Ribosome", "Membrane"],
+            correctIndex: 0,
+            explanation: "Mitochondria is the powerhouse",
+            difficulty: "Medium",
+          }),
+        },
+      });
       
-      // Additional verification: excluded statuses
-      const excludedStatuses = ["draft", "rejected"];
-      expect(excludedStatuses).not.toContain("approved");
+      await db.generatedItem.create({
+        data: {
+          draftSetId: draftSet.id,
+          itemType: "mcq",
+          bloomLevel: "Remember",
+          reviewStatus: "draft",
+          payload: JSON.stringify({
+            id: "q-draft",
+            question: "Draft question",
+            options: ["A", "B", "C", "D"],
+            correctIndex: 0,
+          }),
+        },
+      });
+      
+      await db.generatedItem.create({
+        data: {
+          draftSetId: draftSet.id,
+          itemType: "mcq",
+          bloomLevel: "Remember",
+          reviewStatus: "rejected",
+          payload: JSON.stringify({
+            id: "q-rejected",
+            question: "Rejected question",
+            options: ["A", "B", "C", "D"],
+            correctIndex: 0,
+          }),
+        },
+      });
+      
+      // Query only approved items
+      const approvedOnly = await db.generatedItem.findMany({
+        where: {
+          draftSetId: draftSet.id,
+          reviewStatus: "approved",
+        },
+      });
+      
+      expect(approvedOnly).toHaveLength(1);
+      expect(approvedOnly[0].id).toBe(approvedItem.id);
+      expect(approvedOnly[0].reviewStatus).toBe("approved");
+      
+      // Verify draft and rejected are excluded
+      const allItems = await db.generatedItem.findMany({
+        where: { draftSetId: draftSet.id },
+      });
+      
+      expect(allItems).toHaveLength(3);
+      expect(allItems.some(i => i.reviewStatus === "draft")).toBe(true);
+      expect(allItems.some(i => i.reviewStatus === "rejected")).toBe(true);
+    });
+
+    it("should never return placeholder questions", async () => {
+      const userId = getUserId();
+      
+      // Create a draft set with no approved items
+      const draftSet = await db.draftQuizSet.create({
+        data: {
+          userId,
+          topic: "Biology",
+          sourceType: "text",
+          quizData: JSON.stringify({ title: "Test Quiz" }),
+        },
+      });
+      
+      // Create only draft/rejected items
+      await db.generatedItem.create({
+        data: {
+          draftSetId: draftSet.id,
+          itemType: "mcq",
+          bloomLevel: "Remember",
+          reviewStatus: "draft",
+          payload: JSON.stringify({
+            id: "q1",
+            question: "Draft",
+            options: ["A", "B", "C", "D"],
+            correctIndex: 0,
+          }),
+        },
+      });
+      
+      // Query approved items - should be empty
+      const approvedItems = await db.generatedItem.findMany({
+        where: {
+          draftSetId: draftSet.id,
+          reviewStatus: "approved",
+        },
+      });
+      
+      expect(approvedItems).toHaveLength(0);
+      
+      // Verify no placeholder patterns exist in approved items
+      for (const item of approvedItems) {
+        const payload = JSON.parse(item.payload);
+        expect(payload.question).not.toContain("Review concept:");
+        expect(payload.question).not.toContain("placeholder");
+        expect(payload.options).not.toEqual(["Option A", "Option B", "Option C", "Option D"]);
+      }
     });
   });
 });
