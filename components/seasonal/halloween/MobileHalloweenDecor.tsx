@@ -185,17 +185,6 @@ export default function MobileHalloweenDecor({
         <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 32, height: 32, top: 580, right: -20 }} />
         <Prop src={BAT} className="hw-m-bat" style={{ width: 24, height: 12, top: 700, left: -16, transform: "rotate(-8deg)" }} />
         <Prop src={GHOST} className="hw-m-ghost" style={{ width: 40, height: 40, top: 720, right: -24, transform: "scaleX(-1)" }} />
-
-        {/* Footer strip — fixed in the first viewport above the tab bar (Option A) */}
-        <div className="hw-m-footer-strip hw-m-pricing-footer-fixed flex items-end justify-center gap-3">
-          <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 32, height: 32, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-          <Prop src={BAT} className="hw-m-bat" style={{ width: 28, height: 14, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-          <Prop src={CANDLE} className="hw-m-candle" style={{ width: 28, height: 28, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-          <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 34, height: 34, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-          <Prop src={BAT} className="hw-m-bat" style={{ width: 28, height: 14, position: "relative", top: "auto", left: "auto", right: "auto", transform: "scaleX(-1)" }} />
-          <Prop src={CANDLE} className="hw-m-candle" style={{ width: 28, height: 28, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-          <Prop src={PUMPKIN} className="hw-m-pumpkin" style={{ width: 32, height: 32, position: "relative", top: "auto", left: "auto", right: "auto" }} />
-        </div>
       </div>
     );
   }
