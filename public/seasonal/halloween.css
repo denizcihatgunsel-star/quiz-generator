@@ -1865,8 +1865,8 @@ body[data-season="halloween"] {
 
 
 /* ==========================================================================
-   Mobile Soft A / Pricing A / app-shell layers — SSR markup always present
-   while the Halloween calendar window is open; shown only under data-season.
+   Mobile Soft A / Pricing A / app-shell layers — SSR markup conditionally present
+   when Halloween is active; shown/hidden with data-season (defence-in-depth).
    ========================================================================== */
 .hw-m-layer {
   display: none !important;
@@ -1946,4 +1946,40 @@ body[data-season="halloween"] {
 }
 [data-season="halloween"] .hw-m-pricing-footer-fixed .hw-m-bat {
   filter: drop-shadow(0 0 10px rgba(53, 208, 180, 0.95)) brightness(1.2);
+}
+
+/* ==========================================================================
+   Mobile viewport guards: hide decorations that cannot maintain >= 8px clearance
+   from text / buttons / inputs at narrow mobile viewports.
+   ========================================================================== */
+@media (max-width: 379px) {
+  .hw-m-pricing-ghost-title {
+    display: none !important;
+  }
+}
+
+/* Quiz-soft side ghosts/bats hidden at all phone widths (they overlap card/textarea) */
+@media (max-width: 767px) {
+  .hw-m-quiz-ghost-hide-380,
+  .hw-m-quiz-bat-hide-380 {
+    display: none !important;
+  }
+}
+
+@media (min-width: 390px) and (max-width: 400px) {
+  .hw-m-pricing-pumpkin-left {
+    right: -32px !important;
+  }
+}
+
+/* ==========================================================================
+   Fix Generate button clipping at 360px on /m/create: ensure it fits inside
+   the card exactly like the non-Halloween version by not adding extra width.
+   ========================================================================== */
+@media (max-width: 360px) {
+  [data-season="halloween"] button#generate-btn {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    font-size: 0.8125rem !important;
+  }
 }
