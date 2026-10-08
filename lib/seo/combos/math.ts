@@ -271,31 +271,6 @@ export const MATH_COMBOS: ComboData[] = [
       },
     ],
     topicsCovered: ["Arithmetic", "Pre-algebra", "Algebra (equations, functions)", "Geometry (area, volume, angles)", "Trigonometry (sin, cos, tan)", "Statistics (mean, median, probability)", "Calculus (derivatives, limits)", "Word problems", "Problem-solving strategies"],
-          "Apply the power rule to each term: d/dx[4x³] = 12x² and d/dx[2x] = 2. Combine: f'(x) = 12x² + 2.",
-        bloomLevel: "Apply",
-        type: "multiple-choice",
-      },
-      {
-        q: "What is the next number in the sequence: 2, 6, 12, 20, 30, __?",
-        a: "42",
-        explanation:
-          "The differences between consecutive terms are 4, 6, 8, 10 (increasing by 2 each time). Next difference is 12, so 30 + 12 = 42. Pattern: n(n+1) for n = 1,2,3,4,5,6.",
-        bloomLevel: "Analyze",
-        type: "multiple-choice",
-      },
-    ],
-    topicsCovered: [
-      "Linear equations",
-      "Quadratic equations",
-      "Functions and graphs",
-      "Geometry and measurement",
-      "Exponents and radicals",
-      "Polynomials",
-      "Ratios and percentages",
-      "Basic calculus",
-      "Word problems",
-      "Number patterns",
-    ],
     studyTips: {
       workflow: [
         "Take a diagnostic practice test across all math topics to identify which areas (algebra, geometry, trig, calculus) you struggle with most",
@@ -329,23 +304,6 @@ export const MATH_COMBOS: ComboData[] = [
       {
         q: "Can I use this for standardized test prep (SAT, ACT, GRE)?",
         a: "Yes. Practice questions build the problem-solving skills tested on standardized exams. For test-specific prep, also upload official practice tests to generate questions matching exact exam format and difficulty.",
-      },
-    ],
-      {
-        q: "Can I generate questions at specific difficulty levels?",
-        a: "Yes. Questions are generated from your uploaded material, so difficulty matches your course level. You can also specify difficulty when creating custom quizzes.",
-      },
-      {
-        q: "Is this good for SAT or ACT math prep?",
-        a: "Yes. Generate SAT/ACT-style math questions by uploading relevant practice material. Questions test the same skills and problem-solving approaches.",
-      },
-      {
-        q: "How many questions should I practice at once?",
-        a: "Start with 10-15 question sets to maintain focus. Quality practice with review is more effective than racing through large problem sets.",
-      },
-      {
-        q: "Can I create tests from my homework or textbook?",
-        a: "Yes. Upload your textbook chapter or homework assignment and generate similar practice problems with different numbers.",
       },
     ],
     relatedPages: [
