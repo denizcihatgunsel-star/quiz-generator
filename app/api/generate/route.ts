@@ -262,7 +262,7 @@ export async function POST(req: NextRequest) {
                   continue;
                 }
                 
-                if (isAnswerGrounded(correctAnswer, lesson)) {
+                if (isAnswerGrounded(correctAnswer, lesson, q.question)) {
                   keepIndices.push(i);
                 } else {
                   failedIndices.push(i);
