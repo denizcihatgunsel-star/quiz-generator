@@ -55,6 +55,13 @@ export default function FeaturesHubPage() {
         isPartOf: { "@id": `${SITE_URL}/#website` },
       },
       {
+        "@type": "SoftwareApplication",
+        name: "Examina",
+        url: SITE_URL,
+        applicationCategory: "EducationalApplication",
+        description: "Quiz generator with Bloom's taxonomy, live classroom mode, OCR, PDF export, and more.",
+      },
+      {
         "@type": "ItemList",
         name: "Examina Features",
         description:

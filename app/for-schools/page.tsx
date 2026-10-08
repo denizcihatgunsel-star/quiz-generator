@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
-import { saleLandingData } from "@/lib/pricing";
+import { copyText, saleCopy, saleLandingData, planOffers } from "@/lib/pricing";
 
 export const dynamic = "force-static";
 export const revalidate = 60;
@@ -21,8 +21,28 @@ const faqs = [
 
 export default function ForSchoolsPage() {
   const now = new Date();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebPage", "@id": "https://www.examina.ink/for-schools#webpage", url: "https://www.examina.ink/for-schools", name: "Quiz Platform for Schools | Examina", isPartOf: { "@id": "https://www.examina.ink/#website" } },
+      { "@type": "SoftwareApplication", name: "Examina", url: "https://www.examina.ink", applicationCategory: "EducationalApplication", description: "Quiz platform for schools and districts with AI quiz generation.", offers: planOffers(now) },
+      { "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) } })) },
+      { "@type": "BreadcrumbList", itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://www.examina.ink" },
+        { "@type": "ListItem", position: 2, name: "For Schools", item: "https://www.examina.ink/for-schools" }
+      ]}
+    ]
+  };
+
+  
+
   return (
-    <KeywordLanding
+
+    <>
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      <KeywordLanding
       data={saleLandingData({
         kicker: "For Schools",
         h1: "Quiz platform for schools",
@@ -48,6 +68,9 @@ export default function ForSchoolsPage() {
         relatedTitle: "Related",
         related: [{ href: "/for-teachers", label: "For Teachers" }, { href: "/ai-quiz-generator", label: "AI Quiz Generator" }, { href: "/features/formative-assessment", label: "Formative Assessment" }],
       }, now)}
-    />
-  );
+          />
+
+      </>
+
+    );
 }

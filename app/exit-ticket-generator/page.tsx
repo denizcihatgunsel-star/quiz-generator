@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
-import { saleLandingData, planOffers } from "@/lib/pricing";
+import { copyText, saleCopy, saleLandingData, planOffers } from "@/lib/pricing";
 
 export const dynamic = "force-static";
 export const revalidate = 60;
@@ -21,8 +21,33 @@ const faqs = [
 
 export default function ExitTicketGeneratorPage() {
   const now = new Date();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebPage", "@id": "https://www.examina.ink/exit-ticket-generator#webpage", url: "https://www.examina.ink/exit-ticket-generator", name: "Exit Ticket Generator | Examina", isPartOf: { "@id": "https://www.examina.ink/#website" } },
+      { "@type": "SoftwareApplication", name: "Examina", url: "https://www.examina.ink", applicationCategory: "EducationalApplication", description: "Generate exit ticket questions for formative assessment.", offers: planOffers(now) },
+      { "@type": "HowTo", name: "How to create exit tickets with AI", step: [
+        { "@type": "HowToStep", position: 1, name: "Paste lesson key points", text: "Copy the key concepts from today's lesson" },
+        { "@type": "HowToStep", position: 2, name: "Generate questions", text: "AI writes 2-3 quick check questions" },
+        { "@type": "HowToStep", position: 3, name: "Run the exit ticket", text: "Students answer in the last 5 minutes of class" }
+      ]},
+      { "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) } })) },
+      { "@type": "BreadcrumbList", itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://www.examina.ink" },
+        { "@type": "ListItem", position: 2, name: "Tools", item: "https://www.examina.ink/exit-ticket-generator" }
+      ]}
+    ]
+  };
+
+  
+
   return (
-    <KeywordLanding
+
+    <>
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      <KeywordLanding
       data={saleLandingData({
         kicker: "Exit Ticket Generator",
         h1: "Exit ticket generator",
@@ -48,6 +73,9 @@ export default function ExitTicketGeneratorPage() {
         relatedTitle: "Related",
         related: [{ href: "/features/formative-assessment", label: "Formative Assessment" }, { href: "/for-teachers", label: "For Teachers" }, { href: "/blog/exit-ticket-ideas", label: "Exit Ticket Ideas" }],
       }, now)}
-    />
-  );
+          />
+
+      </>
+
+    );
 }

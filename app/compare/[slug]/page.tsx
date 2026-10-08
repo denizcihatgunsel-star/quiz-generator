@@ -15,9 +15,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const page = getComparePage(params.slug);
+  const { slug } = await params;
+  const page = getComparePage(slug);
   if (!page) return {};
 
   return pageMetadata({
@@ -27,8 +28,9 @@ export async function generateMetadata({
   });
 }
 
-export default function ComparePage({ params }: { params: { slug: string } }) {
-  const page = getComparePage(params.slug);
+export default async function ComparePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const page = getComparePage(slug);
   if (!page) notFound();
 
   const now = new Date();

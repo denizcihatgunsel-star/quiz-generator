@@ -15,9 +15,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { subject: string };
+  params: Promise<{ subject: string }>;
 }): Promise<Metadata> {
-  const subject = getSubject(params.subject);
+  const { subject: subjectSlug } = await params;
+  const subject = getSubject(subjectSlug);
   if (!subject) return {};
 
   return pageMetadata({
@@ -27,8 +28,9 @@ export async function generateMetadata({
   });
 }
 
-export default function SubjectPage({ params }: { params: { subject: string } }) {
-  const subject = getSubject(params.subject);
+export default async function SubjectPage({ params }: { params: Promise<{ subject: string }> }) {
+  const { subject: subjectSlug } = await params;
+  const subject = getSubject(subjectSlug);
   if (!subject) notFound();
 
   const now = new Date();

@@ -15,6 +15,42 @@ export interface Integration {
 
 export const INTEGRATIONS: Integration[] = [
   {
+    slug: "google-forms",
+    name: "Google Forms",
+    fullName: "Google Forms",
+    description:
+      "Generate quiz questions from notes, then add to Google Forms. AI creates multiple choice and true/false questions compatible with Google Forms.",
+    workflow: [
+      "Generate quiz questions in Examina from your lesson notes",
+      "Review questions and note the answer key",
+      "Manually create Google Forms quiz and paste questions",
+      "Set up auto-grading in Forms using the answer key",
+    ],
+    faq: [
+      {
+        q: "Can Examina export directly to Google Forms?",
+        a: "Examina generates quiz questions you can copy into Google Forms. Future updates may include direct export.",
+      },
+      {
+        q: "What question types work with Google Forms?",
+        a: "Multiple choice and true/false questions transfer perfectly. Fill-in-the-blank works as short answer questions.",
+      },
+      {
+        q: "Is this free?",
+        a: "Yes. Generate 5 quizzes per month free. Paid plans start at $2/month for 20 quizzes.",
+      },
+      {
+        q: "Why use this instead of typing questions directly in Google Forms?",
+        a: "AI generates questions from your lesson content in seconds. You get a complete quiz with answers and explanations, then transfer it to Google Forms.",
+      },
+    ],
+    relatedTools: [
+      "/integrations/google-classroom",
+      "/for-teachers",
+      "/ai-quiz-generator",
+    ],
+  },
+  {
     slug: "canvas",
     name: "Canvas",
     fullName: "Canvas LMS",

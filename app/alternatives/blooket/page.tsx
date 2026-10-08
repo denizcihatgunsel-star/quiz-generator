@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
-import { copyText, saleCopy, saleLandingData } from "@/lib/pricing";
+import { copyText, saleCopy, saleLandingData, planOffers } from "@/lib/pricing";
 
 export const dynamic = "force-static";
 export const revalidate = 60;
@@ -43,6 +43,14 @@ export default function BlooketAlternativePage() {
         url: "https://www.examina.ink/alternatives/blooket",
         name: "Blooket Alternative | Examina",
         isPartOf: { "@id": "https://www.examina.ink/#website" },
+      },
+      {
+        "@type": "SoftwareApplication",
+        name: "Examina",
+        url: "https://www.examina.ink",
+        applicationCategory: "EducationalApplication",
+        description: "AI quiz generator with alternatives to Kahoot, Quizizz, and other platforms.",
+        offers: planOffers(now),
       },
       {
         "@type": "FAQPage",

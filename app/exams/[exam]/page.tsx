@@ -12,8 +12,9 @@ export async function generateStaticParams() {
   return EXAMS.map((exam) => ({ exam: exam.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { exam: string } }): Promise<Metadata> {
-  const exam = getExam(params.exam);
+export async function generateMetadata({ params }: { params: Promise<{ exam: string }> }): Promise<Metadata> {
+  const { exam: examSlug } = await params;
+  const exam = getExam(examSlug);
   if (!exam) return {};
 
   return pageMetadata({
@@ -23,8 +24,9 @@ export async function generateMetadata({ params }: { params: { exam: string } })
   });
 }
 
-export default function ExamPage({ params }: { params: { exam: string } }) {
-  const exam = getExam(params.exam);
+export default async function ExamPage({ params }: { params: Promise<{ exam: string }> }) {
+  const { exam: examSlug } = await params;
+  const exam = getExam(examSlug);
   if (!exam) notFound();
 
   const now = new Date();

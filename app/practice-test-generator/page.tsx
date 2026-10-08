@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
-import { saleLandingData, planOffers } from "@/lib/pricing";
+import { copyText, saleCopy, saleLandingData, planOffers } from "@/lib/pricing";
 
 export const dynamic = "force-static";
 export const revalidate = 60;
@@ -21,8 +21,52 @@ const faqs = [
 
 export default function PracticeTestGeneratorPage() {
   const now = new Date();
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.examina.ink/practice-test-generator#webpage",
+        url: "https://www.examina.ink/practice-test-generator",
+        name: "Practice Test Generator | Examina",
+        isPartOf: { "@id": "https://www.examina.ink/#website" },
+      },
+      {
+        "@type": "SoftwareApplication",
+        name: "Examina",
+        url: "https://www.examina.ink",
+        applicationCategory: "EducationalApplication",
+        description: "Generate practice tests for exam prep from study materials.",
+        offers: planOffers(now),
+      },
+      {
+        "@type": "HowTo",
+        name: "How to create practice tests with AI",
+        step: [
+          { "@type": "HowToStep", position: 1, name: "Upload study materials", text: "Upload notes for the topic you're practicing" },
+          { "@type": "HowToStep", position: 2, name: "Generate practice test", text: "AI creates a complete practice test with questions" },
+          { "@type": "HowToStep", position: 3, name: "Take under test conditions", text: "Set a timer and take the test like the real exam" },
+        ],
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) } })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.examina.ink" },
+          { "@type": "ListItem", position: 2, name: "Tools", item: "https://www.examina.ink/practice-test-generator" },
+        ],
+      },
+    ],
+  };
+  
   return (
-    <KeywordLanding
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <KeywordLanding
       data={saleLandingData({
         kicker: "Practice Test Generator",
         h1: "Practice test generator",
@@ -48,6 +92,7 @@ export default function PracticeTestGeneratorPage() {
         relatedTitle: "Related",
         related: [{ href: "/test-generator", label: "Test Generator" }, { href: "/exam-generator", label: "Exam Generator" }, { href: "/for-students", label: "For Students" }],
       }, now)}
-    />
+      />
+    </>
   );
 }

@@ -15,9 +15,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { integration: string };
+  params: Promise<{ integration: string }>;
 }): Promise<Metadata> {
-  const integration = getIntegration(params.integration);
+  const { integration: integrationSlug } = await params;
+  const integration = getIntegration(integrationSlug);
   if (!integration) return {};
 
   return pageMetadata({
@@ -27,8 +28,9 @@ export async function generateMetadata({
   });
 }
 
-export default function IntegrationPage({ params }: { params: { integration: string } }) {
-  const integration = getIntegration(params.integration);
+export default async function IntegrationPage({ params }: { params: Promise<{ integration: string }> }) {
+  const { integration: integrationSlug } = await params;
+  const integration = getIntegration(integrationSlug);
   if (!integration) notFound();
 
   const now = new Date();

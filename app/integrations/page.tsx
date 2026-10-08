@@ -46,6 +46,13 @@ export default function IntegrationsHubPage() {
         isPartOf: { "@id": `${SITE_URL}/#website` },
       },
       {
+        "@type": "SoftwareApplication",
+        name: "Examina",
+        url: SITE_URL,
+        applicationCategory: "EducationalApplication",
+        description: "Generate quiz questions for Canvas, Moodle, Google Classroom, Blackboard, and other LMS platforms.",
+      },
+      {
         "@type": "ItemList",
         name: "LMS Integrations",
         description:

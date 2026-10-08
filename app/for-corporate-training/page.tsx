@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
-import { saleLandingData } from "@/lib/pricing";
+import { copyText, saleCopy, saleLandingData, planOffers } from "@/lib/pricing";
 
 export const dynamic = "force-static";
 export const revalidate = 60;
@@ -21,8 +21,28 @@ const faqs = [
 
 export default function ForCorporateTrainingPage() {
   const now = new Date();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebPage", "@id": "https://www.examina.ink/for-corporate-training#webpage", url: "https://www.examina.ink/for-corporate-training", name: "Corporate Training Quiz Generator | Examina", isPartOf: { "@id": "https://www.examina.ink/#website" } },
+      { "@type": "SoftwareApplication", name: "Examina", url: "https://www.examina.ink", applicationCategory: "EducationalApplication", description: "Generate training quizzes for corporate L&D and compliance.", offers: planOffers(now) },
+      { "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) } })) },
+      { "@type": "BreadcrumbList", itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://www.examina.ink" },
+        { "@type": "ListItem", position: 2, name: "For Corporate Training", item: "https://www.examina.ink/for-corporate-training" }
+      ]}
+    ]
+  };
+
+  
+
   return (
-    <KeywordLanding
+
+    <>
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      <KeywordLanding
       data={saleLandingData({
         kicker: "Corporate Training",
         h1: "Training quiz generator",
@@ -48,6 +68,9 @@ export default function ForCorporateTrainingPage() {
         relatedTitle: "Related",
         related: [{ href: "/for-schools", label: "For Schools" }, { href: "/test-generator", label: "Test Generator" }, { href: "/ai-quiz-generator", label: "AI Quiz Generator" }],
       }, now)}
-    />
-  );
+          />
+
+      </>
+
+    );
 }

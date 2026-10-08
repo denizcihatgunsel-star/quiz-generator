@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
-import { saleLandingData } from "@/lib/pricing";
+import { saleLandingData, planOffers } from "@/lib/pricing";
 
 export const dynamic = "force-static";
 export const revalidate = 60;
@@ -44,6 +44,15 @@ export default function AlternativaKahootPage() {
         name: "Alternativa a Kahoot | Examina",
         isPartOf: { "@id": "https://www.examina.ink/#website" },
         inLanguage: "es",
+      },
+      {
+        "@type": "SoftwareApplication",
+        name: "Examina",
+        url: "https://www.examina.ink",
+        applicationCategory: "EducationalApplication",
+        description: "Generador de quiz con IA - alternativa a Kahoot con generación automática de preguntas.",
+        inLanguage: "es",
+        offers: planOffers(now),
       },
       {
         "@type": "FAQPage",

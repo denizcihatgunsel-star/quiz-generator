@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
-import { saleLandingData } from "@/lib/pricing";
+import { copyText, saleCopy, saleLandingData, planOffers } from "@/lib/pricing";
 
 export const dynamic = "force-static";
 export const revalidate = 60;
@@ -21,8 +21,28 @@ const faqs = [
 
 export default function ForTutorsPage() {
   const now = new Date();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebPage", "@id": "https://www.examina.ink/for-tutors#webpage", url: "https://www.examina.ink/for-tutors", name: "Quiz Generator for Tutors | Examina", isPartOf: { "@id": "https://www.examina.ink/#website" } },
+      { "@type": "SoftwareApplication", name: "Examina", url: "https://www.examina.ink", applicationCategory: "EducationalApplication", description: "Generate custom practice tests for tutoring students.", offers: planOffers(now) },
+      { "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) } })) },
+      { "@type": "BreadcrumbList", itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://www.examina.ink" },
+        { "@type": "ListItem", position: 2, name: "For Tutors", item: "https://www.examina.ink/for-tutors" }
+      ]}
+    ]
+  };
+
+  
+
   return (
-    <KeywordLanding
+
+    <>
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      <KeywordLanding
       data={saleLandingData({
         kicker: "For Tutors",
         h1: "Quiz generator for tutors",
@@ -48,6 +68,9 @@ export default function ForTutorsPage() {
         relatedTitle: "Related",
         related: [{ href: "/for-students", label: "For Students" }, { href: "/practice-test-generator", label: "Practice Test Generator" }, { href: "/ai-quiz-generator", label: "AI Quiz Generator" }],
       }, now)}
-    />
-  );
+          />
+
+      </>
+
+    );
 }

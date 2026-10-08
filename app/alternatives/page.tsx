@@ -63,6 +63,13 @@ export default function AlternativesHubPage() {
         isPartOf: { "@id": `${SITE_URL}/#website` },
       },
       {
+        "@type": "SoftwareApplication",
+        name: "Examina",
+        url: SITE_URL,
+        applicationCategory: "EducationalApplication",
+        description: "AI quiz generator - alternatives to Kahoot, Quizizz, Quizlet, Blooket, Gimkit, and more.",
+      },
+      {
         "@type": "ItemList",
         name: "Quiz Platform Alternatives",
         description:
