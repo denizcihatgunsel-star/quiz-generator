@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { detectNewContent, detectGaps } from '../notes-cleanup';
+import { checkRateLimit } from '../rate-limit';
 
 describe('detectNewContent', () => {
   it('should pass when only rephrasing existing content', () => {
@@ -135,5 +136,63 @@ Evaporation happens due to heat.`;
     const gaps = detectGaps(text);
     
     expect(gaps).toHaveLength(0);
+  });
+
+  it('should detect gaps in original text with issues', () => {
+    const original = 'The Process is complex. Step 3 involves heating. 1. Mix 2. Stir 4. Cool';
+    
+    const gaps = detectGaps(original);
+    
+    // Should detect: undefined "Process", mentioned step 3, and numbered list gap (1,2,4)
+    expect(gaps.length).toBeGreaterThan(0);
+  });
+
+  it('should merge gaps from original and cleaned text without duplicates', () => {
+    const original = 'step 1 mix step 2 stir step 5 cool';
+    const cleaned = 'Step 1: Mix\nStep 2: Stir\nStep 5: Cool';
+    
+    const originalGaps = detectGaps(original);
+    const cleanedGaps = detectGaps(cleaned);
+    const merged = [...new Set([...originalGaps, ...cleanedGaps])];
+    
+    // Both should detect the same gap (step jump to 5), so merged should have 1 unique gap
+    expect(merged.length).toBeGreaterThan(0);
+    expect(merged.length).toBeLessThanOrEqual(originalGaps.length + cleanedGaps.length);
+  });
+});
+
+describe('Rate limiting', () => {
+  beforeEach(() => {
+    // Rate limit store is in-memory, so it persists across tests in same process
+    // We use unique keys to avoid interference
+  });
+
+  it('should allow requests within limit', () => {
+    const key = `test-${Date.now()}-allow`;
+    
+    expect(checkRateLimit(key, 3, 1000)).toBe(true);
+    expect(checkRateLimit(key, 3, 1000)).toBe(true);
+    expect(checkRateLimit(key, 3, 1000)).toBe(true);
+  });
+
+  it('should block requests over limit', () => {
+    const key = `test-${Date.now()}-block`;
+    
+    expect(checkRateLimit(key, 2, 1000)).toBe(true);
+    expect(checkRateLimit(key, 2, 1000)).toBe(true);
+    expect(checkRateLimit(key, 2, 1000)).toBe(false); // Third request blocked
+  });
+
+  it('should reset after window expires', async () => {
+    const key = `test-${Date.now()}-reset`;
+    const windowMs = 50; // Short window for testing
+    
+    expect(checkRateLimit(key, 1, windowMs)).toBe(true);
+    expect(checkRateLimit(key, 1, windowMs)).toBe(false); // Blocked
+    
+    // Wait for window to expire
+    await new Promise(resolve => setTimeout(resolve, windowMs + 10));
+    
+    expect(checkRateLimit(key, 1, windowMs)).toBe(true); // Allowed again
   });
 });

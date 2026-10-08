@@ -25,6 +25,7 @@ export default function NotesCleanup({ notes, onAccept, onCancel }: NotesCleanup
   const [result, setResult] = useState<CleanupResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<"side-by-side" | "original" | "cleaned">("side-by-side");
+  const [editedCleaned, setEditedCleaned] = useState<string>("");
 
   const handleCleanup = async () => {
     setLoading(true);
@@ -45,6 +46,7 @@ export default function NotesCleanup({ notes, onAccept, onCancel }: NotesCleanup
       }
 
       setResult(data);
+      setEditedCleaned(data.cleaned); // Initialize editable version
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -53,9 +55,8 @@ export default function NotesCleanup({ notes, onAccept, onCancel }: NotesCleanup
   };
 
   const handleAcceptCleaned = () => {
-    if (result) {
-      onAccept(result.cleaned);
-    }
+    // Use the edited version (user can edit the cleaned pane)
+    onAccept(editedCleaned);
   };
 
   const handleKeepOriginal = () => {
@@ -183,18 +184,18 @@ export default function NotesCleanup({ notes, onAccept, onCancel }: NotesCleanup
 
               {/* Content check warning */}
               {!result.contentCheck.passed && (
-                <div className="mb-4 p-4 rounded-xl bg-amber-50 border border-amber-200">
+                <div className="mb-4 p-4 rounded-xl border border-[#F3D5DC] bg-[#FDE8EC]/50">
                   <div className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-[#9A4F68] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-amber-900">Possible new content detected</p>
-                      <p className="text-xs text-amber-700 mt-1">
+                      <p className="text-sm font-medium text-[#7E3E55]">Possible new content detected</p>
+                      <p className="text-xs text-[#9A7280] mt-1">
                         Some sentences may contain words not in your original notes. Review carefully before accepting.
                       </p>
                       {result.contentCheck.suspiciousWords.length > 0 && (
-                        <p className="text-xs text-amber-600 mt-2">
+                        <p className="text-xs text-[#B0607A] mt-2">
                           New words: {result.contentCheck.suspiciousWords.slice(0, 10).join(", ")}
                           {result.contentCheck.suspiciousWords.length > 10 && "..."}
                         </p>
@@ -206,14 +207,14 @@ export default function NotesCleanup({ notes, onAccept, onCancel }: NotesCleanup
 
               {/* Gaps detected */}
               {result.gaps.length > 0 && (
-                <div className="mb-4 p-4 rounded-xl bg-blue-50 border border-blue-200">
+                <div className="mb-4 p-4 rounded-xl border border-[#E9B8C4] bg-[#FBF1EE]">
                   <div className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-[#B0607A] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-blue-900">Possible gaps</p>
-                      <ul className="text-xs text-blue-700 mt-2 space-y-1">
+                      <p className="text-sm font-medium text-[#7E3E55]">Possible gaps</p>
+                      <ul className="text-xs text-[#9A7280] mt-2 space-y-1">
                         {result.gaps.map((gap, i) => (
                           <li key={i}>• {gap}</li>
                         ))}
@@ -224,21 +225,25 @@ export default function NotesCleanup({ notes, onAccept, onCancel }: NotesCleanup
               )}
 
               {/* Comparison view */}
-              <div className={`grid gap-4 ${view === "side-by-side" ? "grid-cols-2" : "grid-cols-1"}`}>
+              <div className={`grid gap-4 ${view === "side-by-side" ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"}`}>
                 {(view === "side-by-side" || view === "original") && (
                   <div>
                     <p className="text-xs uppercase tracking-wider text-[#9A7280] mb-2">Original</p>
-                    <div className="rounded-xl border border-[#F3D5DC] bg-gray-50 p-4 text-sm text-[#4A3038] whitespace-pre-wrap leading-relaxed max-h-96 overflow-y-auto">
+                    <div className="rounded-xl border border-[#F3D5DC] bg-[#FBF4F6] p-4 text-sm text-[#4A3038] whitespace-pre-wrap leading-relaxed max-h-96 overflow-y-auto">
                       {result.original}
                     </div>
                   </div>
                 )}
                 {(view === "side-by-side" || view === "cleaned") && (
                   <div>
-                    <p className="text-xs uppercase tracking-wider text-[#9A7280] mb-2">Cleaned</p>
-                    <div className="rounded-xl border border-[#E9B8C4] bg-white p-4 text-sm text-[#4A3038] whitespace-pre-wrap leading-relaxed max-h-96 overflow-y-auto">
-                      {result.cleaned}
-                    </div>
+                    <p className="text-xs uppercase tracking-wider text-[#9A7280] mb-2">
+                      Cleaned {view === "cleaned" && "(editable)"}
+                    </p>
+                    <textarea
+                      value={editedCleaned}
+                      onChange={(e) => setEditedCleaned(e.target.value)}
+                      className="w-full rounded-xl border border-[#E9B8C4] bg-white p-4 text-sm text-[#4A3038] leading-relaxed min-h-[384px] resize-y focus:outline-none focus:ring-2 focus:ring-[#B0607A]/30 focus:border-[#B0607A]"
+                    />
                   </div>
                 )}
               </div>
@@ -248,7 +253,7 @@ export default function NotesCleanup({ notes, onAccept, onCancel }: NotesCleanup
 
         {/* Footer */}
         {result && (
-          <div className="px-6 py-4 border-t border-[#F3D5DC] bg-gray-50 flex items-center justify-between gap-4">
+          <div className="px-6 py-4 border-t border-[#F3D5DC] bg-[#FBF4F6] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <button
               onClick={handleKeepOriginal}
               className="px-4 py-2 text-sm text-[#9A7280] hover:text-[#3B2027] transition-colors"
