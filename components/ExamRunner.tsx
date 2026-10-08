@@ -3,35 +3,76 @@
 import { useState, useEffect, useRef } from "react";
 import type { MultipleChoiceQuestion } from "@/types/quiz";
 import type { QuizTheme } from "@/lib/themes";
-import { shuffleExamQuestions, generateShuffleSeed, type ShuffledQuestion } from "@/lib/examMode";
+import { shuffleExamQuestions, type ShuffledQuestion } from "@/lib/examMode";
 
 interface ExamRunnerProps {
+  quizId: string;
   questions: MultipleChoiceQuestion[];
   theme: QuizTheme;
+  examSeed: number;
   timeLimit?: number; // in seconds
   submitLabel: string;
   onSubmit: (correct: number, total: number, tabSwitchCount: number, shuffledQuestions: ShuffledQuestion[]) => void;
   onCancel: () => void;
 }
 
+interface ExamState {
+  seed: number;
+  startedAt: number;
+}
+
 export default function ExamRunner({ 
+  quizId,
   questions, 
-  theme, 
+  theme,
+  examSeed,
   timeLimit,
   submitLabel, 
   onSubmit,
   onCancel,
 }: ExamRunnerProps) {
+  const storageKey = `exam-${quizId}`;
+  
   const [shuffledQuestions] = useState<ShuffledQuestion[]>(() => {
-    const seed = generateShuffleSeed(Date.now().toString() + Math.random().toString());
-    return shuffleExamQuestions(questions, seed);
+    return shuffleExamQuestions(questions, examSeed);
   });
   
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<(number | null)[]>(() => shuffledQuestions.map(() => null));
   const [finished, setFinished] = useState(false);
   const [tabSwitchCount, setTabSwitchCount] = useState(0);
-  const [timeRemaining, setTimeRemaining] = useState<number | null>(timeLimit ?? null);
+  const [timeRemaining, setTimeRemaining] = useState<number | null>(() => {
+    if (!timeLimit || timeLimit <= 0) return null;
+    
+    // Try to restore from sessionStorage
+    try {
+      const stored = sessionStorage.getItem(storageKey);
+      if (stored) {
+        const state: ExamState = JSON.parse(stored);
+        if (state.seed === examSeed) {
+          const elapsed = Math.floor((Date.now() - state.startedAt) / 1000);
+          const remaining = timeLimit - elapsed;
+          return remaining > 0 ? remaining : 0;
+        }
+      }
+    } catch {
+      // ignore
+    }
+    
+    // First time - store start time
+    const state: ExamState = {
+      seed: examSeed,
+      startedAt: Date.now(),
+    };
+    try {
+      sessionStorage.setItem(storageKey, JSON.stringify(state));
+    } catch {
+      // ignore if sessionStorage is unavailable
+    }
+    
+    return timeLimit;
+  });
+  
   const hasStarted = useRef(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -63,7 +104,7 @@ export default function ExamRunner({
     if (hasStarted.current) return;
     hasStarted.current = true;
 
-    if (timeLimit && timeLimit > 0) {
+    if (timeRemaining !== null && timeRemaining > 0) {
       timerRef.current = setInterval(() => {
         setTimeRemaining(prev => {
           if (prev === null || prev <= 1) {
@@ -75,12 +116,28 @@ export default function ExamRunner({
           return prev - 1;
         });
       }, 1000);
+    } else if (timeRemaining === 0) {
+      // Time already expired on refresh
+      handleFinish();
     }
 
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [timeLimit]);
+  }, [timeRemaining]);
+
+  // Cleanup sessionStorage on unmount if finished
+  useEffect(() => {
+    return () => {
+      if (finished) {
+        try {
+          sessionStorage.removeItem(storageKey);
+        } catch {
+          // ignore
+        }
+      }
+    };
+  }, [finished, storageKey]);
 
   const answer = answers[current];
   const correctCount = answers.reduce<number>(

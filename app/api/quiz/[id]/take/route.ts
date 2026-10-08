@@ -28,6 +28,25 @@ export async function POST(
     return NextResponse.json({ error: "Invalid score." }, { status: 400 });
   }
 
+  // Validate tabSwitchCount (clamp to 0-10000, default 0 if invalid)
+  let validTabSwitchCount = 0;
+  if (typeof tabSwitchCount === 'number' && Number.isInteger(tabSwitchCount)) {
+    validTabSwitchCount = Math.max(0, Math.min(10000, tabSwitchCount));
+  }
+
+  // Validate answersJson (max 20KB, drop if too large)
+  let validAnswersJson: string | null = null;
+  if (answersJson) {
+    try {
+      const jsonString = JSON.stringify(answersJson);
+      if (jsonString.length <= 20 * 1024) {
+        validAnswersJson = jsonString;
+      }
+    } catch {
+      // Invalid JSON, drop it
+    }
+  }
+
   const quiz = await db.savedQuiz.findUnique({ where: { id } });
   if (!quiz) {
     return NextResponse.json({ error: "Quiz not found" }, { status: 404 });
@@ -44,8 +63,8 @@ export async function POST(
       userId: session.user.id, 
       score, 
       total,
-      tabSwitchCount: tabSwitchCount ?? 0,
-      answersJson: answersJson ? JSON.stringify(answersJson) : null,
+      tabSwitchCount: validTabSwitchCount,
+      answersJson: validAnswersJson,
     },
   });
 

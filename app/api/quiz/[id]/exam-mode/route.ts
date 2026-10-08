@@ -21,11 +21,21 @@ export async function PATCH(
     return NextResponse.json({ error: "Quiz not found" }, { status: 404 });
   }
 
+  // Validate examTimeLimit (60 to 14400 seconds, or null)
+  let validTimeLimit: number | null = null;
+  if (examTimeLimit !== null && examTimeLimit !== undefined) {
+    if (typeof examTimeLimit === 'number' && Number.isInteger(examTimeLimit)) {
+      if (examTimeLimit >= 60 && examTimeLimit <= 14400) {
+        validTimeLimit = examTimeLimit;
+      }
+    }
+  }
+
   await db.savedQuiz.update({
     where: { id },
     data: {
       examModeEnabled: Boolean(examModeEnabled),
-      examTimeLimit: examTimeLimit && examTimeLimit > 0 ? examTimeLimit : null,
+      examTimeLimit: validTimeLimit,
     },
   });
 

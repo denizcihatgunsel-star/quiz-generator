@@ -38,7 +38,7 @@ export async function GET(
     const userIds = [...new Set(attempts.map(a => (a as any).userId))];
     const users = await db.user.findMany({
       where: { id: { in: userIds } },
-      select: { id: true, name: true, email: true },
+      select: { id: true, name: true },
     });
     const userMap = new Map(users.map(u => [u.id, u]));
     
@@ -46,7 +46,7 @@ export async function GET(
       const user = userMap.get((a as any).userId);
       return {
         ...a,
-        userName: user?.name ?? user?.email ?? 'Unknown',
+        userName: user?.name ?? 'Student',
       };
     });
   }

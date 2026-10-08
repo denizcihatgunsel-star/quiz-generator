@@ -43,6 +43,7 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
     isOwner?: boolean;
     examModeEnabled?: boolean;
     examTimeLimit?: number | null;
+    examSeed?: number;
   } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -87,6 +88,7 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
             isOwner: d.isOwner,
             examModeEnabled: d.examModeEnabled ?? false,
             examTimeLimit: d.examTimeLimit ?? null,
+            examSeed: d.examSeed,
           });
         }
       })
@@ -272,14 +274,20 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
             ) : takingExam ? (
               <div className={`rounded-2xl border p-5 backdrop-blur-xl ${theme.card}`}>
                 <p className={`mb-5 text-center font-serif text-lg italic ${theme.text}`}>Exam — {quiz.topic}</p>
-                <ExamRunner
-                  questions={quiz.multipleChoice}
-                  theme={theme}
-                  timeLimit={quizMeta?.examTimeLimit ?? undefined}
-                  submitLabel="Submit exam"
-                  onSubmit={handleExamComplete}
-                  onCancel={() => setTakingExam(false)}
-                />
+                {quizMeta?.examSeed !== undefined ? (
+                  <ExamRunner
+                    quizId={quizMeta.id}
+                    questions={quiz.multipleChoice}
+                    theme={theme}
+                    examSeed={quizMeta.examSeed}
+                    timeLimit={quizMeta?.examTimeLimit ?? undefined}
+                    submitLabel="Submit exam"
+                    onSubmit={handleExamComplete}
+                    onCancel={() => setTakingExam(false)}
+                  />
+                ) : (
+                  <p className="text-center text-sm text-neutral-500">Loading exam...</p>
+                )}
               </div>
             ) : taking ? (
               <div className={`rounded-2xl border p-5 backdrop-blur-xl ${theme.card}`}>

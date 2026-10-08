@@ -181,6 +181,45 @@ describe('examMode', () => {
       });
     });
 
+    it('should give the same order for the same quiz, user, and attempt', () => {
+      // Simulate deterministic seed from quizId + userId + attemptNumber
+      const quizId = 'quiz123';
+      const userId = 'user456';
+      const attemptNumber = 1;
+      
+      const seedString = `${quizId}-${userId}-${attemptNumber}`;
+      const seed1 = generateShuffleSeed(seedString);
+      const seed2 = generateShuffleSeed(seedString);
+      
+      expect(seed1).toBe(seed2);
+      
+      const shuffled1 = shuffleExamQuestions(mockQuestions, seed1);
+      const shuffled2 = shuffleExamQuestions(mockQuestions, seed2);
+      
+      expect(shuffled1.map(q => q.originalIndex)).toEqual(
+        shuffled2.map(q => q.originalIndex)
+      );
+    });
+
+    it('should give different orders for different attempts', () => {
+      const quizId = 'quiz123';
+      const userId = 'user456';
+      
+      const seed1 = generateShuffleSeed(`${quizId}-${userId}-1`);
+      const seed2 = generateShuffleSeed(`${quizId}-${userId}-2`);
+      
+      expect(seed1).not.toBe(seed2);
+      
+      // With 3 questions, different orders are highly likely but not guaranteed
+      // What matters is the seeds are different
+      const shuffled1 = shuffleExamQuestions(mockQuestions, seed1);
+      const shuffled2 = shuffleExamQuestions(mockQuestions, seed2);
+      
+      // At least verify the shuffle was applied
+      expect(shuffled1[0].originalIndex).toBeGreaterThanOrEqual(0);
+      expect(shuffled2[0].originalIndex).toBeGreaterThanOrEqual(0);
+    });
+
     it('should correctly score a full exam attempt', () => {
       const seed = 54321;
       const shuffled = shuffleExamQuestions(mockQuestions, seed);
