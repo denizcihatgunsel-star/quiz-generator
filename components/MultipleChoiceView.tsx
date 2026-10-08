@@ -404,7 +404,7 @@ export default function MultipleChoiceView({
           </p>
           {questions.filter((q) => answers[q.id] !== q.correctIndex).length > 0 && (
             <motion.a
-              href="/study"
+              href="/study/misses"
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}

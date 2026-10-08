@@ -236,7 +236,7 @@ export default function DashboardPage() {
 
         {studyDueCount > 0 && (
           <Link
-            href="/study"
+            href="/study/misses"
             className="group mb-10 flex flex-wrap items-center justify-between gap-5 rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50 via-indigo-50 to-violet-50 p-6 shadow-[0_20px_60px_-30px_rgba(109,40,217,0.4)] transition-all hover:border-violet-300 hover:shadow-[0_24px_70px_-30px_rgba(109,40,217,0.5)]"
           >
             <div className="flex items-center gap-4">
@@ -294,7 +294,7 @@ export default function DashboardPage() {
         <div className="mb-10 flex flex-wrap gap-3">
           {userRole === "student" && (
             <>
-              <Link href="/study" className={primaryBtn}>
+              <Link href="/study/misses" className={primaryBtn}>
                 {BOOK} Study Mode
               </Link>
               <Link href="/classroom/join" className={ghostBtn}>

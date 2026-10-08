@@ -33,8 +33,12 @@ export async function POST(req: NextRequest) {
     );
 
     return NextResponse.json({ saved });
-  } catch (err) {
+  } catch (err: any) {
     console.error("Study Mode POST error:", err);
+    // Graceful failure if StudyConcept table doesn't exist yet
+    if (err?.message?.includes("no such table") || err?.message?.includes("StudyConcept")) {
+      return NextResponse.json({ saved: 0, error: "Study Mode not yet available" }, { status: 200 });
+    }
     return NextResponse.json({ error: "Failed to record misses" }, { status: 500 });
   }
 }
@@ -122,8 +126,12 @@ export async function GET(req: NextRequest) {
       items,
       dueCount: totalDue,
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error("Study Mode GET error:", err);
+    // Graceful failure if StudyConcept table doesn't exist yet
+    if (err?.message?.includes("no such table") || err?.message?.includes("StudyConcept")) {
+      return NextResponse.json({ items: [], dueCount: 0 }, { status: 200 });
+    }
     return NextResponse.json({ error: "Failed to load study items" }, { status: 500 });
   }
 }
@@ -146,8 +154,12 @@ export async function PATCH(req: NextRequest) {
     const result = await gradeStudyReview(session.user.id, conceptId, correct);
 
     return NextResponse.json(result);
-  } catch (err) {
+  } catch (err: any) {
     console.error("Study Mode PATCH error:", err);
+    // Graceful failure if StudyConcept table doesn't exist yet
+    if (err?.message?.includes("no such table") || err?.message?.includes("StudyConcept")) {
+      return NextResponse.json({ cleared: false, streak: 0 }, { status: 200 });
+    }
     return NextResponse.json({ error: "Failed to grade review" }, { status: 500 });
   }
 }

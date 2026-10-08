@@ -123,7 +123,7 @@ export default function MobileDashboard() {
 
       {studyDueCount > 0 && (
         <Link
-          href="/m/study"
+          href="/m/study/misses"
           className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50 to-indigo-50 p-5 shadow-sm transition-all active:scale-[0.98]"
         >
           <div className="flex items-center gap-3">
@@ -156,7 +156,7 @@ export default function MobileDashboard() {
           </button>
         ) : (
           <Link
-            href="/m/study"
+            href="/m/study/misses"
             className="flex-1 rounded-full bg-[#3B2027] py-3 text-center text-sm font-medium text-[#F6E3E8] shadow-[0_12px_28px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98]"
           >
             Study mode

@@ -30,6 +30,7 @@ interface Daily {
 function MobileHomeContent() {
   const { data: session } = useSession();
   const [daily, setDaily] = useState<Daily | null>(null);
+  const [studyDueCount, setStudyDueCount] = useState(0);
   const halloweenActive = useHalloweenActive();
 
   useEffect(() => {
@@ -37,6 +38,10 @@ function MobileHomeContent() {
     fetch("/api/daily-challenge")
       .then((r) => r.json())
       .then((d) => { if (!d.error) setDaily(d); })
+      .catch(() => {});
+    fetch("/api/study?action=count")
+      .then((r) => r.json())
+      .then((d) => { if (typeof d.dueCount === "number") setStudyDueCount(d.dueCount); })
       .catch(() => {});
   }, [session]);
 
@@ -122,6 +127,27 @@ function MobileHomeContent() {
             </div>
           </div>
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#FDE8EC] text-[#B0607A]">{BOLT}</span>
+        </Link>
+      )}
+
+      {/* Study Mode (misses) banner */}
+      {session?.user && studyDueCount > 0 && (
+        <Link
+          href="/m/study/misses"
+          className="card-breathe mt-4 flex items-center justify-between gap-4 rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50 to-indigo-50 p-5 shadow-[0_18px_48px_-28px_rgba(109,40,217,0.5)] backdrop-blur-xl"
+        >
+          <div className="flex items-center gap-3.5">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 text-white shadow-[0_10px_22px_-10px_rgba(109,40,217,0.7)]">
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <div>
+              <p className="font-serif text-base italic text-violet-900">Study Mode</p>
+              <p className="text-sm font-medium text-violet-700">{studyDueCount} concept{studyDueCount === 1 ? "" : "s"} due</p>
+            </div>
+          </div>
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-100 text-violet-600">{BOLT}</span>
         </Link>
       )}
 
