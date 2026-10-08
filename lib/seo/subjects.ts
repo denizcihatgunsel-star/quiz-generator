@@ -776,6 +776,305 @@ export const SUBJECTS: Subject[] = [
     ],
     relatedExams: ["ap", "midterm", "finals"],
   },
+  {
+    slug: "spelling",
+    name: "Spelling",
+    description:
+      "Generate spelling practice questions and tests for elementary through high school students, ESL learners, and adult education. Test mastery of commonly misspelled words, phonics patterns, homophones, word roots, prefixes and suffixes, and grade-level vocabulary. Create weekly spelling tests, pre-tests to identify problem words, diagnostic assessments, or review quizzes before standardized exams. Upload your school's curriculum word lists, textbook vocabulary, or personal spelling demons to generate targeted practice with immediate feedback. Questions include multiple choice (identifying correct spelling among common errors), fill-in-the-blank (completing sentences with correctly spelled words), error detection (finding and correcting misspellings in context), and sentence dictation formats. Each question provides memory aids, common error patterns, and mnemonic devices to help cement correct spellings. Perfect for teachers creating weekly spelling homework, homeschool parents tracking student progress, or learners working independently to improve spelling accuracy and confidence.",
+    sampleQuestions: [
+      {
+        q: "Choose the correctly spelled word:",
+        a: "Definitely (not definately)",
+        explanation:
+          "Many people misspell 'definitely' because of the pronunciation. Remember: it's related to 'finite' and 'definite.'",
+      },
+      {
+        q: "Which word is spelled correctly?",
+        a: "Separate (not seperate)",
+        explanation:
+          "The correct spelling is 'separate.' Remember there's 'a rat' in separate.",
+      },
+      {
+        q: "Fill in the blank: She was em___rrassed by the mistake.",
+        a: "barrassed (embarrassed)",
+        explanation:
+          "Embarrassed has two r's and two s's. Think: really, really should stay silent.",
+      },
+    ],
+    faq: [
+      {
+        q: "What spelling levels can I practice?",
+        a: "Generate spelling quizzes for elementary, middle school, high school, or adult ESL learners. Upload your weekly spelling list or vocabulary words.",
+      },
+      {
+        q: "Can I create spelling tests from my curriculum?",
+        a: "Yes. Upload your school's spelling list and generate multiple choice or fill-in-the-blank spelling questions.",
+      },
+      {
+        q: "Do questions include context?",
+        a: "Yes. Questions show words in sentence context to test real understanding, not just memorization.",
+      },
+      {
+        q: "Is this free?",
+        a: "Free accounts get 5 quiz generations per month. Paid plans start at $2/month for 20 quizzes.",
+      },
+    ],
+    relatedTools: [
+      "/ai-quiz-generator",
+      "/fill-in-the-blank-generator",
+      "/vocabulary",
+    ],
+  },
+  {
+    slug: "grammar",
+    name: "Grammar",
+    description:
+      "Create grammar quiz questions on sentence structure, parts of speech, punctuation rules, subject-verb agreement, verb tenses, pronoun usage, modifiers, and common usage errors for middle school through adult English learners. Test understanding of how language works at the sentence and word level through identification of errors, correction exercises, sentence combining, and application of grammar rules in context. Generate practice covering nouns, verbs, adjectives, adverbs, prepositions, conjunctions, articles, fragments, run-ons, comma usage, apostrophes, semicolons, active versus passive voice, parallelism, dangling modifiers, who versus whom, its versus it's, and hundreds of other grammar concepts. Questions require not just recognition of correct grammar but understanding why rules exist and how to apply them in writing. Ideal for standardized test preparation (SAT, ACT, GRE), essay writing improvement, ESL grammar practice, or reinforcing concepts taught in English classes. Upload grammar exercises from your textbook, notes from class, or specific grammar rules you struggle with to generate targeted practice that builds grammatical intuition and eliminates common errors.",
+    sampleQuestions: [
+      {
+        q: "Identify the error: 'Me and him went to the store.'",
+        a: "Should be 'He and I went to the store'",
+        explanation:
+          "Use subject pronouns (he, I) when they are the subject of the sentence. 'Me' and 'him' are object pronouns.",
+      },
+      {
+        q: "Which sentence uses commas correctly?",
+        a: "After the meeting, we went to lunch.",
+        explanation:
+          "An introductory phrase (After the meeting) is followed by a comma before the main clause.",
+      },
+      {
+        q: "Choose the correct verb form: 'Neither the teacher nor the students ___ ready.'",
+        a: "were",
+        explanation:
+          "When using 'neither...nor,' the verb agrees with the nearest subject (students, plural), so use 'were.'",
+      },
+    ],
+    faq: [
+      {
+        q: "What grammar topics are covered?",
+        a: "Generate questions on parts of speech, sentence structure, subject-verb agreement, verb tenses, punctuation, modifiers, and common usage errors.",
+      },
+      {
+        q: "Is this suitable for ESL learners?",
+        a: "Yes. Questions work for both native English speakers and ESL students at intermediate to advanced levels.",
+      },
+      {
+        q: "Can I practice for standardized tests?",
+        a: "Yes. Generate SAT, ACT, or TOEFL-style grammar questions by uploading relevant practice material.",
+      },
+      {
+        q: "Do questions explain the rules?",
+        a: "Yes. Every question includes an explanation of the grammar rule being tested.",
+      },
+    ],
+    relatedTools: [
+      "/ai-quiz-generator",
+      "/multiple-choice-quiz-maker",
+      "/vocabulary",
+    ],
+    relatedExams: ["sat", "act", "toefl", "ielts"],
+  },
+  {
+    slug: "algebra",
+    name: "Algebra",
+    description:
+      "Generate algebra practice questions on linear equations, inequalities, quadratic equations, functions and graphs, polynomials, factoring, systems of equations, exponents and radicals, rational expressions, and word problems for pre-algebra through Algebra 2 students. Cover fundamental skills like solving one-variable and two-variable equations, graphing lines and parabolas, understanding function notation, manipulating algebraic expressions, and applying algebra to real-world scenarios. Test both computational proficiency (can you solve 3x + 7 = 22?) and conceptual understanding (what does slope represent? why do we factor?). Create practice for homework review, exam preparation, summer skill maintenance, SAT/ACT math prep, or college placement test readiness. Upload notes from your Algebra 1 or Algebra 2 textbook, problem sets from class, or specific topics you find challenging (like factoring trinomials, solving systems by substitution versus elimination, or word problems involving distance-rate-time relationships). Questions include step-by-step solution methods, common error warnings, and explanations of why techniques work. Build the algebraic foundation necessary for advanced math courses including geometry, trigonometry, pre-calculus, and calculus.",
+    sampleQuestions: [
+      {
+        q: "Solve for x: 5x - 8 = 27",
+        a: "x = 7",
+        explanation:
+          "Add 8 to both sides: 5x = 35. Then divide both sides by 5: x = 7.",
+      },
+      {
+        q: "Factor: x² + 7x + 12",
+        a: "(x + 3)(x + 4)",
+        explanation:
+          "Find two numbers that multiply to 12 and add to 7. Those numbers are 3 and 4, so the factors are (x + 3)(x + 4).",
+      },
+      {
+        q: "What is the slope of the line y = -2x + 5?",
+        a: "-2",
+        explanation:
+          "In slope-intercept form y = mx + b, m is the slope. Here, the slope is -2.",
+      },
+    ],
+    faq: [
+      {
+        q: "What algebra topics can I practice?",
+        a: "Generate questions on solving equations and inequalities, graphing linear and quadratic functions, factoring polynomials, systems of equations, exponents, and rational expressions.",
+      },
+      {
+        q: "Is this suitable for Algebra 1 and Algebra 2?",
+        a: "Yes. Upload your course notes to generate questions matching your specific curriculum and difficulty level.",
+      },
+      {
+        q: "Do questions show step-by-step solutions?",
+        a: "Yes. Every problem includes a detailed explanation showing the solution steps.",
+      },
+      {
+        q: "Can I use this for SAT math prep?",
+        a: "Yes. Generate SAT-style algebra questions by uploading relevant practice problems.",
+      },
+    ],
+    relatedTools: [
+      "/ai-quiz-generator",
+      "/notes-to-quiz",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedExams: ["sat", "act", "midterm", "finals"],
+  },
+  {
+    slug: "geometry",
+    name: "Geometry",
+    description:
+      "Create geometry practice questions on angles, triangles, quadrilaterals, circles, polygons, area and perimeter formulas, volume and surface area calculations, coordinate geometry, transformations, congruence and similarity, geometric proofs, and the Pythagorean theorem for high school geometry students. Test understanding of fundamental concepts like angle relationships (complementary, supplementary, vertical angles), triangle properties (types, angle sum, exterior angles, special right triangles), circle formulas (circumference, area, arc length, sector area), polygon angle sums, 3D shape volumes (prisms, cylinders, pyramids, cones, spheres), and coordinate plane distance and midpoint formulas. Generate practice for daily homework, unit exams, final exam review, SAT/ACT geometry preparation, or summer refreshers before pre-calculus. Upload geometry notes, textbook problem sets, or theorem lists to create questions testing both computational skills (find the area, calculate the volume) and conceptual reasoning (why are base angles of an isosceles triangle equal? how do you prove triangles congruent?). Questions include diagrams described in text, step-by-step solutions, common mistake warnings, and connections between geometric concepts. Essential practice for building spatial reasoning and proof-writing abilities needed in higher mathematics.",
+    sampleQuestions: [
+      {
+        q: "What is the sum of interior angles in a hexagon?",
+        a: "720 degrees",
+        explanation:
+          "Use the formula (n - 2) × 180° where n is the number of sides. For a hexagon (6 sides): (6 - 2) × 180° = 720°.",
+      },
+      {
+        q: "A circle has a radius of 5 cm. What is its area?",
+        a: "25π cm² (approximately 78.54 cm²)",
+        explanation:
+          "Area of a circle is A = πr². With r = 5 cm, A = π(5)² = 25π ≈ 78.54 cm².",
+      },
+      {
+        q: "If two parallel lines are cut by a transversal, and one angle is 65°, what is the corresponding angle?",
+        a: "65°",
+        explanation:
+          "Corresponding angles are equal when parallel lines are cut by a transversal, so the answer is 65°.",
+      },
+    ],
+    faq: [
+      {
+        q: "What geometry topics are covered?",
+        a: "Generate questions on angles, triangles, quadrilaterals, circles, polygons, area and perimeter, volume and surface area, coordinate geometry, transformations, and geometric proofs.",
+      },
+      {
+        q: "Do questions include diagrams?",
+        a: "Questions describe geometric figures in text. For diagram-based problems, describe the figure in your notes when uploading.",
+      },
+      {
+        q: "Is this good for high school geometry?",
+        a: "Yes. Questions match typical high school geometry curriculum and can be generated at appropriate difficulty levels.",
+      },
+      {
+        q: "Can I practice for standardized tests?",
+        a: "Yes. Generate SAT, ACT, or GRE geometry questions by uploading relevant practice material.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/multiple-choice-quiz-maker",
+    ],
+    relatedExams: ["sat", "act", "gre", "midterm", "finals"],
+  },
+  {
+    slug: "world-history",
+    name: "World History",
+    description:
+      "Generate world history quiz questions covering ancient civilizations, classical empires, medieval kingdoms, Renaissance and Reformation, Age of Exploration and colonization, revolutionary movements, industrialization, imperialism, world wars, Cold War conflicts, and contemporary global issues across all major regions including Europe, Asia, Africa, the Americas, and Oceania. Test knowledge of political developments (rise and fall of empires, revolutions, wars, treaties), economic systems (feudalism, mercantilism, capitalism, communism), social structures (class systems, gender roles, slavery, labor movements), cultural achievements (art, literature, philosophy, religion, scientific discoveries), and technological innovations that shaped human civilization. Practice identifying cause-and-effect relationships, comparing historical events across time periods and regions, analyzing continuity and change, and understanding different historical perspectives. Perfect for AP World History exam preparation, IB History assessments, college survey courses, or general knowledge building. Upload textbook chapters, class notes on specific eras, or documentaries you watched to generate questions testing both factual recall and higher-order thinking about historical patterns, causation, and significance of events in global context.",
+    sampleQuestions: [
+      {
+        q: "Which ancient civilization built Machu Picchu?",
+        a: "The Inca Empire",
+        explanation:
+          "Machu Picchu was built by the Inca Empire in the 15th century in present-day Peru, serving as a royal estate and sacred religious site.",
+      },
+      {
+        q: "What was the primary cause of World War I?",
+        a: "The assassination of Archduke Franz Ferdinand triggered a chain of alliances",
+        explanation:
+          "While multiple factors existed (militarism, alliances, imperialism, nationalism), the assassination of Archduke Franz Ferdinand in June 1914 was the immediate trigger that activated the alliance system and led to war.",
+      },
+      {
+        q: "Which revolution established the principle that governments derive power from the consent of the governed?",
+        a: "The American Revolution",
+        explanation:
+          "The American Revolution (1775-1783) and the Declaration of Independence established the principle of popular sovereignty—that government legitimacy comes from the people.",
+      },
+    ],
+    faq: [
+      {
+        q: "What world history periods can I study?",
+        a: "Generate questions on any period: ancient civilizations, classical empires, medieval history, Renaissance, Age of Exploration, revolutions, world wars, Cold War, or modern global issues.",
+      },
+      {
+        q: "Do questions test memorization or analysis?",
+        a: "Both. Questions are tagged by Bloom's taxonomy, testing factual knowledge, understanding of causes and effects, and historical analysis skills.",
+      },
+      {
+        q: "Can I practice for AP World History?",
+        a: "Yes. Upload AP World History notes to generate questions matching the exam's format, themes, and historical thinking skills.",
+      },
+      {
+        q: "Is this free?",
+        a: "Free accounts get 5 quiz generations per month. Paid plans start at $2/month.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/quiz-generator-from-pdf",
+      "/study-guide-generator",
+    ],
+    relatedExams: ["ap", "sat", "midterm", "finals"],
+  },
+  {
+    slug: "french",
+    name: "French",
+    description:
+      "Create French language quiz questions for vocabulary acquisition, grammar rules, verb conjugation mastery, reading comprehension, and practical communication skills at beginner (A1-A2), intermediate (B1-B2), or advanced (C1-C2) proficiency levels. Test knowledge of essential vocabulary (greetings, numbers, colors, family, food, travel, emotions), grammatical structures (noun gender and agreement, articles, pronouns, adjectives, prepositions, negation), verb conjugations across all tenses and moods (présent, passé composé, imparfait, futur, conditionnel, subjonctif), sentence construction, idiomatic expressions, and comprehension of written passages. Generate practice for French 1-4 courses, AP French Language and Culture exam preparation, DELF/DALF certification study, or independent language learning. Upload French textbook chapters, grammar exercises, vocabulary lists, or authentic French texts (articles, stories, dialogues) to create targeted questions with detailed explanations in English showing how French grammar works, common learner mistakes to avoid, and tips for remembering irregular verb forms and tricky pronunciation patterns. Build proficiency systematically from basic communication to sophisticated expression in French.",
+    sampleQuestions: [
+      {
+        q: "Quel est le passé composé de 'parler' à la première personne?",
+        a: "J'ai parlé",
+        explanation:
+          "The passé composé (compound past) of 'parler' in first person is formed with avoir: j'ai parlé (I spoke/have spoken).",
+      },
+      {
+        q: "Translate: 'He is going to the library.'",
+        a: "Il va à la bibliothèque.",
+        explanation:
+          "'Va' is the third person singular present of 'aller' (to go). 'À la bibliothèque' means 'to the library.'",
+      },
+      {
+        q: "Which word is masculine: table, livre, maison, or fenêtre?",
+        a: "Livre",
+        explanation:
+          "'Livre' (book) is masculine (le livre). The others are feminine: la table, la maison, la fenêtre.",
+      },
+    ],
+    faq: [
+      {
+        q: "What French topics can I practice?",
+        a: "Generate questions on vocabulary, verb conjugation (present, past, future, subjunctive), grammar rules, sentence structure, and reading comprehension at any level.",
+      },
+      {
+        q: "Can I practice for AP French?",
+        a: "Yes. Upload AP French course material to generate questions matching exam format and difficulty.",
+      },
+      {
+        q: "Do questions include accents?",
+        a: "Yes. Questions use proper French orthography including accents (é, è, ê, à, ù, ç) and special characters.",
+      },
+      {
+        q: "Is this suitable for beginners?",
+        a: "Yes. Generate questions at any level from beginner (introductory vocabulary and present tense) to advanced (subjunctive, literary texts).",
+      },
+    ],
+    relatedTools: [
+      "/ai-flashcards",
+      "/vocabulary",
+      "/fill-in-the-blank-generator",
+    ],
+    relatedExams: ["ap"],
+  },
 ];
 
 export function getSubject(slug: string): Subject | undefined {
