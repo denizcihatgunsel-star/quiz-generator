@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import { isHalloweenActive } from "@/lib/seasonal";
 
 /**
@@ -70,13 +69,13 @@ export default function MobileHalloweenDecor({
 }) {
   const [mounted, setMounted] = useState(false);
   const [isActive, setIsActive] = useState(false);
-  const searchParams = useSearchParams();
   
   // Avoid hydration mismatch: render nothing on server, decide after mount
   useEffect(() => {
     setMounted(true);
+    const searchParams = new URLSearchParams(window.location.search);
     setIsActive(isHalloweenActive(searchParams));
-  }, [searchParams]);
+  }, []);
   
   if (!mounted || !isActive) return null;
 
