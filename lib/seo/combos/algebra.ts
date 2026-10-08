@@ -42,7 +42,7 @@ export const ALGEBRA_COMBOS: ComboData[] = [
     type: "quiz",
     meta: { type: "quiz", primaryKeyword: "algebra quiz", monthlyVolume: 720 },
     h1: "Algebra Quiz — Quick Skills Assessment",
-    intro: "Test algebra understanding with quick quizzes covering equations, functions, and problem-solving. Perfect for homework checks, identifying concepts that need more study, or pre-test preparation. Each question targets a specific algebra skill with immediate feedback. Use these quizzes to establish a baseline before studying, measure progress during a unit, or verify mastery before a final exam. Short format makes it easy to fit practice into busy schedules.",
+    intro: "Quick algebra assessments test your understanding of core concepts: equations, variables, functions, and basic operations. Ideal for homework verification, progress checks, or identifying specific skills that need reinforcement. Take a baseline quiz before starting a new chapter, then retest after practicing to measure improvement. Short, focused format helps you pinpoint exactly which algebra techniques you've mastered versus which need more work.",
     sampleItems: [
       { q: "Solve: 3x + 7 = 22", a: "x = 5", explanation: "Subtract 7: 3x = 15. Divide by 3: x = 5. Always isolate variable by doing inverse operations.", bloomLevel: "Apply", type: "multiple-choice" },
       { q: "What is 15% of 80?", a: "12", explanation: "0.15 × 80 = 12. Or: (15/100) × 80 = 12. Convert percentage to decimal by dividing by 100.", bloomLevel: "Apply", type: "multiple-choice" },
@@ -57,13 +57,13 @@ export const ALGEBRA_COMBOS: ComboData[] = [
     ],
     topicsCovered: ["Basic equations", "Linear functions", "Percentages", "Distributive property", "Like terms", "Order of operations", "Exponents", "Negative numbers", "Reciprocals"],
     studyTips: {
-      workflow: ["Take quiz before studying to baseline your knowledge and identify gaps", "Note which types of problems you miss—pattern indicates concept weakness", "Practice those problem types separately with similar questions", "Retake quiz after focused practice to measure improvement"],
-      tips: ["Master prerequisite skills (arithmetic, fractions, negative numbers) before moving to complex algebra—weak foundations cause repeated struggle", "Understand WHY methods work, don't just memorize steps—this helps you apply concepts to new problem types", "Practice regularly—algebra skills deteriorate without use, especially over summer breaks", "Write out all steps even for 'easy' problems to build good habits and catch careless errors"],
+      workflow: ["Take quiz cold—no notes—to get honest baseline of current knowledge", "Circle problems where you guessed or felt uncertain, even if you got them right", "Review explanations for missed items, then do 3-5 similar problems from another source", "Retake same quiz 2-3 days later to verify concepts stuck in memory"],
+      tips: ["Work problems on paper first, not just mentally—writing reinforces methods", "If arithmetic trips you up (fractions, negatives), drill those separately before tackling algebra", "Speed matters less than accuracy early on—master correctness, then build speed", "Quizzes reveal gaps fast; use results to target weak spots instead of re-studying everything"],
     },
     faq: [
-      { q: "How many questions in an algebra quiz?", a: "Sample quizzes have 8-10 questions covering core algebra skills. Generate custom quizzes of any length (5-50+ questions) by uploading your textbook chapter or study guide." },
-      { q: "What difficulty levels are available?", a: "Questions range from basic Algebra 1 (linear equations, simple factoring) to advanced Algebra 2 (rational expressions, logarithms). Upload your course material to match your exact curriculum level." },
-      { q: "Can I use this for SAT or ACT prep?", a: "Yes. These quizzes build foundational algebra skills tested on SAT and ACT. For test-specific prep, upload official practice tests to generate questions matching exam format and difficulty." },
+      { q: "How many questions are in a typical algebra quiz?", a: "Most quizzes have 8-10 questions covering 2-3 related skills. Length balances thorough assessment with time efficiency—quick enough to complete in one sitting." },
+      { q: "What's the difference between a quiz and practice test?", a: "Quizzes are shorter (8-10 questions, 10-15 min) and focus on specific skills. Practice tests are longer (20+ questions, 30+ min) and cover broader content for comprehensive review." },
+      { q: "Can I retake the same quiz to study?", a: "Yes. Retaking identical quizzes measures retention. For variety, generate new quizzes on the same topics—different numbers, same concepts—to test transfer of understanding." },
     ],
     relatedPages: ["/subjects/algebra", "/subjects/algebra/practice-questions", "/subjects/math/quiz", "/ai-quiz-generator"],
   },

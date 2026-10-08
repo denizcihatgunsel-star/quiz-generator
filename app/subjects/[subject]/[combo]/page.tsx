@@ -33,7 +33,22 @@ export async function generateMetadata({
   if (!subject || !combo) return {};
 
   const typeLabel = COMBO_TYPE_LABELS[combo.type];
-  const title = `${subject.name} ${typeLabel}: ${combo.meta.primaryKeyword.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')} | Examina`;
+  
+  // Create descriptive title without duplication
+  let titleSuffix = '';
+  if (combo.type === 'practice-questions') {
+    titleSuffix = 'Master Key Concepts';
+  } else if (combo.type === 'quiz') {
+    titleSuffix = 'Quick Skills Assessment';
+  } else if (combo.type === 'flashcards') {
+    titleSuffix = 'Study Cards & Review';
+  } else if (combo.type === 'worksheet-generator') {
+    titleSuffix = 'Create Custom Worksheets';
+  } else if (combo.type === 'quiz-generator') {
+    titleSuffix = 'Generate Custom Tests';
+  }
+  
+  const title = `${subject.name} ${typeLabel}: ${titleSuffix}`;
   const description = combo.intro.slice(0, 155) + "...";
 
   return pageMetadata({

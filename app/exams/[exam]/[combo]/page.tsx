@@ -33,7 +33,37 @@ export async function generateMetadata({
   if (!exam || !combo) return {};
 
   const typeLabel = COMBO_TYPE_LABELS[combo.type];
-  const title = `${exam.name} ${typeLabel}: ${combo.meta.primaryKeyword.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')} | Examina`;
+  
+  // Create descriptive title without duplication, proper acronym caps
+  let titleSuffix = '';
+  if (combo.type === 'practice-questions') {
+    if (exam.slug === 'ap-us-history') {
+      titleSuffix = 'AP US History Exam Prep';
+    } else if (exam.slug === 'ap-psychology') {
+      titleSuffix = 'AP Psych Exam Prep';
+    } else {
+      titleSuffix = 'Master Key Concepts';
+    }
+  } else if (combo.type === 'quiz') {
+    titleSuffix = 'Quick Skills Assessment';
+  } else if (combo.type === 'flashcards') {
+    if (exam.slug === 'ap-psychology') {
+      titleSuffix = 'Key Terms & Concepts';
+    } else {
+      titleSuffix = 'Study Cards & Review';
+    }
+  } else if (combo.type === 'worksheet-generator') {
+    titleSuffix = 'Create Custom Worksheets';
+  } else if (combo.type === 'quiz-generator') {
+    titleSuffix = 'Generate Custom Tests';
+  }
+  
+  // Use proper exam name with correct acronym capitalization
+  const examName = exam.slug === 'ap-us-history' ? 'APUSH' : 
+                   exam.slug === 'ap-psychology' ? 'AP Psychology' : 
+                   exam.name;
+  
+  const title = `${examName} ${typeLabel}: ${titleSuffix}`;
   const description = combo.intro.slice(0, 155) + "...";
 
   return pageMetadata({

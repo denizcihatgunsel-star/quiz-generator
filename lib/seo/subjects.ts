@@ -780,7 +780,7 @@ export const SUBJECTS: Subject[] = [
     slug: "spelling",
     name: "Spelling",
     description:
-      "Generate spelling practice questions and tests for elementary, middle school, or ESL vocabulary building.",
+      "Generate spelling practice questions and tests for elementary through high school students, ESL learners, and adult education. Test mastery of commonly misspelled words, phonics patterns, homophones, word roots, prefixes and suffixes, and grade-level vocabulary. Create weekly spelling tests, pre-tests to identify problem words, diagnostic assessments, or review quizzes before standardized exams. Upload your school's curriculum word lists, textbook vocabulary, or personal spelling demons to generate targeted practice with immediate feedback. Questions include multiple choice (identifying correct spelling among common errors), fill-in-the-blank (completing sentences with correctly spelled words), error detection (finding and correcting misspellings in context), and sentence dictation formats. Each question provides memory aids, common error patterns, and mnemonic devices to help cement correct spellings. Perfect for teachers creating weekly spelling homework, homeschool parents tracking student progress, or learners working independently to improve spelling accuracy and confidence.",
     sampleQuestions: [
       {
         q: "Choose the correctly spelled word:",
@@ -829,7 +829,7 @@ export const SUBJECTS: Subject[] = [
     slug: "grammar",
     name: "Grammar",
     description:
-      "Create grammar quiz questions on sentence structure, parts of speech, punctuation, and usage for English learners.",
+      "Create grammar quiz questions on sentence structure, parts of speech, punctuation rules, subject-verb agreement, verb tenses, pronoun usage, modifiers, and common usage errors for middle school through adult English learners. Test understanding of how language works at the sentence and word level through identification of errors, correction exercises, sentence combining, and application of grammar rules in context. Generate practice covering nouns, verbs, adjectives, adverbs, prepositions, conjunctions, articles, fragments, run-ons, comma usage, apostrophes, semicolons, active versus passive voice, parallelism, dangling modifiers, who versus whom, its versus it's, and hundreds of other grammar concepts. Questions require not just recognition of correct grammar but understanding why rules exist and how to apply them in writing. Ideal for standardized test preparation (SAT, ACT, GRE), essay writing improvement, ESL grammar practice, or reinforcing concepts taught in English classes. Upload grammar exercises from your textbook, notes from class, or specific grammar rules you struggle with to generate targeted practice that builds grammatical intuition and eliminates common errors.",
     sampleQuestions: [
       {
         q: "Identify the error: 'Me and him went to the store.'",
@@ -879,7 +879,7 @@ export const SUBJECTS: Subject[] = [
     slug: "algebra",
     name: "Algebra",
     description:
-      "Generate algebra practice questions on equations, inequalities, functions, polynomials, and graphing for pre-algebra through Algebra 2.",
+      "Generate algebra practice questions on linear equations, inequalities, quadratic equations, functions and graphs, polynomials, factoring, systems of equations, exponents and radicals, rational expressions, and word problems for pre-algebra through Algebra 2 students. Cover fundamental skills like solving one-variable and two-variable equations, graphing lines and parabolas, understanding function notation, manipulating algebraic expressions, and applying algebra to real-world scenarios. Test both computational proficiency (can you solve 3x + 7 = 22?) and conceptual understanding (what does slope represent? why do we factor?). Create practice for homework review, exam preparation, summer skill maintenance, SAT/ACT math prep, or college placement test readiness. Upload notes from your Algebra 1 or Algebra 2 textbook, problem sets from class, or specific topics you find challenging (like factoring trinomials, solving systems by substitution versus elimination, or word problems involving distance-rate-time relationships). Questions include step-by-step solution methods, common error warnings, and explanations of why techniques work. Build the algebraic foundation necessary for advanced math courses including geometry, trigonometry, pre-calculus, and calculus.",
     sampleQuestions: [
       {
         q: "Solve for x: 5x - 8 = 27",
@@ -929,7 +929,7 @@ export const SUBJECTS: Subject[] = [
     slug: "geometry",
     name: "Geometry",
     description:
-      "Create geometry practice questions on shapes, angles, proofs, area, volume, and coordinate geometry for high school geometry courses.",
+      "Create geometry practice questions on angles, triangles, quadrilaterals, circles, polygons, area and perimeter formulas, volume and surface area calculations, coordinate geometry, transformations, congruence and similarity, geometric proofs, and the Pythagorean theorem for high school geometry students. Test understanding of fundamental concepts like angle relationships (complementary, supplementary, vertical angles), triangle properties (types, angle sum, exterior angles, special right triangles), circle formulas (circumference, area, arc length, sector area), polygon angle sums, 3D shape volumes (prisms, cylinders, pyramids, cones, spheres), and coordinate plane distance and midpoint formulas. Generate practice for daily homework, unit exams, final exam review, SAT/ACT geometry preparation, or summer refreshers before pre-calculus. Upload geometry notes, textbook problem sets, or theorem lists to create questions testing both computational skills (find the area, calculate the volume) and conceptual reasoning (why are base angles of an isosceles triangle equal? how do you prove triangles congruent?). Questions include diagrams described in text, step-by-step solutions, common mistake warnings, and connections between geometric concepts. Essential practice for building spatial reasoning and proof-writing abilities needed in higher mathematics.",
     sampleQuestions: [
       {
         q: "What is the sum of interior angles in a hexagon?",
@@ -979,7 +979,7 @@ export const SUBJECTS: Subject[] = [
     slug: "world-history",
     name: "World History",
     description:
-      "Generate world history quiz questions on ancient civilizations, empires, revolutions, wars, and cultural developments across global regions.",
+      "Generate world history quiz questions covering ancient civilizations, classical empires, medieval kingdoms, Renaissance and Reformation, Age of Exploration and colonization, revolutionary movements, industrialization, imperialism, world wars, Cold War conflicts, and contemporary global issues across all major regions including Europe, Asia, Africa, the Americas, and Oceania. Test knowledge of political developments (rise and fall of empires, revolutions, wars, treaties), economic systems (feudalism, mercantilism, capitalism, communism), social structures (class systems, gender roles, slavery, labor movements), cultural achievements (art, literature, philosophy, religion, scientific discoveries), and technological innovations that shaped human civilization. Practice identifying cause-and-effect relationships, comparing historical events across time periods and regions, analyzing continuity and change, and understanding different historical perspectives. Perfect for AP World History exam preparation, IB History assessments, college survey courses, or general knowledge building. Upload textbook chapters, class notes on specific eras, or documentaries you watched to generate questions testing both factual recall and higher-order thinking about historical patterns, causation, and significance of events in global context.",
     sampleQuestions: [
       {
         q: "Which ancient civilization built Machu Picchu?",
@@ -1029,7 +1029,7 @@ export const SUBJECTS: Subject[] = [
     slug: "french",
     name: "French",
     description:
-      "Create French language quiz questions for vocabulary, grammar, verb conjugation, and reading comprehension practice.",
+      "Create French language quiz questions for vocabulary acquisition, grammar rules, verb conjugation mastery, reading comprehension, and practical communication skills at beginner (A1-A2), intermediate (B1-B2), or advanced (C1-C2) proficiency levels. Test knowledge of essential vocabulary (greetings, numbers, colors, family, food, travel, emotions), grammatical structures (noun gender and agreement, articles, pronouns, adjectives, prepositions, negation), verb conjugations across all tenses and moods (présent, passé composé, imparfait, futur, conditionnel, subjonctif), sentence construction, idiomatic expressions, and comprehension of written passages. Generate practice for French 1-4 courses, AP French Language and Culture exam preparation, DELF/DALF certification study, or independent language learning. Upload French textbook chapters, grammar exercises, vocabulary lists, or authentic French texts (articles, stories, dialogues) to create targeted questions with detailed explanations in English showing how French grammar works, common learner mistakes to avoid, and tips for remembering irregular verb forms and tricky pronunciation patterns. Build proficiency systematically from basic communication to sophisticated expression in French.",
     sampleQuestions: [
       {
         q: "Quel est le passé composé de 'parler' à la première personne?",
