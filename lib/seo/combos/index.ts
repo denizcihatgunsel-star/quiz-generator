@@ -15,6 +15,8 @@ import { WORLD_HISTORY_COMBOS } from "./world-history";
 import { FRENCH_COMBOS } from "./french";
 import { AP_US_HISTORY_COMBOS } from "./ap-us-history";
 import { AP_PSYCHOLOGY_COMBOS } from "./ap-psychology";
+import { AP_HUMAN_GEOGRAPHY_COMBOS } from "./ap-human-geography";
+import { AP_WORLD_HISTORY_COMBOS } from "./ap-world-history";
 import type { ComboData } from "./types";
 
 // Subject combo map
@@ -37,6 +39,8 @@ export const SUBJECT_COMBOS: Record<string, ComboData[]> = {
 export const EXAM_COMBOS: Record<string, ComboData[]> = {
   "ap-us-history": AP_US_HISTORY_COMBOS,
   "ap-psychology": AP_PSYCHOLOGY_COMBOS,
+  "ap-human-geography": AP_HUMAN_GEOGRAPHY_COMBOS,
+  "ap-world-history": AP_WORLD_HISTORY_COMBOS,
 };
 
 export {
@@ -54,5 +58,7 @@ export {
   FRENCH_COMBOS,
   AP_US_HISTORY_COMBOS,
   AP_PSYCHOLOGY_COMBOS,
+  AP_HUMAN_GEOGRAPHY_COMBOS,
+  AP_WORLD_HISTORY_COMBOS,
 };
 export * from "./types";

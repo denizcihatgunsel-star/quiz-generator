@@ -8,7 +8,8 @@ export type ComboType =
   | "practice-questions"
   | "quiz"
   | "worksheet-generator"
-  | "quiz-generator";
+  | "quiz-generator"
+  | "study-guide";
 
 export interface ComboMeta {
   type: ComboType;
@@ -47,6 +48,7 @@ export const COMBO_TYPE_LABELS: Record<ComboType, string> = {
   quiz: "Quiz",
   "worksheet-generator": "Worksheet Generator",
   "quiz-generator": "Quiz Generator",
+  "study-guide": "Study Guide",
 };
 
 export const COMBO_TYPE_TOOL_PAGES: Record<ComboType, string> = {
@@ -55,4 +57,5 @@ export const COMBO_TYPE_TOOL_PAGES: Record<ComboType, string> = {
   quiz: "/ai-quiz-generator",
   "worksheet-generator": "/features/worksheet-generator",
   "quiz-generator": "/ai-quiz-generator",
+  "study-guide": "/study-guide-generator",
 };
