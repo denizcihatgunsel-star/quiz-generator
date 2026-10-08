@@ -112,6 +112,43 @@ export function ensureVerificationColumns(): Promise<void> {
           // created by another instance — ignore
         }
       }
+
+      // Study Mode table (concept-based spaced repetition with Bloom level progression)
+      try {
+        await db.$executeRawUnsafe(`SELECT "id" FROM "StudyConcept" LIMIT 1`);
+      } catch {
+        try {
+          await db.$executeRawUnsafe(
+            `CREATE TABLE IF NOT EXISTS "StudyConcept" (
+              "id" TEXT PRIMARY KEY NOT NULL,
+              "userId" TEXT NOT NULL,
+              "concept" TEXT NOT NULL,
+              "originalBloom" INTEGER NOT NULL DEFAULT 1,
+              "currentBloom" INTEGER NOT NULL DEFAULT 1,
+              "correctStreak" INTEGER NOT NULL DEFAULT 0,
+              "firstCorrectAt" DATETIME,
+              "lastReviewedAt" DATETIME,
+              "dueDate" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              "sourceQuizId" TEXT NOT NULL DEFAULT '',
+              "sourceTopic" TEXT NOT NULL DEFAULT '',
+              "cleared" INTEGER NOT NULL DEFAULT 0,
+              "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              "updatedAt" DATETIME NOT NULL
+            )`
+          );
+          await db.$executeRawUnsafe(
+            `CREATE UNIQUE INDEX IF NOT EXISTS "StudyConcept_userId_concept_key" ON "StudyConcept"("userId", "concept")`
+          );
+          await db.$executeRawUnsafe(
+            `CREATE INDEX IF NOT EXISTS "StudyConcept_userId_dueDate_idx" ON "StudyConcept"("userId", "dueDate")`
+          );
+          await db.$executeRawUnsafe(
+            `CREATE INDEX IF NOT EXISTS "StudyConcept_userId_cleared_idx" ON "StudyConcept"("userId", "cleared")`
+          );
+        } catch {
+          // created by another instance — ignore
+        }
+      }
     })().catch((err) => {
       console.error("Verification column check failed:", err);
       globalForMigration.verificationColumnsReady = undefined;

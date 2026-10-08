@@ -90,6 +90,9 @@ export default function DashboardPage() {
   const [achievements, setAchievements] = useState<
     { code: string; name: string; description: string; unlocked: boolean; unlockedAt: string | null }[]
   >([]);
+  const [studyDueCount, setStudyDueCount] = useState(0);
+  const [studyPendingCount, setStudyPendingCount] = useState(0);
+  const [studyNextDue, setStudyNextDue] = useState<string | null>(null);
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/auth/login");
@@ -117,6 +120,15 @@ export default function DashboardPage() {
       fetch("/api/achievements")
         .then((r) => r.json())
         .then((d) => { if (d.achievements) setAchievements(d.achievements); })
+        .catch(() => {});
+
+      fetch("/api/study?action=count")
+        .then((r) => r.json())
+        .then((d) => { 
+          if (typeof d.dueCount === "number") setStudyDueCount(d.dueCount);
+          if (typeof d.pendingCount === "number") setStudyPendingCount(d.pendingCount);
+          if (d.nextDue) setStudyNextDue(d.nextDue);
+        })
         .catch(() => {});
     }
   }, [session]);
@@ -228,6 +240,38 @@ export default function DashboardPage() {
 
         <StreakWidget />
 
+        {studyPendingCount > 0 && (
+          <Link
+            href="/study/misses"
+            className="group mb-10 flex flex-wrap items-center justify-between gap-5 rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50 via-indigo-50 to-violet-50 p-6 shadow-[0_20px_60px_-30px_rgba(109,40,217,0.4)] transition-all hover:border-violet-300 hover:shadow-[0_24px_70px_-30px_rgba(109,40,217,0.5)]"
+          >
+            <div className="flex items-center gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 text-white shadow-[0_10px_25px_-10px_rgba(109,40,217,0.6)]">
+                <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              </div>
+              <div>
+                <p className="mb-1 font-serif text-lg italic text-violet-900">Study Mode</p>
+                {studyDueCount > 0 ? (
+                  <>
+                    <p className="text-sm font-medium text-violet-700">{studyDueCount} concept{studyDueCount === 1 ? "" : "s"} due today</p>
+                    <p className="text-xs text-violet-600">Review missed concepts with Bloom&apos;s Taxonomy progression</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm font-medium text-violet-700">Next review: {studyNextDue || "soon"}</p>
+                    <p className="text-xs text-violet-600">{studyPendingCount} concept{studyPendingCount === 1 ? "" : "s"} in progress</p>
+                  </>
+                )}
+              </div>
+            </div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-violet-600 px-5 py-2.5 text-sm font-medium text-white transition-all group-hover:bg-violet-700">
+              Start Review {ARROW}
+            </span>
+          </Link>
+        )}
+
         {daily && (
           <Link
             href="/daily-challenge"
@@ -265,7 +309,7 @@ export default function DashboardPage() {
         <div className="mb-10 flex flex-wrap gap-3">
           {userRole === "student" && (
             <>
-              <Link href="/study" className={primaryBtn}>
+              <Link href="/study/misses" className={primaryBtn}>
                 {BOOK} Study Mode
               </Link>
               <Link href="/classroom/join" className={ghostBtn}>

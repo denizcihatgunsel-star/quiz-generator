@@ -121,6 +121,28 @@ const statements: string[] = [
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`,
   `CREATE UNIQUE INDEX IF NOT EXISTS "PasswordResetToken_token_key" ON "PasswordResetToken"("token")`,
+
+  // Study Mode: concept-based spaced repetition
+  `CREATE TABLE IF NOT EXISTS "StudyConcept" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "concept" TEXT NOT NULL,
+    "originalBloom" INTEGER NOT NULL DEFAULT 1,
+    "currentBloom" INTEGER NOT NULL DEFAULT 1,
+    "correctStreak" INTEGER NOT NULL DEFAULT 0,
+    "firstCorrectAt" DATETIME,
+    "lastReviewedAt" DATETIME,
+    "dueDate" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "sourceQuizId" TEXT NOT NULL DEFAULT '',
+    "sourceTopic" TEXT NOT NULL DEFAULT '',
+    "cleared" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "StudyConcept_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "StudyConcept_userId_concept_key" ON "StudyConcept"("userId", "concept")`,
+  `CREATE INDEX IF NOT EXISTS "StudyConcept_userId_dueDate_idx" ON "StudyConcept"("userId", "dueDate")`,
+  `CREATE INDEX IF NOT EXISTS "StudyConcept_userId_cleared_idx" ON "StudyConcept"("userId", "cleared")`,
 ];
 
 async function main() {
