@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { getPlan, currentMonth, isUnlimited } from "@/lib/subscription";
 import { quotaLimit } from "@/lib/quota";
 import { awardXp, XP_REWARDS } from "@/lib/xp";
+import { isAnswerGrounded } from "@/lib/notes-cleanup";
 
 export const maxDuration = 60;
 
@@ -25,10 +26,11 @@ const SUPPORTED_LANGUAGES = [
   "Thai", "Indonesian", "Malay", "Ukrainian", "Hebrew",
 ];
 
-const USER_PROMPT_TEMPLATE = (lesson: string, language: string) => `
+const USER_PROMPT_TEMPLATE = (lesson: string, language: string, cleanupGaps?: string[]) => `
 Generate a quiz from the following lesson content.
-${language !== "English" ? `\nIMPORTANT: Generate ALL quiz content (topic, questions, options, explanations, flashcards, statements, answers) in ${language}. The lesson content may be in any language — read and understand it, but write the entire quiz output in ${language}.\n` : ""}
-LESSON CONTENT:
+${language !== "English" ? `\nIMPORTANT: Generate ALL quiz content (topic, questions, options, explanations, flashcards, statements, answers) in ${language}. The lesson content may be in any language — read and understand it, but write the entire quiz output in ${language}.\n` : ""}${cleanupGaps && cleanupGaps.length > 0 ? `\nIMPORTANT GAP CONSTRAINTS: The following information is MISSING from the lesson. DO NOT write questions whose answers depend on these missing items. DO NOT define or fill in these gaps in explanations or flashcards:
+${cleanupGaps.map((gap, i) => `${i + 1}. ${gap}`).join('\n')}
+\n` : ""}LESSON CONTENT:
 ---
 ${lesson}
 ---
@@ -133,6 +135,25 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const lesson = body.lesson;
   const language = SUPPORTED_LANGUAGES.includes(body.language) ? body.language : "English";
+  const cleanupGaps = body.cleanupGaps;
+
+  // Validate cleanupGaps if provided
+  let validatedGaps: string[] | undefined;
+  if (cleanupGaps !== undefined && cleanupGaps !== null) {
+    if (Array.isArray(cleanupGaps)) {
+      // Max 30 items, each max 200 chars
+      validatedGaps = cleanupGaps
+        .filter(g => typeof g === "string")
+        .slice(0, 30)
+        .map(g => g.slice(0, 200));
+      
+      // If empty after filtering, ignore
+      if (validatedGaps.length === 0) {
+        validatedGaps = undefined;
+      }
+    }
+    // If invalid format, ignore silently (don't error, just proceed without gaps)
+  }
 
   if (!lesson || typeof lesson !== "string" || lesson.trim().length < 50) {
     return NextResponse.json(
@@ -183,7 +204,7 @@ export async function POST(req: NextRequest) {
           stream: true,
           messages: [
             { role: "system", content: SYSTEM_PROMPT },
-            { role: "user", content: USER_PROMPT_TEMPLATE(lesson.trim(), language) },
+            { role: "user", content: USER_PROMPT_TEMPLATE(lesson.trim(), language, validatedGaps) },
           ],
         });
 
@@ -215,6 +236,68 @@ export async function POST(req: NextRequest) {
             await rollbackUsage();
             return;
           }
+
+          // Grounding check: only when cleanupGaps is present and non-empty
+          // Wrapped in try/catch to fail open and never break generation
+          if (validatedGaps && validatedGaps.length > 0 && language === "English" && Array.isArray(quiz.multipleChoice)) {
+            try {
+              const originalMcqCount = quiz.multipleChoice.length;
+              const keepIndices = [];
+              const failedIndices = [];
+              
+              for (let i = 0; i < quiz.multipleChoice.length; i++) {
+                const q = quiz.multipleChoice[i];
+                
+                // Guard: treat items without valid correctAnswer as kept
+                if (!q.options || typeof q.correctIndex !== 'number' || !q.options[q.correctIndex]) {
+                  keepIndices.push(i);
+                  continue;
+                }
+                
+                const correctAnswer = q.options[q.correctIndex];
+                
+                // Guard: treat non-string answers as kept
+                if (typeof correctAnswer !== 'string') {
+                  keepIndices.push(i);
+                  continue;
+                }
+                
+                if (isAnswerGrounded(correctAnswer, lesson, q.question)) {
+                  keepIndices.push(i);
+                } else {
+                  failedIndices.push(i);
+                }
+              }
+              
+              const droppedCount = originalMcqCount - keepIndices.length;
+              const shouldWarn = droppedCount * 3 > originalMcqCount; // Warn if >1/3
+              
+              if (shouldWarn) {
+                // Too many drops, keep all and warn instead
+                // Include flagged indices so UI can mark them
+                const groundingResult = {
+                  keep: Array.from({ length: originalMcqCount }, (_, i) => i),
+                  dropped: 0,
+                  warned: true,
+                  flagged: failedIndices
+                };
+                controller.enqueue(encoder.encode(`\n__EXAMINA_GROUNDING__:${JSON.stringify(groundingResult)}`));
+              } else if (droppedCount > 0) {
+                // Drop the ungrounded questions
+                const groundingResult = {
+                  keep: keepIndices,
+                  dropped: droppedCount,
+                  warned: false
+                };
+                controller.enqueue(encoder.encode(`\n__EXAMINA_GROUNDING__:${JSON.stringify(groundingResult)}`));
+              }
+              // If droppedCount === 0, no marker needed (client parses normally)
+            } catch {
+              // Grounding check failed, fail open: no marker gets appended
+              // Generation continues normally without filtering
+            }
+          }
+
         } catch {
           controller.enqueue(encoder.encode("\n__EXAMINA_ERROR__:Failed to parse the generated quiz. Please try again."));
           await rollbackUsage();

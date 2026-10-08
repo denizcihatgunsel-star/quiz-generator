@@ -16,7 +16,7 @@ interface CleanupResult {
 
 interface NotesCleanupProps {
   notes: string;
-  onAccept: (cleanedNotes: string) => void;
+  onAccept: (cleanedNotes: string, gaps: string[]) => void;
   onCancel: () => void;
 }
 
@@ -56,11 +56,13 @@ export default function NotesCleanup({ notes, onAccept, onCancel }: NotesCleanup
 
   const handleAcceptCleaned = () => {
     // Use the edited version (user can edit the cleaned pane)
-    onAccept(editedCleaned);
+    // Pass the gaps so quiz generator can avoid filling them
+    onAccept(editedCleaned, result?.gaps ?? []);
   };
 
   const handleKeepOriginal = () => {
-    onAccept(notes);
+    // No gaps to carry if keeping original
+    onAccept(notes, []);
   };
 
   return (

@@ -65,9 +65,12 @@ export async function recordMissesToStudy(
     distractorStrength?: number;
   }>
 ) {
+  // Filter out flagged items (needsReview: true) - these should never be recorded
+  const validMissed = missed.filter(m => !m.question.needsReview);
+  
   const concepts = new Map<string, { bloom: number; sourceQuizId: string; sourceTopic: string }>();
 
-  for (const { question, concept: qConcept, distractorStrength } of missed) {
+  for (const { question, concept: qConcept, distractorStrength } of validMissed) {
     const conceptKey = deriveConceptKey(question, quizTopic, qConcept);
     const baseBloom = bloomNameToNumber(question.bloomLevel);
     
@@ -84,13 +87,13 @@ export async function recordMissesToStudy(
     }
   }
 
-  // Cap at 2x the number of misses
-  const cap = Math.min(concepts.size, missed.length * 2);
+  // Cap at 2x the number of misses (use validMissed count)
+  const cap = Math.min(concepts.size, validMissed.length * 2);
   const toSave = Array.from(concepts.entries()).slice(0, cap);
 
   for (const [conceptKey, { bloom, sourceQuizId, sourceTopic }] of toSave) {
     // Get the baseBloom from the original question for originalBloom tracking
-    const originalMiss = missed.find(m => deriveConceptKey(m.question, quizTopic, m.concept) === conceptKey);
+    const originalMiss = validMissed.find(m => deriveConceptKey(m.question, quizTopic, m.concept) === conceptKey);
     const baseBloom = originalMiss ? bloomNameToNumber(originalMiss.question.bloomLevel) : bloom;
     
     await db.studyConcept.upsert({

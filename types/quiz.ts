@@ -11,6 +11,7 @@ export interface MultipleChoiceQuestion {
   bloomLevel: BloomLevel;
   bloomRationale?: string;
   distractorStrength?: number;
+  needsReview?: boolean; // Set when grounding check flagged this item
 }
 
 export interface Flashcard {
@@ -50,6 +51,10 @@ export interface QuizData {
   theme?: string; // quiz theme id, default "rose"
   ocrUsed?: boolean;
   sourceConfidence?: number;
+  grounding?: {
+    dropped: number;
+    warned: boolean;
+  };
 }
 
 export type GenerateStatus = "idle" | "loading" | "success" | "error";

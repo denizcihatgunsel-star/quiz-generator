@@ -26,11 +26,47 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No misses provided" }, { status: 400 });
     }
 
+    // Server-side filter: if quizId is provided, load the saved quiz and drop any
+    // missed item whose matching saved question has needsReview: true
+    let filteredMissed = missed;
+    if (quizId) {
+      try {
+        const savedQuiz = await db.savedQuiz.findUnique({
+          where: { id: quizId },
+          select: { data: true },
+        });
+        
+        if (savedQuiz) {
+          const quizData = JSON.parse(savedQuiz.data);
+          const savedQuestions = quizData.multipleChoice || quizData.questions || [];
+          
+          // Create a Set of normalized question texts that have needsReview: true
+          const flaggedQuestions = new Set<string>();
+          for (const sq of savedQuestions) {
+            if (sq.needsReview && sq.question) {
+              const normalized = sq.question.trim().toLowerCase().replace(/[^a-z0-9\s]/g, "");
+              flaggedQuestions.add(normalized);
+            }
+          }
+          
+          // Filter out any missed item whose normalized question matches a flagged one
+          filteredMissed = missed.filter((m) => {
+            if (!m.question?.question) return true;
+            const normalized = m.question.question.trim().toLowerCase().replace(/[^a-z0-9\s]/g, "");
+            return !flaggedQuestions.has(normalized);
+          });
+        }
+      } catch (err) {
+        console.error("Failed to filter flagged questions from saved quiz:", err);
+        // Continue with unfiltered missed items on error
+      }
+    }
+
     const saved = await recordMissesToStudy(
       session.user.id,
       quizId || "",
       topic || "",
-      missed
+      filteredMissed
     );
 
     return NextResponse.json({ saved });
@@ -166,6 +202,9 @@ export async function GET(req: NextRequest) {
           
           for (const q of questions) {
             if (!q.question || !Array.isArray(q.options)) continue;
+            
+            // Skip flagged items that may go beyond the user's notes
+            if (q.needsReview) continue;
             
             // If this quiz has a draftSetId, verify the matching GeneratedItem is approved
             if (quiz.draftSetId && draftSetItems.length > 0) {
