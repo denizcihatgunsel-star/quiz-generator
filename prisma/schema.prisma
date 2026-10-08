@@ -149,6 +149,7 @@ model StudyConcept {
   originalBloom     Int      @default(1) // 1=Remember ... 6=Create
   currentBloom      Int      @default(1) // stepped up after each miss
   correctStreak     Int      @default(0) // 0, 1, or 2 (clears at 2)
+  missStreak        Int      @default(0) // consecutive misses; triggers drop-back at 2
   firstCorrectAt    DateTime? // timestamp of first correct answer
   lastReviewedAt    DateTime? // timestamp of last review
   dueDate           DateTime @default(now())

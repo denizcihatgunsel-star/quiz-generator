@@ -149,6 +149,20 @@ export function ensureVerificationColumns(): Promise<void> {
           // created by another instance — ignore
         }
       }
+
+      // StudyConcept missStreak column (DeepThinker drop-back rule)
+      // Run after CREATE TABLE above. Races are safe: duplicate-column errors are swallowed.
+      try {
+        await db.$executeRawUnsafe(`SELECT "missStreak" FROM "StudyConcept" LIMIT 1`);
+      } catch {
+        try {
+          await db.$executeRawUnsafe(
+            `ALTER TABLE "StudyConcept" ADD COLUMN "missStreak" INTEGER NOT NULL DEFAULT 0`
+          );
+        } catch {
+          // column already added by another instance — ignore
+        }
+      }
     })().catch((err) => {
       console.error("Verification column check failed:", err);
       globalForMigration.verificationColumnsReady = undefined;
