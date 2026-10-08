@@ -138,7 +138,7 @@ export default function TrueFalseQuizGeneratorPage() {
               {
                 step: "03",
                 title: "Study or share.",
-                desc: "Take the quiz right away. On Plus and above you can share it with a link or download it as a PDF. Teachers can run it in class; students join at examina.ink/classroom/join with a game code.",
+                desc: "Take the quiz right away. Share it with a link or download it as a PDF. Teachers can run it in class; students join at examina.ink/classroom/join with a game code.",
               },
             ].map((item) => (
               <div key={item.step}>

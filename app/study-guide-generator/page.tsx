@@ -290,7 +290,7 @@ export default function StudyGuideGeneratorPage() {
             <div>
               <h3 className="text-xl font-medium text-neutral-900 mb-3">Teachers</h3>
               <p className="text-neutral-600 leading-relaxed">
-                Turn a unit&apos;s reading into a review set for the class. Students join at examina.ink/classroom/join with a game code, so review day can be a live quiz rather than a handout. On Plus and above you can also share a set with a link or download it as a PDF to hand out.
+                Turn a unit&apos;s reading into a review set for the class. Students join at examina.ink/classroom/join with a game code, so review day can be a live quiz rather than a handout. You can also share a set with a link or download it as a PDF to hand out.
               </p>
             </div>
             <div>
