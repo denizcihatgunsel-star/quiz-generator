@@ -62,41 +62,83 @@ Next.js 16 (App Router), React, TypeScript, Tailwind CSS, Turso (libSQL), NextAu
 - [Fill in the Blank Generator](https://www.examina.ink/fill-in-the-blank-generator)
 - [True/False Quiz Generator](https://www.examina.ink/true-false-quiz-generator)
 - [Study Guide Generator](https://www.examina.ink/study-guide-generator)
+- [Test Generator](https://www.examina.ink/test-generator)
+- [MCQ Generator](https://www.examina.ink/mcq-generator)
+- [Practice Test Generator](https://www.examina.ink/practice-test-generator)
+- [Exit Ticket Generator](https://www.examina.ink/exit-ticket-generator)
 
 ### Alternatives
+- [Browse Alternatives](https://www.examina.ink/alternatives) — hub for all platforms
 - [Kahoot Alternative](https://www.examina.ink/alternatives/kahoot) — AI question generation vs manual
 - [Quizizz Alternative](https://www.examina.ink/alternatives/quizizz)
 - [Quizlet Alternative](https://www.examina.ink/alternatives/quizlet) — AI flashcards
 - [Blooket Alternative](https://www.examina.ink/alternatives/blooket)
+- [Gimkit Alternative](https://www.examina.ink/alternatives/gimkit)
+- [Nearpod Alternative](https://www.examina.ink/alternatives/nearpod)
+- [Google Forms Alternative](https://www.examina.ink/alternatives/google-forms)
 
 ### Audiences
 - [For Teachers](https://www.examina.ink/for-teachers) — formative assessment, live classroom
 - [For Students](https://www.examina.ink/for-students) — exam prep, study from notes
 - [For Schools](https://www.examina.ink/for-schools) — district quiz platform
 - [For Tutors](https://www.examina.ink/for-tutors) — custom practice tests
+- [For Corporate Training](https://www.examina.ink/for-corporate-training) — L&D assessment
 
 ### Exam Prep
+- [Browse All Exams](https://www.examina.ink/exams) — hub for all standardized tests
 - [SAT Practice Test Generator](https://www.examina.ink/exams/sat)
 - [ACT Practice Questions](https://www.examina.ink/exams/act)
 - [AP Exam Practice](https://www.examina.ink/exams/ap)
 - [MCAT Practice Questions](https://www.examina.ink/exams/mcat)
 - [NCLEX Practice Generator](https://www.examina.ink/exams/nclex)
 - [GRE Practice Quiz](https://www.examina.ink/exams/gre)
+- [LSAT Practice Test](https://www.examina.ink/exams/lsat)
+- [TOEFL Practice Quiz](https://www.examina.ink/exams/toefl)
+- [IELTS Practice Questions](https://www.examina.ink/exams/ielts)
 
 ### Subjects
+- [Browse All Subjects](https://www.examina.ink/subjects) — hub for all subjects
 - [Biology Quiz Generator](https://www.examina.ink/subjects/biology)
 - [Chemistry Quiz Generator](https://www.examina.ink/subjects/chemistry)
+- [Physics Quiz Generator](https://www.examina.ink/subjects/physics)
 - [Math Quiz Generator](https://www.examina.ink/subjects/math)
 - [History Quiz Generator](https://www.examina.ink/subjects/history)
+- [English Quiz Generator](https://www.examina.ink/subjects/english)
 - [Vocabulary Quiz](https://www.examina.ink/subjects/vocabulary)
+- [Spanish Quiz Generator](https://www.examina.ink/subjects/spanish)
 - [Anatomy Quiz Generator](https://www.examina.ink/subjects/anatomy)
 - [Nursing Quiz Generator](https://www.examina.ink/subjects/nursing)
+- [Psychology Quiz Generator](https://www.examina.ink/subjects/psychology)
+- [Computer Science Quiz](https://www.examina.ink/subjects/computer-science)
 
 ### Features
+- [Browse All Features](https://www.examina.ink/features) — hub for all features
 - [Bloom's Taxonomy Quiz](https://www.examina.ink/features/blooms-taxonomy)
 - [Live Classroom Quiz](https://www.examina.ink/features/live-classroom-quiz)
+- [Worksheet Generator](https://www.examina.ink/features/worksheet-generator)
 - [Formative Assessment Tool](https://www.examina.ink/features/formative-assessment)
-- [OCR Quiz from Image](https://www.examina.ink/features/ocr-quiz)
+- [OCR Quiz from Photo](https://www.examina.ink/features/ocr-quiz)
+- [Export Quiz to PDF](https://www.examina.ink/features/export-pdf)
+- [Shared Quiz Links](https://www.examina.ink/features/shared-quiz-links)
+
+### Integrations
+- [Browse All Integrations](https://www.examina.ink/integrations) — hub for LMS integrations
+- [Google Forms Integration](https://www.examina.ink/integrations/google-forms)
+- [Canvas Integration](https://www.examina.ink/integrations/canvas)
+- [Moodle Integration](https://www.examina.ink/integrations/moodle)
+- [Google Classroom](https://www.examina.ink/integrations/google-classroom)
+- [Blackboard Integration](https://www.examina.ink/integrations/blackboard)
+- [QTI Export](https://www.examina.ink/integrations/qti)
+
+### Comparisons
+- [Kahoot vs Examina](https://www.examina.ink/compare/kahoot-vs-examina)
+- [Quizizz vs Kahoot](https://www.examina.ink/compare/quizizz-vs-kahoot)
+- [Quizlet vs Examina](https://www.examina.ink/compare/quizlet-vs-examina)
+
+### Español
+- [Generador de Quizzes IA](https://www.examina.ink/es/generador-de-quizzes)
+- [Generador de Quiz desde PDF](https://www.examina.ink/es/generador-quiz-pdf)
+- [Alternativa a Kahoot](https://www.examina.ink/es/alternativa-kahoot)
 
 ### Integrations
 - [Google Forms Quiz Generator](https://www.examina.ink/integrations/google-forms) — AI → Forms workflow

@@ -88,7 +88,8 @@ export default function sitemap() {
     { url: `${SITE}/subjects/nursing`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE}/subjects/psychology`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE}/subjects/computer-science`, changeFrequency: "monthly", priority: 0.8 },
-    // Wave 2: Comparisons (4)
+    // Wave 2: Comparisons & Alternatives (4 + 1 hub)
+    { url: `${SITE}/alternatives`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE}/alternatives/blooket`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE}/alternatives/gimkit`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE}/alternatives/nearpod`, changeFrequency: "monthly", priority: 0.7 },
