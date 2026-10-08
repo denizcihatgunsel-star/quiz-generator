@@ -21,11 +21,13 @@ describe("Marketing copy compliance", () => {
     const violations: { file: string; line: number; match: string }[] = [];
 
     // Patterns that indicate hardcoded free-limit claims
+    // Also check for literal "5 generations" and "5 quizzes" in source
     const hardcodedPatterns = [
-      /\b5\s+(free\s+)?(generations?|quizzes?)/i,
+      /\b5\s+generations?/i,
+      /\b5\s+quizzes?/i,
+      /\bfive\s+(free\s+)?(generations?|quizzes?|quiz)/i,
       /\b(free|gratis|grátis)\s+(tier|plan|accounts?|users?).*?5\s+(quiz|generation)/i,
       /\b5\s+(quiz|generation).*?(free|gratis|grátis|per\s+month)/i,
-      /\bfive\s+(free\s+)?(generations?|quizzes?|quiz)/i,
     ];
 
     // Patterns that indicate free PDF generation claims (PDF upload requires Starter)

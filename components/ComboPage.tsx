@@ -6,6 +6,7 @@
 
 import { useState } from "react";
 import type { ComboData } from "@/lib/seo/combos/types";
+import { FREE_PLAN_LIMIT, STARTER_PLAN_PRICE } from "@/lib/subscription";
 
 interface ComboPageProps {
   data: ComboData;
@@ -279,7 +280,7 @@ export default function ComboPage({ data, hubName, hubPath, allCombos }: ComboPa
           <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
             Upload your notes, textbook pages, or study material and generate custom{" "}
             {isFlashcardType ? "flashcards" : "practice questions"} in seconds. Free plan
-            includes 5 generations per month. PDF upload available on Starter plan ($2/mo).
+            includes {FREE_PLAN_LIMIT} generations per month. PDF upload available on Starter plan (${STARTER_PLAN_PRICE}/mo).
           </p>
           <a
             href="/create"

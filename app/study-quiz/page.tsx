@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 import { copyText, saleCopy, saleLandingData } from "@/lib/pricing";
+import { FREE_PLAN_LIMIT, STARTER_PLAN_PRICE } from "@/lib/subscription";
 
 // Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
 export const revalidate = 60;
@@ -16,7 +17,7 @@ const faqs = [
   { q: "How is a study quiz different from a normal quiz?", a: "A study quiz is generated from your own notes and is designed to be repeated, so it supports active recall and spaced repetition." },
   { q: "Does Examina schedule my reviews?", a: "Yes — study mode schedules flashcard reviews at intervals optimized for memory retention." },
   { q: "Can I track my progress?", a: "Yes, with streaks, XP, and score history across your quizzes." },
-  { q: "Is the study quiz free?", a: "Free accounts get 5 generations per month. Paid plans start at $2/month." },
+  { q: "Is the study quiz free?", a: `Free accounts get ${FREE_PLAN_LIMIT} generations per month. Paid plans start at $${STARTER_PLAN_PRICE}/month.` },
 ];
 
 export default function StudyQuizPage() {

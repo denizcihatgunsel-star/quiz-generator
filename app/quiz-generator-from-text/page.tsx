@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata, LANGUAGE_COUNT } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 import { copyText, saleCopy, saleLandingData } from "@/lib/pricing";
+import { FREE_PLAN_LIMIT, STARTER_PLAN_PRICE } from "@/lib/subscription";
 
 // Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
 export const revalidate = 60;
@@ -16,7 +17,7 @@ const faqs = [
   { q: "What formats can I paste?", a: "Plain text, Markdown, and TXT all work. You can paste anything from a few lines to 15,000 characters." },
   { q: "Does it work in languages other than English?", a: `Yes — ${LANGUAGE_COUNT} languages are supported, making it ideal for language learning.` },
   { q: "How long does generation take?", a: "Most quizzes are ready in under 30 seconds." },
-  { q: "Is the text generator free?", a: "Free accounts get 5 generations per month. Paid plans start at $2/month." },
+  { q: "Is the text generator free?", a: `Free accounts get ${FREE_PLAN_LIMIT} generations per month. Paid plans start at $${STARTER_PLAN_PRICE}/month.` },
 ];
 
 export default function TextQuizPage() {

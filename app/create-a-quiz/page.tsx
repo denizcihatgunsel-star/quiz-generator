@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 import { copyText, planOffers, saleCopy, saleLandingData } from "@/lib/pricing";
+import { FREE_PLAN_LIMIT, STARTER_PLAN_PRICE } from "@/lib/subscription";
 
 // Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
 export const revalidate = 60;
@@ -16,7 +17,7 @@ const faqs = [
   { q: "Can I create a quiz without writing questions?", a: "Yes — paste your study material and the AI generates the questions for you automatically." },
   { q: "How do I share a quiz?", a: "Every quiz gets a unique link you can send to anyone. No account is needed to play it." },
   { q: "Can I export my quiz?", a: "Yes, you can download quizzes as PDFs on Plus plans and above." },
-  { q: "Is creating a quiz free?", a: "Free accounts get 5 generations per month. Paid plans start at $2/month." },
+  { q: "Is creating a quiz free?", a: `Free accounts get ${FREE_PLAN_LIMIT} generations per month. Paid plans start at $${STARTER_PLAN_PRICE}/month.` },
 ];
 
 export default function CreateQuizPage() {

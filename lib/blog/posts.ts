@@ -1,3 +1,5 @@
+import { FREE_PLAN_LIMIT, STARTER_PLAN_PRICE } from "@/lib/subscription";
+
 export interface BlogPost {
   slug: string;
   title: string;
@@ -1079,7 +1081,7 @@ export const POSTS: BlogPost[] = [
       },
       {
         q: "Is PDF to quiz free?",
-        a: "Examina offers 10 free quizzes/month. Google Forms is free but requires manual question writing. Quizlet is free with ads.",
+        a: `Examina offers ${FREE_PLAN_LIMIT} free quizzes/month made from text. PDF upload requires the Starter plan at $${STARTER_PLAN_PRICE}/month. Google Forms is free but requires manual question writing. Quizlet is free with ads.`,
       },
       {
         q: "Does it work with scanned PDFs?",
