@@ -28,6 +28,7 @@ import QuizEditor from "./QuizEditor";
 import VideoExplanationLink from "./VideoExplanationLink";
 import MagneticText from "./MagneticText";
 import QuizStory from "./QuizStory";
+import NotesCleanup from "./NotesCleanup";
 import { useTranslation } from "@/lib/i18n";
 
 // Halloween seasonal components
@@ -128,6 +129,7 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
   const [demoUsed, setDemoUsed] = useState(false);
   const [language, setLanguage] = useState("English");
   const [editing, setEditing] = useState(false);
+  const [cleanupOpen, setCleanupOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const heroRef = useRef<HTMLElement | null>(null);
@@ -824,6 +826,14 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                           <button onClick={() => fileInputRef.current?.click()} disabled={uploading} className="text-xs text-[#9A7280] hover:text-[#3B2027] disabled:opacity-50 transition-colors duration-200">
                             {uploading ? t("input.extracting") : t("input.upload")}
                           </button>
+                          <button 
+                            onClick={() => setCleanupOpen(true)} 
+                            disabled={charCount < 20}
+                            className="text-xs text-[#B0607A] hover:text-[#3B2027] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                            title="Clean up notes: fix grammar, add structure"
+                          >
+                            Clean up
+                          </button>
                           <button onClick={loadExample} className="text-xs text-[#9A7280] hover:text-[#3B2027] transition-colors duration-200">
                             {t("input.example")}
                           </button>
@@ -1216,6 +1226,19 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
 
       <AnimatePresence>
         {storyOpen && quiz && <QuizStory quiz={quiz} languageCode={language} onClose={() => setStoryOpen(false)} />}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {cleanupOpen && lesson.trim().length >= 20 && (
+          <NotesCleanup
+            notes={lesson}
+            onAccept={(cleanedNotes) => {
+              setLesson(cleanedNotes);
+              setCleanupOpen(false);
+            }}
+            onCancel={() => setCleanupOpen(false)}
+          />
+        )}
       </AnimatePresence>
     </div>
   );
