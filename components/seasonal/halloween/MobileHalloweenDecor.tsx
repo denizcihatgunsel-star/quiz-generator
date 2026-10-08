@@ -1,13 +1,14 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { isHalloweenActive } from "@/lib/seasonal";
 
 /**
  * Mobile Halloween decorations (phone /m app shell, marketing quiz soft accents,
  * /m/pricing). Visual-only: pointer-events none, z behind controls.
- * Renders nothing when Halloween is off (date cutoff OR ?halloween=0).
- * Decision made client-side via query param, cookie, or env var.
+ * Renders nothing until mounted, then decides client-side to avoid hydration mismatch.
+ * Decision via query param, cookie, or env var.
  */
 
 type Variant = "app-hero" | "jump" | "quiz-soft" | "pricing" | "nav-strip";
@@ -67,16 +68,17 @@ export default function MobileHalloweenDecor({
   variant: Variant;
   className?: string;
 }) {
-  // Use try-catch to handle SSR where useSearchParams might not be available
-  let searchParams = null;
-  try {
-    searchParams = useSearchParams();
-  } catch (e) {
-    // SSR or missing Suspense boundary - will check cookie/env only
-  }
+  const [mounted, setMounted] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const searchParams = useSearchParams();
   
-  const isActive = isHalloweenActive(searchParams);
-  if (!isActive) return null;
+  // Avoid hydration mismatch: render nothing on server, decide after mount
+  useEffect(() => {
+    setMounted(true);
+    setIsActive(isHalloweenActive(searchParams));
+  }, [searchParams]);
+  
+  if (!mounted || !isActive) return null;
 
   if (variant === "app-hero") {
     return (
@@ -170,8 +172,8 @@ export default function MobileHalloweenDecor({
             height: 200,
           }}
         />
-        {/* Ghost moved to top-right above eyebrow, hidden below 380px */}
-        <Prop src={GHOST} className="hw-m-ghost hw-m-pricing-ghost-title" style={{ width: 44, height: 44, top: -50, right: 8, transform: "scaleX(-1)" }} />
+        {/* Ghost in top-right gutter, clear of Sign in button */}
+        <Prop src={GHOST} className="hw-m-ghost hw-m-pricing-ghost-title" style={{ width: 44, height: 44, top: 60, right: -32, transform: "scaleX(-1)" }} />
         <Prop src={BAT} className="hw-m-bat" style={{ width: 22, height: 11, top: -18, left: -34, transform: "rotate(-12deg)" }} />
         <Prop src={BAT} className="hw-m-bat" style={{ width: 26, height: 13, top: 2, right: 36, transform: "rotate(14deg)" }} />
 
@@ -199,10 +201,10 @@ export default function MobileHalloweenDecor({
     );
   }
 
-  // nav-strip — thin row ABOVE the bottom tab bar, never on the icons
+  // nav-strip — in page flow at bottom of main, never on the icons
   return (
     <div
-      className={`hw-m-layer hw-m-layer--nav-strip hw-m-nav-strip pointer-events-none fixed inset-x-0 flex items-end justify-center gap-3 ${className}`}
+      className={`hw-m-layer hw-m-layer--nav-strip hw-m-nav-strip pointer-events-none flex items-end justify-center gap-3 ${className}`}
       aria-hidden="true"
       data-hw-mobile="nav-strip"
     >
