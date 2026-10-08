@@ -51,6 +51,14 @@ const alternatives = [
   },
 ];
 
+
+const faqs = [
+  { q: "What makes Examina different from Kahoot, Quizizz, and other platforms?", a: "Examina generates quiz questions automatically from your lesson notes using AI. No typing questions by hand—upload notes and get a complete quiz in seconds." },
+  { q: "Can I still use these for live classroom games?", a: "Yes. Students join with codes like Kahoot. You control pacing, show leaderboards, and display explanations after each question." },
+  { q: "Is Examina cheaper than paid quiz platforms?", a: "Free tier for 5 quizzes/month. Team plan ($15/month for 5 teachers) includes unlimited quiz generation—much more affordable than Kahoot+ or Quizizz Super." },
+  { q: "Do students need accounts?", a: "No. Students join with a code for live games or click a link for self-paced quizzes. No sign-ups required." },
+];
+
 export default function AlternativesHubPage() {
   const jsonLd = {
     "@context": "https://schema.org",
@@ -99,6 +107,10 @@ export default function AlternativesHubPage() {
           },
         ],
       },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+      }
     ],
   };
 
@@ -183,6 +195,21 @@ export default function AlternativesHubPage() {
           >
             Generate quiz free
           </Link>
+        </div>
+      </section>
+
+
+      <section className="border-t border-neutral-200 bg-white px-6 py-16">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="mb-8 text-2xl font-medium text-neutral-900">Frequently Asked Questions</h2>
+          <div className="space-y-6">
+            {faqs.map((faq, i) => (
+              <div key={i}>
+                <h3 className="mb-2 text-lg font-medium text-neutral-900">{faq.q}</h3>
+                <p className="text-sm text-neutral-600">{faq.a}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </LandingPageLayout>

@@ -27,6 +27,14 @@ const exams = [
   { slug: "finals", name: "Finals", description: "Final exam generator" },
 ];
 
+
+const faqs = [
+  { q: "How do AI practice test generators work?", a: "Upload your study material and AI generates realistic practice questions matching the exam format. Each question includes explanations and difficulty tags." },
+  { q: "Are these official exam questions?", a: "No. These are original AI-generated practice questions based on your study material. They help you practice exam skills but are not official test items." },
+  { q: "Which exams can I practice for?", a: "SAT, ACT, AP, MCAT, NCLEX, GRE, LSAT, TOEFL, IELTS, plus midterm and final exams for any course." },
+  { q: "Is this free?", a: "Free accounts get 5 quiz generations per month. Paid plans start at $2/month for 20 quizzes." },
+];
+
 export default function ExamsHubPage() {
   const jsonLd = {
     "@context": "https://schema.org",
@@ -66,7 +74,18 @@ export default function ExamsHubPage() {
             item: `${SITE_URL}/exams`,
           },
         ],
+      },,
+      {
+        "@type": "SoftwareApplication",
+        name: "Examina",
+        url: SITE_URL,
+        applicationCategory: "EducationalApplication",
+        description: "AI practice test generator for standardized exams and course tests.",
       },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+      }
     ],
   };
 
@@ -122,6 +141,21 @@ export default function ExamsHubPage() {
           >
             Generate practice questions
           </Link>
+        </div>
+      </section>
+
+
+      <section className="border-t border-neutral-200 bg-white px-6 py-16">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="mb-8 text-2xl font-medium text-neutral-900">Frequently Asked Questions</h2>
+          <div className="space-y-6">
+            {faqs.map((faq, i) => (
+              <div key={i}>
+                <h3 className="mb-2 text-lg font-medium text-neutral-900">{faq.q}</h3>
+                <p className="text-sm text-neutral-600">{faq.a}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </LandingPageLayout>

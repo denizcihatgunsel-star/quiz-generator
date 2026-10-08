@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
-import { saleLandingData, planOffers } from "@/lib/pricing";
+import { copyText, saleCopy, saleLandingData, planOffers } from "@/lib/pricing";
 
 export const dynamic = "force-static";
 export const revalidate = 60;
@@ -17,12 +17,49 @@ const faqs = [
   { q: "Do students need accounts?", a: "No. Students can take quizzes from shared links without signing up or logging in." },
   { q: "Can I see who took the quiz?", a: "Yes. View results and scores for quizzes taken via shared links in your Examina dashboard." },
   { q: "Can I revoke a shared link?", a: "Shared links are tied to saved quizzes. Delete the quiz to make the link inactive." },
+  { q: "Can I use shared links in my LMS?", a: "Yes. Share the Examina quiz link as an external resource in Canvas, Moodle, Blackboard, or Google Classroom." },
 ];
 
 export default function SharedQuizLinksPage() {
   const now = new Date();
+  
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.examina.ink/features/shared-quiz-links#webpage",
+        url: "https://www.examina.ink/features/shared-quiz-links",
+        name: "Shared Quiz Links | Examina",
+        isPartOf: { "@id": "https://www.examina.ink/#website" },
+      },
+      {
+        "@type": "SoftwareApplication",
+        name: "Examina",
+        url: "https://www.examina.ink",
+        applicationCategory: "EducationalApplication",
+        description: "Share quizzes with unique links. Students take quizzes without accounts.",
+        offers: planOffers(now),
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) } })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.examina.ink" },
+          { "@type": "ListItem", position: 2, name: "Features", item: "https://www.examina.ink/features" },
+          { "@type": "ListItem", position: 3, name: "Shared Quiz Links", item: "https://www.examina.ink/features/shared-quiz-links" },
+        ],
+      },
+    ],
+  };
+  
   return (
-    <KeywordLanding
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <KeywordLanding
       data={saleLandingData({
         kicker: "Shared Quiz Links",
         h1: "Share quizzes",
@@ -48,6 +85,7 @@ export default function SharedQuizLinksPage() {
         relatedTitle: "Related",
         related: [{ href: "/features/export-pdf", label: "Export PDF" }, { href: "/for-teachers", label: "For Teachers" }, { href: "/ai-quiz-generator", label: "AI Quiz Generator" }],
       }, now)}
-    />
+      />
+    </>
   );
 }

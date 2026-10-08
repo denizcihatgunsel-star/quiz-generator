@@ -34,6 +34,14 @@ const integrations = [
   { slug: "qti", name: "QTI Format", description: "IMS QTI export roadmap" },
 ];
 
+
+const faqs = [
+  { q: "Can Examina export directly to my LMS?", a: "Not currently. Generate questions in Examina, then manually copy into Canvas, Moodle, Blackboard, or Google Classroom. Or share Examina quiz links as external resources." },
+  { q: "Does it support QTI format?", a: "QTI export is not available yet. Current workflow is generate → manual copy or share link." },
+  { q: "Can students take Examina quizzes through the LMS?", a: "Students can take quizzes via shared Examina links (tracked in Examina) or you can manually recreate quizzes in your LMS for native gradebook integration." },
+  { q: "Why use this if I have to copy questions manually?", a: "AI generates questions in seconds vs. hours of manual typing. Copy-paste takes 2 minutes; writing 20 questions by hand takes 60+ minutes." },
+];
+
 export default function IntegrationsHubPage() {
   const jsonLd = {
     "@context": "https://schema.org",
@@ -82,6 +90,10 @@ export default function IntegrationsHubPage() {
           },
         ],
       },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+      }
     ],
   };
 
@@ -168,6 +180,21 @@ export default function IntegrationsHubPage() {
           >
             Generate questions
           </Link>
+        </div>
+      </section>
+
+
+      <section className="border-t border-neutral-200 bg-white px-6 py-16">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="mb-8 text-2xl font-medium text-neutral-900">Frequently Asked Questions</h2>
+          <div className="space-y-6">
+            {faqs.map((faq, i) => (
+              <div key={i}>
+                <h3 className="mb-2 text-lg font-medium text-neutral-900">{faq.q}</h3>
+                <p className="text-sm text-neutral-600">{faq.a}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </LandingPageLayout>

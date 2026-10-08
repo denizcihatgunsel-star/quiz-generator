@@ -28,6 +28,14 @@ const subjects = [
   { slug: "computer-science", name: "Computer Science" },
 ];
 
+
+const faqs = [
+  { q: "What subjects does this work for?", a: "Any subject: biology, chemistry, physics, math, history, English, vocabulary, Spanish, anatomy, nursing, psychology, computer science, and more." },
+  { q: "How does it generate subject-specific questions?", a: "AI reads your course notes and generates questions matching the subject's concepts, terminology, and difficulty level." },
+  { q: "Can I use this for college courses?", a: "Yes. Upload lecture notes, textbook chapters, or study guides and get practice questions for any college subject." },
+  { q: "Is this free?", a: "Free accounts get 5 quiz generations per month. Team plans with unlimited generation start at $15/month for 5 teachers." },
+];
+
 export default function SubjectsHubPage() {
   const jsonLd = {
     "@context": "https://schema.org",
@@ -65,7 +73,18 @@ export default function SubjectsHubPage() {
             item: `${SITE_URL}/subjects`,
           },
         ],
+      },,
+      {
+        "@type": "SoftwareApplication",
+        name: "Examina",
+        url: SITE_URL,
+        applicationCategory: "EducationalApplication",
+        description: "Generate subject-specific quiz questions from course notes for any academic subject.",
       },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+      }
     ],
   };
 
@@ -120,6 +139,21 @@ export default function SubjectsHubPage() {
           >
             Turn notes into quiz
           </Link>
+        </div>
+      </section>
+
+
+      <section className="border-t border-neutral-200 bg-white px-6 py-16">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="mb-8 text-2xl font-medium text-neutral-900">Frequently Asked Questions</h2>
+          <div className="space-y-6">
+            {faqs.map((faq, i) => (
+              <div key={i}>
+                <h3 className="mb-2 text-lg font-medium text-neutral-900">{faq.q}</h3>
+                <p className="text-sm text-neutral-600">{faq.a}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </LandingPageLayout>

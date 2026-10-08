@@ -43,6 +43,14 @@ const features = [
   },
 ];
 
+
+const faqs = [
+  { q: "What features are included in the free plan?", a: "All features are available on the free plan: Bloom's taxonomy tagging, live classroom mode, OCR quiz from photos, PDF export, shared quiz links, and formative assessment tools. Free tier: 5 quizzes/month." },
+  { q: "How does Bloom's taxonomy tagging work?", a: "Every question is automatically tagged with its cognitive level (Remember, Understand, Apply, Analyze, Evaluate, Create) so you know what skills you're testing." },
+  { q: "Can I run live classroom quizzes like Kahoot?", a: "Yes. Students join with a code from any device. You control question pacing, show leaderboards, and display explanations." },
+  { q: "Does OCR work with handwritten notes?", a: "Yes. Photograph handwritten or printed notes and Examina extracts the text using OCR, then generates quiz questions from it." },
+];
+
 export default function FeaturesHubPage() {
   const jsonLd = {
     "@context": "https://schema.org",
@@ -91,6 +99,10 @@ export default function FeaturesHubPage() {
           },
         ],
       },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+      }
     ],
   };
 
@@ -142,6 +154,21 @@ export default function FeaturesHubPage() {
           >
             Generate quiz free
           </Link>
+        </div>
+      </section>
+
+
+      <section className="border-t border-neutral-200 bg-white px-6 py-16">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="mb-8 text-2xl font-medium text-neutral-900">Frequently Asked Questions</h2>
+          <div className="space-y-6">
+            {faqs.map((faq, i) => (
+              <div key={i}>
+                <h3 className="mb-2 text-lg font-medium text-neutral-900">{faq.q}</h3>
+                <p className="text-sm text-neutral-600">{faq.a}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </LandingPageLayout>

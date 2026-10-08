@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 import { COMPARE_PAGES, getComparePage } from "@/lib/seo/comparisons";
-import { copyText, saleCopy, saleLandingData } from "@/lib/pricing";
+import { copyText, saleCopy, saleLandingData, planOffers } from "@/lib/pricing";
 
 export const dynamic = "force-static";
 export const revalidate = 60;
@@ -44,6 +44,14 @@ export default async function ComparePage({ params }: { params: Promise<{ slug: 
         url: `https://www.examina.ink/compare/${page.slug}`,
         name: `${page.title} | Examina`,
         isPartOf: { "@id": "https://www.examina.ink/#website" },
+      },
+      {
+        "@type": "SoftwareApplication",
+        name: "Examina",
+        url: "https://www.examina.ink",
+        applicationCategory: "EducationalApplication",
+        description: "AI quiz generator - compare features, pricing, and capabilities with alternatives.",
+        offers: planOffers(now),
       },
       {
         "@type": "FAQPage",
