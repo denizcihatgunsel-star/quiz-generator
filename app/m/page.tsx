@@ -49,11 +49,11 @@ function MobileHomeContent() {
         <div className="orb-drift h-40 w-40 rounded-full bg-[#E9A8B8]/70 blur-2xl" style={{ top: "-2rem", right: "-3rem" }} />
         <div className="orb-drift h-32 w-32 rounded-full bg-[#F6DCE5]/90 blur-2xl" style={{ animationDelay: "-5s", top: "16rem", left: "-3rem" }} />
         <div className="orb-drift h-28 w-28 rounded-full bg-[#C98A98]/50 blur-2xl" style={{ animationDelay: "-9s", top: "30rem", right: "-2rem" }} />
-        <span className="twinkle absolute left-8 top-10 h-2 w-2 rounded-full bg-[#B0607A]" />
-        <span className="twinkle absolute right-10 top-24 h-1.5 w-1.5 rounded-full bg-[#E9A8B8]" style={{ animationDelay: "-1s" }} />
-        <span className="twinkle absolute left-1/3 top-1/2 h-2 w-2 rounded-full bg-[#C98A98]" style={{ animationDelay: "-1.8s" }} />
-        <span className="float-glyph absolute right-8 top-2/3 text-xl text-[#E9A8B8]">✦</span>
-        <span className="float-glyph absolute left-6 bottom-24 text-base text-[#C98A98]" style={{ animationDelay: "-3s" }}>❀</span>
+        <span className="twinkle absolute left-8 top-10 h-2 w-2 rounded-full bg-[#B0607A] z-0" />
+        <span className="twinkle absolute right-10 top-24 h-1.5 w-1.5 rounded-full bg-[#E9A8B8] z-0" style={{ animationDelay: "-1s" }} />
+        <span className="twinkle absolute left-1/3 top-1/2 h-2 w-2 rounded-full bg-[#C98A98] z-0" style={{ animationDelay: "-1.8s" }} />
+        <span className="float-glyph absolute right-8 top-2/3 text-xl text-[#E9A8B8] z-0">✦</span>
+        <span className="float-glyph absolute left-6 bottom-24 text-base text-[#C98A98] z-0" style={{ animationDelay: "-3s" }}>❀</span>
       </div>
 
       {/* Hero — big visible wordmark */}

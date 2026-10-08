@@ -256,7 +256,7 @@ export default function ChatBot({ onQuizGenerated }: ChatBotProps) {
 
       {/* Input */}
       <div className="px-4 py-3 border-t border-[#F6E4EA]">
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <input
             ref={inputRef}
             value={input}
@@ -269,7 +269,7 @@ export default function ChatBot({ onQuizGenerated }: ChatBotProps) {
           <button
             onClick={() => sendMessage()}
             disabled={!input.trim() || loading}
-            className="px-4 py-2.5 rounded-xl bg-[#3B2027] hover:bg-[#52303B] disabled:bg-[#E9D3DA] disabled:text-[#B79AA6] text-[#F6E3E8] text-sm font-medium transition-all disabled:cursor-not-allowed"
+            className="shrink-0 px-4 py-2.5 rounded-xl bg-[#3B2027] hover:bg-[#52303B] disabled:bg-[#E9D3DA] disabled:text-[#B79AA6] text-[#F6E3E8] text-sm font-medium transition-all disabled:cursor-not-allowed"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
