@@ -122,4 +122,38 @@ describe('parseQuizWithGrounding', () => {
     
     expect(result.grounding).toBeUndefined();
   });
+
+  it('should mark flagged items with needsReview in warn path', () => {
+    const quizData = {
+      topic: "Test Topic",
+      multipleChoice: [
+        { id: "mcq-1", question: "Q1", options: ["A", "B"], correctIndex: 0, explanation: "E1", difficulty: "Easy", bloomLevel: "Remember" },
+        { id: "mcq-2", question: "Q2", options: ["C", "D"], correctIndex: 1, explanation: "E2", difficulty: "Medium", bloomLevel: "Understand" },
+        { id: "mcq-3", question: "Q3", options: ["E", "F"], correctIndex: 0, explanation: "E3", difficulty: "Hard", bloomLevel: "Apply" }
+      ],
+      flashcards: [],
+      fillInTheBlank: [],
+      trueFalse: []
+    };
+    
+    const groundingData = {
+      keep: [0, 1, 2], // Keep all (warn path)
+      dropped: 0,
+      warned: true,
+      flagged: [1, 2] // Items 1 and 2 failed check
+    };
+    
+    const fullText = JSON.stringify(quizData) + "\n__EXAMINA_GROUNDING__:" + JSON.stringify(groundingData);
+    
+    const result = parseQuizWithGrounding(fullText);
+    
+    expect(result.multipleChoice).toHaveLength(3);
+    expect(result.multipleChoice[0].needsReview).toBeUndefined();
+    expect(result.multipleChoice[1].needsReview).toBe(true);
+    expect(result.multipleChoice[2].needsReview).toBe(true);
+    expect(result.grounding).toEqual({
+      dropped: 0,
+      warned: true
+    });
+  });
 });

@@ -11,6 +11,7 @@ export interface MultipleChoiceQuestion {
   bloomLevel: BloomLevel;
   bloomRationale?: string;
   distractorStrength?: number;
+  needsReview?: boolean; // Set when grounding check flagged this item
 }
 
 export interface Flashcard {

@@ -9,6 +9,7 @@ interface GroundingResult {
   keep: number[]; // Indices of MCQ items to keep
   dropped: number;
   warned: boolean;
+  flagged?: number[]; // Indices of items that failed check in warn path
 }
 
 interface QuizData {
@@ -56,6 +57,18 @@ export function parseQuizWithGrounding(fullText: string): QuizData {
   if (grounding.keep && Array.isArray(quiz.multipleChoice)) {
     const keepSet = new Set(grounding.keep);
     quiz.multipleChoice = quiz.multipleChoice.filter((_, idx) => keepSet.has(idx));
+  }
+  
+  // Mark flagged items with needsReview (warn path only)
+  if (grounding.flagged && Array.isArray(grounding.flagged) && Array.isArray(quiz.multipleChoice)) {
+    const flaggedSet = new Set(grounding.flagged);
+    quiz.multipleChoice.forEach((item, idx) => {
+      // After filtering by keep list, we need to map back to original indices
+      // But since we're in warn path, keep list is [0,1,2,...,n] so indices match
+      if (flaggedSet.has(idx)) {
+        item.needsReview = true;
+      }
+    });
   }
   
   // Attach grounding metadata

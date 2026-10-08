@@ -219,13 +219,18 @@ export default function MultipleChoiceView({
           >
             {/* Difficulty + Bloom's tags */}
             {q.difficulty && (
-              <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-center gap-2 mb-2 flex-wrap">
                 <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400">
                   {q.difficulty}
                 </span>
                 {q.bloomLevel && (
                   <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-400">
                     {q.bloomLevel}
+                  </span>
+                )}
+                {q.needsReview && (
+                  <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-[#FBF1EE] border border-[#E9B8C4] text-[#7E3E55]">
+                    Check this — may go beyond your notes
                   </span>
                 )}
               </div>

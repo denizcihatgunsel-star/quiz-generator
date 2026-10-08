@@ -243,6 +243,7 @@ export async function POST(req: NextRequest) {
             try {
               const originalMcqCount = quiz.multipleChoice.length;
               const keepIndices = [];
+              const failedIndices = [];
               
               for (let i = 0; i < quiz.multipleChoice.length; i++) {
                 const q = quiz.multipleChoice[i];
@@ -263,6 +264,8 @@ export async function POST(req: NextRequest) {
                 
                 if (isAnswerGrounded(correctAnswer, lesson)) {
                   keepIndices.push(i);
+                } else {
+                  failedIndices.push(i);
                 }
               }
               
@@ -271,10 +274,12 @@ export async function POST(req: NextRequest) {
               
               if (shouldWarn) {
                 // Too many drops, keep all and warn instead
+                // Include flagged indices so UI can mark them
                 const groundingResult = {
                   keep: Array.from({ length: originalMcqCount }, (_, i) => i),
                   dropped: 0,
-                  warned: true
+                  warned: true,
+                  flagged: failedIndices
                 };
                 controller.enqueue(encoder.encode(`\n__EXAMINA_GROUNDING__:${JSON.stringify(groundingResult)}`));
               } else if (droppedCount > 0) {
