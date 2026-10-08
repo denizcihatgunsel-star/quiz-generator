@@ -88,3 +88,7 @@ export function currentMonth(): string {
 export function isUnlimited(plan: Plan): boolean {
   return plan.quizzesPerMonth === Infinity;
 }
+
+// Marketing copy helpers - always read from config
+export const FREE_PLAN_LIMIT = PLANS.free.quizzesPerMonth;
+export const STARTER_PLAN_PRICE = PLANS.starter.price;

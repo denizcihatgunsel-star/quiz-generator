@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata, LANGUAGE_COUNT } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 import { copyText, planOffers, saleCopy, saleLandingData } from "@/lib/pricing";
+import { FREE_PLAN_LIMIT, STARTER_PLAN_PRICE } from "@/lib/subscription";
 
 export const dynamic = "force-static";
 
@@ -25,7 +26,7 @@ export const metadata: Metadata = pageMetadata({
 const faqs = [
   {
     q: "Are the AI flashcards free?",
-    a: "Yes. The Free plan includes 5 generations a month with no credit card, and paid plans start at $2/month.",
+    a: `Yes. The Free plan includes ${FREE_PLAN_LIMIT} generations a month with no credit card, and paid plans start at $${STARTER_PLAN_PRICE}/month.`,
   },
   {
     q: "Can I make flashcards from a PDF or a photo?",

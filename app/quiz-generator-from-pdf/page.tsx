@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 import { copyText, planOffers, saleCopy, saleLandingData } from "@/lib/pricing";
+import { FREE_PLAN_LIMIT, STARTER_PLAN_PRICE } from "@/lib/subscription";
 
 // Re-rendered at least every 60s so the Halloween sale copy reverts on its own after the cutoff.
 export const revalidate = 60;
 
 export const metadata: Metadata = pageMetadata({
-  title: "Quiz Maker from PDF — Convert PDF to Quiz Free",
-  description: "Upload a PDF and turn it into quiz questions with AI. PDF to quiz maker for students and teachers. Works with scans too. Free.",
+  title: "Quiz Maker from PDF — Convert PDF to Quiz",
+  description: "Upload a PDF and turn it into quiz questions with AI. PDF to quiz maker for students and teachers. Works with scans too.",
   path: "/quiz-generator-from-pdf",
 });
 
@@ -16,7 +17,7 @@ const faqs = [
   { q: "How large a PDF can I upload?", a: "Examina reads up to 15,000 characters of text per generation — enough for most handouts and chapter sections." },
   { q: "Can I convert a photo of a page?", a: "Yes. Upload a picture of a printed page and OCR extracts the text before the AI generates questions." },
   { q: "Does the PDF generator preserve my file?", a: "Your original text is used only to generate questions and is not stored on our servers." },
-  { q: "Is converting a PDF to a quiz free?", a: "Free accounts get 5 generations per month. Paid plans start at $2/month." },
+  { q: "Is converting a PDF to a quiz free?", a: `The Free plan includes ${FREE_PLAN_LIMIT} quizzes per month made from pasted or typed text. PDF upload requires the Starter plan at $${STARTER_PLAN_PRICE}/month.` },
 ];
 
 export default function PdfQuizPage() {
@@ -92,7 +93,7 @@ export default function PdfQuizPage() {
         h1Accent: "quiz",
         subtitle:
           "Upload a study guide, textbook chapter, or handout and Examina reads it and writes the questions for you.",
-        cta: "Convert a PDF free",
+        cta: "Generate from PDF",
         introTitle: "From PDF to quiz in one upload",
         intro: [
           "PDFs are how most course material ships — study guides, textbook chapters, past papers, and journal articles. Examina's PDF-to-quiz converter reads the document directly and turns it into multiple choice questions and flashcards, so the review-ready version of your reading is one upload away. Want to create a study guide from a PDF or turn it into a true/false quiz from a PDF? Just upload and generate.",

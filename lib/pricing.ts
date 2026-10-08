@@ -10,7 +10,7 @@
  * price with the same percentage, so the page and the Stripe total always agree.
  */
 import { isHalloweenSeason } from "@/lib/seasonal";
-import { PLANS, type Plan, type PlanId } from "@/lib/subscription";
+import { PLANS, FREE_PLAN_LIMIT, type Plan, type PlanId } from "@/lib/subscription";
 
 export const HALLOWEEN_DISCOUNT_PERCENT = 20;
 export const HALLOWEEN_COUPON_ID = "examina-halloween-2026-20off";
@@ -84,7 +84,7 @@ export function withSaleOffer<T extends OfferLike>(offer: T, plan: Pick<Plan, "p
  * ---------------------------------------------------------------------------------------- */
 
 export const PLAN_OFFER_DESCRIPTIONS: Record<PlanId, string> = {
-  free: "10 quizzes per month, no credit card required",
+  free: `${FREE_PLAN_LIMIT} quizzes per month, no credit card required`,
   starter: "20 quizzes per month",
   plus: "60 quizzes per month",
   pro: "200 quizzes per month",
