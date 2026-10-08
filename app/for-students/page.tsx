@@ -10,7 +10,7 @@ export const metadata: Metadata = pageMetadata({
 });
 
 const faqs = [
-  { q: "Is the AI quiz generator free for students?", a: "Yes. Students start with 5 free quiz generations per month. Paid plans start at $2/month." },
+  { q: "Is the AI quiz generator free for students?", a: "Yes. Students start with 10 free quiz generations per month. Paid plans start at $2/month." },
   { q: "What types of questions can I generate?", a: "Multiple choice, true/false, fill-in-the-blank, and flashcards. All with explanations and Bloom's taxonomy tags." },
   { q: "Can I use handwritten notes?", a: "Yes. Upload a photo of your handwritten notes and OCR extracts the text before generating questions." },
   { q: "Does it work with PDFs?", a: "Yes. Upload lecture slides, textbook chapters, or study guides as PDF and turn them into quiz questions." },

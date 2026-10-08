@@ -183,7 +183,7 @@ export default function MultipleChoiceQuizMakerPage() {
       <ToolCrossLinks
         faqs={[
           { q: "How does the multiple choice quiz maker work?", a: "Paste or upload your study material and the AI generates 5-6 multiple choice questions with explanations, difficulty tags, and Bloom's Taxonomy levels." },
-          { q: "Is the MCQ generator free?", a: "Yes — free accounts get 5 generations per month. Paid plans start at $2/month." },
+          { q: "Is the MCQ generator free?", a: "Yes — free accounts get 10 generations per month. Paid plans start at $2/month." },
           { q: "Can I export my multiple choice quiz?", a: "Yes — download the quiz as a PDF or share it with a unique link on Plus plans and above." },
         ]}
       />

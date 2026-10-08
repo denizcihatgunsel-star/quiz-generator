@@ -10,14 +10,14 @@ export function generateMetadata(): Metadata {
   return pageMetadata({
     title: "Free Quiz Maker — Create Quizzes Online Free",
     description: copyText(
-      saleCopy("Free quiz maker with AI. No credit card needed. Generate up to 5 quizzes a month free, or unlock more from $2/month.")
+      saleCopy("Free quiz maker with AI. No credit card needed. Generate up to 10 quizzes a month free, or unlock more from $2/month.")
     ),
     path: "/free-quiz-generator",
   });
 }
 
 const faqs = [
-  { q: "Is there really a free plan?", a: "Yes. Everyone starts with 5 free generations per month and full access to all four question types." },
+  { q: "Is there really a free plan?", a: "Yes. Everyone starts with 10 free generations per month and full access to all four question types." },
   { q: "Do I need a credit card to sign up?", a: "No. The free plan never asks for payment details." },
   { q: "What happens when I hit the free limit?", a: "You can upgrade to a paid plan or wait for your monthly allowance to reset." },
   { q: "How much do paid plans cost?", a: "Starter is $2/month for 20 quizzes, Plus $5/month for 60, Pro $9/month for 200, and Team $15/month for unlimited." },
@@ -43,7 +43,7 @@ export default function FreeQuizPage() {
         applicationCategory: "EducationalApplication",
         operatingSystem: "Web",
         description:
-          "Free quiz maker that generates quizzes from your notes with AI. No credit card required. 5 free quizzes per month.",
+          "Free quiz maker that generates quizzes from your notes with AI. No credit card required. 10 free quizzes per month.",
         offers: planOffers(now),
         publisher: { "@id": "https://www.examina.ink/#organization" },
       },
@@ -70,18 +70,18 @@ export default function FreeQuizPage() {
         h1: "Make free quizzes",
         h1Accent: "online",
         subtitle:
-          "No credit card, no catch — start with 5 free AI generations every month and upgrade only when you need more.",
+          "No credit card, no catch — start with 10 free AI generations every month and upgrade only when you need more.",
         cta: "Try it free",
         introTitle: "The genuinely free quiz generator",
         intro: [
-          "'Free' usually means a trial that expires or a watermark on the result. Examina's free quiz generator gives you a working tool with no credit card and no trial clock: five full AI generations every month, all four question types, share links, flashcard review, and streak tracking.",
+          "'Free' usually means a trial that expires or a watermark on the result. Examina's free quiz generator gives you a working tool with no credit card and no trial clock: ten full AI generations every month, all four question types, share links, flashcard review, and streak tracking.",
           "When you hit the monthly limit you get a choice instead of a wall — wait for the reset, or upgrade from $2/month. And because the generator works from your own notes, whether text, PDF, or photo, even the free tier produces quizzes tailored to your course rather than generic templates.",
         ],
         featuresTitle: "The free plan",
         features: [
           {
-            title: "5 generations / month",
-            body: "Turn up to 15,000 characters of notes into a quiz, five times every month, at no cost.",
+            title: "10 generations / month",
+            body: "Turn up to 15,000 characters of notes into a quiz, ten times every month, at no cost.",
           },
           {
             title: "All question types",

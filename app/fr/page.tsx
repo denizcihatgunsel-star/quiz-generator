@@ -53,7 +53,7 @@ const DATA: LocaleData = {
   faqTitle: "Questions fréquentes",
   faq: [
     { q: "Puis-je créer un quiz à partir d'un PDF ?", a: "Oui. Examina accepte les PDF, TXT et Markdown, ainsi que le texte collé et les photos de notes." },
-    { q: "Le générateur de quiz est-il gratuit ?", a: "Les comptes gratuits incluent 5 quiz par mois. Les formules payantes commencent à 2 $/mois." },
+    { q: "Le générateur de quiz est-il gratuit ?", a: "Les comptes gratuits incluent 10 quiz par mois. Les formules payantes commencent à 2 $/mois." },
     { q: "Est-ce que ça fonctionne dans d'autres langues ?", a: "Oui — Examina génère du contenu dans 29 langues, questions et explications comprises." },
   ],
   footer: "©2026 Examina",

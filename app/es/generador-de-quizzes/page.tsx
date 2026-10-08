@@ -16,7 +16,7 @@ export const metadata: Metadata = pageMetadata({
 const faqs = [
   {
     q: "¿Es gratis el generador de quizzes?",
-    a: "Sí. Genera hasta 5 quizzes por mes gratis. Los planes pagos empiezan en $2/mes para 20 quizzes.",
+    a: "Sí. Genera hasta 10 quizzes por mes gratis. Los planes pagos empiezan en $2/mes para 20 quizzes.",
   },
   {
     q: "¿Qué tipos de preguntas genera?",

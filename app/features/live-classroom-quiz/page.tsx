@@ -35,7 +35,7 @@ const faqs = [
   },
   {
     q: "Is this free?",
-    a: "Yes. Live classroom mode is included in all plans, including the free tier (5 quizzes/month).",
+    a: "Yes. Live classroom mode is included in all plans, including the free tier (10 quizzes/month).",
   },
 ];
 

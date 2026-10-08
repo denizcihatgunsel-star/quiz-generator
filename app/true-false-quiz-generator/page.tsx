@@ -11,7 +11,7 @@ import { SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "True False Quiz Generator — AI True or False Maker Free",
-  description: "True false quiz generator with AI. Turn notes into true/false questions with answers and explanations. Free plan includes 5 quizzes a month.",
+  description: "True false quiz generator with AI. Turn notes into true/false questions with answers and explanations. Free plan includes 10 quizzes a month.",
   path: "/true-false-quiz-generator",
 });
 
@@ -22,7 +22,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Is the true/false quiz generator free?",
-    a: "Yes, you can start on the Free plan, which includes 5 quizzes per month. Paid plans start at $2/month for more quizzes.",
+    a: "Yes, you can start on the Free plan, which includes 10 quizzes per month. Paid plans start at $2/month for more quizzes.",
   },
   {
     q: "Can it answer or solve true or false questions for me?",
@@ -42,7 +42,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Can I share the quiz or download it as a PDF?",
-    a: "Yes, on Plus ($5/mo) and above you can share quizzes with a link and download them as PDF.",
+    a: "Yes. All plans including Free support sharing quiz links and PDF export.",
   },
   {
     q: "Can my students take the quiz in class?",
@@ -95,7 +95,7 @@ export default function TrueFalseQuizGeneratorPage() {
             True or False Quiz Generator — Make True/False Questions with AI
           </h1>
           <p className="text-lg text-neutral-500 max-w-3xl mb-10">
-            Paste your notes or upload a PDF, TXT or Markdown file, and Examina&apos;s AI true or false generator writes true/false statements with the correct answer and an explanation for each one. Start free with 5 quizzes a month.
+            Paste your notes or upload a PDF, TXT or Markdown file, and Examina&apos;s AI true or false generator writes true/false statements with the correct answer and an explanation for each one. Start free with 10 quizzes a month.
           </p>
           <div className="flex flex-wrap gap-4">
             <a
@@ -138,7 +138,7 @@ export default function TrueFalseQuizGeneratorPage() {
               {
                 step: "03",
                 title: "Study or share.",
-                desc: "Take the quiz right away. On Plus and above you can share it with a link or download it as a PDF. Teachers can run it in class; students join at examina.ink/classroom/join with a game code.",
+                desc: "Take the quiz right away. Share it with a link or download it as a PDF. Teachers can run it in class; students join at examina.ink/classroom/join with a game code.",
               },
             ].map((item) => (
               <div key={item.step}>
@@ -448,7 +448,7 @@ Answer key: 1 __ 2 __ 3 __ 4 __ 5 __
             Pricing at a glance
           </h2>
           <p className="text-lg text-neutral-600 mb-8">
-            <CopyText value={saleCopy("Free: 5 quizzes/month. Starter $2/mo, Plus $5/mo, Pro $9/mo, Team $15/mo. Sharing and PDF download are included from Plus.", now)} />{" "}
+            <CopyText value={saleCopy("Free: 10 quizzes/month. Starter $2/mo, Plus $5/mo, Pro $9/mo, Team $15/mo. Sharing and PDF download are included on all plans.", now)} />{" "}
             <Link href="/pricing" className="text-violet-600 hover:underline">Compare plans</Link>.
           </p>
         </div>

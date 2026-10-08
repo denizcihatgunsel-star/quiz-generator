@@ -28,7 +28,7 @@ const faqs = [
   },
   {
     q: "Is MCQ generation free?",
-    a: "Free accounts get 5 quiz generations per month. Each generation can include MCQs. Paid plans start at $2/month.",
+    a: "Free accounts get 10 quiz generations per month. Each generation can include MCQs. Paid plans start at $2/month.",
   },
 ];
 

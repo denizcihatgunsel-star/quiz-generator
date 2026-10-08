@@ -16,7 +16,7 @@ const faqs = [
   { q: "What's an exit ticket?", a: "A short formative assessment (2-3 questions) students complete at the end of a lesson. It tells teachers whether the class understood the day's content." },
   { q: "How many questions should an exit ticket have?", a: "2-3 questions that take 3-5 minutes total. Exit tickets are quick checks, not quizzes." },
   { q: "Can students take exit tickets without accounts?", a: "Yes. Share a link or display the questions. For live exit tickets, students join with a code from any device." },
-  { q: "Is this free for teachers?", a: "Free accounts get 5 generations per month. For daily exit tickets, the Team plan ($15/month for 5 teachers) includes unlimited generations." },
+  { q: "Is this free for teachers?", a: "Free accounts get 10 generations per month. For daily exit tickets, the Team plan ($15/month for 5 teachers) includes unlimited generations." },
 ];
 
 export default function ExitTicketGeneratorPage() {

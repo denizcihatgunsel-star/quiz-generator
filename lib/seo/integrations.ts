@@ -37,7 +37,7 @@ export const INTEGRATIONS: Integration[] = [
       },
       {
         q: "Is this free?",
-        a: "Yes. Generate 5 quizzes per month free. Paid plans start at $2/month for 20 quizzes.",
+        a: "Yes. Generate 10 quizzes per month free. Paid plans start at $2/month for 20 quizzes.",
       },
       {
         q: "Why use this instead of typing questions directly in Google Forms?",
@@ -77,7 +77,7 @@ export const INTEGRATIONS: Integration[] = [
       },
       {
         q: "Is this free?",
-        a: "Free accounts get 5 quiz generations per month. Paid plans start at $2/month for 20 quizzes.",
+        a: "Free accounts get 10 quiz generations per month. Paid plans start at $2/month for 20 quizzes.",
       },
     ],
     relatedTools: [

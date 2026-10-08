@@ -33,7 +33,7 @@ const faqs = [
   { q: "What subjects does this work for?", a: "Any subject: biology, chemistry, physics, math, history, English, vocabulary, Spanish, anatomy, nursing, psychology, computer science, and more." },
   { q: "How does it generate subject-specific questions?", a: "AI reads your course notes and generates questions matching the subject's concepts, terminology, and difficulty level." },
   { q: "Can I use this for college courses?", a: "Yes. Upload lecture notes, textbook chapters, or study guides and get practice questions for any college subject." },
-  { q: "Is this free?", a: "Free accounts get 5 quiz generations per month. Team plans with unlimited generation start at $15/month for 5 teachers." },
+  { q: "Is this free?", a: "Free accounts get 10 quiz generations per month. Team plans with unlimited generation start at $15/month for 5 teachers." },
 ];
 
 export default function SubjectsHubPage() {

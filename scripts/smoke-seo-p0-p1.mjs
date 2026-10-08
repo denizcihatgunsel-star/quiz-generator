@@ -42,7 +42,7 @@ if (w === 1200 && h === 630) ok(`og-image.png ${w}x${h}`);
 else bad(`og-image.png is ${w}x${h}, want 1200x630`);
 
 const home = readFileSync("app/page.tsx", "utf8");
-if (home.includes("FAQPage") && home.includes("Free accounts get 5 quizzes per month")) ok("homepage FAQ schema answers");
+if (home.includes("FAQPage") && home.includes("Free accounts get 10 quizzes per month")) ok("homepage FAQ schema answers");
 else bad("homepage FAQ schema mismatch");
 
 const qg = readFileSync("components/QuizGenerator.tsx", "utf8");

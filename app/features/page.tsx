@@ -45,7 +45,7 @@ const features = [
 
 
 const faqs = [
-  { q: "What features are included in the free plan?", a: "All features are available on the free plan: Bloom's taxonomy tagging, live classroom mode, OCR quiz from photos, PDF export, shared quiz links, and formative assessment tools. Free tier: 5 quizzes/month." },
+  { q: "What features are included in the free plan?", a: "All features are available on the free plan: Bloom's taxonomy tagging, live classroom mode, OCR quiz from photos, PDF export, shared quiz links, and formative assessment tools. Free tier: 10 quizzes/month." },
   { q: "How does Bloom's taxonomy tagging work?", a: "Every question is automatically tagged with its cognitive level (Remember, Understand, Apply, Analyze, Evaluate, Create) so you know what skills you're testing." },
   { q: "Can I run live classroom quizzes like Kahoot?", a: "Yes. Students join with a code from any device. You control question pacing, show leaderboards, and display explanations." },
   { q: "Does OCR work with handwritten notes?", a: "Yes. Photograph handwritten or printed notes and Examina extracts the text using OCR, then generates quiz questions from it." },
@@ -146,7 +146,7 @@ export default function FeaturesHubPage() {
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 text-3xl font-medium text-neutral-900">Try all features free</h2>
           <p className="mb-8 text-lg leading-relaxed text-neutral-600">
-            Generate 5 quizzes per month free. All features included. No credit card required.
+            Generate 10 quizzes per month free. All features included. No credit card required.
           </p>
           <Link
             href="/ai-quiz-generator"

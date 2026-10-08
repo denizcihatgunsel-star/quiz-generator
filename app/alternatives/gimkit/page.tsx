@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: "Is the free plan enough for teachers?",
-    a: "Free plan includes 5 quiz generations per month. For daily classroom use, the Team plan ($15/month for 5 teachers) offers unlimited quizzes.",
+    a: "Free plan includes 10 quiz generations per month. For daily classroom use, the Team plan ($15/month for 5 teachers) offers unlimited quizzes.",
   },
   {
     q: "Can students play without accounts?",
@@ -142,7 +142,7 @@ export default function GimkitAlternativePage() {
               },
               {
                 title: "Affordable for teams",
-                body: "Free tier for 5 quizzes/month. Team plan ($15/month for 5 teachers) includes unlimited quiz generation and shared question banks.",
+                body: "Free tier for 10 quizzes/month. Team plan ($15/month for 5 teachers) includes unlimited quiz generation and shared question banks.",
               },
             ],
             howTitle: "How to run a classroom game",

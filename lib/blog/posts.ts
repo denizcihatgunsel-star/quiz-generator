@@ -62,7 +62,7 @@ export const POSTS: BlogPost[] = [
       },
       {
         q: "Is the quiz generator free?",
-        a: "Free accounts can generate 5 quizzes per month. Paid plans start at $2/month and go up to unlimited generation.",
+        a: "Free accounts can generate 10 quizzes per month. Paid plans start at $2/month and go up to unlimited generation.",
       },
       {
         q: "What question types can I generate?",
@@ -277,7 +277,7 @@ export const POSTS: BlogPost[] = [
     faq: [
       {
         q: "Is it free for teachers?",
-        a: "Examina's free plan includes 5 quizzes per month. The Team plan is designed for educators: unlimited quizzes, shared library, and up to five members.",
+        a: "Examina's free plan includes 10 quizzes per month. The Team plan is designed for educators: unlimited quizzes, shared library, and up to five members.",
       },
       {
         q: "Can students take the quiz without an account?",
@@ -573,7 +573,7 @@ export const POSTS: BlogPost[] = [
       },
       {
         q: "Is this free?",
-        a: "Examina's free plan covers 5 quizzes a month — plenty for daily checks across a couple of classes. The Team plan is built for educators with unlimited generation and a shared library.",
+        a: "Examina's free plan covers 10 quizzes a month — plenty for daily checks across a couple of classes. The Team plan is built for educators with unlimited generation and a shared library.",
       },
     ],
     tools: [
@@ -939,7 +939,7 @@ export const POSTS: BlogPost[] = [
       {
         h: "Top Kahoot alternatives for 2026",
         p: [
-          "**Examina** — AI-powered quiz generator with live classroom mode. Upload your lesson notes and Examina writes the questions for you (multiple choice, true/false, fill-in-the-blank). Students join with a code, no accounts needed. Free tier: 5 quizzes/month. Team plan: $15/month for unlimited quizzes and 5 teachers. Best for: teachers who want to skip manual question entry and run daily formative checks.",
+          "**Examina** — AI-powered quiz generator with live classroom mode. Upload your lesson notes and Examina writes the questions for you (multiple choice, true/false, fill-in-the-blank). Students join with a code, no accounts needed. Free tier: 10 quizzes/month. Team plan: $15/month for unlimited quizzes and 5 teachers. Best for: teachers who want to skip manual question entry and run daily formative checks.",
           "**Quizizz** — Self-paced and live quiz platform. Students work at their own speed even in live mode. Strong question bank and reports. Free tier has ads; paid plans start at $19/month per teacher. Best for: mixed live/homework workflows and classes that need differentiated pacing.",
           "**Blooket** — Game-style quiz platform with multiple game modes (Tower Defense, Gold Quest, etc.). Very engaging for younger students. Free tier is generous. Paid ($36/year) adds question sets and more game modes. Best for: elementary/middle school engagement.",
           "**Gimkit** — Live quiz platform where students earn in-game currency and buy upgrades. High engagement. Created by a high school student, now widely used. Free tier limited; paid is $60/year per teacher. Best for: high engagement in competitive classrooms.",
@@ -952,7 +952,7 @@ export const POSTS: BlogPost[] = [
         p: [
           "| Platform | AI Generation | Free Tier | Live Mode | Self-Paced | Starting Price |",
           "|----------|--------------|-----------|-----------|------------|----------------|",
-          "| Examina | ✅ Yes | 5 quizzes/month | ✅ Yes | ✅ Yes | $2/mo (Starter) |",
+          "| Examina | ✅ Yes | 10 quizzes/month | ✅ Yes | ✅ Yes | $2/mo (Starter) |",
           "| Quizizz | ❌ No | Yes (with ads) | ✅ Yes | ✅ Yes | $19/mo/teacher |",
           "| Blooket | ❌ No | Generous | ✅ Yes | ❌ Live only | $36/year |",
           "| Gimkit | ❌ No | Limited | ✅ Yes | ❌ Live only | $60/year |",
@@ -981,7 +981,7 @@ export const POSTS: BlogPost[] = [
     faq: [
       {
         q: "Is there a completely free Kahoot alternative?",
-        a: "Quizlet Live and Blooket have strong free tiers. Examina offers 5 AI-generated quizzes per month free—enough for trying it out or occasional use.",
+        a: "Quizlet Live and Blooket have strong free tiers. Examina offers 10 AI-generated quizzes per month free—enough for trying it out or occasional use.",
       },
       {
         q: "Which alternative is closest to Kahoot?",
@@ -1021,7 +1021,7 @@ export const POSTS: BlogPost[] = [
         h: "Method 1: AI PDF to quiz generators (fastest)",
         p: [
           "AI quiz generators read your PDF and write questions automatically. Upload a file, pick question types, and get a complete quiz with answer key in under 30 seconds.",
-          "**How to use Examina for PDF to quiz:** Go to Examina and create a free account (5 quizzes/month, no credit card). Click 'Upload' and select your PDF (up to 15,000 characters, roughly 5-10 pages). Choose question types: multiple choice, true/false, fill-in-the-blank, or flashcards. Click 'Generate.' In 20-30 seconds, you get questions with answers and explanations. Review the quiz. Edit any question if needed. Take it online, share by link, or export as PDF.",
+          "**How to use Examina for PDF to quiz:** Go to Examina and create a free account (10 quizzes/month, no credit card). Click 'Upload' and select your PDF (up to 15,000 characters, roughly 5-10 pages). Choose question types: multiple choice, true/false, fill-in-the-blank, or flashcards. Click 'Generate.' In 20-30 seconds, you get questions with answers and explanations. Review the quiz. Edit any question if needed. Take it online, share by link, or export as PDF.",
           "**Pros:** Fastest method by far. Automatically generates plausible distractors for multiple choice. Includes Bloom's taxonomy tagging.",
           "**Cons:** Requires a tool subscription after free tier (but cheap—starts at $2/month). Questions should be reviewed for accuracy (like any AI output).",
         ],
@@ -1055,7 +1055,7 @@ export const POSTS: BlogPost[] = [
         p: [
           "| Tool | AI Generation | PDF Support | Free Tier | Price |",
           "|------|--------------|-------------|-----------|-------|",
-          "| **Examina** | ✅ Yes | ✅ Native upload | 5/month | $2/mo for 20 |",
+          "| **Examina** | ✅ Yes | ✅ Native upload | 10/month | $2/mo for 20 |",
           "| **Quizlet** | ❌ No | Copy-paste only | ✅ Yes | $8/mo Plus |",
           "| **Google Forms** | ❌ No | Copy-paste only | ✅ Yes | Free |",
           "| **Kahoot** | ❌ No | Copy-paste only | ✅ Limited | $10/mo+ |",
@@ -1079,7 +1079,7 @@ export const POSTS: BlogPost[] = [
       },
       {
         q: "Is PDF to quiz free?",
-        a: "Examina offers 5 free quizzes/month. Google Forms is free but requires manual question writing. Quizlet is free with ads.",
+        a: "Examina offers 10 free quizzes/month. Google Forms is free but requires manual question writing. Quizlet is free with ads.",
       },
       {
         q: "Does it work with scanned PDFs?",
@@ -1128,7 +1128,7 @@ export const POSTS: BlogPost[] = [
       {
         h: "Top Quizlet alternatives for 2026",
         p: [
-          "**Examina** — AI flashcard and quiz generator. Upload notes or a PDF and get flashcards + multiple choice + true/false questions from the same source. Study mode uses spaced repetition. Free: 5 generations/month. Paid: $2/month for 20. Best for: students who want to skip typing cards and need quizzes + flashcards together.",
+          "**Examina** — AI flashcard and quiz generator. Upload notes or a PDF and get flashcards + multiple choice + true/false questions from the same source. Study mode uses spaced repetition. Free: 10 generations/month. Paid: $2/month for 20. Best for: students who want to skip typing cards and need quizzes + flashcards together.",
           "**Anki** — The gold standard for spaced repetition. Powerful, customizable, free on desktop (iOS is $25 one-time). Steep learning curve. You type cards manually or import from CSV. Best for: serious students willing to invest time in setup for maximum retention.",
           "**Knowt** — Free flashcard platform with AI generation from notes and quizzes. Also converts Quizlet sets. Very generous free tier. Best for: students who want AI flashcards but don't need advanced analytics.",
           "**Brainscape** — Confidence-based spaced repetition. You rate how well you know each card. Huge marketplace of pre-made decks. Free tier limited; Pro is $10/month or $40/year. Best for: students using popular exam prep (MCAT, NCLEX, bar exam) with existing Brainscape decks.",
@@ -1141,7 +1141,7 @@ export const POSTS: BlogPost[] = [
         p: [
           "| Platform | AI Generation | Spaced Repetition | Free Tier | Also Does Quizzes | Price |",
           "|----------|--------------|-------------------|-----------|-------------------|-------|",
-          "| Examina | ✅ Yes | ✅ Yes | 5/month | ✅ Yes | $2/mo |",
+          "| Examina | ✅ Yes | ✅ Yes | 10/month | ✅ Yes | $2/mo |",
           "| Anki | ❌ No | ✅ Yes (best) | ✅ Yes (desktop) | ❌ No | Free (desktop) |",
           "| Knowt | ✅ Yes | ✅ Yes | ✅ Generous | ✅ Yes | Free |",
           "| Brainscape | ❌ No | ✅ Yes | ✅ Limited | ❌ No | $10/mo |",
@@ -1171,7 +1171,7 @@ export const POSTS: BlogPost[] = [
     faq: [
       {
         q: "Is there a completely free Quizlet alternative?",
-        a: "Yes. Anki (desktop), Mochi, and Knowt all have strong free tiers. Examina offers 5 free AI generations per month.",
+        a: "Yes. Anki (desktop), Mochi, and Knowt all have strong free tiers. Examina offers 10 free AI generations per month.",
       },
       {
         q: "Which alternative is most like Quizlet?",

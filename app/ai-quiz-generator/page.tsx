@@ -25,7 +25,7 @@ export const metadata: Metadata = pageMetadata({
 const faqs = [
   {
     q: "Is the AI quiz generator free?",
-    a: "Yes. The Free plan includes 5 quizzes per month and doesn't need a credit card. Paid plans start at $2/month for 20 quizzes.",
+    a: "Yes. The Free plan includes 10 quizzes per month and doesn't need a credit card. Paid plans start at $2/month for 20 quizzes.",
   },
   {
     q: "What question types can it generate?",

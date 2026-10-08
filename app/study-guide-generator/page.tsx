@@ -25,7 +25,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Is the AI study guide generator free?",
-    a: "You can start on the Free plan with 5 quizzes per month. Paid plans start at $2/month.",
+    a: "You can start on the Free plan with 10 quizzes per month. Paid plans start at $2/month.",
   },
   {
     q: "What are the Bloom's taxonomy tags?",
@@ -33,7 +33,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Can I share my study set or print it?",
-    a: "On Plus ($5/mo) and above you can share quizzes with a link and download them as PDF.",
+    a: "Yes. All plans including Free support sharing quiz links and PDF export.",
   },
   {
     q: "Can teachers use it for class review?",
@@ -290,7 +290,7 @@ export default function StudyGuideGeneratorPage() {
             <div>
               <h3 className="text-xl font-medium text-neutral-900 mb-3">Teachers</h3>
               <p className="text-neutral-600 leading-relaxed">
-                Turn a unit&apos;s reading into a review set for the class. Students join at examina.ink/classroom/join with a game code, so review day can be a live quiz rather than a handout. On Plus and above you can also share a set with a link or download it as a PDF to hand out.
+                Turn a unit&apos;s reading into a review set for the class. Students join at examina.ink/classroom/join with a game code, so review day can be a live quiz rather than a handout. You can also share a set with a link or download it as a PDF to hand out.
               </p>
             </div>
             <div>
@@ -364,7 +364,7 @@ export default function StudyGuideGeneratorPage() {
             Pricing
           </h2>
           <p className="text-lg text-neutral-600 mb-8 max-w-3xl">
-            <CopyText value={saleCopy("Start free with 5 quizzes a month. Starter $2/mo, Plus $5/mo, Pro $9/mo, Team $15/mo. Sharing and PDF download are included from Plus.", now)} />{" "}
+            <CopyText value={saleCopy("Start free with 10 quizzes a month. Starter $2/mo, Plus $5/mo, Pro $9/mo, Team $15/mo. Sharing and PDF download are included on all plans.", now)} />{" "}
             <Link href="/pricing" className="text-violet-600 hover:underline">See plans</Link>.
           </p>
         </div>

@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: "¿Es gratis?",
-    a: "Sí. Genera 5 quizzes desde PDF por mes gratis. Planes pagos desde $2/mes para 20 generaciones.",
+    a: "Sí. Genera 10 quizzes desde PDF por mes gratis. Planes pagos desde $2/mes para 20 generaciones.",
   },
   {
     q: "¿Cuántas páginas puede procesar?",

@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: "Is there a free tier?",
-    a: "Free plan includes 5 quiz generations per month. Team plan ($15/month for 5 teachers) offers unlimited quizzes.",
+    a: "Free plan includes 10 quiz generations per month. Team plan ($15/month for 5 teachers) offers unlimited quizzes.",
   },
   {
     q: "Can I export questions to Nearpod?",

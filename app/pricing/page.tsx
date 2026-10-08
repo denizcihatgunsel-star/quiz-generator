@@ -24,8 +24,8 @@ export function generateMetadata(): Metadata {
   const now = new Date();
   const starter = planPriceCents(PLANS.starter);
   const description = isHalloweenSaleActive(now)
-    ? `Halloween sale: ${HALLOWEEN_DISCOUNT_PERCENT}% off every paid plan until Oct 31, from ${formatUsd(discountedCents(starter))}/month (regularly ${formatUsd(starter)}). Free plan: 5 quizzes/month. No credit card required to start.`
-    : "Free plan: 5 quizzes/month. Paid plans from $2/month with more quizzes, PDF downloads, and team features. No credit card required to start.";
+    ? `Halloween sale: ${HALLOWEEN_DISCOUNT_PERCENT}% off every paid plan until Oct 31, from ${formatUsd(discountedCents(starter))}/month (regularly ${formatUsd(starter)}). Free plan: 10 quizzes/month. No credit card required to start.`
+    : "Free plan: 10 quizzes/month. Paid plans from $2/month with more quizzes, PDF upload, and team features. No credit card required to start.";
   return pageMetadata({
     title: "Pricing — Quiz Generator Plans",
     description,
@@ -54,7 +54,7 @@ function getPricingFaqs(saleActive: boolean): PricingFaq[] {
   return [
     {
       q: "Is Examina free to try?",
-      a: "Yes. The Free plan includes 5 quizzes per month with multiple choice, flashcards, and score tracking — no credit card required.",
+      a: "Yes. The Free plan includes 10 quizzes per month with all question types, sharing, PDF export, and score tracking — no credit card required.",
     },
     {
       q: "What do the paid plans cost?",
@@ -220,10 +220,10 @@ export default function PricingPage() {
               All Examina plans give you access to four question types: multiple choice with detailed explanations, interactive flashcards with 3D flip, fill-in-the-blank questions, and true/false with reasoning. All questions are tagged with Bloom's Taxonomy cognitive levels so you know whether you're testing recall, understanding, or application.
             </p>
             <p>
-              The platform generates quizzes in 29 languages, handles content from 50 to 15,000 characters, and creates each quiz in under 30 seconds. Every quiz includes score tracking so you can monitor your progress over time. Free and Starter plans let you take quizzes for personal study; Plus and above add sharing via unique quiz links and PDF export for offline use or printing.
+              The platform generates quizzes in 29 languages, handles content from 50 to 15,000 characters, and creates each quiz in under 30 seconds. Every quiz includes score tracking so you can monitor your progress over time. All plans include sharing via unique quiz links and PDF export for offline use or printing.
             </p>
             <p>
-              The main differences between plans are: how many quizzes you can generate per month, whether you can upload PDF files (Starter and above—PDFs require optical character recognition which costs more to process), and whether you can share quizzes or export them to PDF (Plus and above). Free users can paste text directly or upload TXT and Markdown files for quiz generation.
+              The main differences between plans are: how many quizzes you can generate per month, and whether you can upload PDF files (Starter and above—PDFs require optical character recognition which costs more to process). Free users can paste text directly or upload TXT and Markdown files for quiz generation.
             </p>
           </div>
 
@@ -232,27 +232,27 @@ export default function PricingPage() {
           </h2>
           <div className="mx-auto mb-16 max-w-3xl space-y-6">
             <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6">
-              <h3 className="mb-2 font-medium text-[#3B2027]">Free Plan (5 quizzes/month)</h3>
+              <h3 className="mb-2 font-medium text-[#3B2027]">Free Plan (10 quizzes/month)</h3>
               <p className="text-sm leading-relaxed text-[#9A7280]">
-                Good for students who need occasional practice quizzes before midterms and finals, or anyone trying Examina to see if it fits their study workflow. Five quizzes is enough to test one subject per month or create a few practice tests throughout the semester. Take quizzes for personal study (no sharing or PDF export). No credit card required to start. Upload TXT or Markdown files, or paste text directly.
+                Good for students who need practice quizzes before midterms and finals, or anyone trying Examina to see if it fits their study workflow. Ten quizzes covers about two subjects per month or weekly practice tests throughout the semester. Includes sharing via quiz links and PDF export. No credit card required to start. Upload TXT or Markdown files, or paste text directly.
               </p>
             </div>
             <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6">
               <h3 className="mb-2 font-medium text-[#3B2027]">Starter Plan (20 quizzes/month)</h3>
               <p className="text-sm leading-relaxed text-[#9A7280]">
-                Most popular for individual students taking 4-6 classes. Twenty quizzes covers one practice quiz per subject per week, plus extras for exam prep. PDF upload is included, so you can generate questions directly from textbook pages and lecture slide PDFs without manual copying. Still for personal study only (sharing and PDF export start at Plus).
+                Most popular for individual students taking 4-6 classes. Twenty quizzes covers one practice quiz per subject per week, plus extras for exam prep. PDF upload is included, so you can generate questions directly from textbook pages and lecture slide PDFs without manual copying. Includes sharing and PDF export like the Free plan.
               </p>
             </div>
             <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6">
               <h3 className="mb-2 font-medium text-[#3B2027]">Plus Plan (60 quizzes/month)</h3>
               <p className="text-sm leading-relaxed text-[#9A7280]">
-                For active students who create multiple practice sets per subject, or tutors working with several students. Sixty quizzes means 2-3 practice quizzes per subject per week, with room for extra review quizzes before exams. Plus adds sharing via quiz links and PDF export, so you can share with study groups or print for offline practice. Works well for teachers who assign weekly quizzes to one or two classes.
+                For active students who create multiple practice sets per subject, or tutors working with several students. Sixty quizzes means 2-3 practice quizzes per subject per week, with room for extra review quizzes before exams. Includes all features from Free and Starter, plus API access and priority support. Works well for teachers who assign weekly quizzes to one or two classes.
               </p>
             </div>
             <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6">
               <h3 className="mb-2 font-medium text-[#3B2027]">Pro Plan (200 quizzes/month)</h3>
               <p className="text-sm leading-relaxed text-[#9A7280]">
-                Built for teachers who assign quizzes to multiple classes or create frequent formative assessments. Two hundred quizzes covers daily exit tickets, weekly review quizzes, and unit tests across 4-5 classes. Includes all Plus features (sharing, PDF export, API access). Also suits tutoring centers or study groups with heavy usage.
+                Built for teachers who assign quizzes to multiple classes or create frequent formative assessments. Two hundred quizzes covers daily exit tickets, weekly review quizzes, and unit tests across 4-5 classes. Includes all Plus features (API access, priority support). Also suits tutoring centers or study groups with heavy usage.
               </p>
             </div>
             <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6">

@@ -25,7 +25,7 @@ export const metadata: Metadata = pageMetadata({
 const faqs = [
   {
     q: "Is turning notes into a quiz free?",
-    a: "Yes. The Free plan includes 5 quizzes a month with no credit card. Paid plans start at $2/month.",
+    a: "Yes. The Free plan includes 10 quizzes a month with no credit card. Paid plans start at $2/month.",
   },
   {
     q: "Do my notes need to be organised?",
