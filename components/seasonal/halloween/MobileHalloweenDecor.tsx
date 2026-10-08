@@ -34,6 +34,8 @@ function Prop({
       alt={alt}
       aria-hidden="true"
       draggable={false}
+      loading="lazy"
+      decoding="async"
       className={`hw-m-prop ${className ?? ""}`}
       style={style}
     />
@@ -48,7 +50,7 @@ function MoonGlow({ className, style }: { className?: string; style?: React.CSSP
       aria-hidden="true"
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={MOON} alt="" draggable={false} className="hw-m-moon-img" />
+      <img src={MOON} alt="" draggable={false} loading="lazy" decoding="async" className="hw-m-moon-img" />
     </div>
   );
 }
