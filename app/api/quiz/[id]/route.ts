@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { db } from "@/lib/db";
+import { db, ensureVerificationColumns } from "@/lib/db";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    await ensureVerificationColumns();
+    
     const { id } = await params;
     const session = await auth();
 
@@ -44,6 +46,8 @@ export async function GET(
       score: quiz.score,
       total: quiz.total,
       shareId: quiz.shareId,
+      examModeEnabled: (quiz as any).examModeEnabled ?? false,
+      examTimeLimit: (quiz as any).examTimeLimit ?? null,
       createdAt: quiz.createdAt,
     });
   } catch (err) {

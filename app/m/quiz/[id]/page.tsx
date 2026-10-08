@@ -9,7 +9,10 @@ import FlashcardView from "@/components/FlashcardView";
 import FillInTheBlankView from "@/components/FillInTheBlankView";
 import TrueFalseView from "@/components/TrueFalseView";
 import QuizRunner from "@/components/QuizRunner";
+import ExamRunner from "@/components/ExamRunner";
+import ExamModeToggle from "@/components/ExamModeToggle";
 import QuizNotebook from "@/components/QuizNotebook";
+import type { ShuffledQuestion } from "@/lib/examMode";
 
 const TABS = [
   { id: "mcq", label: "Quiz", icon: "\ud83e\udde0" },
@@ -26,17 +29,27 @@ interface Attempt {
   total: number;
   percent: number;
   createdAt: string;
+  tabSwitchCount?: number;
 }
 
 export default function MobileSharedQuizPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { data: session } = useSession();
   const [quiz, setQuiz] = useState<QuizData | null>(null);
-  const [quizMeta, setQuizMeta] = useState<{ id: string; shareId: string | null; topic: string; isOwner?: boolean } | null>(null);
+  const [quizMeta, setQuizMeta] = useState<{ 
+    id: string; 
+    shareId: string | null; 
+    topic: string; 
+    isOwner?: boolean;
+    examModeEnabled?: boolean;
+    examTimeLimit?: number | null;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabId>("mcq");
   const [taking, setTaking] = useState(false);
+  const [takingExam, setTakingExam] = useState(false);
+  const [showExamNotice, setShowExamNotice] = useState(false);
   const [notebookOpen, setNotebookOpen] = useState(false);
   const [attempts, setAttempts] = useState<Attempt[] | null>(null);
   const [userRole, setUserRole] = useState<"student" | "teacher">("student");
@@ -59,7 +72,7 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
       .catch(() => {});
   };
 
-  useEffect(() => {
+  const loadQuiz = () => {
     fetch(`/api/quiz/${id}`)
       .then((r) => r.json())
       .then((d) => {
@@ -67,11 +80,22 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
           setError(d.error);
         } else {
           setQuiz(d.data);
-          setQuizMeta({ id: d.id, shareId: d.shareId ?? null, topic: d.topic ?? "", isOwner: d.isOwner });
+          setQuizMeta({ 
+            id: d.id, 
+            shareId: d.shareId ?? null, 
+            topic: d.topic ?? "",
+            isOwner: d.isOwner,
+            examModeEnabled: d.examModeEnabled ?? false,
+            examTimeLimit: d.examTimeLimit ?? null,
+          });
         }
       })
       .catch(() => setError("Failed to load quiz."))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    loadQuiz();
   }, [id]);
 
   useEffect(() => {
@@ -101,6 +125,46 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
     }
     setTaking(false);
     loadAttempts();
+  };
+
+  const handleExamComplete = async (
+    correct: number, 
+    total: number, 
+    tabSwitchCount: number,
+    shuffledQuestions: ShuffledQuestion[]
+  ) => {
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    try {
+      const answersJson = {
+        questionOrder: shuffledQuestions.map(q => q.originalIndex),
+        shuffledOptions: shuffledQuestions.map(q => q.shuffledOptions),
+      };
+      
+      await fetch(`/api/quiz/${id}/take`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          score: correct, 
+          total,
+          tabSwitchCount,
+          answersJson,
+        }),
+      });
+    } catch { /* ignore */ } finally {
+      submittingRef.current = false;
+    }
+    setTakingExam(false);
+    loadAttempts();
+  };
+
+  const handleStartExam = () => {
+    setShowExamNotice(true);
+  };
+
+  const handleConfirmExam = () => {
+    setShowExamNotice(false);
+    setTakingExam(true);
   };
 
   if (loading) {
@@ -136,6 +200,8 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
     ? Math.max(...attempts.map((a) => a.percent))
     : null;
 
+  const examModeEnabled = quizMeta?.examModeEnabled ?? false;
+
   return (
     <div className={`min-h-screen transition-colors ${theme.page}`}>
       <main className="mx-auto w-full max-w-lg px-1">
@@ -143,6 +209,9 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
           <div className="mb-1.5 flex items-center gap-2">
             <span className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium ${theme.eyebrow}`}>Shared Quiz</span>
             <span className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium ${theme.eyebrow}`}>{theme.label}</span>
+            {examModeEnabled && (
+              <span className="rounded-full px-2.5 py-0.5 text-[11px] font-medium bg-violet-100 text-violet-700">Exam Mode</span>
+            )}
           </div>
           <h1 className={`text-2xl font-medium leading-tight ${theme.text}`}>{quiz.topic}</h1>
           <p className={`mt-1 text-xs ${theme.muted}`}>
@@ -152,9 +221,67 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
           </p>
         </div>
 
+        {quizMeta?.isOwner && userRole === "teacher" && (
+          <div className="mb-5">
+            <ExamModeToggle 
+              quizId={quizMeta.id}
+              initialEnabled={examModeEnabled}
+              initialTimeLimit={quizMeta.examTimeLimit}
+              onUpdate={loadQuiz}
+            />
+          </div>
+        )}
+
         {quiz.multipleChoice.length > 0 && (
           <div className="mb-5">
-            {taking ? (
+            {showExamNotice ? (
+              <div className={`rounded-2xl border p-5 backdrop-blur-xl ${theme.card}`}>
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
+                    <svg className="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  </div>
+                  <h3 className={`text-base font-semibold ${theme.text}`}>Exam Mode Notice</h3>
+                </div>
+                <div className={`mb-4 space-y-2 text-sm ${theme.text}`}>
+                  <p>This quiz is in exam mode. Before you begin:</p>
+                  <ul className="ml-4 list-disc space-y-1">
+                    <li>Questions and answer options are shuffled</li>
+                    {quizMeta?.examTimeLimit && <li>Time limit: {Math.floor(quizMeta.examTimeLimit / 60)} minutes</li>}
+                    <li>Tab switches are recorded and shared with your teacher</li>
+                    <li>No penalties are applied for tab switches</li>
+                  </ul>
+                  <p className="text-xs italic text-neutral-500">Stay on this tab for the best experience.</p>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowExamNotice(false)}
+                    className={`flex-1 rounded-full border px-4 py-3 text-sm font-medium transition-all ${theme.text} ${theme.soft}`}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleConfirmExam}
+                    className="flex-1 rounded-full bg-[#3B2027] py-3 text-sm font-medium text-[#F6E3E8] shadow-[0_12px_30px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98]"
+                  >
+                    I Understand, Start
+                  </button>
+                </div>
+              </div>
+            ) : takingExam ? (
+              <div className={`rounded-2xl border p-5 backdrop-blur-xl ${theme.card}`}>
+                <p className={`mb-5 text-center font-serif text-lg italic ${theme.text}`}>Exam — {quiz.topic}</p>
+                <ExamRunner
+                  questions={quiz.multipleChoice}
+                  theme={theme}
+                  timeLimit={quizMeta?.examTimeLimit ?? undefined}
+                  submitLabel="Submit exam"
+                  onSubmit={handleExamComplete}
+                  onCancel={() => setTakingExam(false)}
+                />
+              </div>
+            ) : taking ? (
               <div className={`rounded-2xl border p-5 backdrop-blur-xl ${theme.card}`}>
                 <p className={`mb-5 text-center font-serif text-lg italic ${theme.text}`}>Take quiz — {quiz.topic}</p>
                 <QuizRunner
@@ -174,11 +301,11 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
               <div>
                 <div className="space-y-2">
                   <button
-                    onClick={() => setTaking(true)}
+                    onClick={examModeEnabled ? handleStartExam : () => setTaking(true)}
                     className="w-full rounded-full bg-[#3B2027] py-3.5 text-sm font-medium text-[#F6E3E8] shadow-[0_12px_30px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98]"
                   >
-                    {attempts && attempts.length > 0 ? "Retake quiz" : "Take quiz"}
-                    {bestAttempt !== null && ` · best ${bestAttempt}%`}
+                    {examModeEnabled ? 'Start Exam' : (attempts && attempts.length > 0 ? "Retake quiz" : "Take quiz")}
+                    {bestAttempt !== null && !examModeEnabled && ` · best ${bestAttempt}%`}
                   </button>
                   {quizMeta?.isOwner && userRole === "teacher" && (
                     <button
@@ -217,19 +344,25 @@ export default function MobileSharedQuizPage({ params }: { params: Promise<{ id:
           </div>
         )}
 
-        {attempts && attempts.length > 0 && !taking && (
+        {attempts && attempts.length > 0 && !taking && !takingExam && !showExamNotice && (
           <div className={`mb-5 rounded-2xl border p-5 ${theme.card}`}>
             <h2 className={`mb-2 font-serif text-base italic ${theme.text}`}>Your progress</h2>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="space-y-2">
               {attempts.slice(-6).map((a, i, arr) => (
-                <span
-                  key={a.id}
-                  className={`rounded-full px-3 py-1 text-xs font-medium ${
-                    a.percent === bestAttempt ? theme.soft + " " + theme.accent : theme.eyebrow
-                  }`}
-                >
-                  {arr.length - i}. {a.percent}%
-                </span>
+                <div key={a.id} className="flex items-center justify-between">
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-medium ${
+                      a.percent === bestAttempt ? theme.soft + " " + theme.accent : theme.eyebrow
+                    }`}
+                  >
+                    {arr.length - i}. {a.percent}%
+                  </span>
+                  {quizMeta?.isOwner && a.tabSwitchCount !== undefined && a.tabSwitchCount > 0 && (
+                    <span className="text-xs text-neutral-500">
+                      Left tab {a.tabSwitchCount} {a.tabSwitchCount === 1 ? 'time' : 'times'}
+                    </span>
+                  )}
+                </div>
               ))}
             </div>
           </div>

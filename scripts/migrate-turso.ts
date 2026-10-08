@@ -146,6 +146,14 @@ const statements: string[] = [
 
   // Study Mode: DeepThinker drop-back rule (missStreak column)
   `ALTER TABLE "StudyConcept" ADD COLUMN "missStreak" INTEGER NOT NULL DEFAULT 0`,
+
+  // Exam mode for SavedQuiz
+  `ALTER TABLE "SavedQuiz" ADD COLUMN "examModeEnabled" INTEGER NOT NULL DEFAULT 0`,
+  `ALTER TABLE "SavedQuiz" ADD COLUMN "examTimeLimit" INTEGER`,
+
+  // Exam mode tracking for QuizAttempt
+  `ALTER TABLE "QuizAttempt" ADD COLUMN "tabSwitchCount" INTEGER NOT NULL DEFAULT 0`,
+  `ALTER TABLE "QuizAttempt" ADD COLUMN "answersJson" TEXT`,
 ];
 
 async function main() {

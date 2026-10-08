@@ -21,9 +21,27 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-export const db = globalForPrisma.prisma ?? makeClient();
+const baseClient = globalForPrisma.prisma ?? makeClient();
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+// Extend the client to ensure migrations run before any SavedQuiz/QuizAttempt operations
+export const db = baseClient.$extends({
+  query: {
+    savedQuiz: {
+      async $allOperations({ args, query }) {
+        await ensureVerificationColumns();
+        return query(args);
+      },
+    },
+    quizAttempt: {
+      async $allOperations({ args, query }) {
+        await ensureVerificationColumns();
+        return query(args);
+      },
+    },
+  },
+});
+
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = baseClient;
 
 // Self-migration: make sure the email-verification columns exist.
 // Runs at most once per server instance; safe to call concurrently
@@ -161,6 +179,40 @@ export function ensureVerificationColumns(): Promise<void> {
           );
         } catch {
           // column already added by another instance — ignore
+        }
+      }
+
+      // Exam mode columns on SavedQuiz
+      const quizExamAlters: [string, string][] = [
+        ["examModeEnabled", `ALTER TABLE "SavedQuiz" ADD COLUMN "examModeEnabled" INTEGER NOT NULL DEFAULT 0`],
+        ["examTimeLimit", `ALTER TABLE "SavedQuiz" ADD COLUMN "examTimeLimit" INTEGER`],
+      ];
+      for (const [column, stmt] of quizExamAlters) {
+        try {
+          await db.$executeRawUnsafe(`SELECT "${column}" FROM "SavedQuiz" LIMIT 1`);
+        } catch {
+          try {
+            await db.$executeRawUnsafe(stmt);
+          } catch {
+            // column already added by another instance — ignore
+          }
+        }
+      }
+
+      // Exam mode columns on QuizAttempt
+      const attemptExamAlters: [string, string][] = [
+        ["tabSwitchCount", `ALTER TABLE "QuizAttempt" ADD COLUMN "tabSwitchCount" INTEGER NOT NULL DEFAULT 0`],
+        ["answersJson", `ALTER TABLE "QuizAttempt" ADD COLUMN "answersJson" TEXT`],
+      ];
+      for (const [column, stmt] of attemptExamAlters) {
+        try {
+          await db.$executeRawUnsafe(`SELECT "${column}" FROM "QuizAttempt" LIMIT 1`);
+        } catch {
+          try {
+            await db.$executeRawUnsafe(stmt);
+          } catch {
+            // column already added by another instance — ignore
+          }
         }
       }
     })().catch((err) => {

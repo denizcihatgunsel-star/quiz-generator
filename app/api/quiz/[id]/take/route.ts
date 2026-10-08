@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { db } from "@/lib/db";
+import { db, ensureVerificationColumns } from "@/lib/db";
 import { awardXp, XP_REWARDS } from "@/lib/xp";
 import { unlockAchievement } from "@/lib/achievements";
 
@@ -9,13 +9,15 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await ensureVerificationColumns();
+  
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { id } = await params;
-  const { score, total } = await req.json();
+  const { score, total, tabSwitchCount, answersJson } = await req.json();
   if (
     !Number.isInteger(score) ||
     !Number.isInteger(total) ||
@@ -37,7 +39,14 @@ export async function POST(
   }
 
   await db.quizAttempt.create({
-    data: { quizId: id, userId: session.user.id, score, total },
+    data: { 
+      quizId: id, 
+      userId: session.user.id, 
+      score, 
+      total,
+      tabSwitchCount: tabSwitchCount ?? 0,
+      answersJson: answersJson ? JSON.stringify(answersJson) : null,
+    },
   });
 
   // Award XP only for the first completion of this quiz per day (anti-farm)
