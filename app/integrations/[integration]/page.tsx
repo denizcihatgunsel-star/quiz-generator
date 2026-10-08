@@ -22,7 +22,9 @@ export async function generateMetadata({
   if (!integration) return {};
 
   return pageMetadata({
-    title: `${integration.name} Quiz Generator — AI Questions for ${integration.fullName}`,
+    title: integration.slug === "qti" 
+      ? `QTI Export (Coming Soon) | Examina`
+      : `${integration.name} Quiz Generator — AI Questions for ${integration.fullName}`,
     description: `${integration.description} Free to try.`,
     path: `/integrations/${integration.slug}`,
   });
@@ -107,8 +109,8 @@ export default async function IntegrationPage({ params }: { params: Promise<{ in
         data={saleLandingData(
           {
             kicker: `${integration.name} Integration`,
-            h1: `${integration.name} quiz generator`,
-            h1Accent: "with AI",
+            h1: integration.slug === "qti" ? `QTI export for quizzes` : `${integration.name} quiz generator`,
+            h1Accent: integration.slug === "qti" ? "(coming soon)" : "with AI",
             subtitle: integration.description,
             cta: "Generate questions free",
             introTitle: `How to use Examina with ${integration.name}`,

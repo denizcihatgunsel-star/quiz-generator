@@ -69,9 +69,9 @@ function getPricingFaqs(saleActive: boolean): PricingFaq[] {
     },
     {
       q: "Do you offer student discounts?",
-      a: "Our Starter plan at $2/mo is priced for students. Free always stays available if you only need a few quizzes a month.",
+      a: "Our Starter plan at $2/mo is priced for students. The Free plan always stays available if you only need a few quizzes a month.",
       ...(saleActive && {
-        sale: `Our Starter plan is priced for students, and until Oct 31 it's ${starter.sale}/mo (${HALLOWEEN_DISCOUNT_PERCENT}% off the regular ${starter.regular}/mo) for Halloween. Free always stays available if you only need a few quizzes a month.`,
+        sale: `Until Oct 31, the Starter plan is ${starter.sale}/mo (${HALLOWEEN_DISCOUNT_PERCENT}% off the regular ${starter.regular}/mo) for Halloween—priced specifically for students. The Free plan always stays available if you only need a few quizzes a month.`,
       }),
     },
   ];
@@ -213,17 +213,17 @@ export default function PricingPage() {
 
         <section className="mx-auto mt-20 max-w-5xl">
           <h2 className="mb-6 text-center text-2xl font-medium tracking-tight text-[#3B2027] sm:text-3xl">
-            What's included in <span className="font-serif italic text-[#B0607A]">every plan</span>
+            What's included <span className="font-serif italic text-[#B0607A]">across plans</span>
           </h2>
           <div className="mx-auto mb-16 max-w-3xl space-y-3 text-base leading-relaxed text-[#5D4450]">
             <p>
-              Every Examina plan—including the free tier—gives you access to all four question types: multiple choice with detailed explanations, interactive flashcards with 3D flip, fill-in-the-blank questions, and true/false with reasoning. All questions are tagged with Bloom's Taxonomy cognitive levels so you know whether you're testing recall, understanding, or application.
+              All Examina plans give you access to four question types: multiple choice with detailed explanations, interactive flashcards with 3D flip, fill-in-the-blank questions, and true/false with reasoning. All questions are tagged with Bloom's Taxonomy cognitive levels so you know whether you're testing recall, understanding, or application.
             </p>
             <p>
-              The platform generates quizzes in 29 languages, handles content from 50 to 15,000 characters, and creates each quiz in under 30 seconds. Every quiz gets a unique shareable link, score tracking shows your progress over time, and you can export your quizzes to PDF for offline study or printing.
+              The platform generates quizzes in 29 languages, handles content from 50 to 15,000 characters, and creates each quiz in under 30 seconds. Every quiz includes score tracking so you can monitor your progress over time. Free and Starter plans let you take quizzes for personal study; Plus and above add sharing via unique quiz links and PDF export for offline use or printing.
             </p>
             <p>
-              The difference between plans is how many quizzes you can generate per month and whether you can upload PDF files. PDF upload requires optical character recognition, which costs more to process, so it's available on paid plans starting with Starter. Free plan users can paste text directly or upload TXT and Markdown files.
+              The main differences between plans are: how many quizzes you can generate per month, whether you can upload PDF files (Starter and above—PDFs require optical character recognition which costs more to process), and whether you can share quizzes or export them to PDF (Plus and above). Free users can paste text directly or upload TXT and Markdown files for quiz generation.
             </p>
           </div>
 
@@ -234,31 +234,31 @@ export default function PricingPage() {
             <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6">
               <h3 className="mb-2 font-medium text-[#3B2027]">Free Plan (5 quizzes/month)</h3>
               <p className="text-sm leading-relaxed text-[#9A7280]">
-                Good for students who need occasional practice quizzes before midterms and finals, or anyone trying Examina to see if it fits their study workflow. Five quizzes is enough to test one subject per month or create a few practice tests throughout the semester. No credit card required to start.
+                Good for students who need occasional practice quizzes before midterms and finals, or anyone trying Examina to see if it fits their study workflow. Five quizzes is enough to test one subject per month or create a few practice tests throughout the semester. Take quizzes for personal study (no sharing or PDF export). No credit card required to start. Upload TXT or Markdown files, or paste text directly.
               </p>
             </div>
             <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6">
               <h3 className="mb-2 font-medium text-[#3B2027]">Starter Plan (20 quizzes/month)</h3>
               <p className="text-sm leading-relaxed text-[#9A7280]">
-                Most popular for individual students taking 4-6 classes. Twenty quizzes covers one practice quiz per subject per week, plus extras for exam prep. PDF upload is included, so you can generate questions directly from textbook pages and lecture slide PDFs without manual copying.
+                Most popular for individual students taking 4-6 classes. Twenty quizzes covers one practice quiz per subject per week, plus extras for exam prep. PDF upload is included, so you can generate questions directly from textbook pages and lecture slide PDFs without manual copying. Still for personal study only (sharing and PDF export start at Plus).
               </p>
             </div>
             <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6">
               <h3 className="mb-2 font-medium text-[#3B2027]">Plus Plan (60 quizzes/month)</h3>
               <p className="text-sm leading-relaxed text-[#9A7280]">
-                For active students who create multiple practice sets per subject, or tutors working with several students. Sixty quizzes means 2-3 practice quizzes per subject per week, with room for extra review quizzes before exams. Also works well for teachers who assign weekly quizzes to one or two classes.
+                For active students who create multiple practice sets per subject, or tutors working with several students. Sixty quizzes means 2-3 practice quizzes per subject per week, with room for extra review quizzes before exams. Plus adds sharing via quiz links and PDF export, so you can share with study groups or print for offline practice. Works well for teachers who assign weekly quizzes to one or two classes.
               </p>
             </div>
             <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6">
               <h3 className="mb-2 font-medium text-[#3B2027]">Pro Plan (200 quizzes/month)</h3>
               <p className="text-sm leading-relaxed text-[#9A7280]">
-                Built for teachers who assign quizzes to multiple classes or create frequent formative assessments. Two hundred quizzes covers daily exit tickets, weekly review quizzes, and unit tests across 4-5 classes. Also suits tutoring centers or study groups with heavy usage.
+                Built for teachers who assign quizzes to multiple classes or create frequent formative assessments. Two hundred quizzes covers daily exit tickets, weekly review quizzes, and unit tests across 4-5 classes. Includes all Plus features (sharing, PDF export, API access). Also suits tutoring centers or study groups with heavy usage.
               </p>
             </div>
             <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6">
               <h3 className="mb-2 font-medium text-[#3B2027]">Team Plan (unlimited quizzes, up to 5 members)</h3>
               <p className="text-sm leading-relaxed text-[#9A7280]">
-                For departments, tutoring teams, or teacher groups who need to share quiz generation capacity. Each team member gets their own account, and the team shares unlimited quiz generation. Perfect for schools, tutoring centers, or corporate training teams where multiple people create assessments.
+                For departments, tutoring teams, or teacher groups who need to share quiz generation capacity. Each team member gets their own account, and the team shares unlimited quiz generation with all Pro features. Perfect for schools, tutoring centers, or corporate training teams where multiple people create and share assessments.
               </p>
             </div>
           </div>
