@@ -38,6 +38,12 @@ export const db = baseClient.$extends({
         return query(args);
       },
     },
+    studyConcept: {
+      async $allOperations({ args, query }) {
+        await ensureVerificationColumns();
+        return query(args);
+      },
+    },
   },
 });
 
