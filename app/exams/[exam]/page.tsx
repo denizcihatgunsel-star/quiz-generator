@@ -101,6 +101,7 @@ export default async function ExamPage({ params }: { params: Promise<{ exam: str
             intro: [
               `Preparing for the ${exam.name} requires hours of practice with realistic questions. Creating those questions by hand is time-consuming and hard to do well—you need questions at the right difficulty, covering the right topics, with plausible wrong answers that expose real gaps in knowledge.`,
               `Examina generates ${exam.name}-style practice questions from your study material automatically. Upload your ${exam.name} prep book chapter, course notes, or review outline, and get multiple choice questions with explanations and Bloom's taxonomy tagging. Questions test the same skills as the real ${exam.name}, helping you identify weak areas before test day.`,
+              `**Disclaimer:** ${exam.disclaimer}`,
             ],
             featuresTitle: "Built for effective practice",
             features: [
