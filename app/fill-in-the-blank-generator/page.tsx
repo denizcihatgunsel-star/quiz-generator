@@ -185,7 +185,7 @@ export default function FillInTheBlankGeneratorPage() {
       <ToolCrossLinks
         faqs={[
           { q: "How does the fill in the blank generator work?", a: "You paste or upload your study material and the AI blanks out key terms and concepts to create cloze questions." },
-          { q: "Is the fill in the blank generator free?", a: "Yes — free accounts get 5 generations per month. Paid plans start at $2/month." },
+          { q: "Is the fill in the blank generator free?", a: "Yes — free accounts get 10 generations per month. Paid plans start at $2/month." },
           { q: "Who uses cloze questions?", a: "Medical students, language learners, and anyone studying terms and definitions benefit most from fill-in-the-blank practice." },
         ]}
       />

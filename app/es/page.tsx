@@ -53,7 +53,7 @@ const DATA: LocaleData = {
   faqTitle: "Preguntas frecuentes",
   faq: [
     { q: "¿Puedo crear un examen desde un PDF?", a: "Sí. Examina acepta PDF, TXT y Markdown, además de texto pegado y fotos de apuntes." },
-    { q: "¿Es gratis el generador de quizzes?", a: "Las cuentas gratis incluyen 5 quizzes al mes. Los planes de pago empiezan en 2 $/mes." },
+    { q: "¿Es gratis el generador de quizzes?", a: "Las cuentas gratis incluyen 10 quizzes al mes. Los planes de pago empiezan en 2 $/mes." },
     { q: "¿Funciona en otros idiomas?", a: "Sí — Examina genera contenido en 29 idiomas, tanto preguntas como explicaciones." },
   ],
   footer: "©2026 Examina",

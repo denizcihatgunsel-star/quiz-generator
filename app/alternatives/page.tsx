@@ -55,7 +55,7 @@ const alternatives = [
 const faqs = [
   { q: "What makes Examina different from Kahoot, Quizizz, and other platforms?", a: "Examina generates quiz questions automatically from your lesson notes using AI. No typing questions by hand—upload notes and get a complete quiz in seconds." },
   { q: "Can I still use these for live classroom games?", a: "Yes. Students join with codes like Kahoot. You control pacing, show leaderboards, and display explanations after each question." },
-  { q: "Is Examina cheaper than paid quiz platforms?", a: "Free tier for 5 quizzes/month. Team plan ($15/month for 5 teachers) includes unlimited quiz generation—much more affordable than Kahoot+ or Quizizz Super." },
+  { q: "Is Examina cheaper than paid quiz platforms?", a: "Free tier for 10 quizzes/month. Team plan ($15/month for 5 teachers) includes unlimited quiz generation—much more affordable than Kahoot+ or Quizizz Super." },
   { q: "Do students need accounts?", a: "No. Students join with a code for live games or click a link for self-paced quizzes. No sign-ups required." },
 ];
 
@@ -186,7 +186,7 @@ export default function AlternativesHubPage() {
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 text-3xl font-medium text-neutral-900">Try it free</h2>
           <p className="mb-8 text-lg leading-relaxed text-neutral-600">
-            Generate 5 quizzes per month free. No credit card required. Paid plans start at
+            Generate 10 quizzes per month free. No credit card required. Paid plans start at
             $2/month.
           </p>
           <Link

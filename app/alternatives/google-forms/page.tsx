@@ -28,7 +28,7 @@ const faqs = [
   },
   {
     q: "Is this free?",
-    a: "Free accounts get 5 quiz generations per month. Paid plans start at $2/month for 20 quizzes.",
+    a: "Free accounts get 10 quiz generations per month. Paid plans start at $2/month for 20 quizzes.",
   },
 ];
 

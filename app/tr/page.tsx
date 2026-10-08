@@ -53,7 +53,7 @@ const DATA: LocaleData = {
   faqTitle: "Sık sorulan sorular",
   faq: [
     { q: "PDF'den quiz oluşturabilir miyim?", a: "Evet. Examina PDF, TXT ve Markdown'ın yanı sıra yapıştırılan metin ve not fotoğraflarını da kabul eder." },
-    { q: "Quiz oluşturucu ücretsiz mi?", a: "Ücretsiz hesaplar ayda 5 quiz içerir. Ücretli planlar 2 $/ay'dan başlar." },
+    { q: "Quiz oluşturucu ücretsiz mi?", a: "Ücretsiz hesaplar ayda 10 quiz içerir. Ücretli planlar 2 $/ay'dan başlar." },
     { q: "Diğer dillerde de çalışır mı?", a: "Evet — Examina 29 dilde soru ve açıklama üretebilir." },
   ],
   footer: "©2026 Examina",

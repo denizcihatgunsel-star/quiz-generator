@@ -108,7 +108,7 @@ const QUESTION_TYPES_DETAIL = [
 
 const FAQ_ITEMS = [
   { q: "What file types can I upload?", a: "PDF, TXT, and Markdown files. Or just paste text directly into the editor." },
-  { q: "How many quizzes can I generate?", a: "Free accounts get 5 quizzes per month. Paid plans go up to unlimited quiz generation." },
+  { q: "How many quizzes can I generate?", a: "Free accounts get 10 quizzes per month. Paid plans go up to unlimited quiz generation." },
   { q: "What makes the questions good?", a: "Questions are mapped to Bloom's Taxonomy — testing recall, understanding, application, and analysis. Not just surface-level memorization." },
   { q: "Can I share quizzes?", a: "Every quiz gets a unique shareable link. You can also export your quizzes to PDF." },
   { q: "Is my content stored?", a: "Content is sent to the AI for generation only. Generated quizzes are saved to your account, but your original content is not stored on our servers." },
@@ -146,7 +146,7 @@ export default function HomeSections() {
               The platform supports multiple question formats: multiple choice questions with 4-6 answer options and detailed explanations, true/false statements with reasoning, fill-in-the-blank questions that test actual recall, and interactive flashcards with 3D flip animations. Every question is tagged with difficulty levels and mapped to Bloom's Taxonomy cognitive levels—so you know whether you're testing simple recall or higher-order thinking like analysis and application.
             </p>
             <p>
-              Examina works in 29 languages, accepts PDF files (on paid plans), plain text, and Markdown, and handles content from 50 to 15,000 characters per generation. Students use it to turn lecture notes into practice tests. Teachers use it to create formative assessments and review materials in minutes instead of hours. The free plan includes 5 quiz generations per month with no credit card required—enough to try it properly before deciding if you need more.
+              Examina works in 29 languages, accepts PDF files (on paid plans), plain text, and Markdown, and handles content from 50 to 15,000 characters per generation. Students use it to turn lecture notes into practice tests. Teachers use it to create formative assessments and review materials in minutes instead of hours. The free plan includes 10 quiz generations per month with no credit card required—enough to try it properly before deciding if you need more.
             </p>
           </div>
         </div>

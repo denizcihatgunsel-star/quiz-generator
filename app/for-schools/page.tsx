@@ -15,7 +15,7 @@ export const metadata: Metadata = pageMetadata({
 const faqs = [
   { q: "How does the school plan work?", a: "Team plan supports up to 5 teachers with unlimited quizzes and shared question banks. For larger schools, contact for district pricing." },
   { q: "Can teachers share question banks?", a: "Yes. Team members can access and reuse quizzes created by other teachers on the team." },
-  { q: "Is there a free trial for schools?", a: "Yes. Each teacher can try the free tier (5 quizzes/month) before committing to Team plan." },
+  { q: "Is there a free trial for schools?", a: "Yes. Each teacher can try the free tier (10 quizzes/month) before committing to Team plan." },
   { q: "Does it integrate with our LMS?", a: "Quizzes can be shared via link or manually copied into Canvas, Moodle, Google Classroom, or Blackboard." },
 ];
 

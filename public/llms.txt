@@ -31,7 +31,7 @@ Examina turns any text into multiple choice, flashcard, fill-in-the-blank, and t
 
 ## Pricing
 
-- **Free**: 5 quiz generations/month, all question types, no credit card
+- **Free**: 10 quiz generations/month, all question types, sharing, PDF export, no credit card
 - **Starter**: $2/month for 20 quizzes
 - **Plus**: $5/month for 60 quizzes
 - **Pro**: $10/month for 200 quizzes
@@ -54,7 +54,7 @@ Next.js 16 (App Router), React, TypeScript, Tailwind CSS, Turso (libSQL), NextAu
 
 ### Tools
 - [AI Quiz Generator](https://www.examina.ink/ai-quiz-generator) — turn notes into quizzes
-- [Free Quiz Generator](https://www.examina.ink/free-quiz-generator) — 5 quizzes/month free
+- [Free Quiz Generator](https://www.examina.ink/free-quiz-generator) — 10 quizzes/month free
 - [Multiple Choice Quiz Maker](https://www.examina.ink/multiple-choice-quiz-maker)
 - [AI Flashcards](https://www.examina.ink/ai-flashcards) — flashcard generation
 - [PDF to Quiz](https://www.examina.ink/quiz-generator-from-pdf)

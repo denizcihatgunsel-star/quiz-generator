@@ -83,7 +83,7 @@ const translations: Record<Locale, Record<string, string>> = {
     "landing.commonQuestions": "Common questions",
     // Landing - CTA
     "landing.ctaTitle": "Put your notes to work.",
-    "landing.ctaSubtitle": "5 free quizzes per month. No credit card required.",
+    "landing.ctaSubtitle": "10 free quizzes per month. No credit card required.",
     "landing.ctaButton": "Create free account",
     // Footer
     "footer.privacy": "Privacy",
@@ -143,7 +143,7 @@ const translations: Record<Locale, Record<string, string>> = {
     "landing.faq": "Preguntas frecuentes",
     "landing.commonQuestions": "Preguntas comunes",
     "landing.ctaTitle": "Empieza a estudiar mejor.",
-    "landing.ctaSubtitle": "5 quizzes gratis al mes. Sin tarjeta de credito.",
+    "landing.ctaSubtitle": "10 quizzes gratis al mes. Sin tarjeta de credito.",
     "landing.ctaButton": "Crear cuenta gratis",
   },
   fr: {
@@ -185,7 +185,7 @@ const translations: Record<Locale, Record<string, string>> = {
     "landing.howItWorks": "Comment ca marche",
     "landing.pasteGenerateStudy": "Collez. Generez. Etudiez.",
     "landing.ctaTitle": "Etudiez plus intelligemment.",
-    "landing.ctaSubtitle": "5 quiz gratuits par mois. Pas de carte de credit.",
+    "landing.ctaSubtitle": "10 quiz gratuits par mois. Pas de carte de credit.",
     "landing.ctaButton": "Creer un compte gratuit",
     "landing.commonQuestions": "Questions frequentes",
   },
@@ -275,7 +275,7 @@ const translations: Record<Locale, Record<string, string>> = {
     "landing.faq": "SSS",
     "landing.commonQuestions": "Sik sorulan sorular",
     "landing.ctaTitle": "Daha akilli calis.",
-    "landing.ctaSubtitle": "Ayda 5 ucretsiz quiz. Kredi karti gerekmez.",
+    "landing.ctaSubtitle": "Ayda 10 ucretsiz quiz. Kredi karti gerekmez.",
     "landing.ctaButton": "Ucretsiz hesap olustur",
   },
   pt: {

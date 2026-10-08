@@ -19,7 +19,7 @@ const faqs = [
   },
   {
     q: "Is Examina free like Quizlet?",
-    a: "Yes. Generate 5 study sets per month free. Paid plans start at $2/month for 20 sets—far cheaper than Quizlet Plus.",
+    a: "Yes. Generate 10 study sets per month free. Paid plans start at $2/month for 20 sets—far cheaper than Quizlet Plus.",
   },
   {
     q: "Can I import my Quizlet sets?",
@@ -74,7 +74,7 @@ export default function QuizletAlternativePage() {
             "@type": "ListItem",
             position: 2,
             name: "Free tier with no ads",
-            description: "5 generations per month free. No forced ads or locked features.",
+            description: "10 generations per month free. No forced ads or locked features.",
           },
           {
             "@type": "ListItem",
@@ -140,7 +140,7 @@ export default function QuizletAlternativePage() {
             },
             {
               title: "Better free plan",
-              body: "Quizlet's free tier has ads and locks features. Examina's free plan gives you 5 AI generations per month with no ads and no time limit.",
+              body: "Quizlet's free tier has ads and locks features. Examina's free plan gives you 10 AI generations per month with no ads and no time limit.",
             },
           ],
           howTitle: "How to make flashcards with Examina",

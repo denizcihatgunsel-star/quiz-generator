@@ -23,7 +23,7 @@ function FadeInSection({ id, className, children }: { id?: string; className?: s
 
 const FAQ_ITEMS = [
   { q: "What file types can I upload?", a: "PDF, TXT, and Markdown files. Or just paste text directly." },
-  { q: "How many quizzes can I generate?", a: "Free accounts get 5 per month. Paid plans go up to unlimited." },
+  { q: "How many quizzes can I generate?", a: "Free accounts get 10 per month. Paid plans go up to unlimited." },
   { q: "What makes the questions good?", a: "Questions are mapped to Bloom's Taxonomy — testing recall, understanding, application, and analysis. Not just surface-level memorization." },
   { q: "Can I share quizzes?", a: "Every quiz gets a unique link. You can also export to PDF." },
   { q: "Is my content stored?", a: "Content is sent to the AI for generation only. Generated quizzes are saved to your account." },
@@ -298,7 +298,7 @@ export default function LandingPage() {
               Examina is an AI-powered quiz generator that reads any text you give it — pasted notes,
               PDFs, TXT, or Markdown — and produces multiple choice, flashcards, fill-in-the-blank,
               and true/false questions mapped to Bloom&apos;s Taxonomy. It supports 29 languages,
-              generates in under 30 seconds, and is free to start with 5 quizzes per month, no credit
+              generates in under 30 seconds, and is free to start with 10 quizzes per month, no credit
               card required.
             </p>
           </div>

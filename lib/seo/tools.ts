@@ -54,7 +54,7 @@ export const TOOLS: ToolLanding[] = [
       },
       {
         q: "Is this free?",
-        a: "Free accounts get 5 test generations per month. Paid plans start at $2/month for 20 generations.",
+        a: "Free accounts get 10 test generations per month. Paid plans start at $2/month for 20 generations.",
       },
     ],
     relatedTools: [
@@ -103,7 +103,7 @@ export const TOOLS: ToolLanding[] = [
       },
       {
         q: "Is MCQ generation free?",
-        a: "Free accounts get 5 quiz generations per month. Each generation can include MCQs. Paid plans start at $2/month.",
+        a: "Free accounts get 10 quiz generations per month. Each generation can include MCQs. Paid plans start at $2/month.",
       },
     ],
     relatedTools: [
@@ -201,7 +201,7 @@ export const TOOLS: ToolLanding[] = [
       },
       {
         q: "Is this free for teachers?",
-        a: "Free accounts get 5 generations per month. For daily exit tickets, the Team plan ($15/month for 5 teachers) includes unlimited generations.",
+        a: "Free accounts get 10 generations per month. For daily exit tickets, the Team plan ($15/month for 5 teachers) includes unlimited generations.",
       },
     ],
     relatedTools: [

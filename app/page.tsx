@@ -24,7 +24,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "How many quizzes can I generate?",
-    a: "Free accounts get 5 quizzes per month. Paid plans go up to unlimited quiz generation.",
+    a: "Free accounts get 10 quizzes per month. Paid plans go up to unlimited quiz generation.",
   },
   {
     q: "What makes the questions good?",

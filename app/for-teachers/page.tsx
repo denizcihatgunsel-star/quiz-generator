@@ -11,7 +11,7 @@ export const metadata: Metadata = pageMetadata({
 const faqs = [
   {
     q: "Is there a free plan for teachers?",
-    a: "Yes. Generate 5 quizzes per month free. For unlimited quizzes, Team plan is $15/month for up to 5 teachers with shared quiz libraries.",
+    a: "Yes. Generate 10 quizzes per month free. For unlimited quizzes, Team plan is $15/month for up to 5 teachers with shared quiz libraries.",
   },
   {
     q: "Can I use this for live classroom quizzes?",

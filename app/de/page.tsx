@@ -53,7 +53,7 @@ const DATA: LocaleData = {
   faqTitle: "Häufige Fragen",
   faq: [
     { q: "Kann ich aus einem PDF einen Test erstellen?", a: "Ja. Examina akzeptiert PDF, TXT und Markdown sowie eingefügten Text und Fotos von Notizen." },
-    { q: "Ist der Quizgenerator kostenlos?", a: "Gratis-Konten erhalten 5 Quizze pro Monat. Bezahlte Pläne starten bei 2 $/Monat." },
+    { q: "Ist der Quizgenerator kostenlos?", a: "Gratis-Konten erhalten 10 Quizze pro Monat. Bezahlte Pläne starten bei 2 $/Monat." },
     { q: "Funktioniert das in anderen Sprachen?", a: "Ja — Examina generiert Inhalte in 29 Sprachen, Fragen und Erklärungen." },
   ],
   footer: "©2026 Examina",

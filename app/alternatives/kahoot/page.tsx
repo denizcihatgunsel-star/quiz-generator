@@ -23,7 +23,7 @@ const faqs = [
   },
   {
     q: "Is the free plan enough for teachers?",
-    a: "The free plan gives 5 quiz generations per month. For daily classroom use, the Team plan ($15/month) offers unlimited quizzes and shared question banks for up to 5 teachers.",
+    a: "The free plan gives 10 quiz generations per month. For daily classroom use, the Team plan ($15/month) offers unlimited quizzes and shared question banks for up to 5 teachers.",
   },
   {
     q: "Do questions have answer explanations?",
@@ -140,7 +140,7 @@ export default function KahootAlternativePage() {
             },
             {
               title: "Affordable team plans",
-              body: "Free tier for 5 quizzes/month. Team plan ($15/month for 5 teachers) includes unlimited quizzes and a shared question library.",
+              body: "Free tier for 10 quizzes/month. Team plan ($15/month for 5 teachers) includes unlimited quizzes and a shared question library.",
             },
           ],
           howTitle: "How to run a live quiz with Examina",

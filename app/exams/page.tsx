@@ -32,7 +32,7 @@ const faqs = [
   { q: "How do AI practice test generators work?", a: "Upload your study material and AI generates realistic practice questions matching the exam format. Each question includes explanations and difficulty tags." },
   { q: "Are these official exam questions?", a: "No. These are original AI-generated practice questions based on your study material. They help you practice exam skills but are not official test items." },
   { q: "Which exams can I practice for?", a: "SAT, ACT, AP, MCAT, NCLEX, GRE, LSAT, TOEFL, IELTS, plus midterm and final exams for any course." },
-  { q: "Is this free?", a: "Free accounts get 5 quiz generations per month. Paid plans start at $2/month for 20 quizzes." },
+  { q: "Is this free?", a: "Free accounts get 10 quiz generations per month. Paid plans start at $2/month for 20 quizzes." },
 ];
 
 export default function ExamsHubPage() {

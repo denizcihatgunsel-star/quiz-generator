@@ -28,7 +28,7 @@ const faqs = [
   },
   {
     q: "Is this free for teachers?",
-    a: "Free accounts get 5 generations per month. For daily formative checks, Team plan ($15/month for 5 teachers) includes unlimited generation.",
+    a: "Free accounts get 10 generations per month. For daily formative checks, Team plan ($15/month for 5 teachers) includes unlimited generation.",
   },
 ];
 

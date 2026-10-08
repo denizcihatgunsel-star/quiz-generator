@@ -23,7 +23,7 @@ export const metadata: Metadata = pageMetadata({
 const faqs = [
   {
     q: "Is the online quiz maker free?",
-    a: "Yes. Create up to 5 quizzes per month free. Paid plans start at $2/month for 20 quizzes.",
+    a: "Yes. Create up to 10 quizzes per month free. Paid plans start at $2/month for 20 quizzes.",
   },
   {
     q: "What question types can I create?",

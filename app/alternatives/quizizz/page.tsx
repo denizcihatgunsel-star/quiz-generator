@@ -23,7 +23,7 @@ const faqs = [
   },
   {
     q: "Is there a free plan?",
-    a: "Yes. Generate 5 quizzes per month free. For unlimited use, Team plan is $15/month for up to 5 teachers.",
+    a: "Yes. Generate 10 quizzes per month free. For unlimited use, Team plan is $15/month for up to 5 teachers.",
   },
   {
     q: "Can I see individual student results?",
