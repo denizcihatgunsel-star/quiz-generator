@@ -23,7 +23,7 @@ export async function generateMetadata({
 
   return pageMetadata({
     title: integration.slug === "qti" 
-      ? `QTI Export (Coming Soon) | Examina`
+      ? `QTI Export (Coming Soon)`
       : `${integration.name} Quiz Generator — AI Questions for ${integration.fullName}`,
     description: `${integration.description} Free to try.`,
     path: `/integrations/${integration.slug}`,

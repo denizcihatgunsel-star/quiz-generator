@@ -28,11 +28,11 @@ export const EXAMS: ExamType[] = [
     name: "SAT",
     fullName: "SAT (Scholastic Assessment Test)",
     description:
-      "Generate practice questions for SAT prep covering reading, writing, and math sections.",
+      "Generate practice questions for SAT prep covering reading, writing, and math sections. The Digital SAT uses adaptive testing with two modules per section—your performance on the first module determines the difficulty of the second.",
     owner: "College Board",
     disclaimer:
       "Examina is not affiliated with, endorsed by, or sponsored by the College Board. These are original practice questions created by AI for study purposes only, not official SAT questions.",
-    practiceTermTitle: "SAT Practice Test: Free AI Practice Questions | Examina",
+    practiceTermTitle: "SAT Practice Test: Free AI Practice Questions",
     practiceTermH1: "SAT practice test",
     practiceTermH1Accent: "free AI-generated practice questions",
     topicsList: [
@@ -66,7 +66,7 @@ export const EXAMS: ExamType[] = [
         q: "In the passage, the word 'pedestrian' most nearly means:",
         a: "ordinary or unimaginative",
         explanation:
-          "In context, 'pedestrian' is used figuratively to mean lacking inspiration or originality, not literally referring to someone walking.",
+          "In context, 'pedestrian' is used figuratively to mean lacking inspiration or originality, not literally referring to someone walking. The SAT frequently tests secondary meanings of common words—words you know in one context but must recognize in a different usage. Here, 'pedestrian' describes something mundane or conventional rather than its primary meaning of 'a person who walks.' Look for context clues in surrounding sentences: if the passage is discussing art or ideas (not literal walking), the figurative meaning applies. This question type appears 3-4 times per Reading section on the Digital SAT.",
       },
     ],
     questionTypesAdvice:
@@ -114,7 +114,7 @@ export const EXAMS: ExamType[] = [
     owner: "ACT, Inc.",
     disclaimer:
       "Examina is not affiliated with, endorsed by, or sponsored by ACT, Inc. These are original practice questions for study purposes only, not official ACT materials.",
-    practiceTermTitle: "ACT Practice Test: Free AI Practice Questions | Examina",
+    practiceTermTitle: "ACT Practice Test: Free AI Practice Questions",
     practiceTermH1: "ACT practice test",
     practiceTermH1Accent: "free AI-generated practice questions",
     sampleQuestions: [
@@ -252,7 +252,7 @@ export const EXAMS: ExamType[] = [
     owner: "AAMC (Association of American Medical Colleges)",
     disclaimer:
       "Examina is not affiliated with or endorsed by the AAMC. These are original practice questions for study purposes only, not official MCAT materials.",
-    practiceTermTitle: "MCAT Questions: Free AI-Generated MCAT Practice | Examina",
+    practiceTermTitle: "MCAT Questions: Free AI-Generated MCAT Practice",
     practiceTermH1: "MCAT questions",
     practiceTermH1Accent: "free AI-generated practice",
     topicsList: [
@@ -332,7 +332,7 @@ export const EXAMS: ExamType[] = [
     owner: "NCSBN (National Council of State Boards of Nursing)",
     disclaimer:
       "Examina is not affiliated with or endorsed by the NCSBN. These are original practice questions for nursing study, not official NCLEX test items.",
-    practiceTermTitle: "NCLEX Practice Questions: Free AI-Generated NCLEX Practice | Examina",
+    practiceTermTitle: "NCLEX Practice Questions: Free AI-Generated NCLEX Practice",
     practiceTermH1: "NCLEX practice questions",
     practiceTermH1Accent: "free AI-generated nursing practice",
     topicsList: [
@@ -416,7 +416,7 @@ export const EXAMS: ExamType[] = [
     owner: "ETS (Educational Testing Service)",
     disclaimer:
       "Examina is not affiliated with or endorsed by ETS. These are original practice questions, not official GRE materials.",
-    practiceTermTitle: "GRE Practice Test: Free AI Practice Questions | Examina",
+    practiceTermTitle: "GRE Practice Test: Free AI Practice Questions",
     practiceTermH1: "GRE practice test",
     practiceTermH1Accent: "free AI-generated practice questions",
     sampleQuestions: [
@@ -472,7 +472,7 @@ export const EXAMS: ExamType[] = [
     owner: "LSAC (Law School Admission Council)",
     disclaimer:
       "Examina is not affiliated with or endorsed by LSAC. These are original practice questions for study purposes, not official LSAT materials.",
-    practiceTermTitle: "LSAT Questions: Free AI-Generated LSAT Practice Questions | Examina",
+    practiceTermTitle: "LSAT Questions: Free AI-Generated LSAT Practice Questions",
     practiceTermH1: "LSAT questions",
     practiceTermH1Accent: "free AI-generated practice questions",
     sampleQuestions: [
@@ -529,7 +529,7 @@ export const EXAMS: ExamType[] = [
     owner: "ETS (Educational Testing Service)",
     disclaimer:
       "Examina is not affiliated with or endorsed by ETS. These are original practice questions, not official TOEFL materials.",
-    practiceTermTitle: "TOEFL Practice Test: Free AI Practice Questions | Examina",
+    practiceTermTitle: "TOEFL Practice Test: Free AI Practice Questions",
     practiceTermH1: "TOEFL practice test",
     practiceTermH1Accent: "free AI-generated practice questions",
     sampleQuestions: [
@@ -586,7 +586,7 @@ export const EXAMS: ExamType[] = [
     owner: "British Council, IDP Education, and Cambridge Assessment English",
     disclaimer:
       "Examina is not affiliated with or endorsed by British Council, IDP Education, or Cambridge Assessment. These are original practice questions, not official IELTS materials.",
-    practiceTermTitle: "IELTS Practice Test: Free AI Practice Questions | Examina",
+    practiceTermTitle: "IELTS Practice Test: Free AI Practice Questions",
     practiceTermH1: "IELTS practice test",
     practiceTermH1Accent: "free AI-generated practice questions",
     sampleQuestions: [
