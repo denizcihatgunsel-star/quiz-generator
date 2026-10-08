@@ -130,9 +130,9 @@ export default async function SubjectPage({ params }: { params: Promise<{ subjec
             howTitle: `Sample ${subject.name} questions`,
             intro2: [
               `Here are examples of ${subject.name.toLowerCase()} questions Examina can generate. Actual questions come from your uploaded study material, so they match your course content exactly.`,
-              ...(subject.questionTypesAdvice ? [`**Which question types work best for ${subject.name.toLowerCase()}:** ${subject.questionTypesAdvice}`] : []),
+              ...(subject.questionTypesAdvice ? [`Which question types work best for ${subject.name.toLowerCase()}: ${subject.questionTypesAdvice}`] : []),
               ...(subject.studyTips
-                ? [`**Study tips for ${subject.name.toLowerCase()}:** ${subject.studyTips.join(" ")}`]
+                ? [`Study tips for ${subject.name.toLowerCase()}: ${subject.studyTips.join(" ")}`]
                 : []),
             ],
             steps: subject.sampleQuestions.map((sq, i) => ({

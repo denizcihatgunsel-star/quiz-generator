@@ -106,7 +106,7 @@ export default async function ExamPage({ params }: { params: Promise<{ exam: str
                     `The ${exam.name} covers these content areas: ${exam.topicsList.join("; ")}. Upload notes from any of these topics to generate practice questions specific to what you're studying.`,
                   ]
                 : []),
-              `**Disclaimer:** ${exam.disclaimer}`,
+              `Disclaimer: ${exam.disclaimer}`,
             ],
             featuresTitle: "Built for effective practice",
             features: [
@@ -126,9 +126,9 @@ export default async function ExamPage({ params }: { params: Promise<{ exam: str
             howTitle: `Sample ${exam.name} questions`,
             intro2: [
               `Here are examples of questions Examina can generate for ${exam.name} practice. Actual questions are based on your uploaded study material.`,
-              ...(exam.questionTypesAdvice ? [`**Which question types work best:** ${exam.questionTypesAdvice}`] : []),
+              ...(exam.questionTypesAdvice ? [`Which question types work best: ${exam.questionTypesAdvice}`] : []),
               ...(exam.studyTips
-                ? [`**Study tips for ${exam.name} prep:** ${exam.studyTips.join(" ")}`]
+                ? [`Study tips for ${exam.name} prep: ${exam.studyTips.join(" ")}`]
                 : []),
               exam.disclaimer,
             ],
