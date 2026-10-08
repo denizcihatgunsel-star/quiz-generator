@@ -33,7 +33,7 @@ export async function generateMetadata({
   if (!exam || !combo) return {};
 
   const typeLabel = COMBO_TYPE_LABELS[combo.type];
-  const title = `${exam.name} ${typeLabel} — ${combo.h1}`;
+  const title = `${exam.name} ${typeLabel}: ${combo.meta.primaryKeyword.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')} | Examina`;
   const description = combo.intro.slice(0, 155) + "...";
 
   return pageMetadata({
@@ -112,14 +112,14 @@ export default async function ExamComboPage({
           acceptedAnswer: { "@type": "Answer", text: copyText(saleCopy(f.a, now)) },
         })),
       },
-      ...(combo.type === "flashcards"
+      ...(combo.type === "flashcards" || combo.type === "worksheet-generator" || combo.type === "quiz-generator"
         ? [
             {
               "@type": "LearningResource",
               name: `${exam.name} ${typeLabel}`,
               description: combo.intro,
               educationalLevel: "High School to College",
-              learningResourceType: "Flashcards",
+              learningResourceType: combo.type === "flashcards" ? "Flashcards" : "Worksheet",
             },
           ]
         : []),

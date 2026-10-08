@@ -82,8 +82,8 @@ export default function ComboPage({ data, hubName, hubPath, allCombos }: ComboPa
           </h2>
           <p className="text-sm text-neutral-500 mb-8">
             {isFlashcardType
-              ? `Try these sample flashcards. Click to flip and reveal definitions.`
-              : `Practice with these sample questions. Click "Show Answer" to reveal explanations.`}
+              ? `${data.sampleItems.length} sample flashcards. Click to flip and reveal definitions.`
+              : `${data.sampleItems.length} sample questions. Expand to see answers and explanations.`}
           </p>
 
           {isFlashcardType ? (
@@ -144,6 +144,18 @@ export default function ComboPage({ data, hubName, hubPath, allCombos }: ComboPa
                 </div>
               </div>
 
+              {/* SSR content for all flashcards */}
+              <div className="sr-only" aria-hidden="true">
+                {data.sampleItems.map((item, idx) => (
+                  <div key={`fc-ssr-${idx}`}>
+                    <p><strong>Flashcard {idx + 1} - Term:</strong> {item.q}</p>
+                    <p><strong>Definition:</strong> {item.a}</p>
+                    <p><strong>Explanation:</strong> {item.explanation}</p>
+                    {item.bloomLevel && <p><strong>Bloom Level:</strong> {item.bloomLevel}</p>}
+                  </div>
+                ))}
+              </div>
+
               <div className="flex items-center justify-between mt-6">
                 <button
                   onClick={(e) => {
@@ -171,35 +183,38 @@ export default function ComboPage({ data, hubName, hubPath, allCombos }: ComboPa
               </div>
             </div>
           ) : (
-            <div className="space-y-8">
+            <div className="space-y-6">
               {data.sampleItems.map((item, i) => (
-                <div key={i} className="border-l-4 border-violet-500 pl-6">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <p className="text-neutral-900 font-medium flex-1">{item.q}</p>
-                    {item.bloomLevel && (
-                      <span className="text-xs px-2 py-1 bg-violet-100 text-violet-700 rounded">
-                        {item.bloomLevel}
-                      </span>
+                <details key={i} className="border-l-4 border-violet-500 pl-6 group">
+                  <summary className="cursor-pointer list-none">
+                    <div className="flex items-start justify-between gap-4 mb-2">
+                      <p className="text-neutral-900 font-medium flex-1">
+                        {i + 1}. {item.q}
+                      </p>
+                      {item.bloomLevel && (
+                        <span className="text-xs px-2 py-1 bg-violet-100 text-violet-700 rounded flex-shrink-0">
+                          {item.bloomLevel}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-violet-600 hover:text-violet-700 font-medium group-open:hidden">
+                      Show Answer →
+                    </p>
+                  </summary>
+                  <div className="mt-4 bg-neutral-50 rounded-lg p-4 space-y-3">
+                    <div>
+                      <p className="text-xs uppercase tracking-wide text-neutral-500 mb-1">Answer</p>
+                      <p className="text-sm font-medium text-emerald-700">{item.a}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase tracking-wide text-neutral-500 mb-1">Explanation</p>
+                      <p className="text-sm text-neutral-600 leading-relaxed">{item.explanation}</p>
+                    </div>
+                    {item.type && (
+                      <p className="text-xs text-neutral-500">Type: {item.type.replace(/-/g, ' ')}</p>
                     )}
                   </div>
-                  {revealedAnswers.has(i) ? (
-                    <div className="bg-neutral-50 rounded-lg p-4 space-y-2">
-                      <p className="text-sm font-medium text-emerald-700">
-                        Answer: {item.a}
-                      </p>
-                      <p className="text-sm text-neutral-600 leading-relaxed">
-                        {item.explanation}
-                      </p>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => toggleAnswer(i)}
-                      className="text-sm text-violet-600 hover:text-violet-700 font-medium"
-                    >
-                      Show Answer →
-                    </button>
-                  )}
-                </div>
+                </details>
               ))}
             </div>
           )}
