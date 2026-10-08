@@ -615,6 +615,305 @@ export const SUBJECTS: Subject[] = [
     ],
     relatedExams: ["ap", "midterm", "finals"],
   },
+  {
+    slug: "spelling",
+    name: "Spelling",
+    description:
+      "Generate spelling practice questions and tests for elementary, middle school, or ESL vocabulary building.",
+    sampleQuestions: [
+      {
+        q: "Choose the correctly spelled word:",
+        a: "Definitely (not definately)",
+        explanation:
+          "Many people misspell 'definitely' because of the pronunciation. Remember: it's related to 'finite' and 'definite.'",
+      },
+      {
+        q: "Which word is spelled correctly?",
+        a: "Separate (not seperate)",
+        explanation:
+          "The correct spelling is 'separate.' Remember there's 'a rat' in separate.",
+      },
+      {
+        q: "Fill in the blank: She was em___rrassed by the mistake.",
+        a: "barrassed (embarrassed)",
+        explanation:
+          "Embarrassed has two r's and two s's. Think: really, really should stay silent.",
+      },
+    ],
+    faq: [
+      {
+        q: "What spelling levels can I practice?",
+        a: "Generate spelling quizzes for elementary, middle school, high school, or adult ESL learners. Upload your weekly spelling list or vocabulary words.",
+      },
+      {
+        q: "Can I create spelling tests from my curriculum?",
+        a: "Yes. Upload your school's spelling list and generate multiple choice or fill-in-the-blank spelling questions.",
+      },
+      {
+        q: "Do questions include context?",
+        a: "Yes. Questions show words in sentence context to test real understanding, not just memorization.",
+      },
+      {
+        q: "Is this free?",
+        a: "Free accounts get 5 quiz generations per month. Paid plans start at $2/month for 20 quizzes.",
+      },
+    ],
+    relatedTools: [
+      "/ai-quiz-generator",
+      "/fill-in-the-blank-generator",
+      "/vocabulary",
+    ],
+  },
+  {
+    slug: "grammar",
+    name: "Grammar",
+    description:
+      "Create grammar quiz questions on sentence structure, parts of speech, punctuation, and usage for English learners.",
+    sampleQuestions: [
+      {
+        q: "Identify the error: 'Me and him went to the store.'",
+        a: "Should be 'He and I went to the store'",
+        explanation:
+          "Use subject pronouns (he, I) when they are the subject of the sentence. 'Me' and 'him' are object pronouns.",
+      },
+      {
+        q: "Which sentence uses commas correctly?",
+        a: "After the meeting, we went to lunch.",
+        explanation:
+          "An introductory phrase (After the meeting) is followed by a comma before the main clause.",
+      },
+      {
+        q: "Choose the correct verb form: 'Neither the teacher nor the students ___ ready.'",
+        a: "were",
+        explanation:
+          "When using 'neither...nor,' the verb agrees with the nearest subject (students, plural), so use 'were.'",
+      },
+    ],
+    faq: [
+      {
+        q: "What grammar topics are covered?",
+        a: "Generate questions on parts of speech, sentence structure, subject-verb agreement, verb tenses, punctuation, modifiers, and common usage errors.",
+      },
+      {
+        q: "Is this suitable for ESL learners?",
+        a: "Yes. Questions work for both native English speakers and ESL students at intermediate to advanced levels.",
+      },
+      {
+        q: "Can I practice for standardized tests?",
+        a: "Yes. Generate SAT, ACT, or TOEFL-style grammar questions by uploading relevant practice material.",
+      },
+      {
+        q: "Do questions explain the rules?",
+        a: "Yes. Every question includes an explanation of the grammar rule being tested.",
+      },
+    ],
+    relatedTools: [
+      "/ai-quiz-generator",
+      "/multiple-choice-quiz-maker",
+      "/vocabulary",
+    ],
+    relatedExams: ["sat", "act", "toefl", "ielts"],
+  },
+  {
+    slug: "algebra",
+    name: "Algebra",
+    description:
+      "Generate algebra practice questions on equations, inequalities, functions, polynomials, and graphing for pre-algebra through Algebra 2.",
+    sampleQuestions: [
+      {
+        q: "Solve for x: 5x - 8 = 27",
+        a: "x = 7",
+        explanation:
+          "Add 8 to both sides: 5x = 35. Then divide both sides by 5: x = 7.",
+      },
+      {
+        q: "Factor: x² + 7x + 12",
+        a: "(x + 3)(x + 4)",
+        explanation:
+          "Find two numbers that multiply to 12 and add to 7. Those numbers are 3 and 4, so the factors are (x + 3)(x + 4).",
+      },
+      {
+        q: "What is the slope of the line y = -2x + 5?",
+        a: "-2",
+        explanation:
+          "In slope-intercept form y = mx + b, m is the slope. Here, the slope is -2.",
+      },
+    ],
+    faq: [
+      {
+        q: "What algebra topics can I practice?",
+        a: "Generate questions on solving equations and inequalities, graphing linear and quadratic functions, factoring polynomials, systems of equations, exponents, and rational expressions.",
+      },
+      {
+        q: "Is this suitable for Algebra 1 and Algebra 2?",
+        a: "Yes. Upload your course notes to generate questions matching your specific curriculum and difficulty level.",
+      },
+      {
+        q: "Do questions show step-by-step solutions?",
+        a: "Yes. Every problem includes a detailed explanation showing the solution steps.",
+      },
+      {
+        q: "Can I use this for SAT math prep?",
+        a: "Yes. Generate SAT-style algebra questions by uploading relevant practice problems.",
+      },
+    ],
+    relatedTools: [
+      "/ai-quiz-generator",
+      "/notes-to-quiz",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedExams: ["sat", "act", "midterm", "finals"],
+  },
+  {
+    slug: "geometry",
+    name: "Geometry",
+    description:
+      "Create geometry practice questions on shapes, angles, proofs, area, volume, and coordinate geometry for high school geometry courses.",
+    sampleQuestions: [
+      {
+        q: "What is the sum of interior angles in a hexagon?",
+        a: "720 degrees",
+        explanation:
+          "Use the formula (n - 2) × 180° where n is the number of sides. For a hexagon (6 sides): (6 - 2) × 180° = 720°.",
+      },
+      {
+        q: "A circle has a radius of 5 cm. What is its area?",
+        a: "25π cm² (approximately 78.54 cm²)",
+        explanation:
+          "Area of a circle is A = πr². With r = 5 cm, A = π(5)² = 25π ≈ 78.54 cm².",
+      },
+      {
+        q: "If two parallel lines are cut by a transversal, and one angle is 65°, what is the corresponding angle?",
+        a: "65°",
+        explanation:
+          "Corresponding angles are equal when parallel lines are cut by a transversal, so the answer is 65°.",
+      },
+    ],
+    faq: [
+      {
+        q: "What geometry topics are covered?",
+        a: "Generate questions on angles, triangles, quadrilaterals, circles, polygons, area and perimeter, volume and surface area, coordinate geometry, transformations, and geometric proofs.",
+      },
+      {
+        q: "Do questions include diagrams?",
+        a: "Questions describe geometric figures in text. For diagram-based problems, describe the figure in your notes when uploading.",
+      },
+      {
+        q: "Is this good for high school geometry?",
+        a: "Yes. Questions match typical high school geometry curriculum and can be generated at appropriate difficulty levels.",
+      },
+      {
+        q: "Can I practice for standardized tests?",
+        a: "Yes. Generate SAT, ACT, or GRE geometry questions by uploading relevant practice material.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/multiple-choice-quiz-maker",
+    ],
+    relatedExams: ["sat", "act", "gre", "midterm", "finals"],
+  },
+  {
+    slug: "world-history",
+    name: "World History",
+    description:
+      "Generate world history quiz questions on ancient civilizations, empires, revolutions, wars, and cultural developments across global regions.",
+    sampleQuestions: [
+      {
+        q: "Which ancient civilization built Machu Picchu?",
+        a: "The Inca Empire",
+        explanation:
+          "Machu Picchu was built by the Inca Empire in the 15th century in present-day Peru, serving as a royal estate and sacred religious site.",
+      },
+      {
+        q: "What was the primary cause of World War I?",
+        a: "The assassination of Archduke Franz Ferdinand triggered a chain of alliances",
+        explanation:
+          "While multiple factors existed (militarism, alliances, imperialism, nationalism), the assassination of Archduke Franz Ferdinand in June 1914 was the immediate trigger that activated the alliance system and led to war.",
+      },
+      {
+        q: "Which revolution established the principle that governments derive power from the consent of the governed?",
+        a: "The American Revolution",
+        explanation:
+          "The American Revolution (1775-1783) and the Declaration of Independence established the principle of popular sovereignty—that government legitimacy comes from the people.",
+      },
+    ],
+    faq: [
+      {
+        q: "What world history periods can I study?",
+        a: "Generate questions on any period: ancient civilizations, classical empires, medieval history, Renaissance, Age of Exploration, revolutions, world wars, Cold War, or modern global issues.",
+      },
+      {
+        q: "Do questions test memorization or analysis?",
+        a: "Both. Questions are tagged by Bloom's taxonomy, testing factual knowledge, understanding of causes and effects, and historical analysis skills.",
+      },
+      {
+        q: "Can I practice for AP World History?",
+        a: "Yes. Upload AP World History notes to generate questions matching the exam's format, themes, and historical thinking skills.",
+      },
+      {
+        q: "Is this free?",
+        a: "Free accounts get 5 quiz generations per month. Paid plans start at $2/month.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/quiz-generator-from-pdf",
+      "/study-guide-generator",
+    ],
+    relatedExams: ["ap", "sat", "midterm", "finals"],
+  },
+  {
+    slug: "french",
+    name: "French",
+    description:
+      "Create French language quiz questions for vocabulary, grammar, verb conjugation, and reading comprehension practice.",
+    sampleQuestions: [
+      {
+        q: "Quel est le passé composé de 'parler' à la première personne?",
+        a: "J'ai parlé",
+        explanation:
+          "The passé composé (compound past) of 'parler' in first person is formed with avoir: j'ai parlé (I spoke/have spoken).",
+      },
+      {
+        q: "Translate: 'He is going to the library.'",
+        a: "Il va à la bibliothèque.",
+        explanation:
+          "'Va' is the third person singular present of 'aller' (to go). 'À la bibliothèque' means 'to the library.'",
+      },
+      {
+        q: "Which word is masculine: table, livre, maison, or fenêtre?",
+        a: "Livre",
+        explanation:
+          "'Livre' (book) is masculine (le livre). The others are feminine: la table, la maison, la fenêtre.",
+      },
+    ],
+    faq: [
+      {
+        q: "What French topics can I practice?",
+        a: "Generate questions on vocabulary, verb conjugation (present, past, future, subjunctive), grammar rules, sentence structure, and reading comprehension at any level.",
+      },
+      {
+        q: "Can I practice for AP French?",
+        a: "Yes. Upload AP French course material to generate questions matching exam format and difficulty.",
+      },
+      {
+        q: "Do questions include accents?",
+        a: "Yes. Questions use proper French orthography including accents (é, è, ê, à, ù, ç) and special characters.",
+      },
+      {
+        q: "Is this suitable for beginners?",
+        a: "Yes. Generate questions at any level from beginner (introductory vocabulary and present tense) to advanced (subjunctive, literary texts).",
+      },
+    ],
+    relatedTools: [
+      "/ai-flashcards",
+      "/vocabulary",
+      "/fill-in-the-blank-generator",
+    ],
+    relatedExams: ["ap"],
+  },
 ];
 
 export function getSubject(slug: string): Subject | undefined {

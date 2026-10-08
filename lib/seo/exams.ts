@@ -597,6 +597,124 @@ export const EXAMS: ExamType[] = [
       "/ai-flashcards",
     ],
   },
+  {
+    slug: "ap-us-history",
+    name: "APUSH",
+    fullName: "AP US History",
+    description:
+      "Generate AP US History practice questions covering periods 1-9, historical thinking skills, and document-based analysis for AP exam prep.",
+    owner: "College Board",
+    disclaimer:
+      "Examina is not affiliated with or endorsed by the College Board. These are original practice questions created by AI for study purposes only, not official AP exam materials.",
+    sampleQuestions: [
+      {
+        q: "Which development best represents the transition from colonial mercantilism to free market capitalism in early America?",
+        a: "The decline of the Navigation Acts enforcement after 1763",
+        explanation:
+          "Weakening enforcement of mercantile restrictions allowed colonial merchants to develop independent trade networks, fostering capitalist economic development.",
+      },
+      {
+        q: "The Supreme Court's decision in Marbury v. Madison (1803) most significantly established which principle?",
+        a: "Judicial review",
+        explanation:
+          "Marbury v. Madison established the Court's power to declare laws unconstitutional, creating the foundational principle of judicial review in American government.",
+      },
+      {
+        q: "How did the Second Great Awakening influence reform movements in antebellum America?",
+        a: "It emphasized individual moral responsibility, inspiring temperance, abolitionist, and women's rights movements",
+        explanation:
+          "The religious revival stressed personal salvation and moral improvement, which motivated many Americans to work for social reform causes.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these real AP US History exam questions?",
+        a: "No. These are original practice questions created by AI following AP format and difficulty. For official practice exams, visit the College Board AP Central website.",
+      },
+      {
+        q: "What APUSH periods and themes are covered?",
+        a: "Generate questions covering all nine periods (1491-present) and all themes: American and National Identity, Work/Exchange/Technology, Geography and Environment, Migration and Settlement, Politics and Power, America in the World, American and Regional Culture, and Social Structures.",
+      },
+      {
+        q: "Do questions match the AP exam format?",
+        a: "Yes. Questions test historical thinking skills (comparison, causation, continuity and change, contextualization) and are tagged by difficulty level and skill type.",
+      },
+      {
+        q: "Can I practice document-based questions (DBQs)?",
+        a: "Examina focuses on multiple choice questions. For DBQ and Long Essay Question practice, use our study guide generator to outline arguments and evidence.",
+      },
+      {
+        q: "Is this free?",
+        a: "Free accounts get 5 quiz generations per month. Paid plans start at $2/month for 20 quizzes.",
+      },
+    ],
+    relatedTools: [
+      "/quiz-generator-from-pdf",
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/study-guide-generator",
+    ],
+    relatedSubjects: ["history", "world-history"],
+  },
+  {
+    slug: "ap-psychology",
+    name: "AP Psychology",
+    fullName: "AP Psychology",
+    description:
+      "Create AP Psychology practice questions on biological bases, cognition, development, social psychology, and mental health for AP exam preparation.",
+    owner: "College Board",
+    disclaimer:
+      "Examina is not affiliated with or endorsed by the College Board. These are original practice questions created by AI for study purposes only, not official AP exam materials.",
+    sampleQuestions: [
+      {
+        q: "According to Piaget, which cognitive ability emerges during the formal operational stage?",
+        a: "Abstract and hypothetical thinking",
+        explanation:
+          "The formal operational stage (age 12+) marks the development of abstract reasoning, allowing individuals to think about hypothetical situations and use deductive logic.",
+      },
+      {
+        q: "Which neurotransmitter is most directly associated with the reward pathway and addiction?",
+        a: "Dopamine",
+        explanation:
+          "Dopamine plays a central role in the brain's reward system. Addictive substances increase dopamine activity, reinforcing drug-seeking behavior.",
+      },
+      {
+        q: "A researcher finds that ice cream sales and crime rates both increase in summer. This is an example of:",
+        a: "Correlation without causation (third variable: temperature)",
+        explanation:
+          "Both variables are influenced by a third factor (hot weather), demonstrating that correlation does not imply causation—a key research methods concept.",
+      },
+    ],
+    faq: [
+      {
+        q: "Are these official AP Psychology questions?",
+        a: "No. These are AI-generated practice questions following AP format and content. For official practice, visit the College Board AP Central website.",
+      },
+      {
+        q: "What AP Psychology units are covered?",
+        a: "Generate questions across all units: Scientific Foundations, Biological Bases of Behavior, Sensation and Perception, Learning, Cognitive Psychology, Developmental Psychology, Motivation/Emotion/Personality, Clinical Psychology, and Social Psychology.",
+      },
+      {
+        q: "Do questions test both terminology and application?",
+        a: "Yes. Questions range from basic concept identification to applying psychological principles to scenarios, matching the AP exam's emphasis on both knowledge and application.",
+      },
+      {
+        q: "Can I practice free response questions (FRQs)?",
+        a: "Examina specializes in multiple choice questions. For FRQ practice, use our study guide generator to organize concepts and design research studies.",
+      },
+      {
+        q: "How accurate are the psychological concepts?",
+        a: "Questions are generated from established psychological research and theory. However, always verify against your textbook and AP course materials.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-quiz-generator",
+      "/quiz-generator-from-pdf",
+      "/ai-flashcards",
+    ],
+    relatedSubjects: ["psychology"],
+  },
 ];
 
 export function getExam(slug: string): ExamType | undefined {
