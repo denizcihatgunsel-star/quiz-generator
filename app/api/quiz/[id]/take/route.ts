@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { db } from "@/lib/db";
+import { db, ensureVerificationColumns } from "@/lib/db";
 import { awardXp, XP_REWARDS } from "@/lib/xp";
 import { unlockAchievement } from "@/lib/achievements";
 
@@ -9,13 +9,15 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await ensureVerificationColumns();
+  
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { id } = await params;
-  const { score, total } = await req.json();
+  const { score, total, tabSwitchCount, answersJson } = await req.json();
   if (
     !Number.isInteger(score) ||
     !Number.isInteger(total) ||
@@ -24,6 +26,25 @@ export async function POST(
     score > total
   ) {
     return NextResponse.json({ error: "Invalid score." }, { status: 400 });
+  }
+
+  // Validate tabSwitchCount (clamp to 0-10000, default 0 if invalid)
+  let validTabSwitchCount = 0;
+  if (typeof tabSwitchCount === 'number' && Number.isInteger(tabSwitchCount)) {
+    validTabSwitchCount = Math.max(0, Math.min(10000, tabSwitchCount));
+  }
+
+  // Validate answersJson (max 20KB, drop if too large)
+  let validAnswersJson: string | null = null;
+  if (answersJson) {
+    try {
+      const jsonString = JSON.stringify(answersJson);
+      if (jsonString.length <= 20 * 1024) {
+        validAnswersJson = jsonString;
+      }
+    } catch {
+      // Invalid JSON, drop it
+    }
   }
 
   const quiz = await db.savedQuiz.findUnique({ where: { id } });
@@ -37,7 +58,14 @@ export async function POST(
   }
 
   await db.quizAttempt.create({
-    data: { quizId: id, userId: session.user.id, score, total },
+    data: { 
+      quizId: id, 
+      userId: session.user.id, 
+      score, 
+      total,
+      tabSwitchCount: validTabSwitchCount,
+      answersJson: validAnswersJson,
+    },
   });
 
   // Award XP only for the first completion of this quiz per day (anti-farm)

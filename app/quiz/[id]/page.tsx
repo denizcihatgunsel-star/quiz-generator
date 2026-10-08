@@ -10,8 +10,11 @@ import FlashcardView from "@/components/FlashcardView";
 import FillInTheBlankView from "@/components/FillInTheBlankView";
 import TrueFalseView from "@/components/TrueFalseView";
 import QuizRunner from "@/components/QuizRunner";
+import ExamRunner from "@/components/ExamRunner";
+import ExamModeToggle from "@/components/ExamModeToggle";
 import VideoExplanationLink from "@/components/VideoExplanationLink";
 import QuizNotebook from "@/components/QuizNotebook";
+import type { ShuffledQuestion } from "@/lib/examMode";
 
 const TABS = [
   { id: "mcq", label: "Multiple Choice", icon: "\ud83e\udde0" },
@@ -24,9 +27,12 @@ type TabId = (typeof TABS)[number]["id"];
 
 interface Attempt {
   id: string;
+  userId?: string;
+  userName?: string;
   score: number;
   total: number;
   percent: number;
+  tabSwitchCount?: number;
   createdAt: string;
 }
 
@@ -34,12 +40,22 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
   const { id } = use(params);
   const { data: session } = useSession();
   const [quiz, setQuiz] = useState<QuizData | null>(null);
-  const [quizMeta, setQuizMeta] = useState<{ id: string; shareId: string | null; topic: string; isOwner?: boolean } | null>(null);
+  const [quizMeta, setQuizMeta] = useState<{ 
+    id: string; 
+    shareId: string | null; 
+    topic: string; 
+    isOwner?: boolean;
+    examModeEnabled?: boolean;
+    examTimeLimit?: number | null;
+    examSeed?: number;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabId>("mcq");
   const [copied, setCopied] = useState(false);
   const [taking, setTaking] = useState(false);
+  const [takingExam, setTakingExam] = useState(false);
+  const [showExamNotice, setShowExamNotice] = useState(false);
   const [notebookOpen, setNotebookOpen] = useState(true);
   const [attempts, setAttempts] = useState<Attempt[] | null>(null);
   const [userRole, setUserRole] = useState<"student" | "teacher">("student");
@@ -57,12 +73,14 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
     fetch(`/api/quiz/${id}/attempts`)
       .then((r) => r.json())
       .then((d) => {
-        if (!d.error) setAttempts(d.attempts ?? []);
+        if (!d.error) {
+          setAttempts(d.attempts ?? []);
+        }
       })
       .catch(() => {});
   };
 
-  useEffect(() => {
+  const loadQuiz = () => {
     fetch(`/api/quiz/${id}`)
       .then((r) => r.json())
       .then((d) => {
@@ -70,11 +88,23 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
           setError(d.error);
         } else {
           setQuiz(d.data);
-          setQuizMeta({ id: d.id, shareId: d.shareId ?? null, topic: d.topic ?? "", isOwner: d.isOwner });
+          setQuizMeta({ 
+            id: d.id, 
+            shareId: d.shareId ?? null, 
+            topic: d.topic ?? "", 
+            isOwner: d.isOwner,
+            examModeEnabled: d.examModeEnabled ?? false,
+            examTimeLimit: d.examTimeLimit ?? null,
+            examSeed: d.examSeed,
+          });
         }
       })
       .catch(() => setError("Failed to load quiz."))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    loadQuiz();
   }, [id]);
 
   useEffect(() => {
@@ -112,6 +142,46 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
     loadAttempts();
   };
 
+  const handleExamComplete = async (
+    correct: number, 
+    total: number, 
+    tabSwitchCount: number,
+    shuffledQuestions: ShuffledQuestion[]
+  ) => {
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    try {
+      const answersJson = {
+        questionOrder: shuffledQuestions.map(q => q.originalIndex),
+        shuffledOptions: shuffledQuestions.map(q => q.shuffledOptions),
+      };
+      
+      await fetch(`/api/quiz/${id}/take`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          score: correct, 
+          total,
+          tabSwitchCount,
+          answersJson,
+        }),
+      });
+    } catch { /* ignore */ } finally {
+      submittingRef.current = false;
+    }
+    setTakingExam(false);
+    loadAttempts();
+  };
+
+  const handleStartExam = () => {
+    setShowExamNotice(true);
+  };
+
+  const handleConfirmExam = () => {
+    setShowExamNotice(false);
+    setTakingExam(true);
+  };
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -146,6 +216,9 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
   const bestAttempt = attempts && attempts.length > 0
     ? Math.max(...attempts.map((a) => a.percent))
     : null;
+
+  const examModeEnabled = quizMeta?.examModeEnabled ?? false;
+  const isOwner = quizMeta?.isOwner ?? false;
 
   const Curve = ({ attempts }: { attempts: Attempt[] }) => {
     if (attempts.length < 2) return null;
@@ -203,6 +276,9 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
           <div className="mb-1 flex items-center gap-3">
             <span className={`rounded-full px-3 py-1 text-xs font-medium ${theme.eyebrow}`}>Shared Quiz</span>
             <span className={`rounded-full px-3 py-1 text-xs font-medium ${theme.eyebrow}`}>{theme.label}</span>
+            {examModeEnabled && (
+              <span className="rounded-full px-3 py-1 text-xs font-medium bg-violet-100 text-violet-700">Exam Mode</span>
+            )}
           </div>
           <h1 className={`text-2xl font-medium ${theme.text}`}>{quiz.topic}</h1>
           <p className={`mt-1 text-sm ${theme.muted}`}>
@@ -212,9 +288,73 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
           </p>
         </div>
 
+        {isOwner && userRole === "teacher" && (
+          <div className="mb-6">
+            <ExamModeToggle 
+              quizId={quizMeta!.id}
+              initialEnabled={examModeEnabled}
+              initialTimeLimit={quizMeta?.examTimeLimit}
+              onUpdate={loadQuiz}
+            />
+          </div>
+        )}
+
         {quiz.multipleChoice.length > 0 && (
           <div className="mb-6">
-            {taking ? (
+            {showExamNotice ? (
+              <div className={`rounded-2xl border p-6 backdrop-blur-xl ${theme.card}`}>
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
+                    <svg className="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  </div>
+                  <h3 className={`text-base font-semibold ${theme.text}`}>Exam Mode Notice</h3>
+                </div>
+                <div className={`mb-4 space-y-2 text-sm ${theme.text}`}>
+                  <p>This quiz is in exam mode. Before you begin:</p>
+                  <ul className="ml-4 list-disc space-y-1">
+                    <li>Questions and answer options are shuffled</li>
+                    {quizMeta?.examTimeLimit && <li>Time limit: {Math.floor(quizMeta.examTimeLimit / 60)} minutes</li>}
+                    <li>Tab switches are recorded and shared with your teacher</li>
+                    <li>No penalties are applied for tab switches</li>
+                  </ul>
+                  <p className="text-xs italic text-neutral-500">Stay on this tab for the best experience.</p>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowExamNotice(false)}
+                    className={`flex-1 rounded-full border px-4 py-3 text-sm font-medium transition-all ${theme.text} ${theme.soft}`}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleConfirmExam}
+                    className="flex-1 rounded-full bg-[#3B2027] py-3 text-sm font-medium text-[#F6E3E8] shadow-[0_12px_30px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98]"
+                  >
+                    I Understand, Start
+                  </button>
+                </div>
+              </div>
+            ) : takingExam ? (
+              <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6 backdrop-blur-xl">
+                <p className={`mb-5 text-center font-serif text-xl italic ${theme.text}`}>Exam — {quiz.topic}</p>
+                {quizMeta?.examSeed !== undefined ? (
+                  <ExamRunner
+                    quizId={quizMeta.id}
+                    questions={quiz.multipleChoice}
+                    theme={theme}
+                    examSeed={quizMeta.examSeed}
+                    timeLimit={quizMeta?.examTimeLimit ?? undefined}
+                    submitLabel="Submit exam"
+                    onSubmit={handleExamComplete}
+                    onCancel={() => setTakingExam(false)}
+                  />
+                ) : (
+                  <p className="text-center text-sm text-neutral-500">Loading exam...</p>
+                )}
+              </div>
+            ) : taking ? (
               <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-6 backdrop-blur-xl">
                 <p className={`mb-5 text-center font-serif text-xl italic ${theme.text}`}>Take quiz — {quiz.topic}</p>
                 <QuizRunner
@@ -234,10 +374,10 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
               <div>
                 <div className="flex flex-wrap items-center gap-3">
                   <button
-                    onClick={() => setTaking(true)}
+                    onClick={examModeEnabled ? handleStartExam : () => setTaking(true)}
                     className="rounded-full bg-[#3B2027] px-6 py-3 text-sm font-medium text-[#F6E3E8] shadow-[0_12px_30px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98]"
                   >
-                    {attempts && attempts.length > 0 ? "Retake quiz" : "Take quiz"}
+                    {examModeEnabled ? 'Start Exam' : (attempts && attempts.length > 0 ? "Retake quiz" : "Take quiz")}
                   </button>
                   {quizMeta?.isOwner && userRole === "teacher" && (
                     <button
@@ -268,7 +408,7 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
                     </button>
                   )}
                   <VideoExplanationLink topic={quiz.topic} />
-                  {bestAttempt !== null && (
+                  {bestAttempt !== null && !examModeEnabled && (
                     <span className={`text-sm ${theme.muted}`}>
                       Best: <span className={`font-medium ${theme.accent}`}>{bestAttempt}%</span>
                     </span>
@@ -282,27 +422,49 @@ export default function SharedQuizPage({ params }: { params: Promise<{ id: strin
           </div>
         )}
 
-        {attempts && attempts.length > 0 && !taking && (
+        {attempts && attempts.length > 0 && !taking && !takingExam && !showExamNotice && (
           <div className={`mb-8 rounded-2xl border p-6 ${theme.card}`}>
             <div className="mb-4 flex items-center justify-between">
-              <h2 className={`font-serif text-lg italic ${theme.text}`}>Your progress</h2>
+              <h2 className={`font-serif text-lg italic ${theme.text}`}>
+                {isOwner ? 'Student Attempts' : 'Your progress'}
+              </h2>
               <span className={`text-xs ${theme.muted}`}>
                 {attempts.length} attempt{attempts.length === 1 ? "" : "s"}
-                {bestAttempt !== null && ` · best ${bestAttempt}%`}
+                {bestAttempt !== null && !isOwner && ` · best ${bestAttempt}%`}
               </span>
             </div>
-            <Curve attempts={attempts} />
-            <div className="mt-3 flex flex-wrap gap-2">
-              {attempts.slice(-6).map((a, i, arr) => (
-                <span
-                  key={a.id}
-                  className={`rounded-full px-3 py-1 text-xs font-medium ${
-                    a.percent === bestAttempt ? theme.soft + " " + theme.accent : theme.eyebrow
-                  }`}
-                >
-                  {arr.length - i}. {a.percent}%
-                </span>
-              ))}
+            {!isOwner && <Curve attempts={attempts} />}
+            <div className="mt-3">
+              {isOwner && examModeEnabled ? (
+                <div className="space-y-2">
+                  {attempts.map((a) => (
+                    <div key={a.id} className="flex items-center justify-between py-2 px-3 rounded-lg bg-neutral-50">
+                      <div className="flex items-center gap-3">
+                        <span className={`text-sm font-medium ${theme.text}`}>{a.userName || 'Student'}</span>
+                        <span className={`text-sm ${theme.muted}`}>{a.percent}%</span>
+                      </div>
+                      {a.tabSwitchCount !== undefined && a.tabSwitchCount > 0 && (
+                        <span className="text-xs text-neutral-500">
+                          Left tab {a.tabSwitchCount} {a.tabSwitchCount === 1 ? 'time' : 'times'}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {attempts.slice(-6).map((a, i, arr) => (
+                    <span
+                      key={a.id}
+                      className={`rounded-full px-3 py-1 text-xs font-medium ${
+                        a.percent === bestAttempt ? theme.soft + " " + theme.accent : theme.eyebrow
+                      }`}
+                    >
+                      {arr.length - i}. {a.percent}%
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}

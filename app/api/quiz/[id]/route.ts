@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { db } from "@/lib/db";
+import { db, ensureVerificationColumns } from "@/lib/db";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    await ensureVerificationColumns();
+    
     const { id } = await params;
     const session = await auth();
 
@@ -35,6 +37,27 @@ export async function GET(
       return NextResponse.json({ error: "This quiz is corrupted." }, { status: 500 });
     }
 
+    // Calculate exam seed if exam mode is enabled and user is taking the quiz
+    let examSeed: number | undefined;
+    if ((quiz as any).examModeEnabled && session?.user?.id) {
+      // Get attempt count for this user on this quiz
+      const attemptCount = await db.quizAttempt.count({
+        where: {
+          quizId: quiz.id,
+          userId: session.user.id,
+        },
+      });
+      // Derive deterministic seed from quizId + userId + attemptNumber
+      const seedString = `${quiz.id}-${session.user.id}-${attemptCount + 1}`;
+      let hash = 0;
+      for (let i = 0; i < seedString.length; i++) {
+        const char = seedString.charCodeAt(i);
+        hash = (hash << 5) - hash + char;
+        hash = hash & hash;
+      }
+      examSeed = Math.abs(hash);
+    }
+
     return NextResponse.json({
       id: quiz.id,
       topic: quiz.topic,
@@ -44,6 +67,9 @@ export async function GET(
       score: quiz.score,
       total: quiz.total,
       shareId: quiz.shareId,
+      examModeEnabled: (quiz as any).examModeEnabled ?? false,
+      examTimeLimit: (quiz as any).examTimeLimit ?? null,
+      examSeed,
       createdAt: quiz.createdAt,
     });
   } catch (err) {
