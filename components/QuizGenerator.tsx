@@ -130,6 +130,8 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
   const [language, setLanguage] = useState("English");
   const [editing, setEditing] = useState(false);
   const [cleanupOpen, setCleanupOpen] = useState(false);
+  const [cleanedNotes, setCleanedNotes] = useState<string | null>(null);
+  const [cleanupGaps, setCleanupGaps] = useState<string[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const heroRef = useRef<HTMLElement | null>(null);
@@ -255,6 +257,13 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
     const sourceCount = sourceText.trim().length;
     if (sourceCount < 50 || sourceCount > 15000) return;
 
+    // Determine if we should pass gaps: only if user accepted cleaned notes
+    // that still match the current textarea content AND had flagged gaps
+    const shouldSendGaps = 
+      cleanupGaps.length > 0 && 
+      cleanedNotes !== null && 
+      sourceText === cleanedNotes;
+
     setStatus("loading");
     setError(null);
     setLimitReached(false);
@@ -265,10 +274,19 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
     setScore(null);
 
     try {
+      const requestBody: { lesson: string; language: string; cleanupGaps?: string[] } = {
+        lesson: sourceText,
+        language,
+      };
+      
+      if (shouldSendGaps) {
+        requestBody.cleanupGaps = cleanupGaps;
+      }
+
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lesson: sourceText, language }),
+        body: JSON.stringify(requestBody),
       });
 
       // Non-streaming error responses (auth, validation, limit)
@@ -844,7 +862,14 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                         id="lesson-input"
                         ref={textareaRef}
                         value={lesson}
-                        onChange={(e) => setLesson(e.target.value)}
+                        onChange={(e) => {
+                          setLesson(e.target.value);
+                          // Clear gap context if notes no longer match cleaned version
+                          if (cleanedNotes !== null && e.target.value !== cleanedNotes) {
+                            setCleanedNotes(null);
+                            setCleanupGaps([]);
+                          }
+                        }}
                         placeholder={t("input.placeholder")}
                         className="w-full px-5 pb-4 min-h-40 text-sm text-[#4A3038] placeholder-neutral-400 bg-transparent resize-y focus:outline-none leading-relaxed"
                         aria-describedby="char-count"
@@ -1016,6 +1041,22 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
                   <VideoExplanationLink topic={quiz.topic} />
                 </div>
               </div>
+
+              {/* Grounding warnings */}
+              {quiz.grounding && (quiz.grounding.dropped > 0 || quiz.grounding.warned) && (
+                <div className="mb-6 p-4 rounded-xl border border-[#E9B8C4] bg-[#FBF1EE] text-sm">
+                  {quiz.grounding.dropped > 0 && !quiz.grounding.warned && (
+                    <p className="text-[#7E3E55]">
+                      {quiz.grounding.dropped} question{quiz.grounding.dropped > 1 ? "s" : ""} dropped because your notes didn&apos;t cover them.
+                    </p>
+                  )}
+                  {quiz.grounding.warned && (
+                    <p className="text-[#7E3E55]">
+                      Some questions may go beyond your notes. Check them before using this quiz.
+                    </p>
+                  )}
+                </div>
+              )}
 
               {score && (
                 <div className="mb-8 p-6 border border-[#F3D5DC] bg-white/70 backdrop-blur-xl shadow-[0_16px_50px_-24px_rgba(176,96,122,0.4)]">
@@ -1232,8 +1273,10 @@ export default function QuizGenerator({ hideChrome = false }: { hideChrome?: boo
         {cleanupOpen && lesson.trim().length >= 20 && (
           <NotesCleanup
             notes={lesson}
-            onAccept={(cleanedNotes) => {
+            onAccept={(cleanedNotes, gaps) => {
               setLesson(cleanedNotes);
+              setCleanedNotes(cleanedNotes);
+              setCleanupGaps(gaps);
               setCleanupOpen(false);
             }}
             onCancel={() => setCleanupOpen(false)}

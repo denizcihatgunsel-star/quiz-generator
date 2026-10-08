@@ -9,6 +9,75 @@
  */
 
 /**
+ * Check if an answer is grounded in the notes using word overlap.
+ * 
+ * Strategy: Extract content words from both the answer and notes, apply stemming,
+ * and check if enough of the answer's words appear in the notes.
+ * 
+ * This is lenient to allow rephrased answers that use different words but similar concepts.
+ */
+export function isAnswerGrounded(
+  answer: string,
+  notes: string,
+  questionStem?: string
+): boolean {
+  // Normalize: lowercase, remove punctuation except hyphens
+  const normalize = (text: string) => 
+    text.toLowerCase().replace(/[^\w\s-]/g, ' ').replace(/\s+/g, ' ').trim();
+  
+  // Extract words, filter common stop words
+  const stopWords = new Set([
+    'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
+    'of', 'with', 'by', 'from', 'as', 'is', 'was', 'are', 'were', 'be',
+    'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will',
+    'would', 'should', 'could', 'may', 'might', 'must', 'can', 'this',
+    'that', 'these', 'those', 'i', 'you', 'he', 'she', 'it', 'we', 'they',
+    'them', 'their', 'what', 'which', 'who', 'when', 'where', 'why', 'how'
+  ]);
+  
+  const extractContentWords = (text: string): Set<string> => {
+    const normalized = normalize(text);
+    const words = normalized.split(/\s+/);
+    return new Set(
+      words
+        .filter(w => w.length > 2 && !stopWords.has(w))
+        .map(w => {
+          // Simple stemming: remove common suffixes
+          return w
+            .replace(/ies$/, 'y')
+            .replace(/es$/, '')
+            .replace(/s$/, '')
+            .replace(/ed$/, '')
+            .replace(/ing$/, '');
+        })
+    );
+  };
+  
+  // Combine answer with question stem (if provided) for context
+  const combinedText = questionStem 
+    ? `${questionStem} ${answer}` 
+    : answer;
+  
+  const answerWords = extractContentWords(combinedText);
+  const notesWords = extractContentWords(notes);
+  
+  if (answerWords.size === 0) return true; // Empty answer, pass by default
+  
+  // Very short answers (1-2 words) pass if at least one word matches
+  if (answerWords.size <= 2 && answerWords.size > 0) {
+    const matchedWords = Array.from(answerWords).filter(w => notesWords.has(w));
+    return matchedWords.length > 0;
+  }
+  
+  // Count how many answer words appear in notes
+  const matchedWords = Array.from(answerWords).filter(w => notesWords.has(w));
+  const overlapRatio = matchedWords.length / answerWords.size;
+  
+  // Lenient threshold: 50% word overlap (allows for rewording)
+  return overlapRatio >= 0.5;
+}
+
+/**
  * Post-check heuristic to detect if new content was added.
  * 
  * Strategy: Extract "content words" (nouns, verbs, adjectives, numbers) from both

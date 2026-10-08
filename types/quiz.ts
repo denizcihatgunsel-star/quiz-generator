@@ -50,6 +50,10 @@ export interface QuizData {
   theme?: string; // quiz theme id, default "rose"
   ocrUsed?: boolean;
   sourceConfidence?: number;
+  grounding?: {
+    dropped: number;
+    warned: boolean;
+  };
 }
 
 export type GenerateStatus = "idle" | "loading" | "success" | "error";
