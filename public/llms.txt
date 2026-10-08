@@ -1,0 +1,126 @@
+# Examina
+
+> AI quiz generator at https://www.examina.ink
+
+Examina turns any text into multiple choice, flashcard, fill-in-the-blank, and true/false questions in seconds. Upload PDF, paste notes, or photograph handouts to generate practice quizzes with explanations and Bloom's taxonomy mapping.
+
+## Key Features
+
+- **AI question generation** from notes, PDFs, Markdown, or plain text (50-15,000 characters)
+- **Multiple question types**: multiple choice, flashcards, fill-in-the-blank, true/false
+- **Bloom's taxonomy tagging**: every question tagged Remember → Evaluate
+- **29 languages** supported for generation
+- **Live classroom mode**: students join with codes, no accounts needed
+- **Spaced repetition** study mode with streak tracking
+- **Share quizzes** via unique links; PDF export on paid plans
+- **OCR support** for handwritten or photographed notes
+
+## For Teachers
+
+- Generate formative assessments (exit tickets, do-nows) in under 30 seconds from lesson notes
+- Run live classroom quiz games (Kahoot-style join codes and leaderboards)
+- Team plan: unlimited quizzes for up to 5 teachers, shared question banks
+- Export quizzes to PDF or share links for homework
+
+## For Students
+
+- Turn study notes into practice quizzes instantly
+- Study mode with spaced repetition (SM-2 algorithm)
+- Track scores and streaks across multiple attempts
+- Generate quizzes for SAT, ACT, AP, MCAT, NCLEX, GRE, LSAT, TOEFL, IELTS prep
+
+## Pricing
+
+- **Free**: 5 quiz generations/month, all question types, no credit card
+- **Starter**: $2/month for 20 quizzes
+- **Plus**: $5/month for 60 quizzes
+- **Pro**: $10/month for 200 quizzes
+- **Team**: $15/month for unlimited quizzes, 5 members
+
+Halloween 2026 sale: 20% off all paid plans until Oct 31, 2026.
+
+## Tech Stack
+
+Next.js 16 (App Router), React, TypeScript, Tailwind CSS, Turso (libSQL), NextAuth.js, DeepSeek AI, Stripe, Tesseract.js OCR, Vercel hosting.
+
+## Use Cases
+
+**Teachers**: daily formative assessment, exit tickets, live classroom games, differentiated question banks
+**Students**: exam prep (SAT/ACT/AP/MCAT/NCLEX), study from lecture notes, spaced repetition flashcards
+**Tutors**: custom practice tests for individual students
+**Corporate training**: L&D quiz creation from training materials
+
+## Product Pages
+
+### Tools
+- [AI Quiz Generator](https://www.examina.ink/ai-quiz-generator) — turn notes into quizzes
+- [Free Quiz Generator](https://www.examina.ink/free-quiz-generator) — 5 quizzes/month free
+- [Multiple Choice Quiz Maker](https://www.examina.ink/multiple-choice-quiz-maker)
+- [AI Flashcards](https://www.examina.ink/ai-flashcards) — flashcard generation
+- [PDF to Quiz](https://www.examina.ink/quiz-generator-from-pdf)
+- [Notes to Quiz](https://www.examina.ink/notes-to-quiz)
+- [Fill in the Blank Generator](https://www.examina.ink/fill-in-the-blank-generator)
+- [True/False Quiz Generator](https://www.examina.ink/true-false-quiz-generator)
+- [Study Guide Generator](https://www.examina.ink/study-guide-generator)
+
+### Alternatives
+- [Kahoot Alternative](https://www.examina.ink/alternatives/kahoot) — AI question generation vs manual
+- [Quizizz Alternative](https://www.examina.ink/alternatives/quizizz)
+- [Quizlet Alternative](https://www.examina.ink/alternatives/quizlet) — AI flashcards
+- [Blooket Alternative](https://www.examina.ink/alternatives/blooket)
+
+### Audiences
+- [For Teachers](https://www.examina.ink/for-teachers) — formative assessment, live classroom
+- [For Students](https://www.examina.ink/for-students) — exam prep, study from notes
+- [For Schools](https://www.examina.ink/for-schools) — district quiz platform
+- [For Tutors](https://www.examina.ink/for-tutors) — custom practice tests
+
+### Exam Prep
+- [SAT Practice Test Generator](https://www.examina.ink/exams/sat)
+- [ACT Practice Questions](https://www.examina.ink/exams/act)
+- [AP Exam Practice](https://www.examina.ink/exams/ap)
+- [MCAT Practice Questions](https://www.examina.ink/exams/mcat)
+- [NCLEX Practice Generator](https://www.examina.ink/exams/nclex)
+- [GRE Practice Quiz](https://www.examina.ink/exams/gre)
+
+### Subjects
+- [Biology Quiz Generator](https://www.examina.ink/subjects/biology)
+- [Chemistry Quiz Generator](https://www.examina.ink/subjects/chemistry)
+- [Math Quiz Generator](https://www.examina.ink/subjects/math)
+- [History Quiz Generator](https://www.examina.ink/subjects/history)
+- [Vocabulary Quiz](https://www.examina.ink/subjects/vocabulary)
+- [Anatomy Quiz Generator](https://www.examina.ink/subjects/anatomy)
+- [Nursing Quiz Generator](https://www.examina.ink/subjects/nursing)
+
+### Features
+- [Bloom's Taxonomy Quiz](https://www.examina.ink/features/blooms-taxonomy)
+- [Live Classroom Quiz](https://www.examina.ink/features/live-classroom-quiz)
+- [Formative Assessment Tool](https://www.examina.ink/features/formative-assessment)
+- [OCR Quiz from Image](https://www.examina.ink/features/ocr-quiz)
+
+### Integrations
+- [Google Forms Quiz Generator](https://www.examina.ink/integrations/google-forms) — AI → Forms workflow
+- [Canvas Quiz Generator](https://www.examina.ink/integrations/canvas)
+- [Moodle Quiz Generator](https://www.examina.ink/integrations/moodle)
+
+## API / Programmatic Access
+
+Not currently available. Examina is a web application for direct use by teachers and students.
+
+## Support
+
+- Email: support@examina.ink
+- Documentation: https://www.examina.ink/blog
+- Status: hosted on Vercel (99.9% uptime SLA)
+
+## Legal
+
+- Privacy: https://www.examina.ink/privacy
+- Terms: https://www.examina.ink/terms
+- No data retention: source content sent to AI for generation only, not stored
+- Generated quizzes saved to user accounts
+- GDPR/CCPA compliant
+
+---
+
+*Last updated: October 2026*
