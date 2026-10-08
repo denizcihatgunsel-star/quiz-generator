@@ -22,6 +22,7 @@ beforeAll(async () => {
         "originalBloom" INTEGER NOT NULL DEFAULT 1,
         "currentBloom" INTEGER NOT NULL DEFAULT 1,
         "correctStreak" INTEGER NOT NULL DEFAULT 0,
+        "missStreak" INTEGER NOT NULL DEFAULT 0,
         "firstCorrectAt" DATETIME,
         "lastReviewedAt" DATETIME,
         "dueDate" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

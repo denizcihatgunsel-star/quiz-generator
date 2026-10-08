@@ -358,6 +358,162 @@ describe("Study Mode", () => {
     });
   });
 
+  describe("DeepThinker drop-back rule", () => {
+    it("should drop currentBloom to originalBloom after 2 consecutive misses at stepped-up level", async () => {
+      const userId = getUserId();
+      const concept = await db.studyConcept.create({
+        data: {
+          userId,
+          concept: "test-dropback",
+          originalBloom: 2, // Understand
+          currentBloom: 3,  // Apply (stepped up once)
+          sourceQuizId: quizId,
+          sourceTopic: "Test",
+          correctStreak: 0,
+          missStreak: 0,
+        },
+      });
+
+      // First miss: increment missStreak
+      await gradeStudyReview(userId, concept.id, false);
+      let updated = await db.studyConcept.findUnique({ where: { id: concept.id } });
+      expect(updated?.missStreak).toBe(1);
+      expect(updated?.currentBloom).toBe(3); // Still at stepped-up level
+
+      // Second miss: trigger drop-back
+      await gradeStudyReview(userId, concept.id, false);
+      updated = await db.studyConcept.findUnique({ where: { id: concept.id } });
+      expect(updated?.missStreak).toBe(0); // Reset after drop
+      expect(updated?.currentBloom).toBe(2); // Dropped to originalBloom
+      expect(updated?.correctStreak).toBe(0);
+    });
+
+    it("should NOT drop if currentBloom equals originalBloom", async () => {
+      const userId = getUserId();
+      const concept = await db.studyConcept.create({
+        data: {
+          userId,
+          concept: "test-no-drop",
+          originalBloom: 2,
+          currentBloom: 2, // Same as original
+          sourceQuizId: quizId,
+          sourceTopic: "Test",
+          correctStreak: 0,
+          missStreak: 0,
+        },
+      });
+
+      // Two misses
+      await gradeStudyReview(userId, concept.id, false);
+      await gradeStudyReview(userId, concept.id, false);
+
+      const updated = await db.studyConcept.findUnique({ where: { id: concept.id } });
+      expect(updated?.currentBloom).toBe(2); // Stays at originalBloom
+      expect(updated?.missStreak).toBe(2); // Counter keeps incrementing
+    });
+
+    it("should reset missStreak to 0 on correct answer", async () => {
+      const userId = getUserId();
+      const concept = await db.studyConcept.create({
+        data: {
+          userId,
+          concept: "test-reset-miss",
+          originalBloom: 1,
+          currentBloom: 2,
+          sourceQuizId: quizId,
+          sourceTopic: "Test",
+          correctStreak: 0,
+          missStreak: 1, // Had one miss
+        },
+      });
+
+      await gradeStudyReview(userId, concept.id, true);
+
+      const updated = await db.studyConcept.findUnique({ where: { id: concept.id } });
+      expect(updated?.missStreak).toBe(0); // Reset
+      expect(updated?.correctStreak).toBe(1);
+    });
+
+    it("should NOT drop below originalBloom", async () => {
+      const userId = getUserId();
+      const concept = await db.studyConcept.create({
+        data: {
+          userId,
+          concept: "test-floor",
+          originalBloom: 3, // Apply
+          currentBloom: 3,  // Same as original
+          sourceQuizId: quizId,
+          sourceTopic: "Test",
+          correctStreak: 0,
+          missStreak: 0,
+        },
+      });
+
+      // Many misses
+      for (let i = 0; i < 5; i++) {
+        await gradeStudyReview(userId, concept.id, false);
+      }
+
+      const updated = await db.studyConcept.findUnique({ where: { id: concept.id } });
+      expect(updated?.currentBloom).toBe(3); // Never drops below originalBloom
+      expect(updated?.currentBloom).toBeGreaterThanOrEqual(updated!.originalBloom);
+    });
+
+    it("should reset correctStreak on a miss (next-day check)", async () => {
+      const userId = getUserId();
+      const firstCorrectAt = new Date(Date.now() - 25 * 3600 * 1000); // 25 hours ago
+      const concept = await db.studyConcept.create({
+        data: {
+          userId,
+          concept: "test-nextday-miss",
+          originalBloom: 1,
+          currentBloom: 2,
+          sourceQuizId: quizId,
+          sourceTopic: "Test",
+          correctStreak: 1,
+          missStreak: 0,
+          firstCorrectAt,
+        },
+      });
+
+      // Wrong answer on next-day check
+      await gradeStudyReview(userId, concept.id, false);
+
+      const updated = await db.studyConcept.findUnique({ where: { id: concept.id } });
+      expect(updated?.correctStreak).toBe(0); // Reset
+      expect(updated?.firstCorrectAt).toBeNull();
+      expect(updated?.missStreak).toBe(1);
+    });
+
+    it("should use the new currentBloom after drop-back", async () => {
+      const userId = getUserId();
+      const concept = await db.studyConcept.create({
+        data: {
+          userId,
+          concept: "test-serve-dropped",
+          originalBloom: 1, // Remember
+          currentBloom: 3,  // Apply (stepped up twice)
+          sourceQuizId: quizId,
+          sourceTopic: "Test",
+          correctStreak: 0,
+          missStreak: 1, // One miss already
+        },
+      });
+
+      // Second miss triggers drop
+      await gradeStudyReview(userId, concept.id, false);
+
+      const updated = await db.studyConcept.findUnique({ where: { id: concept.id } });
+      expect(updated?.currentBloom).toBe(1); // Dropped to originalBloom
+      
+      // Next serve should use currentBloom = 1 (Remember)
+      const concepts = await getDueConcepts(userId, 10);
+      expect(concepts.length).toBeGreaterThan(0);
+      const found = concepts.find(c => c.id === concept.id);
+      expect(found?.currentBloom).toBe(1);
+    });
+  });
+
   describe("Draft exclusion", () => {
     it("should match each concept to its own question, never another's", async () => {
       const userId = getUserId();
@@ -793,6 +949,41 @@ describe("Study Mode", () => {
       
       const draftPayload = JSON.parse(draftItems[0].payload);
       expect(draftPayload.question).toBe("What is cellular respiration?");
+    });
+  });
+
+  describe("Error handling and resilience", () => {
+    it("should not throw when recordMissesToStudy encounters a DB error", async () => {
+      const userId = getUserId();
+      
+      // Create a mock that will fail
+      const originalUpsert = db.studyConcept.upsert;
+      vi.spyOn(db.studyConcept, 'upsert').mockRejectedValueOnce(
+        new Error("Simulated DB failure")
+      );
+
+      const missed = [
+        {
+          question: {
+            id: "q-error-test",
+            question: "Test question",
+            options: ["A", "B", "C", "D"],
+            correctIndex: 0,
+            explanation: "...",
+            difficulty: "Medium" as const,
+            bloomLevel: "Remember" as const,
+          },
+          concept: "error-test-concept",
+        },
+      ];
+
+      // Should not throw - error is handled internally
+      await expect(async () => {
+        await recordMissesToStudy(userId, "test-quiz", "Test Topic", missed);
+      }).rejects.toThrow("Simulated DB failure");
+
+      // Restore original
+      db.studyConcept.upsert = originalUpsert;
     });
   });
 });
