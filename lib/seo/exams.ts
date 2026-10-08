@@ -10,6 +10,9 @@ export interface ExamType {
   description: string;
   owner?: string;
   disclaimer: string;
+  practiceTermTitle?: string; // Custom title for practice-focused SEO
+  practiceTermH1?: string; // Custom H1 for practice-focused SEO
+  practiceTermH1Accent?: string; // Custom H1 accent
   topicsList?: string[];
   sampleQuestions: { q: string; a: string; explanation: string }[];
   questionTypesAdvice?: string;
@@ -29,6 +32,9 @@ export const EXAMS: ExamType[] = [
     owner: "College Board",
     disclaimer:
       "Examina is not affiliated with, endorsed by, or sponsored by the College Board. These are original practice questions created by AI for study purposes only, not official SAT questions.",
+    practiceTermTitle: "SAT Practice Test: Free AI Practice Questions | Examina",
+    practiceTermH1: "SAT practice test",
+    practiceTermH1Accent: "free AI-generated practice questions",
     topicsList: [
       "Reading: Command of Evidence (finding textual support for claims and inferences), Words in Context (determining precise word meanings from surrounding text), Analysis in History/Social Studies (interpreting primary sources, charts, and historical arguments), Analysis in Science (understanding experimental design and data interpretation)",
       "Writing and Language: Standard English Conventions (grammar rules including subject-verb agreement, pronoun case, verb tense consistency, and punctuation), Expression of Ideas (revising for clarity, coherence, effective word choice, logical transitions between sentences and paragraphs, and eliminating redundancy)",
@@ -76,12 +82,12 @@ export const EXAMS: ExamType[] = [
     ],
     faq: [
       {
-        q: "Are these real SAT questions?",
-        a: "No. These are original practice questions created by AI for study purposes. They follow SAT format and difficulty but are not official College Board materials.",
+        q: "Is this a full-length SAT practice test?",
+        a: "No. Examina generates AI-created practice questions from your study material to help you prepare. These are not full-length official practice tests. For official SAT practice tests from the College Board, visit collegeboard.org.",
       },
       {
-        q: "Can I use this to study for the SAT?",
-        a: "Yes. These practice questions help you prepare by testing similar skills to the real SAT. For official practice tests, visit the College Board website.",
+        q: "How does AI-generated SAT practice help?",
+        a: "Upload your SAT prep book chapters, review guides, or class notes and get targeted practice questions instantly. AI-generated questions test the same skills as the SAT (reading comprehension, grammar, math reasoning) and help you identify weak areas. Practice with these questions supplements official SAT practice tests.",
       },
       {
         q: "What SAT sections can I practice?",
@@ -108,6 +114,9 @@ export const EXAMS: ExamType[] = [
     owner: "ACT, Inc.",
     disclaimer:
       "Examina is not affiliated with, endorsed by, or sponsored by ACT, Inc. These are original practice questions for study purposes only, not official ACT materials.",
+    practiceTermTitle: "ACT Practice Test: Free AI Practice Questions | Examina",
+    practiceTermH1: "ACT practice test",
+    practiceTermH1Accent: "free AI-generated practice questions",
     sampleQuestions: [
       {
         q: "Choose the best revision: The team, having practiced diligently, were ready for the competition.",
@@ -130,16 +139,16 @@ export const EXAMS: ExamType[] = [
     ],
     faq: [
       {
-        q: "Are these official ACT questions?",
-        a: "No. These are AI-generated practice questions that follow ACT format and difficulty. For official practice, visit act.org.",
+        q: "Is this a full-length ACT practice test?",
+        a: "No. Examina generates AI-created practice questions from your study material to help you prepare. These are not full-length official practice tests. For official ACT practice tests, visit act.org.",
+      },
+      {
+        q: "How does AI-generated ACT practice help?",
+        a: "Upload your ACT prep book chapters, review guides, or class notes and get targeted practice questions for English, math, reading, and science reasoning. AI-generated questions help you identify weak areas and supplement official ACT practice tests.",
       },
       {
         q: "What ACT sections can I practice?",
         a: "Generate questions for English (grammar, rhetoric), math, reading comprehension, and science reasoning.",
-      },
-      {
-        q: "How are these different from the SAT?",
-        a: "ACT includes a science reasoning section and emphasizes speed. Question style is more straightforward than SAT.",
       },
       {
         q: "Can I practice the essay section?",
@@ -243,6 +252,9 @@ export const EXAMS: ExamType[] = [
     owner: "AAMC (Association of American Medical Colleges)",
     disclaimer:
       "Examina is not affiliated with or endorsed by the AAMC. These are original practice questions for study purposes only, not official MCAT materials.",
+    practiceTermTitle: "MCAT Questions: Free AI-Generated MCAT Practice | Examina",
+    practiceTermH1: "MCAT questions",
+    practiceTermH1Accent: "free AI-generated practice",
     topicsList: [
       "Biological and Biochemical Foundations of Living Systems: biochemistry (amino acids, proteins, enzymes, metabolism, carbohydrates, lipids, nucleic acids), molecular biology (DNA replication, transcription, translation, gene regulation), cell biology (cell structure, membranes, transport, cell division, cell signaling), organ systems (circulatory, respiratory, digestive, excretory, nervous, immune, endocrine, musculoskeletal, reproductive systems and their integration)",
       "Chemical and Physical Foundations of Biological Systems: general chemistry (atomic structure, periodic trends, bonding, stoichiometry, gases, solutions, acids and bases, redox, equilibrium, thermodynamics, kinetics, electrochemistry), organic chemistry (nomenclature, stereochemistry, functional groups, reaction mechanisms, spectroscopy), physics (translational motion, forces, work and energy, periodic motion, fluids, electrostatics, circuits, magnetism, waves, optics, atomic and nuclear structure)",
@@ -288,16 +300,16 @@ export const EXAMS: ExamType[] = [
     ],
     faq: [
       {
-        q: "Are these real MCAT questions?",
-        a: "No. These are AI-generated practice questions following MCAT format and difficulty. For official practice, visit aamc.org.",
+        q: "Are these official MCAT questions?",
+        a: "No. These are AI-generated practice questions that follow MCAT format and difficulty to help you study. They are not official AAMC materials. For official MCAT practice, visit aamc.org.",
+      },
+      {
+        q: "How do AI-generated MCAT questions help?",
+        a: "Upload your MCAT review book chapters, biochemistry notes, or psychology study guides and get passage-based practice questions instantly. AI-generated questions help you practice applying content knowledge to new scenarios—the core skill the MCAT tests. Use these alongside official AAMC question banks and practice exams for comprehensive preparation.",
       },
       {
         q: "What MCAT sections can I practice?",
         a: "Generate questions for all MCAT sections: biological and biochemical foundations, chemical and physical foundations, psychological and sociological foundations, and CARS (critical analysis).",
-      },
-      {
-        q: "How do I use this for MCAT prep?",
-        a: "Upload your review book chapter or notes by topic (e.g., amino acids, circuits, cognition) and generate practice questions. Review explanations for missed questions.",
       },
       {
         q: "Is this enough to study for the MCAT?",
@@ -320,6 +332,9 @@ export const EXAMS: ExamType[] = [
     owner: "NCSBN (National Council of State Boards of Nursing)",
     disclaimer:
       "Examina is not affiliated with or endorsed by the NCSBN. These are original practice questions for nursing study, not official NCLEX test items.",
+    practiceTermTitle: "NCLEX Practice Questions: Free AI-Generated NCLEX Practice | Examina",
+    practiceTermH1: "NCLEX practice questions",
+    practiceTermH1Accent: "free AI-generated nursing practice",
     topicsList: [
       "Safe and Effective Care Environment - Management of Care: advance directives and living wills, advocacy for patient rights, case management and care coordination, client rights and confidentiality (HIPAA), collaboration with interdisciplinary team, delegation and supervision of care tasks to LPNs and UAPs, establishing priorities using ABC (airway-breathing-circulation) and Maslow's hierarchy, informed consent, legal responsibilities and ethical dilemmas",
       "Safe and Effective Care Environment - Safety and Infection Control: accident and injury prevention, emergency response plans, ergonomics and body mechanics, handling hazardous materials, home safety assessments, infection control procedures (standard precautions, transmission-based precautions, hand hygiene, sterile technique), medical and surgical asepsis, reporting incidents and errors, safe use of equipment, security plans",
@@ -369,16 +384,16 @@ export const EXAMS: ExamType[] = [
     ],
     faq: [
       {
-        q: "Are these real NCLEX questions?",
-        a: "No. These are original practice questions following NCLEX format and cognitive levels. For official practice, visit ncsbn.org.",
+        q: "Are these official NCLEX questions?",
+        a: "No. These are AI-generated practice questions that follow NCLEX format and cognitive levels to help you study. They are not official NCSBN test items. For official NCLEX practice, visit ncsbn.org.",
+      },
+      {
+        q: "How do AI-generated NCLEX practice questions help?",
+        a: "Upload your nursing school notes, textbook chapters, or review guides and get NCLEX-style priority questions instantly. AI-generated questions help you practice clinical judgment, delegation, and priority-setting—the core skills NCLEX tests. Use these alongside official NCSBN question banks for comprehensive preparation.",
       },
       {
         q: "What NCLEX categories can I practice?",
         a: "Generate questions across all NCLEX categories: safe and effective care, health promotion, psychosocial integrity, and physiological integrity.",
-      },
-      {
-        q: "Do questions use NCLEX format?",
-        a: "Yes. Questions follow NCLEX-style wording with priority ('most important,' 'first action') and evidence-based rationales.",
       },
       {
         q: "Can this replace NCLEX review courses?",
@@ -401,6 +416,9 @@ export const EXAMS: ExamType[] = [
     owner: "ETS (Educational Testing Service)",
     disclaimer:
       "Examina is not affiliated with or endorsed by ETS. These are original practice questions, not official GRE materials.",
+    practiceTermTitle: "GRE Practice Test: Free AI Practice Questions | Examina",
+    practiceTermH1: "GRE practice test",
+    practiceTermH1Accent: "free AI-generated practice questions",
     sampleQuestions: [
       {
         q: "The scientist's argument was _____, relying on incomplete data and unverified assumptions.",
@@ -422,16 +440,16 @@ export const EXAMS: ExamType[] = [
     ],
     faq: [
       {
-        q: "Are these official GRE questions?",
-        a: "No. These are AI-generated practice questions following GRE format. For official materials, visit ets.org/gre.",
+        q: "Is this a full-length GRE practice test?",
+        a: "No. Examina generates AI-created practice questions from your study material to help you prepare. These are not full-length official practice tests. For official GRE practice tests from ETS, visit ets.org/gre.",
+      },
+      {
+        q: "How do AI-generated GRE practice questions help?",
+        a: "Upload your GRE prep book chapters, vocabulary lists, or math review guides and get targeted practice questions for verbal reasoning and quantitative reasoning. AI-generated questions help you practice the question formats and reasoning skills the GRE tests, supplementing official ETS practice materials.",
       },
       {
         q: "What GRE sections can I practice?",
         a: "Generate questions for verbal reasoning (vocabulary, reading comprehension) and quantitative reasoning (arithmetic, algebra, geometry, data analysis).",
-      },
-      {
-        q: "Can I practice analytical writing?",
-        a: "Examina focuses on multiple choice questions. For essay practice, use our study guide generator to outline argument structures.",
       },
       {
         q: "Is this free?",
@@ -454,6 +472,9 @@ export const EXAMS: ExamType[] = [
     owner: "LSAC (Law School Admission Council)",
     disclaimer:
       "Examina is not affiliated with or endorsed by LSAC. These are original practice questions for study purposes, not official LSAT materials.",
+    practiceTermTitle: "LSAT Questions: Free AI-Generated LSAT Practice Questions | Examina",
+    practiceTermH1: "LSAT questions",
+    practiceTermH1Accent: "free AI-generated practice questions",
     sampleQuestions: [
       {
         q: "The argument assumes which of the following?",
@@ -476,16 +497,16 @@ export const EXAMS: ExamType[] = [
     ],
     faq: [
       {
-        q: "Are these real LSAT questions?",
-        a: "No. These are original practice questions following LSAT format. For official PrepTests, visit lsac.org.",
+        q: "Are these official LSAT questions?",
+        a: "No. These are AI-generated practice questions for LSAT logical reasoning and reading comprehension. They are not official LSAC PrepTest questions. For official LSAT practice, visit lsac.org.",
+      },
+      {
+        q: "How do AI-generated LSAT questions help?",
+        a: "Upload your LSAT prep materials, formal logic notes, or argument examples and get practice questions that test logical reasoning skills. AI-generated questions help you practice identifying assumptions, flaws, and strengthening/weakening arguments—core LSAT logical reasoning skills. Use these alongside official LSAC PrepTests.",
       },
       {
         q: "What LSAT sections can I practice?",
         a: "Generate questions for logical reasoning (arguments, assumptions, flaws) and reading comprehension. Logic games require visual diagramming not suited to AI generation.",
-      },
-      {
-        q: "How do I use this for LSAT prep?",
-        a: "Focus on logical reasoning practice by uploading argument examples or formal logic notes. Review explanations to understand reasoning patterns.",
       },
       {
         q: "Is this enough for LSAT preparation?",
@@ -508,6 +529,9 @@ export const EXAMS: ExamType[] = [
     owner: "ETS (Educational Testing Service)",
     disclaimer:
       "Examina is not affiliated with or endorsed by ETS. These are original practice questions, not official TOEFL materials.",
+    practiceTermTitle: "TOEFL Practice Test: Free AI Practice Questions | Examina",
+    practiceTermH1: "TOEFL practice test",
+    practiceTermH1Accent: "free AI-generated practice questions",
     sampleQuestions: [
       {
         q: "The word 'ubiquitous' in paragraph 2 is closest in meaning to:",
@@ -530,16 +554,16 @@ export const EXAMS: ExamType[] = [
     ],
     faq: [
       {
-        q: "Are these official TOEFL questions?",
-        a: "No. These are AI-generated practice questions following TOEFL format. For official practice, visit ets.org/toefl.",
+        q: "Is this a full-length TOEFL practice test?",
+        a: "No. Examina generates AI-created reading comprehension and vocabulary questions to help you prepare. These are not full-length official practice tests. For official TOEFL practice tests from ETS, visit ets.org/toefl.",
+      },
+      {
+        q: "How do AI-generated TOEFL questions help?",
+        a: "Upload your TOEFL reading materials, academic articles, or vocabulary lists and get practice questions instantly. AI-generated questions help you practice reading comprehension, vocabulary in context, and paraphrasing—key TOEFL reading skills. Use these alongside official ETS materials for comprehensive preparation.",
       },
       {
         q: "What TOEFL sections can I practice?",
         a: "Generate reading comprehension and vocabulary questions. For speaking and writing practice, use our study guide generator.",
-      },
-      {
-        q: "Can I practice listening?",
-        a: "Examina focuses on text-based questions. TOEFL listening requires audio, which we don't currently support.",
       },
       {
         q: "Is this good for TOEFL preparation?",
@@ -562,6 +586,9 @@ export const EXAMS: ExamType[] = [
     owner: "British Council, IDP Education, and Cambridge Assessment English",
     disclaimer:
       "Examina is not affiliated with or endorsed by British Council, IDP Education, or Cambridge Assessment. These are original practice questions, not official IELTS materials.",
+    practiceTermTitle: "IELTS Practice Test: Free AI Practice Questions | Examina",
+    practiceTermH1: "IELTS practice test",
+    practiceTermH1Accent: "free AI-generated practice questions",
     sampleQuestions: [
       {
         q: "The passage indicates that the main cause of urban migration is:",
@@ -584,16 +611,16 @@ export const EXAMS: ExamType[] = [
     ],
     faq: [
       {
-        q: "Are these real IELTS questions?",
-        a: "No. These are AI-generated practice questions following IELTS format. For official practice tests, visit ielts.org.",
+        q: "Is this a full-length IELTS practice test?",
+        a: "No. Examina generates AI-created academic reading questions to help you prepare. These are not full-length official practice tests. For official IELTS practice tests, visit ielts.org.",
+      },
+      {
+        q: "How do AI-generated IELTS questions help?",
+        a: "Upload your IELTS reading materials, academic articles, or study notes and get practice questions instantly. AI-generated questions help you practice True/False/Not Given reasoning, matching information, and summary completion—core IELTS academic reading question types. Use these alongside official IELTS materials.",
       },
       {
         q: "What IELTS sections can I practice?",
         a: "Generate academic reading questions (True/False/Not Given, matching, summary completion) and vocabulary. Speaking and writing require human evaluation.",
-      },
-      {
-        q: "Can I practice IELTS listening?",
-        a: "Not currently. IELTS listening requires audio content which Examina doesn't support yet.",
       },
       {
         q: "Is this suitable for IELTS preparation?",
