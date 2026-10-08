@@ -91,6 +91,7 @@ const LANGUAGES = [
   { code: "Vietnamese", label: "Ti\u1ebfng Vi\u1ec7t" },
   { code: "Thai", label: "\u0e44\u0e17\u0e22" },
   { code: "Indonesian", label: "Bahasa Indonesia" },
+  { code: "Malay", label: "Malay (Bahasa Melayu)" },
   { code: "Ukrainian", label: "\u0423\u043a\u0440\u0430\u0457\u043d\u0441\u044c\u043a\u0430" },
   { code: "Hebrew", label: "\u05e2\u05d1\u05e8\u05d9\u05ea" },
 ];
