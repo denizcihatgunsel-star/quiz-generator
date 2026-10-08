@@ -171,13 +171,13 @@ export const MATH_COMBOS: ComboData[] = [
     },
     h1: "Math Practice Questions — Test Your Problem-Solving Skills",
     intro:
-      "Build math confidence through targeted practice questions that test conceptual understanding and computational skills. These problems span algebra, geometry, trigonometry, and calculus with step-by-step explanations showing solution methods. Perfect for homework practice, test prep, or identifying which topics need more work.",
+      "Build comprehensive math confidence through diverse practice questions spanning arithmetic, pre-algebra, geometry, trigonometry, statistics, and calculus. Test your conceptual understanding and computational skills across all major math topics. Perfect for homework practice, standardized test prep (SAT, ACT, GRE), or assessing your readiness for the next math level.",
     sampleItems: [
       {
         q: "Solve for x: 3x + 7 = 22",
         a: "x = 5",
         explanation:
-          "Subtract 7 from both sides: 3x = 15. Then divide both sides by 3: x = 5. Check: 3(5) + 7 = 15 + 7 = 22 ✓",
+          "Subtract 7 from both sides: 3x = 15. Then divide both sides by 3: x = 5. Check by substitution: 3(5) + 7 = 15 + 7 = 22 ✓",
         bloomLevel: "Apply",
         type: "multiple-choice",
       },
@@ -185,31 +185,23 @@ export const MATH_COMBOS: ComboData[] = [
         q: "What is the area of a circle with radius 6 cm?",
         a: "36π cm² (approximately 113.10 cm²)",
         explanation:
-          "Use the formula A = πr². With r = 6: A = π(6)² = 36π ≈ 113.10 cm². Remember: area grows with the square of the radius.",
+          "Use the formula A = πr². With r = 6: A = π(6)² = 36π ≈ 113.10 cm². Remember: area grows with the square of the radius (quadratic relationship).",
         bloomLevel: "Apply",
         type: "multiple-choice",
       },
       {
-        q: "Factor completely: x² + 7x + 12",
-        a: "(x + 3)(x + 4)",
+        q: "What is the median of the data set: 3, 7, 2, 9, 5?",
+        a: "5",
         explanation:
-          "Find two numbers that multiply to 12 and add to 7. Those numbers are 3 and 4. So x² + 7x + 12 = (x + 3)(x + 4). Check by FOILing.",
+          "First, sort the data: 2, 3, 5, 7, 9. The median is the middle value: 5. With even number of values, average the two middle numbers.",
         bloomLevel: "Apply",
         type: "multiple-choice",
       },
       {
-        q: "If f(x) = 2x² - 5, what is f(3)?",
-        a: "13",
+        q: "If sin(θ) = 0.5, what is θ in degrees (0° to 90°)?",
+        a: "30°",
         explanation:
-          "Substitute x = 3 into the function: f(3) = 2(3)² - 5 = 2(9) - 5 = 18 - 5 = 13.",
-        bloomLevel: "Apply",
-        type: "multiple-choice",
-      },
-      {
-        q: "What is the slope of the line y = -2x + 5?",
-        a: "-2",
-        explanation:
-          "In slope-intercept form y = mx + b, m is the slope and b is the y-intercept. Here, the slope m = -2 and y-intercept b = 5.",
+          "sin(30°) = 0.5 = 1/2. This is a special angle you should memorize. Also: sin(45°) = √2/2, sin(60°) = √3/2, sin(90°) = 1.",
         bloomLevel: "Remember",
         type: "multiple-choice",
       },
@@ -225,7 +217,7 @@ export const MATH_COMBOS: ComboData[] = [
         q: "What is 15% of 80?",
         a: "12",
         explanation:
-          "Convert 15% to decimal: 0.15. Multiply: 0.15 × 80 = 12. Alternatively: 15% = 15/100, so (15/100) × 80 = 12.",
+          "Convert 15% to decimal: 0.15. Multiply: 0.15 × 80 = 12. Alternatively: 15% = 15/100, so (15/100) × 80 = 1200/100 = 12.",
         bloomLevel: "Apply",
         type: "multiple-choice",
       },
@@ -233,7 +225,7 @@ export const MATH_COMBOS: ComboData[] = [
         q: "True or False: A triangle can have two obtuse angles.",
         a: "False",
         explanation:
-          "False. An obtuse angle is greater than 90°. Two obtuse angles would sum to more than 180°, but the total of all three angles in a triangle must equal exactly 180°.",
+          "False. An obtuse angle is greater than 90°. Two obtuse angles would sum to more than 180°, but the total of all three angles in a triangle must equal exactly 180°. Maximum one obtuse angle per triangle.",
         bloomLevel: "Understand",
         type: "true-false",
       },
@@ -241,6 +233,44 @@ export const MATH_COMBOS: ComboData[] = [
         q: "Find the derivative of f(x) = 4x³ + 2x",
         a: "f'(x) = 12x² + 2",
         explanation:
+          "Use power rule: d/dx[xⁿ] = nxⁿ⁻¹. For 4x³: 4·3·x² = 12x². For 2x: 2·1·x⁰ = 2. Sum: f'(x) = 12x² + 2.",
+        bloomLevel: "Apply",
+        type: "multiple-choice",
+      },
+      {
+        q: "What is the volume of a rectangular prism with length 4, width 3, height 5?",
+        a: "60 cubic units",
+        explanation:
+          "Volume = length × width × height = 4 × 3 × 5 = 60 cubic units. 3D volumes always have cubic units.",
+        bloomLevel: "Apply",
+        type: "multiple-choice",
+      },
+      {
+        q: "Evaluate: 2³ + 3²",
+        a: "17",
+        explanation:
+          "2³ = 2 × 2 × 2 = 8. 3² = 3 × 3 = 9. Sum: 8 + 9 = 17. Remember order of operations: exponents before addition.",
+        bloomLevel: "Apply",
+        type: "multiple-choice",
+      },
+      {
+        q: "What is the distance between points (1, 2) and (4, 6)?",
+        a: "5",
+        explanation:
+          "Use distance formula: d = √[(x₂-x₁)² + (y₂-y₁)²] = √[(4-1)² + (6-2)²] = √[9 + 16] = √25 = 5. This is Pythagorean theorem applied to coordinate plane.",
+        bloomLevel: "Apply",
+        type: "multiple-choice",
+      },
+      {
+        q: "If P(A) = 0.3 and P(B) = 0.4 (independent events), what is P(A and B)?",
+        a: "0.12",
+        explanation:
+          "For independent events, P(A and B) = P(A) × P(B) = 0.3 × 0.4 = 0.12. Independence means one event doesn't affect probability of the other.",
+        bloomLevel: "Apply",
+        type: "multiple-choice",
+      },
+    ],
+    topicsCovered: ["Arithmetic", "Pre-algebra", "Algebra (equations, functions)", "Geometry (area, volume, angles)", "Trigonometry (sin, cos, tan)", "Statistics (mean, median, probability)", "Calculus (derivatives, limits)", "Word problems", "Problem-solving strategies"],
           "Apply the power rule to each term: d/dx[4x³] = 12x² and d/dx[2x] = 2. Combine: f'(x) = 12x² + 2.",
         bloomLevel: "Apply",
         type: "multiple-choice",
@@ -268,25 +298,39 @@ export const MATH_COMBOS: ComboData[] = [
     ],
     studyTips: {
       workflow: [
-        "Take a practice test to identify which types of problems you struggle with",
-        "Review the explanations for missed questions and work through similar problems from your textbook",
-        "Retake the test in a few days to verify you've mastered those problem types",
+        "Take a diagnostic practice test across all math topics to identify which areas (algebra, geometry, trig, calculus) you struggle with most",
+        "Review the explanations for missed questions carefully—understand WHY you made errors, not just what the right answer is",
+        "Work through similar problems from your textbook or online resources for topics you missed",
+        "Practice mixed problem sets—don't just drill one topic at a time, since real tests mix topics",
+        "Retake the full practice test after a week of study to verify you've mastered those problem types and track improvement",
       ],
       tips: [
-        "Show your work for every problem—this helps you catch errors and reinforces the solution method",
-        "Check your answers by substituting back into the original problem when possible",
-        "Focus on understanding the method, not memorizing specific problems—tests will use different numbers",
+        "Show your work for every problem—this helps you catch errors, partial credit on tests, and reinforces the solution method in your brain",
+        "Check your answers by substituting back into the original problem when possible (works for equations, not always for geometry)",
+        "Focus on understanding the underlying method, not memorizing specific problems—tests will use different numbers and contexts",
+        "Learn to identify problem types quickly: 'This is a distance formula problem,' 'This needs the quadratic formula,' etc.",
+        "Master fundamentals first (order of operations, fractions, exponent rules) before moving to advanced topics—weak foundations cause repeated errors",
+        "Time yourself on practice tests to build speed—math sections on SAT/ACT are very time-pressured",
       ],
     },
     faq: [
       {
         q: "What math topics are covered?",
-        a: "Practice questions span algebra, geometry, trigonometry, pre-calculus, and basic calculus. Upload your course notes to generate questions matching your curriculum exactly.",
+        a: "Practice questions span arithmetic, pre-algebra, algebra, geometry, trigonometry, statistics, pre-calculus, and basic calculus. Covers middle school through early college math. Upload your course notes or textbook to generate questions matching your specific curriculum.",
       },
       {
         q: "Do explanations show step-by-step solutions?",
-        a: "Yes. Every question includes a detailed explanation showing the solution process, relevant formulas, and common pitfalls to avoid.",
+        a: "Yes. Every question includes a detailed explanation showing the complete solution process, relevant formulas, common pitfalls to avoid, and why the method works. Learn from mistakes, not just answers.",
       },
+      {
+        q: "How do I know which math level to practice?",
+        a: "Start with a mixed diagnostic test. Your results show which topics you've mastered vs need review. Then generate targeted practice for weak areas. Work from foundational topics (algebra) toward advanced (calculus).",
+      },
+      {
+        q: "Can I use this for standardized test prep (SAT, ACT, GRE)?",
+        a: "Yes. Practice questions build the problem-solving skills tested on standardized exams. For test-specific prep, also upload official practice tests to generate questions matching exact exam format and difficulty.",
+      },
+    ],
       {
         q: "Can I generate questions at specific difficulty levels?",
         a: "Yes. Questions are generated from your uploaded material, so difficulty matches your course level. You can also specify difficulty when creating custom quizzes.",
