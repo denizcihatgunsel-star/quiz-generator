@@ -217,12 +217,14 @@ export default function MultipleChoiceView({
                 : "border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800/50"
             }`}
           >
-            {/* Difficulty + Bloom's tags */}
-            {q.difficulty && (
+            {/* Difficulty + Bloom's + needsReview tags */}
+            {(q.difficulty || q.bloomLevel || q.needsReview) && (
               <div className="flex items-center gap-2 mb-2 flex-wrap">
-                <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400">
-                  {q.difficulty}
-                </span>
+                {q.difficulty && (
+                  <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400">
+                    {q.difficulty}
+                  </span>
+                )}
                 {q.bloomLevel && (
                   <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-400">
                     {q.bloomLevel}
