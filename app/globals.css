@@ -649,3 +649,8 @@
     animation-play-state: running;
   }
 }
+
+/* Halloween mobile decorations: hide by default, show only when body[data-season="halloween"] */
+body:not([data-season="halloween"]) .hw-m-layer {
+  display: none !important;
+}

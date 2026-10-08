@@ -1,13 +1,11 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import { isHalloweenActive } from "@/lib/seasonal";
+import { isHalloweenSeason } from "@/lib/seasonal";
 
 /**
  * Mobile Halloween decorations (phone /m app shell, marketing quiz soft accents,
  * /m/pricing). Visual-only: pointer-events none, z behind controls.
- * Renders nothing until mounted, then decides client-side to avoid hydration mismatch.
- * Decision via query param, cookie, or env var.
+ * Renders server-side when isHalloweenSeason() (date-only, deterministic).
+ * Visibility gated by CSS: body:not([data-season="halloween"]) .hw-m-layer { display:none }
+ * Inline scripts set data-season before first paint based on query/cookie/env.
  */
 
 type Variant = "app-hero" | "jump" | "quiz-soft" | "pricing" | "nav-strip";
@@ -36,6 +34,8 @@ function Prop({
       alt={alt}
       aria-hidden="true"
       draggable={false}
+      loading="lazy"
+      decoding="async"
       className={`hw-m-prop ${className ?? ""}`}
       style={style}
     />
@@ -50,15 +50,15 @@ function MoonGlow({ className, style }: { className?: string; style?: React.CSSP
       aria-hidden="true"
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={MOON} alt="" draggable={false} className="hw-m-moon-img" />
+      <img src={MOON} alt="" draggable={false} loading="lazy" decoding="async" className="hw-m-moon-img" />
     </div>
   );
 }
 
 /**
- * Renders decoration markup ONLY when Halloween is active.
- * Client-side decision via query param, cookie, or env var.
- * Returns null when inactive (no hidden markup).
+ * Renders decoration markup server-side when isHalloweenSeason() (date-only).
+ * Visibility controlled by CSS based on body[data-season="halloween"].
+ * Returns null after Nov 1 00:00 +03:00 regardless of query/cookie/env.
  */
 export default function MobileHalloweenDecor({
   variant,
@@ -67,17 +67,8 @@ export default function MobileHalloweenDecor({
   variant: Variant;
   className?: string;
 }) {
-  const [mounted, setMounted] = useState(false);
-  const [isActive, setIsActive] = useState(false);
-  
-  // Avoid hydration mismatch: render nothing on server, decide after mount
-  useEffect(() => {
-    setMounted(true);
-    const searchParams = new URLSearchParams(window.location.search);
-    setIsActive(isHalloweenActive(searchParams));
-  }, []);
-  
-  if (!mounted || !isActive) return null;
+  // Server-side date check: same result on server and client, no hydration mismatch
+  if (!isHalloweenSeason()) return null;
 
   if (variant === "app-hero") {
     return (
