@@ -57,7 +57,37 @@ export async function GET(req: NextRequest) {
 
     if (action === "count") {
       const count = await countDueConcepts(session.user.id);
-      return NextResponse.json({ dueCount: count });
+      
+      // Also get pending (uncleared) count and next due date
+      const pending = await db.studyConcept.count({
+        where: { userId: session.user.id, cleared: false },
+      });
+      
+      let nextDue: string | null = null;
+      if (pending > count) {
+        const nextConcept = await db.studyConcept.findFirst({
+          where: { 
+            userId: session.user.id, 
+            cleared: false,
+            dueDate: { gt: new Date() },
+          },
+          orderBy: { dueDate: "asc" },
+        });
+        if (nextConcept) {
+          const due = new Date(nextConcept.dueDate);
+          const now = new Date();
+          const diffDays = Math.ceil((due.getTime() - now.getTime()) / (24 * 3600 * 1000));
+          if (diffDays === 1) {
+            nextDue = "tomorrow";
+          } else if (diffDays < 7) {
+            nextDue = `in ${diffDays} days`;
+          } else {
+            nextDue = due.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+          }
+        }
+      }
+      
+      return NextResponse.json({ dueCount: count, pendingCount: pending, nextDue });
     }
 
     // Default: return due concepts
@@ -130,7 +160,7 @@ export async function GET(req: NextRequest) {
     console.error("Study Mode GET error:", err);
     // Graceful failure if StudyConcept table doesn't exist yet
     if (err?.message?.includes("no such table") || err?.message?.includes("StudyConcept")) {
-      return NextResponse.json({ items: [], dueCount: 0 }, { status: 200 });
+      return NextResponse.json({ items: [], dueCount: 0, pendingCount: 0, nextDue: null }, { status: 200 });
     }
     return NextResponse.json({ error: "Failed to load study items" }, { status: 500 });
   }

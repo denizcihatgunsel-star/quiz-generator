@@ -91,6 +91,8 @@ export default function DashboardPage() {
     { code: string; name: string; description: string; unlocked: boolean; unlockedAt: string | null }[]
   >([]);
   const [studyDueCount, setStudyDueCount] = useState(0);
+  const [studyPendingCount, setStudyPendingCount] = useState(0);
+  const [studyNextDue, setStudyNextDue] = useState<string | null>(null);
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/auth/login");
@@ -122,7 +124,11 @@ export default function DashboardPage() {
 
       fetch("/api/study?action=count")
         .then((r) => r.json())
-        .then((d) => { if (typeof d.dueCount === "number") setStudyDueCount(d.dueCount); })
+        .then((d) => { 
+          if (typeof d.dueCount === "number") setStudyDueCount(d.dueCount);
+          if (typeof d.pendingCount === "number") setStudyPendingCount(d.pendingCount);
+          if (d.nextDue) setStudyNextDue(d.nextDue);
+        })
         .catch(() => {});
     }
   }, [session]);
@@ -234,7 +240,7 @@ export default function DashboardPage() {
 
         <StreakWidget />
 
-        {studyDueCount > 0 && (
+        {studyPendingCount > 0 && (
           <Link
             href="/study/misses"
             className="group mb-10 flex flex-wrap items-center justify-between gap-5 rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50 via-indigo-50 to-violet-50 p-6 shadow-[0_20px_60px_-30px_rgba(109,40,217,0.4)] transition-all hover:border-violet-300 hover:shadow-[0_24px_70px_-30px_rgba(109,40,217,0.5)]"
@@ -247,8 +253,17 @@ export default function DashboardPage() {
               </div>
               <div>
                 <p className="mb-1 font-serif text-lg italic text-violet-900">Study Mode</p>
-                <p className="text-sm font-medium text-violet-700">{studyDueCount} concept{studyDueCount === 1 ? "" : "s"} due today</p>
-                <p className="text-xs text-violet-600">Review missed concepts with Bloom&apos;s Taxonomy progression</p>
+                {studyDueCount > 0 ? (
+                  <>
+                    <p className="text-sm font-medium text-violet-700">{studyDueCount} concept{studyDueCount === 1 ? "" : "s"} due today</p>
+                    <p className="text-xs text-violet-600">Review missed concepts with Bloom&apos;s Taxonomy progression</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm font-medium text-violet-700">Next review: {studyNextDue || "soon"}</p>
+                    <p className="text-xs text-violet-600">{studyPendingCount} concept{studyPendingCount === 1 ? "" : "s"} in progress</p>
+                  </>
+                )}
               </div>
             </div>
             <span className="inline-flex items-center gap-2 rounded-full bg-violet-600 px-5 py-2.5 text-sm font-medium text-white transition-all group-hover:bg-violet-700">

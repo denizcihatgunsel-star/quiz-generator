@@ -31,6 +31,8 @@ function MobileHomeContent() {
   const { data: session } = useSession();
   const [daily, setDaily] = useState<Daily | null>(null);
   const [studyDueCount, setStudyDueCount] = useState(0);
+  const [studyPendingCount, setStudyPendingCount] = useState(0);
+  const [studyNextDue, setStudyNextDue] = useState<string | null>(null);
   const halloweenActive = useHalloweenActive();
 
   useEffect(() => {
@@ -41,7 +43,11 @@ function MobileHomeContent() {
       .catch(() => {});
     fetch("/api/study?action=count")
       .then((r) => r.json())
-      .then((d) => { if (typeof d.dueCount === "number") setStudyDueCount(d.dueCount); })
+      .then((d) => { 
+        if (typeof d.dueCount === "number") setStudyDueCount(d.dueCount);
+        if (typeof d.pendingCount === "number") setStudyPendingCount(d.pendingCount);
+        if (d.nextDue) setStudyNextDue(d.nextDue);
+      })
       .catch(() => {});
   }, [session]);
 
@@ -131,7 +137,7 @@ function MobileHomeContent() {
       )}
 
       {/* Study Mode (misses) banner */}
-      {session?.user && studyDueCount > 0 && (
+      {session?.user && studyPendingCount > 0 && (
         <Link
           href="/m/study/misses"
           className="card-breathe mt-4 flex items-center justify-between gap-4 rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50 to-indigo-50 p-5 shadow-[0_18px_48px_-28px_rgba(109,40,217,0.5)] backdrop-blur-xl"
@@ -144,7 +150,11 @@ function MobileHomeContent() {
             </div>
             <div>
               <p className="font-serif text-base italic text-violet-900">Study Mode</p>
-              <p className="text-sm font-medium text-violet-700">{studyDueCount} concept{studyDueCount === 1 ? "" : "s"} due</p>
+              {studyDueCount > 0 ? (
+                <p className="text-sm font-medium text-violet-700">{studyDueCount} concept{studyDueCount === 1 ? "" : "s"} due</p>
+              ) : (
+                <p className="text-sm font-medium text-violet-700">Next review: {studyNextDue || "soon"}</p>
+              )}
             </div>
           </div>
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-100 text-violet-600">{BOLT}</span>

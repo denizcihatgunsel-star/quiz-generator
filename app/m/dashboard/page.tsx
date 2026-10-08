@@ -35,6 +35,8 @@ export default function MobileDashboard() {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [userRole, setUserRole] = useState<"student" | "teacher">("student");
   const [studyDueCount, setStudyDueCount] = useState(0);
+  const [studyPendingCount, setStudyPendingCount] = useState(0);
+  const [studyNextDue, setStudyNextDue] = useState<string | null>(null);
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/m/auth/login");
@@ -59,7 +61,11 @@ export default function MobileDashboard() {
 
       fetch("/api/study?action=count")
         .then((r) => r.json())
-        .then((d) => { if (typeof d.dueCount === "number") setStudyDueCount(d.dueCount); })
+        .then((d) => { 
+          if (typeof d.dueCount === "number") setStudyDueCount(d.dueCount);
+          if (typeof d.pendingCount === "number") setStudyPendingCount(d.pendingCount);
+          if (d.nextDue) setStudyNextDue(d.nextDue);
+        })
         .catch(() => {});
     }
   }, [session]);
@@ -121,7 +127,7 @@ export default function MobileDashboard() {
         <StreakWidget />
       </div>
 
-      {studyDueCount > 0 && (
+      {studyPendingCount > 0 && (
         <Link
           href="/m/study/misses"
           className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50 to-indigo-50 p-5 shadow-sm transition-all active:scale-[0.98]"
@@ -134,7 +140,11 @@ export default function MobileDashboard() {
             </div>
             <div>
               <p className="text-sm font-semibold text-violet-900">Study Mode</p>
-              <p className="text-xs text-violet-700">{studyDueCount} concept{studyDueCount === 1 ? "" : "s"} due</p>
+              {studyDueCount > 0 ? (
+                <p className="text-xs text-violet-700">{studyDueCount} concept{studyDueCount === 1 ? "" : "s"} due</p>
+              ) : (
+                <p className="text-xs text-violet-700">Next review: {studyNextDue || "soon"}</p>
+              )}
             </div>
           </div>
           <svg className="h-5 w-5 shrink-0 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
