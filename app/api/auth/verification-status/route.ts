@@ -3,8 +3,10 @@ import bcrypt from "bcryptjs";
 import { db, ensureVerificationColumns } from "@/lib/db";
 import { checkRateLimit } from "@/lib/rate-limit";
 
-// Dummy hash for timing attack mitigation
-const DUMMY_HASH = "$2a$12$dummyhashfordummyhashfordummyhashfordummyhashdummyha";
+// Dummy hash for timing attack mitigation (60 chars, cost factor 12, same as registration)
+// Generated with: bcryptjs.hashSync("examina-dummy-not-a-password", 12)
+const DUMMY_HASH = "$2b$12$Kttv1dVF2gpMJbj/t07Ze.Jm4NhqrQD8ZrJ5bcwvDfkCpE5dzsmp.";
+if (DUMMY_HASH.length !== 60) throw new Error("DUMMY_HASH must be 60 characters");
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,7 +20,8 @@ export async function POST(req: NextRequest) {
     }
     const email = rawEmail.toLowerCase().trim();
 
-    if (!password) {
+    // Validate password type
+    if (typeof password !== "string" || !password) {
       return NextResponse.json({ needsVerification: false }, { status: 200 });
     }
 
