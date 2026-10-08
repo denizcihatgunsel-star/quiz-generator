@@ -143,6 +143,9 @@ const statements: string[] = [
   `CREATE UNIQUE INDEX IF NOT EXISTS "StudyConcept_userId_concept_key" ON "StudyConcept"("userId", "concept")`,
   `CREATE INDEX IF NOT EXISTS "StudyConcept_userId_dueDate_idx" ON "StudyConcept"("userId", "dueDate")`,
   `CREATE INDEX IF NOT EXISTS "StudyConcept_userId_cleared_idx" ON "StudyConcept"("userId", "cleared")`,
+
+  // Study Mode: DeepThinker drop-back rule (missStreak column)
+  `ALTER TABLE "StudyConcept" ADD COLUMN "missStreak" INTEGER NOT NULL DEFAULT 0`,
 ];
 
 async function main() {

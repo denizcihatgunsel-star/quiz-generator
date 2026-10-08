@@ -109,6 +109,7 @@ export async function recordMissesToStudy(
         sourceTopic,
         dueDate: new Date(),
         correctStreak: 0,
+        missStreak: 0,
         cleared: false,
       },
     });
@@ -150,9 +151,11 @@ export async function countDueConcepts(userId: string): Promise<number> {
 
 /**
  * Grade a Study Mode review.
- * - Correct: increment streak, schedule next due >= 24h later
+ * - Correct: reset missStreak to 0, increment correctStreak, schedule next due >= 24h later
  * - 2nd correct must be in a LATER session (>= 1 day after first) -> clears
- * - Wrong: reset streak, schedule due now
+ * - Wrong: increment missStreak, reset correctStreak to 0, schedule due now
+ * - Drop-back rule: if missStreak reaches 2 while currentBloom > originalBloom,
+ *   drop currentBloom to originalBloom and reset missStreak to 0
  */
 export async function gradeStudyReview(
   userId: string,
@@ -183,6 +186,7 @@ export async function gradeStudyReview(
       where: { id: conceptId },
       data: {
         correctStreak: newStreak,
+        missStreak: 0, // Reset miss streak on correct
         firstCorrectAt,
         lastReviewedAt: now,
         dueDate: shouldClear ? now : nextDue,
@@ -193,11 +197,24 @@ export async function gradeStudyReview(
 
     return { cleared: shouldClear, streak: newStreak };
   } else {
-    // Wrong: reset streak, schedule due now
+    // Wrong: increment miss streak, reset correct streak
+    const newMissStreak = concept.missStreak + 1;
+    
+    // Drop-back rule: 2 consecutive misses at stepped-up level drops to original
+    let newCurrentBloom = concept.currentBloom;
+    let finalMissStreak = newMissStreak;
+    
+    if (newMissStreak >= 2 && concept.currentBloom > concept.originalBloom) {
+      newCurrentBloom = concept.originalBloom;
+      finalMissStreak = 0; // Reset miss streak after drop
+    }
+    
     await db.studyConcept.update({
       where: { id: conceptId },
       data: {
         correctStreak: 0,
+        missStreak: finalMissStreak,
+        currentBloom: newCurrentBloom,
         firstCorrectAt: null,
         lastReviewedAt: now,
         dueDate: now,
