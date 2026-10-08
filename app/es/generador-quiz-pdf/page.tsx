@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import KeywordLanding from "@/components/KeywordLanding";
 import { copyText, saleCopy, saleLandingData } from "@/lib/pricing";
+import { FREE_PLAN_LIMIT, STARTER_PLAN_PRICE } from "@/lib/subscription";
 
 export const dynamic = "force-static";
 export const revalidate = 60;
@@ -24,7 +25,7 @@ const faqs = [
   },
   {
     q: "¿Es gratis?",
-    a: "Sí. Genera 10 quizzes desde PDF por mes gratis. Planes pagos desde $2/mes para 20 generaciones.",
+    a: `El plan gratuito incluye ${FREE_PLAN_LIMIT} quizzes por mes hechos desde texto pegado. Subir PDF requiere el plan Starter a $${STARTER_PLAN_PRICE}/mes.`,
   },
   {
     q: "¿Cuántas páginas puede procesar?",
@@ -123,7 +124,7 @@ export default function GeneradorQuizPdfPage() {
           h1: "Convierte PDF a",
           h1Accent: "cuestionario",
           subtitle: `Sube un archivo PDF con tus apuntes, capítulo de libro o material de clase. Examina extrae el texto y genera preguntas automáticamente con inteligencia artificial.`,
-          cta: "Generar desde PDF gratis",
+          cta: "Generar desde PDF",
           introTitle: "De PDF a quiz en menos de un minuto",
           intro: [
             "Tienes apuntes en PDF, un capítulo escaneado o slides de clase guardados como PDF. Convertir eso en un cuestionario de práctica normalmente significa leer todo, escribir preguntas a mano, y formatear las respuestas. Con Examina, subes el PDF y el resto es automático.",
