@@ -47,66 +47,60 @@ const TABS = [
 export default function MobileShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { data: session } = useSession();
-  const isAuthPage = pathname?.startsWith("/m/auth");
+  const isAuthPage = pathname.startsWith("/m/auth/");
   
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-[#FDE8EC] via-[#FBF1EE] to-[#FDE8EC]">
-      {!isAuthPage && (
-        <header className="sticky top-0 z-40 border-b border-[#F3D5DC] bg-[#FBF1EE]/85 backdrop-blur-xl">
-          <div className="flex items-center justify-between px-5 py-3.5">
-            <Link href="/m" className="flex items-center gap-2.5">
-              <img src="/logo.png" alt="Examina" className="h-9 w-9 rounded-xl object-cover shadow-[0_6px_18px_-8px_rgba(176,96,122,0.8)]" />
-              <span className="font-serif text-2xl italic tracking-tight text-[#3B2027]">Examina</span>
+      <header className="sticky top-0 z-40 border-b border-[#F3D5DC] bg-[#FBF1EE]/85 backdrop-blur-xl">
+        <div className="flex items-center justify-between px-5 py-3.5">
+          <Link href="/m" className="flex items-center gap-2.5">
+            <img src="/logo.png" alt="Examina" className="h-9 w-9 rounded-xl object-cover shadow-[0_6px_18px_-8px_rgba(176,96,122,0.8)]" />
+            <span className="font-serif text-2xl italic tracking-tight text-[#3B2027]">Examina</span>
+          </Link>
+          {session?.user ? (
+            <Link
+              href="/m/dashboard"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#B0607A] to-[#E9A8B8] text-sm font-semibold text-white shadow-[0_6px_16px_-6px_rgba(176,96,122,0.8)]"
+            >
+              {(session.user.name ?? "?").charAt(0).toUpperCase()}
             </Link>
-            {session?.user ? (
-              <Link
-                href="/m/dashboard"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#B0607A] to-[#E9A8B8] text-sm font-semibold text-white shadow-[0_6px_16px_-6px_rgba(176,96,122,0.8)]"
-              >
-                {(session.user.name ?? "?").charAt(0).toUpperCase()}
-              </Link>
-            ) : (
-              <Link
-                href="/m/auth/login"
-                className="rounded-full bg-[#3B2027] px-4 py-2 text-sm font-medium text-[#F6E3E8] transition-colors hover:bg-[#52303B]"
-              >
-                Sign in
-              </Link>
-            )}
-          </div>
-        </header>
-      )}
+          ) : (
+            <Link
+              href={pathname === "/m/auth/login" ? "/m/auth/register" : "/m/auth/login"}
+              className="rounded-full bg-[#3B2027] px-4 py-2 text-sm font-medium text-[#F6E3E8] transition-colors hover:bg-[#52303B]"
+            >
+              {pathname === "/m/auth/login" ? "Sign up" : "Sign in"}
+            </Link>
+          )}
+        </div>
+      </header>
 
-      <main className={`mx-auto w-full max-w-lg px-4 ${isAuthPage ? "pb-8 pt-6" : "pb-28 pt-6"}`}>{children}</main>
+      <main className="mx-auto w-full max-w-lg px-4 pb-28 pt-6">{children}</main>
 
-      {!isAuthPage && (
-        <>
-          <MobileHalloweenDecor variant="nav-strip" />
-          <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-[#F3D5DC] bg-white/85 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl">
-            <div className="mx-auto flex max-w-lg items-stretch justify-around px-2">
-              {TABS.map((tab) => {
-                const active = pathname === tab.href;
-                return (
-                  <Link
-                    key={tab.href}
-                    href={tab.href}
-                    className={`flex flex-1 flex-col items-center gap-1 py-2.5 transition-colors ${
-                      active ? "text-[#B0607A]" : "text-[#9A7280] hover:text-[#3B2027]"
-                    }`}
-                  >
-                    <span className={`flex h-8 w-8 items-center justify-center rounded-full transition-all ${
-                      active ? "bg-[#FDE8EC]" : ""
-                    }`}>
-                      {tab.icon}
-                    </span>
-                    <span className="text-[10px] font-medium">{tab.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
-          </nav>
-        </>
-      )}
+      {!isAuthPage && <MobileHalloweenDecor variant="nav-strip" />}
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-[#F3D5DC] bg-white/85 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl">
+        <div className="mx-auto flex max-w-lg items-stretch justify-around px-2">
+          {TABS.map((tab) => {
+            const active = pathname === tab.href;
+            return (
+              <Link
+                key={tab.href}
+                href={tab.href}
+                className={`flex flex-1 flex-col items-center gap-1 py-2.5 transition-colors ${
+                  active ? "text-[#B0607A]" : "text-[#9A7280] hover:text-[#3B2027]"
+                }`}
+              >
+                <span className={`flex h-8 w-8 items-center justify-center rounded-full transition-all ${
+                  active ? "bg-[#FDE8EC]" : ""
+                }`}>
+                  {tab.icon}
+                </span>
+                <span className="text-[10px] font-medium">{tab.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
       <ReferralAttribution />
     </div>
   );

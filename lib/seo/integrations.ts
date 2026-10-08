@@ -197,31 +197,32 @@ export const INTEGRATIONS: Integration[] = [
   {
     slug: "qti",
     name: "QTI",
-    fullName: "IMS QTI (Question & Test Interoperability)",
+    fullName: "IMS QTI (Question & Test Interoperability) — Coming Soon",
     description:
-      "QTI export is not currently available. Generate questions in Examina and manually import to your LMS, or use share links.",
+      "QTI export for quizzes is not yet available. Currently, generate questions in Examina and manually copy them to your LMS, export to PDF, or share quiz links.",
     workflow: [
-      "Generate quiz questions in Examina from your content",
-      "Copy questions and manually create quiz in your LMS (Canvas, Moodle, Blackboard)",
-      "Or share Examina quiz link directly with students as external practice",
-      "QTI export may be added in future—current workflow is manual or link sharing",
+      "Generate quiz questions in Examina from your course content",
+      "Review and edit questions as needed",
+      "Copy questions and manually create quiz in your LMS (Canvas, Moodle, Blackboard), or export to PDF for printing",
+      "Alternatively, share Examina quiz link directly with students for online practice",
+      "QTI export is under consideration for future development",
     ],
     faq: [
       {
         q: "Does Examina support QTI export?",
-        a: "Not currently. QTI export is a planned feature. Right now, generate questions in Examina and manually copy them into your LMS or share quiz links.",
+        a: "Not yet. QTI export is not currently available. Generate questions in Examina and manually copy them into your LMS, export to PDF, or share quiz links with students.",
       },
       {
-        q: "What's the alternative to QTI?",
-        a: "Generate questions in Examina, then manually copy into Canvas/Moodle/Blackboard quizzes. Or share Examina quiz links as external practice—students can take them without LMS integration.",
+        q: "What's the current workflow without QTI?",
+        a: "Generate questions in Examina, then manually copy them into Canvas/Moodle/Blackboard quizzes. You can also export quizzes to PDF for printing or share quiz links as external practice—students can take them without LMS integration.",
       },
       {
-        q: "Will QTI export be available in the future?",
-        a: "It's on the roadmap. For now, the workflow is generate → manual copy or share link.",
+        q: "Will QTI export be added in the future?",
+        a: "It's on the roadmap as a potential feature. For now, the workflow is generate questions → manual copy, PDF export, or share link.",
       },
       {
         q: "Can I still use Examina with my LMS?",
-        a: "Yes. Generate questions and manually add them to LMS quizzes, or share Examina quiz links as external resources. Both work with any LMS.",
+        a: "Yes. Generate questions and manually add them to LMS quizzes, or share Examina quiz links as external resources. Both workflows support any LMS platform.",
       },
     ],
     relatedTools: [

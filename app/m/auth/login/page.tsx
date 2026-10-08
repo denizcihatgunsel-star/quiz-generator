@@ -1,69 +1,23 @@
-"use client";
-
-import { useState, FormEvent, Suspense, useEffect } from "react";
-import { signIn } from "next-auth/react";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { storePendingRef } from "@/components/ReferralAttribution";
+import LoginFormClient from "./LoginFormClient";
 
-function LoginForm() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/m/dashboard";
-  const authError = searchParams.get("error");
-  const verified = searchParams.get("verified") === "1";
-  const prefillEmail = searchParams.get("email");
+export const metadata: Metadata = {
+  title: "Sign in",
+};
 
-  const [email, setEmail] = useState(prefillEmail ?? "");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    storePendingRef(searchParams.get("ref"));
-  }, [searchParams]);
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-
-    setLoading(false);
-
-    if (result?.error) {
-      const res = await fetch("/api/auth/verification-status", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      
-      if (res.ok) {
-        const data = await res.json();
-        if (data.needsVerification) {
-          setError("unverified");
-          return;
-        }
-      }
-      
-      setError("Invalid email or password.");
-      return;
-    }
-
-    router.push(callbackUrl);
-    router.refresh();
-  };
-
-  const inputClass =
-    "w-full rounded-xl border border-[#F3D5DC] bg-white/80 px-4 py-3.5 text-sm text-[#3B2027] placeholder:text-[#B4939F] shadow-[0_8px_24px_-20px_rgba(176,96,122,0.5)] transition-all focus:border-[#B0607A] focus:outline-none focus:ring-2 focus:ring-[#B0607A]/30";
+export default function MobileLoginPage({
+  searchParams,
+}: {
+  searchParams: { callbackUrl?: string; error?: string; ref?: string; verified?: string; email?: string };
+}) {
+  const callbackUrl = searchParams.callbackUrl ?? "/m/dashboard";
+  const authError = searchParams.error;
+  const verified = searchParams.verified === "1";
+  const prefillEmail = searchParams.email;
 
   return (
-    <div className="pt-4">
+    <div className="pt-4 pb-[calc(80px+env(safe-area-inset-bottom)+24px)]">
       <p className="font-serif text-sm italic text-[#B0607A]">Welcome back</p>
       <h1 className="mt-1 text-3xl font-medium tracking-tight text-[#3B2027]">
         Sign in to <span className="font-serif italic text-[#B0607A]">Examina</span>
@@ -82,62 +36,12 @@ function LoginForm() {
       )}
 
       <div className="mt-7 rounded-2xl border border-[#F3D5DC] bg-white/75 p-6 shadow-[0_20px_60px_-30px_rgba(176,96,122,0.5)] backdrop-blur-xl">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="m-email" className="mb-1.5 block text-sm font-medium text-[#3B2027]">Email</label>
-            <input
-              id="m-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-              placeholder="you@example.com"
-              className={inputClass}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="m-password" className="mb-1.5 block text-sm font-medium text-[#3B2027]">Password</label>
-            <input
-              id="m-password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-              placeholder="••••••••"
-              className={inputClass}
-            />
-            <div className="mt-1.5 text-right">
-              <Link href="/auth/forgot-password" className="text-xs font-medium text-[#B0607A] hover:underline">
-                Forgot password?
-              </Link>
-            </div>
-          </div>
-
-          {error === "unverified" ? (
-            <div className="rounded-xl border border-[#F1C8C8] bg-[#FDF1F1] px-3.5 py-2.5 text-sm text-[#C25B5B]">
-              <p className="font-medium">Please verify your email first</p>
-              <Link
-                href={`/m/auth/verify-email?email=${encodeURIComponent(email)}`}
-                className="mt-2 inline-block rounded-full bg-[#C25B5B] px-4 py-2 text-xs font-medium text-white hover:bg-[#A84A4A]"
-              >
-                Go to verification
-              </Link>
-            </div>
-          ) : error ? (
-            <p className="rounded-xl border border-[#F1C8C8] bg-[#FDF1F1] px-3.5 py-2.5 text-sm text-[#C25B5B]">{error}</p>
-          ) : null}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-[#3B2027] py-3.5 text-sm font-medium text-[#F6E3E8] shadow-[0_12px_30px_-12px_rgba(59,32,39,0.6)] transition-all hover:bg-[#52303B] active:scale-[0.98] disabled:opacity-60"
-          >
-            {loading ? "Signing in..." : "Sign in"}
-          </button>
-        </form>
+        <LoginFormClient 
+          callbackUrl={callbackUrl} 
+          refCode={searchParams.ref}
+          verified={verified}
+          prefillEmail={prefillEmail}
+        />
 
         <div className="my-5 flex items-center gap-3">
           <div className="h-px flex-1 bg-[#F3D5DC]" />
@@ -146,7 +50,7 @@ function LoginForm() {
         </div>
 
         <Link
-          href={`/api/auth/signin/google?callbackUrl=${encodeURIComponent("/m/dashboard")}`}
+          href={`/api/auth/signin/google?callbackUrl=${encodeURIComponent(callbackUrl)}`}
           className="flex w-full items-center justify-center gap-3 rounded-full border border-[#F3D5DC] bg-white py-3.5 text-sm font-medium text-[#3B2027] transition-colors hover:bg-[#F6EBEE]"
         >
           <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
@@ -166,13 +70,5 @@ function LoginForm() {
         </Link>
       </p>
     </div>
-  );
-}
-
-export default function MobileLoginPage() {
-  return (
-    <Suspense>
-      <LoginForm />
-    </Suspense>
   );
 }
