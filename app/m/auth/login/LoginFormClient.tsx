@@ -9,12 +9,16 @@ import { storePendingRef } from "@/components/ReferralAttribution";
 export default function LoginFormClient({
   callbackUrl,
   refCode,
+  verified,
+  prefillEmail,
 }: {
   callbackUrl: string;
   refCode?: string;
+  verified?: boolean;
+  prefillEmail?: string;
 }) {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(prefillEmail ?? "");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -37,6 +41,20 @@ export default function LoginFormClient({
     setLoading(false);
 
     if (result?.error) {
+      const res = await fetch("/api/auth/verification-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        if (data.needsVerification) {
+          setError("unverified");
+          return;
+        }
+      }
+      
       setError("Invalid email or password.");
       return;
     }
@@ -87,11 +105,21 @@ export default function LoginFormClient({
         </div>
       </div>
 
-      {error && (
+      {error === "unverified" ? (
+        <div className="rounded-xl border border-[#F1C8C8] bg-[#FDF1F1] px-3.5 py-2.5 text-sm text-[#C25B5B]">
+          <p className="font-medium">Please verify your email first</p>
+          <Link
+            href={`/m/auth/verify-email?email=${encodeURIComponent(email)}`}
+            className="mt-2 inline-block rounded-full bg-[#C25B5B] px-4 py-2 text-xs font-medium text-white hover:bg-[#A84A4A]"
+          >
+            Go to verification
+          </Link>
+        </div>
+      ) : error ? (
         <p className="rounded-xl border border-[#F1C8C8] bg-[#FDF1F1] px-3.5 py-2.5 text-sm text-[#C25B5B]">
           {error}
         </p>
-      )}
+      ) : null}
 
       <button
         type="submit"

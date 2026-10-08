@@ -9,10 +9,12 @@ export const metadata: Metadata = {
 export default function MobileLoginPage({
   searchParams,
 }: {
-  searchParams: { callbackUrl?: string; error?: string; ref?: string };
+  searchParams: { callbackUrl?: string; error?: string; ref?: string; verified?: string; email?: string };
 }) {
   const callbackUrl = searchParams.callbackUrl ?? "/m/dashboard";
   const authError = searchParams.error;
+  const verified = searchParams.verified === "1";
+  const prefillEmail = searchParams.email;
 
   return (
     <div className="pt-4 pb-[calc(80px+env(safe-area-inset-bottom)+24px)]">
@@ -21,6 +23,12 @@ export default function MobileLoginPage({
         Sign in to <span className="font-serif italic text-[#B0607A]">Examina</span>
       </h1>
 
+      {verified && (
+        <p role="alert" className="mt-5 rounded-xl border border-[#D8EFD8] bg-[#F1FDF1] px-3.5 py-2.5 text-sm text-[#4A8A4A]">
+          Email verified — you can sign in now.
+        </p>
+      )}
+
       {authError && (
         <p role="alert" className="mt-5 rounded-xl border border-[#F1C8C8] bg-[#FDF1F1] px-3.5 py-2.5 text-sm text-[#C25B5B]">
           Sign-in didn&apos;t complete. Please try again.
@@ -28,7 +36,12 @@ export default function MobileLoginPage({
       )}
 
       <div className="mt-7 rounded-2xl border border-[#F3D5DC] bg-white/75 p-6 shadow-[0_20px_60px_-30px_rgba(176,96,122,0.5)] backdrop-blur-xl">
-        <LoginFormClient callbackUrl={callbackUrl} refCode={searchParams.ref} />
+        <LoginFormClient 
+          callbackUrl={callbackUrl} 
+          refCode={searchParams.ref}
+          verified={verified}
+          prefillEmail={prefillEmail}
+        />
 
         <div className="my-5 flex items-center gap-3">
           <div className="h-px flex-1 bg-[#F3D5DC]" />

@@ -10,7 +10,6 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/";
-  // Set by Auth.js (pages.error) when an OAuth sign-in fails.
   const authError = searchParams.get("error");
 
   const [email, setEmail] = useState("");
@@ -62,6 +61,20 @@ function LoginForm() {
     setLoading(false);
 
     if (result?.error) {
+      const res = await fetch("/api/auth/verification-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        if (data.needsVerification) {
+          setError("unverified");
+          return;
+        }
+      }
+      
       setError("Invalid email or password.");
       return;
     }
@@ -163,14 +176,18 @@ function LoginForm() {
 
             {error && (
               <p className="rounded-xl border border-[#F1C8C8] bg-[#FDF1F1] px-3.5 py-2.5 text-sm text-[#C25B5B]">
-                {error}
-                <span className="mt-1 block text-xs text-[#9A7280]">
-                  Just signed up?{" "}
-                  <Link href="/auth/verify-email" className="font-medium text-[#B0607A] hover:underline">
-                    Verify your email
-                  </Link>{" "}
-                  to activate your account.
-                </span>
+                {error === "unverified" ? (
+                  <>
+                    <span className="font-medium">Please verify your email first</span>
+                    <span className="mt-1 block text-xs text-[#9A7280]">
+                      <Link href={`/auth/verify-email?email=${encodeURIComponent(email)}`} className="font-medium text-[#B0607A] hover:underline">
+                        Go to verification
+                      </Link>
+                    </span>
+                  </>
+                ) : (
+                  error
+                )}
               </p>
             )}
 
