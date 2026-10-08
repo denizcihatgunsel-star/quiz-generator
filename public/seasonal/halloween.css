@@ -1040,6 +1040,18 @@ html:has(body[data-season="halloween"]) {
   background-color: rgba(53, 208, 180, 0.25) !important;
 }
 
+/* Unselected role buttons - cream at 70% */
+[data-season="halloween"] .rounded-2xl.bg-white\/75 button.border-\[\#F3D5DC\]:not(.bg-\[\#FDE8EC\]) {
+  color: rgba(255, 247, 236, 0.7) !important;
+  border-color: rgba(53, 208, 180, 0.3) !important;
+}
+
+/* Input placeholders - cream at 70% */
+[data-season="halloween"] .rounded-2xl.bg-white\/75 input::placeholder,
+[data-season="halloween"] .rounded-2xl.bg-white\/75 textarea::placeholder {
+  color: rgba(255, 247, 236, 0.7) !important;
+}
+
 /* Google button - teal outline */
 [data-season="halloween"] .rounded-2xl.bg-white\/75 button[class*="border-[#F3D5DC]"].bg-white {
   background: transparent !important;
