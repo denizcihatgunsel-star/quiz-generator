@@ -9,7 +9,7 @@ export const GEOMETRY_COMBOS: ComboData[] = [
     type: "quiz",
     meta: { type: "quiz", primaryKeyword: "geometry quiz", monthlyVolume: 880 },
     h1: "Geometry Quiz — Test Shape and Angle Knowledge",
-    intro: "Practice geometry concepts with quick quizzes on angles, triangles, circles, polygons, area, volume, and coordinate geometry. Perfect for high school geometry students, SAT/ACT prep, or quick concept checks before tests. Immediate feedback helps identify knowledge gaps.",
+    intro: "Practice geometry concepts with quick quizzes on angles, triangles, circles, polygons, area, volume, and coordinate geometry. Perfect for high school geometry students, SAT/ACT prep, or quick concept checks before tests. Immediate feedback helps identify knowledge gaps. Cover fundamental topics like angle relationships, triangle properties, circle formulas, and 3D volume calculations. Each quiz tests both computational skills and conceptual understanding, ensuring you can apply geometry principles to new problems.",
     sampleItems: [
       { q: "What is the sum of interior angles in a triangle?", a: "180°", explanation: "ALL triangles have interior angles that sum to 180°, regardless of triangle type (scalene, isosceles, equilateral, right). Fundamental geometry fact.", bloomLevel: "Remember", type: "multiple-choice" },
       { q: "A circle has radius 5. What is its area?", a: "25π (approximately 78.54)", explanation: "A = πr² = π(5)² = 25π ≈ 78.54 square units. Don't confuse with circumference C = 2πr = 10π.", bloomLevel: "Apply", type: "multiple-choice" },

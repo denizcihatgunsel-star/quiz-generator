@@ -42,7 +42,7 @@ export const ALGEBRA_COMBOS: ComboData[] = [
     type: "quiz",
     meta: { type: "quiz", primaryKeyword: "algebra quiz", monthlyVolume: 720 },
     h1: "Algebra Quiz — Quick Skills Assessment",
-    intro: "Test algebra understanding with quick quizzes covering equations, functions, and problem-solving. Perfect for homework checks, identifying concepts that need more study, or pre-test preparation. Each question targets a specific algebra skill with immediate feedback.",
+    intro: "Test algebra understanding with quick quizzes covering equations, functions, and problem-solving. Perfect for homework checks, identifying concepts that need more study, or pre-test preparation. Each question targets a specific algebra skill with immediate feedback. Use these quizzes to establish a baseline before studying, measure progress during a unit, or verify mastery before a final exam. Short format makes it easy to fit practice into busy schedules.",
     sampleItems: [
       { q: "Solve: 3x + 7 = 22", a: "x = 5", explanation: "Subtract 7: 3x = 15. Divide by 3: x = 5. Always isolate variable by doing inverse operations.", bloomLevel: "Apply", type: "multiple-choice" },
       { q: "What is 15% of 80?", a: "12", explanation: "0.15 × 80 = 12. Or: (15/100) × 80 = 12. Convert percentage to decimal by dividing by 100.", bloomLevel: "Apply", type: "multiple-choice" },
