@@ -99,6 +99,14 @@ Next.js 16 (App Router), React, TypeScript, Tailwind CSS, Turso (libSQL), NextAu
   - [APUSH Practice Questions](https://www.examina.ink/exams/ap-us-history/practice-questions)
 - [AP Psychology Practice](https://www.examina.ink/exams/ap-psychology)
   - [AP Psychology Flashcards](https://www.examina.ink/exams/ap-psychology/flashcards)
+- [HESI A2 Practice](https://www.examina.ink/exams/hesi)
+  - [HESI Practice Questions](https://www.examina.ink/exams/hesi/practice-questions)
+- [Real Estate Exam Practice](https://www.examina.ink/exams/real-estate-exam)
+  - [Real Estate Practice Questions](https://www.examina.ink/exams/real-estate-exam/practice-questions)
+- [EMT Certification Practice](https://www.examina.ink/exams/emt)
+  - [EMT Practice Questions](https://www.examina.ink/exams/emt/practice-questions)
+- [DAT Practice](https://www.examina.ink/exams/dat)
+  - [DAT Practice Questions](https://www.examina.ink/exams/dat/practice-questions)
 
 ### Subjects
 - [Browse All Subjects](https://www.examina.ink/subjects) — hub for all subjects
@@ -143,6 +151,23 @@ Next.js 16 (App Router), React, TypeScript, Tailwind CSS, Turso (libSQL), NextAu
   - [World History Quiz](https://www.examina.ink/subjects/world-history/quiz)
 - [French Flashcards](https://www.examina.ink/subjects/french)
   - [French Flashcards](https://www.examina.ink/subjects/french/flashcards)
+- [Medical Terminology Practice](https://www.examina.ink/subjects/medical-terminology)
+  - [Medical Terminology Flashcards](https://www.examina.ink/subjects/medical-terminology/flashcards)
+  - [Medical Terminology Quiz](https://www.examina.ink/subjects/medical-terminology/quiz)
+  - [Medical Terminology Practice Questions](https://www.examina.ink/subjects/medical-terminology/practice-questions)
+- [Pharmacology Practice](https://www.examina.ink/subjects/pharmacology)
+  - [Pharmacology Flashcards](https://www.examina.ink/subjects/pharmacology/flashcards)
+- [Anatomy & Physiology Practice](https://www.examina.ink/subjects/anatomy-and-physiology)
+  - [A&P Quiz](https://www.examina.ink/subjects/anatomy-and-physiology/quiz)
+  - [A&P Flashcards](https://www.examina.ink/subjects/anatomy-and-physiology/flashcards)
+  - [A&P Practice Questions](https://www.examina.ink/subjects/anatomy-and-physiology/practice-questions)
+- [Anatomy Flashcards](https://www.examina.ink/subjects/anatomy)
+  - [Anatomy Flashcards](https://www.examina.ink/subjects/anatomy/flashcards)
+- [Nursing Practice](https://www.examina.ink/subjects/nursing)
+  - [Nursing Practice Questions](https://www.examina.ink/subjects/nursing/practice-questions)
+  - [Nursing Quiz](https://www.examina.ink/subjects/nursing/quiz)
+- [MCAT Flashcards](https://www.examina.ink/exams/mcat)
+  - [MCAT Flashcards](https://www.examina.ink/exams/mcat/flashcards)
 
 ### Features
 - [Browse All Features](https://www.examina.ink/features) — hub for all features

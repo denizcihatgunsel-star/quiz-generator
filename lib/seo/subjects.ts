@@ -8,6 +8,7 @@ export interface Subject {
   name: string;
   description: string;
   icon?: string;
+  disclaimer?: string;
   topicsList?: string[];
   sampleQuestions: { q: string; a: string; explanation: string }[];
   questionTypesAdvice?: string;
@@ -1074,6 +1075,180 @@ export const SUBJECTS: Subject[] = [
       "/fill-in-the-blank-generator",
     ],
     relatedExams: ["ap"],
+  },
+  {
+    slug: "medical-terminology",
+    name: "Medical Terminology",
+    description:
+      "Generate medical terminology quiz questions on prefixes, suffixes, root words, anatomical terms, and clinical vocabulary.",
+    disclaimer:
+      "This is a study aid for healthcare education. It is not medical advice or clinical guidance. Always verify information in clinical practice.",
+    sampleQuestions: [
+      {
+        q: "What does the suffix '-itis' mean?",
+        a: "Inflammation",
+        explanation:
+          "The suffix '-itis' denotes inflammation of a structure. Examples: arthritis (joint inflammation), gastritis (stomach inflammation), appendicitis (appendix inflammation).",
+      },
+      {
+        q: "The prefix 'hyper-' means:",
+        a: "Above normal or excessive",
+        explanation:
+          "Hyper- indicates excess or above normal levels. Hypertension = high blood pressure, hyperglycemia = high blood sugar, hyperthyroidism = excessive thyroid hormone.",
+      },
+      {
+        q: "What does 'cardi/o' refer to?",
+        a: "Heart",
+        explanation:
+          "Cardi/o is the root word for heart. Used in terms like cardiology (study of the heart), cardiopulmonary (heart and lungs), electrocardiogram (heart electrical recording).",
+      },
+      {
+        q: "The term 'hematology' refers to the study of:",
+        a: "Blood",
+        explanation:
+          "Hematology combines hemat/o (blood) and -logy (study of). Hematologists diagnose and treat blood disorders like anemia, leukemia, and clotting disorders.",
+      },
+    ],
+    faq: [
+      {
+        q: "What medical terminology topics can I practice?",
+        a: "Generate questions on prefixes (hypo-, hyper-, brady-), suffixes (-itis, -ectomy, -ology), root words (cardi/o, gastr/o, neur/o), anatomical terms, clinical procedures, and diagnostic terms.",
+      },
+      {
+        q: "Is this suitable for nursing students?",
+        a: "Yes. Medical terminology is foundational for nursing school, allied health programs, and medical assisting courses. Questions test term construction and clinical application.",
+      },
+      {
+        q: "Do questions include pronunciation?",
+        a: "Explanations include phonetic breakdowns and term origins when helpful for understanding. Focus is on meaning and clinical usage.",
+      },
+      {
+        q: "Is this free?",
+        a: "Free accounts include study tools with a monthly quiz limit. PDF upload is available on the paid Starter plan.",
+      },
+    ],
+    relatedTools: [
+      "/ai-flashcards",
+      "/fill-in-the-blank-generator",
+      "/notes-to-quiz",
+    ],
+    relatedExams: ["hesi", "nclex"],
+  },
+  {
+    slug: "pharmacology",
+    name: "Pharmacology",
+    description:
+      "Create pharmacology quiz questions on drug classifications, mechanisms of action, side effects, and nursing considerations.",
+    disclaimer:
+      "This is a study aid for healthcare education. It is not medical advice or clinical guidance. Always verify current prescribing information and institutional protocols in clinical practice.",
+    sampleQuestions: [
+      {
+        q: "What is the mechanism of action of ACE inhibitors?",
+        a: "Block conversion of angiotensin I to angiotensin II",
+        explanation:
+          "ACE inhibitors prevent angiotensin-converting enzyme from producing angiotensin II, reducing vasoconstriction and aldosterone secretion, thereby lowering blood pressure.",
+      },
+      {
+        q: "Which electrolyte should be monitored in patients taking loop diuretics?",
+        a: "Potassium",
+        explanation:
+          "Loop diuretics like furosemide cause potassium loss through increased renal excretion. Hypokalemia can lead to dangerous cardiac arrhythmias requiring monitoring and supplementation.",
+      },
+      {
+        q: "Beta blockers ending in '-olol' are contraindicated in:",
+        a: "Asthma and severe bradycardia",
+        explanation:
+          "Beta blockers can cause bronchoconstriction (worsening asthma) and further slow heart rate in bradycardia. Examples: metoprolol, atenolol, propranolol.",
+      },
+      {
+        q: "What is a common adverse effect of opioid analgesics?",
+        a: "Respiratory depression",
+        explanation:
+          "Opioids suppress the respiratory center in the brainstem, reducing respiratory rate and depth. This is the most dangerous adverse effect requiring close monitoring, especially with IV administration.",
+      },
+    ],
+    faq: [
+      {
+        q: "What pharmacology topics are covered?",
+        a: "Generate questions on drug classifications (antihypertensives, antibiotics, analgesics), mechanisms of action, side effects, drug interactions, nursing implications, and dosage calculations.",
+      },
+      {
+        q: "Are questions NCLEX-style?",
+        a: "Yes. Questions follow nursing pharmacology format with priority setting, safety considerations, and patient teaching components appropriate for NCLEX preparation.",
+      },
+      {
+        q: "Can I practice dosage calculations?",
+        a: "Yes. Upload dosage calculation notes to generate practice problems with dimensional analysis and ratio-proportion methods.",
+      },
+      {
+        q: "Is this suitable for nursing or pharmacy students?",
+        a: "Yes. Questions are appropriate for nursing pharmacology courses, pharmacy school, and allied health programs requiring drug knowledge.",
+      },
+    ],
+    relatedTools: [
+      "/notes-to-quiz",
+      "/ai-flashcards",
+      "/quiz-generator-from-pdf",
+    ],
+    relatedExams: ["nclex", "hesi"],
+  },
+  {
+    slug: "anatomy-and-physiology",
+    name: "Anatomy and Physiology",
+    description:
+      "Generate anatomy and physiology quiz questions on body systems, organ functions, tissue types, and physiological processes.",
+    disclaimer:
+      "This is a study aid for healthcare education. It is not medical advice or clinical guidance.",
+    sampleQuestions: [
+      {
+        q: "Which chamber of the heart receives oxygenated blood from the lungs?",
+        a: "Left atrium",
+        explanation:
+          "Oxygenated blood returns from the lungs via pulmonary veins to the left atrium, then passes through the mitral valve to the left ventricle before being pumped to the body.",
+      },
+      {
+        q: "What type of tissue lines the alveoli?",
+        a: "Simple squamous epithelium",
+        explanation:
+          "Simple squamous epithelium (single layer of flat cells) allows rapid gas exchange between alveolar air and capillary blood due to minimal diffusion distance.",
+      },
+      {
+        q: "The nephron is the functional unit of which organ?",
+        a: "Kidney",
+        explanation:
+          "Each kidney contains approximately 1 million nephrons that filter blood, reabsorb nutrients and water, and produce urine through filtration, reabsorption, and secretion.",
+      },
+      {
+        q: "Which nervous system division is responsible for 'fight or flight'?",
+        a: "Sympathetic nervous system",
+        explanation:
+          "The sympathetic division of the autonomic nervous system activates during stress, increasing heart rate, blood pressure, and glucose availability while inhibiting digestion.",
+      },
+    ],
+    faq: [
+      {
+        q: "What anatomy and physiology topics can I study?",
+        a: "Generate questions on all body systems: skeletal, muscular, cardiovascular, respiratory, nervous, digestive, urinary, reproductive, endocrine, and integumentary systems.",
+      },
+      {
+        q: "Is this good for nursing or pre-med students?",
+        a: "Yes. Questions are appropriate for college-level anatomy and physiology courses, nursing school prerequisites, and pre-med/pre-health programs.",
+      },
+      {
+        q: "Do questions test both structure and function?",
+        a: "Yes. Questions require understanding how anatomical structures enable physiological functions, testing the relationship between form and function.",
+      },
+      {
+        q: "Can I upload my textbook or lecture notes?",
+        a: "Yes. Upload PDF chapters or paste lecture notes to generate questions matching your course material and terminology.",
+      },
+    ],
+    relatedTools: [
+      "/quiz-generator-from-pdf",
+      "/ai-flashcards",
+      "/notes-to-quiz",
+    ],
+    relatedExams: ["mcat", "nclex", "hesi"],
   },
 ];
 
