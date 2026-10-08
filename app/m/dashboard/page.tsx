@@ -34,6 +34,7 @@ export default function MobileDashboard() {
   const [copied, setCopied] = useState<string | null>(null);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [userRole, setUserRole] = useState<"student" | "teacher">("student");
+  const [studyDueCount, setStudyDueCount] = useState(0);
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/m/auth/login");
@@ -54,6 +55,11 @@ export default function MobileDashboard() {
       fetch("/api/achievements")
         .then((r) => r.json())
         .then((d) => { if (d.achievements) setAchievements(d.achievements); })
+        .catch(() => {});
+
+      fetch("/api/study?action=count")
+        .then((r) => r.json())
+        .then((d) => { if (typeof d.dueCount === "number") setStudyDueCount(d.dueCount); })
         .catch(() => {});
     }
   }, [session]);
@@ -114,6 +120,28 @@ export default function MobileDashboard() {
       <div className="mt-6">
         <StreakWidget />
       </div>
+
+      {studyDueCount > 0 && (
+        <Link
+          href="/m/study"
+          className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50 to-indigo-50 p-5 shadow-sm transition-all active:scale-[0.98]"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 text-white shadow-md">
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-violet-900">Study Mode</p>
+              <p className="text-xs text-violet-700">{studyDueCount} concept{studyDueCount === 1 ? "" : "s"} due</p>
+            </div>
+          </div>
+          <svg className="h-5 w-5 shrink-0 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </Link>
+      )}
 
       <div className="mt-6 flex items-center justify-between gap-3">
         {userRole === "teacher" ? (

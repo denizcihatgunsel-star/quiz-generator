@@ -25,6 +25,7 @@ model User {
   quizzes          SavedQuiz[]
   flashcardReviews FlashcardReview[]
   questionReviews  QuestionReview[]
+  studyConcepts    StudyConcept[]
   draftQuizSets    DraftQuizSet[]
   streak           UserStreak?
   xpEvents         XpEvent[]
@@ -137,6 +138,29 @@ model QuestionReview {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, refId])
+}
+
+// Study Mode: concept-based spaced repetition with Bloom level progression
+model StudyConcept {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  concept           String   // normalized concept key (topic tag or quiz topic + question key)
+  originalBloom     Int      @default(1) // 1=Remember ... 6=Create
+  currentBloom      Int      @default(1) // stepped up after each miss
+  correctStreak     Int      @default(0) // 0, 1, or 2 (clears at 2)
+  firstCorrectAt    DateTime? // timestamp of first correct answer
+  lastReviewedAt    DateTime? // timestamp of last review
+  dueDate           DateTime @default(now())
+  sourceQuizId      String   @default("") // originating quiz
+  sourceTopic       String   @default("")
+  cleared           Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([userId, concept])
+  @@index([userId, dueDate])
+  @@index([userId, cleared])
 }
 
 // Gamification: streaks and XP

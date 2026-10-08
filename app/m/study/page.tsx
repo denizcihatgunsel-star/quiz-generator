@@ -1,206 +1,312 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { motion } from "framer-motion";
+import { MultipleChoiceQuestion } from "@/types/quiz";
 
-interface ReviewCard {
-  id: string;
-  front: string;
-  back: string;
-  interval: number;
-  repetition: number;
-  efactor: number;
+interface StudyItem {
+  conceptId: string;
+  concept: string;
+  bloom: string;
+  question: MultipleChoiceQuestion;
 }
 
-export default function MobileStudy() {
-  const { data: session, status: sessionStatus } = useSession();
+export default function MobileStudyModePage() {
+  const { data: session, status } = useSession();
   const router = useRouter();
-  const [cards, setCards] = useState<ReviewCard[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [flipped, setFlipped] = useState(false);
+  const [items, setItems] = useState<StudyItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [answer, setAnswer] = useState<number | null>(null);
+  const [revealed, setRevealed] = useState(false);
   const [dueCount, setDueCount] = useState(0);
-  const [totalCards, setTotalCards] = useState(0);
-  const [reviewed, setReviewed] = useState(0);
-  const [submitting, setSubmitting] = useState(false);
-  const submittingRef = useRef(false);
-  const advanceTimerRef = useRef<number | null>(null);
+  const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
-    return () => {
-      if (advanceTimerRef.current !== null) window.clearTimeout(advanceTimerRef.current);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (sessionStatus === "unauthenticated") router.push("/m/auth/login");
-  }, [sessionStatus, router]);
+    if (status === "unauthenticated") {
+      router.push("/m/auth/login?callbackUrl=/m/study");
+    }
+  }, [status, router]);
 
   useEffect(() => {
     if (session) {
-      fetch("/api/flashcard-review")
-        .then((r) => r.json())
-        .then((d) => {
-          setCards(d.cards);
-          setDueCount(d.dueCount);
-          setTotalCards(d.totalCards);
-        })
-        .catch(() => {})
-        .finally(() => setLoading(false));
+      loadStudyItems();
     }
   }, [session]);
 
-  const handleGrade = async (grade: number) => {
-    if (submittingRef.current || !cards[currentIndex]) return;
-    submittingRef.current = true;
-    setSubmitting(true);
-
+  const loadStudyItems = async () => {
+    setLoading(true);
     try {
-      await fetch("/api/flashcard-review", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cardId: cards[currentIndex].id, grade }),
-      });
-    } catch { /* ignore */ }
-
-    setReviewed((r) => r + 1);
-    setFlipped(false);
-
-    if (currentIndex < cards.length - 1) {
-      advanceTimerRef.current = window.setTimeout(() => {
-        setCurrentIndex((i) => i + 1);
-        setSubmitting(false);
-        submittingRef.current = false;
-      }, 180);
-    } else {
-      setCards([]);
-      setSubmitting(false);
-      submittingRef.current = false;
+      const res = await fetch("/api/study");
+      const data = await res.json();
+      if (data.items) {
+        setItems(data.items);
+        setDueCount(data.dueCount);
+      }
+    } catch (err) {
+      console.error("Failed to load study items:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (sessionStatus === "loading" || loading) {
+  const pickOption = (optionIndex: number) => {
+    if (revealed) return;
+    setAnswer(optionIndex);
+    setRevealed(true);
+  };
+
+  const handleNext = async () => {
+    if (!revealed || !items[currentIndex]) return;
+
+    const currentItem = items[currentIndex];
+    const isCorrect = answer === currentItem.question.correctIndex;
+
+    try {
+      await fetch("/api/study", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          conceptId: currentItem.conceptId,
+          correct: isCorrect,
+        }),
+      });
+    } catch (err) {
+      console.error("Failed to grade review:", err);
+    }
+
+    if (currentIndex < items.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+      setAnswer(null);
+      setRevealed(false);
+    } else {
+      setCompleted(true);
+    }
+  };
+
+  if (status === "loading" || loading) {
     return (
-      <div className="flex justify-center py-24">
+      <div className="flex min-h-screen items-center justify-center pb-20">
         <div className="flex gap-1.5">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="h-2 w-2 animate-bounce rounded-full bg-[#B0607A]" style={{ animationDelay: `${i * 150}ms` }} />
+            <div
+              key={i}
+              className="h-2.5 w-2.5 animate-bounce rounded-full bg-violet-600"
+              style={{ animationDelay: `${i * 150}ms` }}
+            />
           ))}
         </div>
       </div>
     );
   }
 
-  const card = cards[currentIndex];
+  if (items.length === 0 && !loading) {
+    return (
+      <div className="px-4 py-6 pb-24">
+        <div className="rounded-2xl border border-neutral-200 bg-white p-8 text-center shadow-sm">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-violet-50">
+            <svg
+              className="h-8 w-8 text-violet-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <h2 className="mb-2 text-xl font-medium text-neutral-900">
+            No concepts to review
+          </h2>
+          <p className="mb-6 text-sm text-neutral-600">
+            Complete quizzes and miss some questions to build your study deck.
+          </p>
+          <button
+            onClick={() => router.push("/m/dashboard")}
+            className="w-full rounded-full bg-violet-600 px-6 py-3 text-sm font-medium text-white shadow-sm active:scale-[0.98]"
+          >
+            Back to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (completed) {
+    return (
+      <div className="px-4 py-6 pb-24">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-2xl border border-neutral-200 bg-white p-8 text-center shadow-sm"
+        >
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-indigo-600">
+            <svg
+              className="h-8 w-8 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </div>
+          <h2 className="mb-2 text-xl font-medium text-neutral-900">
+            Session complete
+          </h2>
+          <p className="mb-6 text-sm text-neutral-600">
+            You reviewed {items.length} concept{items.length === 1 ? "" : "s"}.
+            {dueCount > items.length &&
+              ` ${dueCount - items.length} more due today.`}
+          </p>
+          <div className="space-y-2">
+            <button
+              onClick={() => {
+                setCompleted(false);
+                setCurrentIndex(0);
+                setAnswer(null);
+                setRevealed(false);
+                loadStudyItems();
+              }}
+              className="w-full rounded-full bg-violet-600 px-6 py-3 text-sm font-medium text-white shadow-sm active:scale-[0.98]"
+            >
+              Continue Studying
+            </button>
+            <button
+              onClick={() => router.push("/m/dashboard")}
+              className="w-full rounded-full border border-neutral-200 bg-white px-6 py-3 text-sm font-medium text-neutral-700 active:scale-[0.98]"
+            >
+              Back to Dashboard
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  const currentItem = items[currentIndex];
+  const q = currentItem.question;
+  const isCorrect = answer === q.correctIndex;
 
   return (
-    <div>
-      <p className="font-serif text-sm italic text-[#B0607A]">Spaced repetition</p>
-      <h1 className="mt-1 text-3xl font-medium tracking-tight text-[#3B2027]">
-        Study <span className="font-serif italic text-[#B0607A]">mode</span>
-      </h1>
-
-      <div className="mt-6 grid grid-cols-3 gap-3">
-        <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-4 text-center shadow-[0_14px_40px_-28px_rgba(176,96,122,0.5)] backdrop-blur-xl">
-          <p className="text-[10px] uppercase tracking-[0.18em] text-[#9A7280]">Due</p>
-          <p className="mt-1 font-serif text-3xl text-[#3B2027]">{dueCount}</p>
+    <div className="px-4 py-6 pb-24">
+      <div className="mb-6">
+        <div className="mb-2 flex items-center justify-between">
+          <h1 className="text-xl font-medium text-neutral-900">Study Mode</h1>
+          <span className="text-sm text-neutral-600">
+            {currentIndex + 1} / {items.length}
+          </span>
         </div>
-        <div className="rounded-2xl border border-[#F3D5DC] bg-gradient-to-br from-[#FDE8EC] to-[#FBF1EE] p-4 text-center">
-          <p className="text-[10px] uppercase tracking-[0.18em] text-[#9A4F68]">Reviewed</p>
-          <p className="mt-1 font-serif text-3xl text-[#B0607A]">{reviewed}</p>
-        </div>
-        <div className="rounded-2xl border border-[#F3D5DC] bg-white/70 p-4 text-center shadow-[0_14px_40px_-28px_rgba(176,96,122,0.5)] backdrop-blur-xl">
-          <p className="text-[10px] uppercase tracking-[0.18em] text-[#9A7280]">Total</p>
-          <p className="mt-1 font-serif text-3xl text-[#3B2027]">{totalCards}</p>
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-neutral-100">
+          <motion.div
+            className="h-full bg-gradient-to-r from-violet-600 to-indigo-600"
+            initial={{ width: 0 }}
+            animate={{ width: `${((currentIndex + 1) / items.length) * 100}%` }}
+            transition={{ duration: 0.5 }}
+          />
         </div>
       </div>
 
-      {totalCards === 0 ? (
-        <div className="mt-8 rounded-2xl border border-[#F3D5DC] bg-white/70 px-6 py-14 text-center backdrop-blur-xl">
-          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[#FDE8EC] to-[#FBF1EE]">
-            <svg className="h-6 w-6 text-[#B0607A]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-          </div>
-          <p className="mb-2 font-serif text-xl italic text-[#3B2027]">No flashcards yet</p>
-          <p className="mb-6 text-xs text-[#9A7280]">
-            Generate a quiz first, then tap &quot;Add to Study Mode&quot; on the flashcards tab.
-          </p>
-          <Link href="/m/create" className="inline-block rounded-full bg-[#3B2027] px-6 py-3 text-sm font-medium text-[#F6E3E8] transition-colors hover:bg-[#52303B]">
-            Generate a quiz
-          </Link>
+      <motion.div
+        key={currentIndex}
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm"
+      >
+        <div className="mb-4 flex flex-wrap items-center gap-2">
+          <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-violet-700">
+            {currentItem.bloom}
+          </span>
+          <span className="text-xs text-neutral-500">{currentItem.concept}</span>
         </div>
-      ) : cards.length === 0 ? (
-        <div className="mt-8 rounded-2xl border border-[#F3D5DC] bg-white/70 px-6 py-14 text-center backdrop-blur-xl">
-          <p className="mb-2 font-serif text-xl italic text-[#3B2027]">All caught up!</p>
-          <p className="mb-2 text-sm text-[#9A7280]">You&apos;ve reviewed all due cards.</p>
-          <p className="text-xs text-[#B4939F]">Reviewed {reviewed} cards this session.</p>
-        </div>
-      ) : card ? (
-        <>
-          <div className="mt-8 h-1.5 w-full overflow-hidden rounded-full bg-[#F6E4EA]">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-[#B0607A] to-[#E9A8B8] transition-all duration-300"
-              style={{ width: `${((currentIndex + 1) / cards.length) * 100}%` }}
-            />
-          </div>
 
-          <div
-            className="flashcard-scene mt-6 h-64 cursor-pointer select-none"
-            onClick={() => setFlipped((f) => !f)}
+        <p className="mb-6 text-base font-medium leading-snug text-neutral-900">
+          {q.question}
+        </p>
+
+        <div className="space-y-2">
+          {q.options.map((option, idx) => {
+            let style =
+              "border-neutral-200 text-neutral-700 hover:border-violet-300 hover:bg-violet-50 active:scale-[0.98]";
+
+            if (revealed) {
+              if (idx === q.correctIndex) {
+                style =
+                  "border-emerald-300 bg-emerald-50 text-emerald-700 ring-1 ring-emerald-300";
+              } else if (idx === answer && answer !== q.correctIndex) {
+                style = "border-red-300 bg-red-50 text-red-700 line-through";
+              } else {
+                style = "border-neutral-100 text-neutral-400";
+              }
+            }
+
+            return (
+              <button
+                key={idx}
+                onClick={() => pickOption(idx)}
+                disabled={revealed}
+                className={`w-full rounded-xl border px-4 py-3 text-left text-sm transition-all ${style}`}
+                style={{ minHeight: "44px" }}
+              >
+                <span className="mr-2 font-semibold opacity-50">
+                  {String.fromCharCode(65 + idx)}.
+                </span>
+                {option}
+              </button>
+            );
+          })}
+        </div>
+
+        {revealed && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-6"
           >
-            <div className={`flashcard-card ${flipped ? "flipped" : ""}`}>
-              <div className="flashcard-face flashcard-front flex flex-col items-center justify-center rounded-2xl border border-[#F3D5DC] bg-white/80 p-7 shadow-[0_20px_60px_-30px_rgba(176,96,122,0.5)] backdrop-blur-xl">
-                <p className="mb-4 font-serif text-xs italic uppercase tracking-[0.2em] text-[#B0607A]">Question</p>
-                <p className="text-center text-lg font-medium leading-relaxed text-[#3B2027]">{card.front}</p>
-                <p className="mt-5 text-xs text-[#B4939F]">Tap to reveal</p>
-              </div>
-              <div className="flashcard-face flashcard-back flex flex-col items-center justify-center rounded-2xl border border-[#E9B8C4] bg-gradient-to-br from-[#FDE8EC] to-[#FBF1EE] p-7 shadow-[0_20px_60px_-30px_rgba(176,96,122,0.55)]">
-                <p className="mb-4 font-serif text-xs italic uppercase tracking-[0.2em] text-[#9A4F68]">Answer</p>
-                <p className="text-center text-base leading-relaxed text-[#6E3345]">{card.back}</p>
-              </div>
+            <div
+              className={`rounded-xl border p-4 ${
+                isCorrect
+                  ? "border-emerald-200 bg-emerald-50"
+                  : "border-red-200 bg-red-50"
+              }`}
+            >
+              <p className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                <span className={isCorrect ? "text-emerald-600" : "text-red-600"}>
+                  {isCorrect ? "✓ Correct" : "✗ Incorrect"}
+                </span>
+              </p>
+              <p className="text-sm leading-relaxed text-neutral-700">
+                {q.explanation}
+              </p>
             </div>
-          </div>
 
-          {flipped && (
-            <div className="mt-6">
-              <p className="mb-3 text-center text-sm text-[#9A7280]">How well did you know this?</p>
-              <div className="grid grid-cols-4 gap-2">
-                <button
-                  onClick={() => handleGrade(1)}
-                  disabled={submitting}
-                  className="rounded-full border border-[#F1C8C8] bg-[#FDF1F1] py-3 text-xs font-medium text-[#C25B5B] transition-colors hover:bg-[#F9E2E2] disabled:opacity-50"
-                >
-                  Again
-                </button>
-                <button
-                  onClick={() => handleGrade(2)}
-                  disabled={submitting}
-                  className="rounded-full border border-[#F5DEC8] bg-[#FDF4EA] py-3 text-xs font-medium text-[#C07B3C] transition-colors hover:bg-[#F9E8D3] disabled:opacity-50"
-                >
-                  Hard
-                </button>
-                <button
-                  onClick={() => handleGrade(4)}
-                  disabled={submitting}
-                  className="rounded-full border border-[#D4E8DC] bg-[#F0F8F3] py-3 text-xs font-medium text-[#3D8B5F] transition-colors hover:bg-[#DFEFE5] disabled:opacity-50"
-                >
-                  Good
-                </button>
-                <button
-                  onClick={() => handleGrade(5)}
-                  disabled={submitting}
-                  className="rounded-full border border-[#D5E3F2] bg-[#F0F6FC] py-3 text-xs font-medium text-[#4A7FC0] transition-colors hover:bg-[#E1EDF9] disabled:opacity-50"
-                >
-                  Easy
-                </button>
-              </div>
-            </div>
-          )}
-        </>
-      ) : null}
+            <button
+              onClick={handleNext}
+              className="mt-4 w-full rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 py-3 text-sm font-medium text-white shadow-sm active:scale-[0.98]"
+              style={{ minHeight: "44px" }}
+            >
+              {currentIndex < items.length - 1 ? "Next Concept" : "Finish Session"}
+            </button>
+          </motion.div>
+        )}
+      </motion.div>
+
+      {dueCount > items.length && (
+        <p className="mt-4 text-center text-sm text-neutral-500">
+          {dueCount - items.length} more concept{dueCount - items.length === 1 ? "" : "s"} due
+          today
+        </p>
+      )}
     </div>
   );
 }
