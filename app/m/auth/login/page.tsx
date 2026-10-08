@@ -10,10 +10,11 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/m/dashboard";
-  // Set by Auth.js (pages.error) when an OAuth sign-in fails.
   const authError = searchParams.get("error");
+  const verified = searchParams.get("verified") === "1";
+  const prefillEmail = searchParams.get("email");
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(prefillEmail ?? "");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -36,6 +37,20 @@ function LoginForm() {
     setLoading(false);
 
     if (result?.error) {
+      const res = await fetch("/api/auth/verification-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        if (data.needsVerification) {
+          setError("unverified");
+          return;
+        }
+      }
+      
       setError("Invalid email or password.");
       return;
     }
@@ -53,6 +68,12 @@ function LoginForm() {
       <h1 className="mt-1 text-3xl font-medium tracking-tight text-[#3B2027]">
         Sign in to <span className="font-serif italic text-[#B0607A]">Examina</span>
       </h1>
+
+      {verified && (
+        <p role="alert" className="mt-5 rounded-xl border border-[#D8EFD8] bg-[#F1FDF1] px-3.5 py-2.5 text-sm text-[#4A8A4A]">
+          Email verified — you can sign in now.
+        </p>
+      )}
 
       {authError && (
         <p role="alert" className="mt-5 rounded-xl border border-[#F1C8C8] bg-[#FDF1F1] px-3.5 py-2.5 text-sm text-[#C25B5B]">
@@ -95,9 +116,19 @@ function LoginForm() {
             </div>
           </div>
 
-          {error && (
+          {error === "unverified" ? (
+            <div className="rounded-xl border border-[#F1C8C8] bg-[#FDF1F1] px-3.5 py-2.5 text-sm text-[#C25B5B]">
+              <p className="font-medium">Please verify your email first</p>
+              <Link
+                href={`/m/auth/verify-email?email=${encodeURIComponent(email)}`}
+                className="mt-2 inline-block rounded-full bg-[#C25B5B] px-4 py-2 text-xs font-medium text-white hover:bg-[#A84A4A]"
+              >
+                Go to verification
+              </Link>
+            </div>
+          ) : error ? (
             <p className="rounded-xl border border-[#F1C8C8] bg-[#FDF1F1] px-3.5 py-2.5 text-sm text-[#C25B5B]">{error}</p>
-          )}
+          ) : null}
 
           <button
             type="submit"
