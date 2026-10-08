@@ -102,6 +102,8 @@ beforeAll(async () => {
         "isPublic" INTEGER NOT NULL DEFAULT 0,
         "reviewStatus" TEXT NOT NULL DEFAULT 'approved',
         "draftSetId" TEXT UNIQUE,
+        "examModeEnabled" INTEGER NOT NULL DEFAULT 0,
+        "examTimeLimit" INTEGER,
         "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
       )
     `);
