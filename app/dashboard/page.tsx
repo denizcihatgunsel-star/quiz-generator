@@ -381,7 +381,7 @@ export default function DashboardPage() {
 
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
               <h2 className="font-serif text-2xl italic text-[#3B2027]">Admin — user management</h2>
-              <p className="text-sm text-[#9A7280]">Signed in as {session.user.email}</p>
+              <p className="text-sm text-[#9A7280]">Signed in as {session?.user?.email}</p>
             </div>
 
             <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
