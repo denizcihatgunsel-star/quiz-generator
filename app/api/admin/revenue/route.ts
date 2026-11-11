@@ -41,13 +41,15 @@ export async function GET() {
 
     while (pages < 10) {
       const sessions = await stripe.checkout.sessions.list({
-        payment_status: "paid",
+        status: "complete",
         limit: 100,
         ...(startingAfter ? { starting_after: startingAfter } : {}),
       });
       pages += 1;
 
       for (const s of sessions.data) {
+        // `status` filters checkout state; only count sessions where payment actually succeeded.
+        if (s.payment_status !== "paid") continue;
         orders.push({
           id: s.id,
           email: s.customer_details?.email ?? s.customer_email ?? null,
