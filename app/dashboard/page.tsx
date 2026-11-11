@@ -8,6 +8,7 @@ import StreakWidget from "@/components/StreakWidget";
 import SiteHeader from "@/components/SiteHeader";
 import NotesPanel from "@/components/NotesPanel";
 import { getQuizTheme } from "@/lib/themes";
+import { isAdminEmail } from "@/lib/admin";
 import { LoadingDots } from "@/components/ui";
 
 interface SavedQuizItem {
@@ -18,6 +19,24 @@ interface SavedQuizItem {
   shareId: string | null;
   isPublic?: boolean;
   createdAt: string;
+}
+
+interface AdminUserItem {
+  id: string;
+  name: string | null;
+  email: string;
+  role: string;
+  plan: string;
+  createdAt: string;
+}
+
+interface AdminOrder {
+  id: string;
+  email: string | null;
+  plan: string | null;
+  amount: number; // cents
+  currency: string;
+  createdAt: number; // unix seconds
 }
 
 const BOOK = (
@@ -79,8 +98,13 @@ export default function DashboardPage() {
   const [startingLive, setStartingLive] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<"student" | "teacher">("student");
   const [showAdminPanel, setShowAdminPanel] = useState(false);
-  const [adminUsers, setAdminUsers] = useState<any[]>([]);
+  const [adminUsers, setAdminUsers] = useState<AdminUserItem[]>([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
+  const [adminRevenue, setAdminRevenue] = useState<{
+    totalRevenue: number;
+    paidOrders: number;
+    orders: AdminOrder[];
+  } | null>(null);
   const [daily, setDaily] = useState<{
     quiz: { id: string; topic: string; author: string } | null;
     completedToday: boolean;
@@ -140,6 +164,11 @@ export default function DashboardPage() {
         .then((r) => r.json())
         .then((d) => setAdminUsers(d.users ?? []))
         .finally(() => setLoadingUsers(false));
+
+      fetch("/api/admin/revenue")
+        .then((r) => r.json())
+        .then((d) => { if (!d.error) setAdminRevenue(d); })
+        .catch(() => {});
     }
   }, [session, showAdminPanel]);
 
@@ -337,7 +366,7 @@ export default function DashboardPage() {
           <Link href="/explore" className={ghostBtn}>
             {GLOBE} Explore Quizzes
           </Link>
-          {session?.user?.email === "denizcihatgunsel@gmail.com" && (
+          {isAdminEmail(session?.user?.email) && (
             <button
               onClick={() => setShowAdminPanel(!showAdminPanel)}
               className="inline-flex items-center gap-2 rounded-full border border-[#B0607A]/25 bg-[#FDE8EC]/70 px-5 py-2.5 text-sm font-medium text-[#9A4F68] transition-all hover:bg-[#F6D5DD] active:scale-[0.98]"
@@ -347,7 +376,7 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {showAdminPanel && session?.user?.email === "denizcihatgunsel@gmail.com" && (
+        {showAdminPanel && isAdminEmail(session?.user?.email) && (
           <div className="mb-12 rounded-2xl border border-[#F3D5DC] bg-white/70 p-6 shadow-[0_16px_50px_-24px_rgba(176,96,122,0.4)] backdrop-blur-xl">
 
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
@@ -355,7 +384,7 @@ export default function DashboardPage() {
               <p className="text-sm text-[#9A7280]">Signed in as {session.user.email}</p>
             </div>
 
-            <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
               <div className="rounded-xl border border-[#F3D5DC] bg-white p-4">
                 <p className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#9A7280]">Total Users</p>
                 <p className="font-serif text-3xl text-[#3B2027]">{adminUsers.length}</p>
@@ -363,12 +392,13 @@ export default function DashboardPage() {
               <div className="rounded-xl border border-[#F3D5DC] bg-white p-4">
                 <p className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#9A7280]">Total Revenue</p>
                 <p className="font-serif text-3xl text-[#3B2027]">
-                  ${adminUsers.reduce((sum, u) => {
-                    const priceMap = { free: 0, starter: 2, plus: 5, pro: 9, team: 15 };
-                    const planPrice = priceMap[u.plan as keyof typeof priceMap] || 0;
-                    return sum + planPrice;
-                  }, 0)}
+                  {adminRevenue ? `$${adminRevenue.totalRevenue.toFixed(2)}` : "—"}
                 </p>
+                <p className="mt-1 text-xs text-[#9A7280]">from Stripe</p>
+              </div>
+              <div className="rounded-xl border border-[#F3D5DC] bg-white p-4">
+                <p className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#9A7280]">Paid Orders</p>
+                <p className="font-serif text-3xl text-[#3B2027]">{adminRevenue ? adminRevenue.paidOrders : "—"}</p>
               </div>
               <div className="rounded-xl border border-[#F3D5DC] bg-white p-4">
                 <p className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#9A7280]">Teacher Accounts</p>
@@ -424,6 +454,38 @@ export default function DashboardPage() {
                       ))}
                     </tbody>
                   </table>
+                </div>
+              </div>
+            )}
+
+            {adminRevenue && adminRevenue.orders.length > 0 && (
+              <div className="mt-6">
+                <h3 className="mb-3 font-serif text-lg italic text-[#3B2027]">Paid orders</h3>
+                <div className="overflow-hidden rounded-xl border border-[#F3D5DC] bg-white">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-[#F3D5DC] bg-[#FBF4F6]">
+                          <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#9A7280]">Email</th>
+                          <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#9A7280]">Plan</th>
+                          <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#9A7280]">Amount</th>
+                          <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#9A7280]">Date</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#F6EBEE]">
+                        {adminRevenue.orders.map((o) => (
+                          <tr key={o.id} className="transition-colors hover:bg-[#FBF4F6]">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-[#9A7280]">{o.email ?? "—"}</td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <span className="inline-flex rounded-full bg-[#E9F5EC] px-2 py-1 text-xs font-semibold text-[#2F7D46]">{o.plan ?? "—"}</span>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#3B2027]">${(o.amount / 100).toFixed(2)}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-[#9A7280]">{new Date(o.createdAt * 1000).toLocaleDateString()}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             )}

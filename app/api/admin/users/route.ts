@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { isAdminEmail } from "@/lib/admin";
 
 async function isAdmin(): Promise<boolean> {
   const session = await auth();
   if (!session?.user?.id) return false;
+  if (isAdminEmail(session.user.email)) return true;
   const user = await db.user.findUnique({ where: { id: session.user.id }, select: { role: true } });
   return user?.role === "admin";
 }

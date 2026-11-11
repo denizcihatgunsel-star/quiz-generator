@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./ThemeToggle";
 import { Wordmark } from "./ui/Container";
+import { isAdminEmail } from "@/lib/admin";
 
 interface NavItem {
   href: string;
@@ -24,7 +25,7 @@ export default function SiteHeader() {
   const pathname = usePathname();
   const authed = status === "authenticated" && !!session?.user;
 
-  const isAdmin = session?.user?.role === "admin";
+  const isAdmin = session?.user?.role === "admin" || isAdminEmail(session?.user?.email);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur-xl">
